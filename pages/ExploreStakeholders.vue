@@ -1,8 +1,9 @@
 <template>
-  <v-layout>
-    <div class="prompt">다음과 같은 사람들이 이 공약에 영향을 받습니다.</div>
-    <!-- <input>~~기준으로 보기</input> -->
-    <!-- <chart></chart> -->
+  <v-layout row wrap>
+    <v-flex xs12>
+      <div class="prompt">다음과 같은 사람들이 이 공약에 영향을 받습니다.</div>
+
+    </v-flex>
   </v-layout>
 </template>
 <script>

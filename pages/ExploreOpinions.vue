@@ -1,65 +1,43 @@
 <template>
   <v-layout row wrap justify-center>
+    <promise-pane :promise="promise"></promise-pane>
     <v-flex xs12>
-      <div class="body-1">이 공약에 대해 사람들은 다음과 같이 생각합니다.</div>
-      <v-card>
-        <v-card-action>
-          <span class="body-1">{{sort.type}}</span>
-          <span class="body-1">{{sort.value}}</span>
-          <v-spacer></v-spacer>
-          <v-btn icon @click="showFilter =! showFilter">
-            <v-icon>{{ showFilter ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-          </v-btn>
-        </v-card-action>
-        <v-slide-y-transition>
-          <v-card-text v-show="showFilter">
-            <v-radio-group v-model="sort.type">
-              <v-radio v-for="type in availableTypes" :key="type" :value="type" :label="type"></v-radio>
-            </v-radio-group>
-            <v-radio-group v-model="sort.value">
-              <v-radio v-for="value in availableValues" :key="value" :value="value" :label="value"></v-radio>
-            </v-radio-group>
-          </v-card-text>
-        </v-slide-y-transition>
-      </v-card>
+      <!-- <p class="promise">{{promise}}</p> -->
+      <p class="body-1">이 공약에 대해 사람들은 이렇게 생각합니다. 앞에서 선택한 집단이 어떻게 생각할 지 알아보세요!</p>
+      <opinion-selector v-model="sort" :available-types="availableTypes" :available-values="availableValues"></opinion-selector>
     </v-flex>
     <v-flex xs12>
-      <v-card>
-        <v-card-media>
-          <div class="mySVGContainer" ref="mySVGContainer">
-            <svg :width="width" :height="height" ref="mySVG">
-              <g class="axis axis--x">
-                <path :d="`M 0 ${height} H ${width}`" stroke="black">
-                </path>
-              </g>
-              <g class="axis axis--y">
-                <path :d="`M 0 0 V ${height}`" stroke="black">
-                </path>
-              </g>
-              <g class="bar" v-for="bar in bars" :key="bar.label">
-                <rect class="bar" :x="bar.x" :y="bar.y" :width="bar.width" :height="bar.height" fill="#4E7AC7"></rect>
-              </g>
-            </svg>
-          </div>
-        </v-card-media>
-      </v-card>
+      <opinion-chart :bar-data="barData" @bar-click="onBarClick"></opinion-chart>
     </v-flex>
+    <v-slide-y-transition>
+      <v-flex xs12 v-show="opinionTexts">
+        <v-card>
+          <v-card-actions>
+            이 공약에 대한 의견입니다.
+            <v-spacer></v-spacer>
+            <v-btn icon @click="opinionTexts = false">
+              <v-icon>close</v-icon>
+            </v-btn>
+          </v-card-actions>
+          <div v-for="text in opinionTexts" :key="text">{{text}}</div>
+        </v-card>
+      </v-flex>
+    </v-slide-y-transition>
   </v-layout>
 </template>
 <script>
 import * as d3 from 'd3'
 import _ from 'lodash'
-
+import OpinionChart from '~/components/OpinionChart.vue'
+import OpinionSelector from '~/components/OpinionSelector.vue'
+import PromisePane from '~/components/PromisePane.vue'
 export default {
+  components: {
+    OpinionChart,
+    OpinionSelector,
+    PromisePane
+  },
   mounted: function () {
-    this.width = this.$refs.mySVGContainer.clientWidth
-    this.height = this.$refs.mySVGContainer.clientHeight
-    this.$nextTick(() => {
-      window.addEventListener('resize', () => {
-        this.width = this.$refs.mySVGContainer.clientWidth
-        this.height = this.$refs.mySVGContainer.clientHeight
-      })
-    })
     d3.csv('/data.csv', function (d) {
       return {
         age: +d.AGE_10,
@@ -74,26 +52,19 @@ export default {
     })
   },
   computed: {
-    barData: function () {
+    promise: function () {
+      return this.$store.state.promise
+    },
+    filteredData: function () {
       if (!this.data) {
         return
       }
-      let filteredData = _.filter(this.data, (d) => {
+      return _.filter(this.data, (d) => {
         return d[this.sort.type] === this.sort.value
       })
-      return _.countBy(filteredData, 'score')
     },
-    bars: function () {
-      let pairs = _.toPairs(this.barData)
-      return _.map(pairs, (b) => {
-        return {
-          label: b[0],
-          x: this.x(+b[0]),
-          y: this.y(b[1]),
-          width: this.x.bandwidth(),
-          height: this.height - this.y(b[1])
-        }
-      })
+    barData: function () {
+      return _.countBy(this.filteredData, 'score')
     },
     availableValues: function () {
       return _.uniqBy(this.data, this.sort.type).map((d) => {
@@ -101,33 +72,30 @@ export default {
       }).sort()
     }
   },
-  watch: {
-    width: function () {
-      this.x = d3.scaleBand().domain([1, 2, 3, 4, 5]).rangeRound([0, this.width]).padding(0.1)
-      this.y = d3.scaleLinear().domain([0, 30]).rangeRound([this.height, 0])
-    }
-  },
   data: function () {
     return {
       data: {},
-      width: 0,
-      height: 0,
       sort: {
         type: 'age',
         value: 2
       },
       availableTypes: ['sex', 'age', 'job', 'kid'],
-      showFilter: false,
-      x: d3.scaleBand().domain([1, 2, 3, 4, 5]).rangeRound([0, this.width]).padding(0.1),
-      y: d3.scaleLinear().domain([0, 30]).rangeRound([this.height, 0])
+      opinionTexts: false
+    }
+  },
+  methods: {
+    onBarClick: function (index) {
+      let data = this.filteredData.filter((d) => {
+        return d.score === +index
+      })
+      console.log(data)
+      this.opinionTexts = data.map((d) => {
+        return d.text
+      })
     }
   }
 }
 </script>
 <style scoped>
-.mySVGContainer {
-  width: 100%;
-  height: 40vh;
-}
 
 </style>
