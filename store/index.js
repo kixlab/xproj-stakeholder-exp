@@ -1,6 +1,6 @@
 export const state = () => ({
   sidebar: false,
-  promise: '연구자와 연구기관에게 자율과 책임을, 국민에게는 혜택을 최대화하는 연구 지원체계로 혁신'
+  promise: '"스펙 없는 이력서", 블라인드 채용 강화를 통해 불합리한 채용관행 개선'
 })
 
 export const mutations = {

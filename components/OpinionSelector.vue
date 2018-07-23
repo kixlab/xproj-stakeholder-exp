@@ -57,9 +57,6 @@ export default {
 }
 </script>
 <style scoped>
-v-btn:hover {
-  
-}
 </style>
 
 

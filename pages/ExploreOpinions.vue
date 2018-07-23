@@ -23,6 +23,9 @@
         </v-card>
       </v-flex>
     </v-slide-y-transition>
+    <v-flex xs12>
+      <v-btn block color="primary" to="EstimateBenefits">새 효과 추가하기</v-btn>
+    </v-flex>
   </v-layout>
 </template>
 <script>
