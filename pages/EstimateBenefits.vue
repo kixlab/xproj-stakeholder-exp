@@ -40,7 +40,8 @@ export default {
         isBenefit: '',
         identity: '',
         detail: '',
-        oneliner: ''
+        oneliner: '',
+        like: 0
       }
     }
   }
