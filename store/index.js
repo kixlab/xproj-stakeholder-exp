@@ -1,7 +1,10 @@
 export const state = () => ({
   sidebar: false,
   promiseIdx: 1,
-  promise: {},
+  promise: {
+    title: '복합쇼핑몰에 대한 입지제한과 영업제한 도입',
+    description: '설명.............'
+  },
   firstImpression: 0
 })
 

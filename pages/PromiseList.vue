@@ -13,10 +13,11 @@
 </template>
 <script>
 export default {
-  asyncData: async function ({app, store}) { // fetch the list of policies from the server
-    let promises = await app.$axios.$get('/api/policies/')
-    return {promises: promises.results}
-  },
+  // List of policies fetched from here
+  // asyncData: async function ({app, store}) { // fetch the list of policies from the server
+  //   let promises = await app.$axios.$get('/api/policies/')
+  //   return {promises: promises.results}
+  // },
   methods: {
     onPromiseClick: function (idx, $ev) { // update the promise index in store
       this.$store.commit('setPromiseIdx', {promiseIdx: idx})

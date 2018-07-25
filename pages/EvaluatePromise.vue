@@ -19,10 +19,11 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 export default {
-  fetch: async function ({app, store, params}) {
-    let promise = await app.$axios.$get('/api/policies/' + store.state.promiseIdx + '/')
-    store.commit('setPromise', promise)
-  },
+  // Policy list will be fetched from here.
+  // fetch: async function ({app, store, params}) {
+  //   let promise = await app.$axios.$get('/api/policies/' + store.state.promiseIdx + '/')
+  //   store.commit('setPromise', promise)
+  // },
   components: {
     PromisePane
   },
@@ -33,6 +34,7 @@ export default {
   },
   data: function () {
     return {
+      // TODO: Adjust the data field to match with UserPolicy model
       firstImpression: {
         score: 0,
         text: ''

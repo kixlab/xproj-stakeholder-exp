@@ -37,13 +37,14 @@ export default {
   methods: {
     addEffect: function () {
       this.effect.policy = this.$store.state.promiseIdx
-      this.$axios.$post('/effects', this.effect)
+      // this.$axios.$post('/effects', this.effect)
       // TODO: record user activity
       this.$router.push('ExploreStakeholders')
     }
   },
   data: function () {
     return {
+      // TODO: Adjust effect according to the data model
       effect: {
         isBenefit: '',
         identity: '',
