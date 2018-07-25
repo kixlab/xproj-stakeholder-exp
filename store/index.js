@@ -1,7 +1,8 @@
 export const state = () => ({
   sidebar: false,
   promiseIdx: 1,
-  promise: {}
+  promise: {},
+  firstImpression: 0
 })
 
 export const mutations = {
@@ -10,5 +11,11 @@ export const mutations = {
   },
   setPromise (state, payload) {
     state.promise = payload
+  },
+  setFirstImpression (state, payload) {
+    state.firstImpression = payload.firstImpression
+  },
+  setPromiseIdx (state, payload) {
+    state.promiseIdx = payload.promiseIdx
   }
 }

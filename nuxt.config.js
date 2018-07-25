@@ -1,3 +1,7 @@
+// var environment = {
+//   API_URL: 'https://localhost/api/',
+//   API_URL_BROWSER: 'https://localhost/api/'
+// }
 
 module.exports = {
   /*
@@ -15,10 +19,18 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
     ]
   },
-  plugins: ['~/plugins/vuetify.js', '~/plugins/api.js', '~plugins/axios'],
+  plugins: ['~/plugins/vuetify.js', '~plugins/axios'],
   modules: [
     '@nuxtjs/axios'
   ],
+  axios: {
+    // baseURL: 'https://localhost/api/',
+    // browserBaseURL: 'https://localhost/api/',
+    proxy: true
+  },
+  proxy: {
+    '/api/': 'https://localhost/api/'
+  },
   css: [
     '~/assets/style/app.styl'
   ],
@@ -35,9 +47,11 @@ module.exports = {
   /*
   ** Build configuration
   */
+
   build: {
     vendor: [
-      '~/plugins/vuetify.js'
+      '~/plugins/vuetify.js',
+      'lodash'
     ],
     extractCSS: true,
     /*

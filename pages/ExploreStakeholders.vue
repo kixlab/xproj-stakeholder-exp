@@ -13,6 +13,11 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 export default {
+  computed: {
+    promise: function () {
+      return this.$store.state.promise
+    }
+  },
   components: {
     PromisePane
   }

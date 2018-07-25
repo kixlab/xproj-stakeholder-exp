@@ -9,5 +9,5 @@
 // Vue.use(ApiAddress)
 
 export default ({app}, inject) => {
-  app.apiAddress = 'https://127.0.0.1/api/'
+  app.apiAddress = ''
 }

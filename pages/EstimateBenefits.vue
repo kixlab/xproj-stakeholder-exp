@@ -7,7 +7,7 @@
         <v-text-field v-model="effect.identity"> <!-- TODO: 명사+형용사 -->
         </v-text-field>
         <p class="body-1 prompt">이 정책은 {{effect.identity || '위 집단'}}에게 어떤 영향을 주나요?</p>
-        <v-radio-group row v-model="isBenefit">
+        <v-radio-group row v-model="effect.isBenefit">
           <v-radio label="혜택" value="benefit">혜택</v-radio>
           <v-radio label="손해" value="demerit">손해</v-radio> 
         </v-radio-group>
@@ -36,7 +36,10 @@ export default {
   },
   methods: {
     addEffect: function () {
-      this.$router.push('ExploreOpinions')
+      this.effect.policy = this.$store.state.promiseIdx
+      this.$axios.$post('/effects', this.effect)
+      // TODO: record user activity
+      this.$router.push('ExploreStakeholders')
     }
   },
   data: function () {
