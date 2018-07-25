@@ -19,6 +19,10 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 export default {
+  fetch: async function ({app, store, params}) {
+    let promise = await app.$axios.$get('https://127.0.0.1/api/policies/' + store.state.promiseIdx)
+    store.commit('setPromise', promise)
+  },
   components: {
     PromisePane
   },

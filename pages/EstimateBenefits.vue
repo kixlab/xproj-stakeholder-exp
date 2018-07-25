@@ -18,7 +18,7 @@
         </v-text-field>
         <!-- <v-flex class="prompt">그 사람들은 어떤 혜택을 받을까요?</v-flex> -->
         <!-- <textarea></textarea> -->
-        <v-btn block color="primary" to="ExploreOpinions">영향 추가</v-btn>
+        <v-btn block color="primary" @click="addEffect">영향 추가</v-btn>
       </v-form>
     </v-flex>
   </v-layout>
@@ -32,6 +32,11 @@ export default {
   computed: {
     promise: function () {
       return this.$store.state.promise
+    }
+  },
+  methods: {
+    addEffect: function () {
+      this.$router.push('ExploreOpinions')
     }
   },
   data: function () {

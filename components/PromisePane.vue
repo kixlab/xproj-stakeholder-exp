@@ -1,9 +1,9 @@
 <template>
   <v-flex xs12>
-    <a @click.prevent="showDetails = !showDetails">{{promise}}</a>
+    <a @click.prevent="showDetails = !showDetails">{{promise.title}}</a>
     <v-slide-y-transition>
       <div v-show="showDetails">
-        설명이 있어야 좋을까요....
+        {{promise.description}}
       </div>
     </v-slide-y-transition>
   </v-flex>
@@ -11,7 +11,11 @@
 <script>
 export default {
   props: {
-    promise: String
+    promise: {
+      validator: function (value) {
+        return ('title' in value) && ('description' in value)
+      }
+    }
   },
   data: function () {
     return {
