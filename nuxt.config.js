@@ -21,7 +21,8 @@ module.exports = {
   },
   plugins: ['~/plugins/vuetify.js', '~plugins/axios'],
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
   axios: {
     // baseURL: 'https://localhost/api/',
@@ -29,7 +30,7 @@ module.exports = {
     proxy: true
   },
   proxy: {
-    '/api/': 'https://localhost/api/'
+    '/api': { target: 'https://localhost', secure: false }
   },
   css: [
     '~/assets/style/app.styl'
