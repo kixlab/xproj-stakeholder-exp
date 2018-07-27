@@ -20,7 +20,7 @@
         <div style="cursor: pointer;">
           <!-- Length of policy name should be less than 18 Korean syllables -->
           <!-- The line must be ended with a single space -->
-          <!-- <small>복합쇼핑몰에 대한 입지제한과 영업제한 </small>  -->
+          <small>{{promise.title}} </small>
           <v-icon dark>arrow_drop_down</v-icon>
         </div>
       </v-toolbar-title>
@@ -69,7 +69,12 @@
       dialog: false
     }),
     props: {
-      source: String
+      source: String,
+      promise: {
+        validator: function (value) {
+          return ('title' in value) && ('description' in value)
+        }
+      }
     }
   }
 </script>
