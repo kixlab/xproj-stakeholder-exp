@@ -76,7 +76,25 @@
         block ripple>
         다른 것도 볼래요!
       </v-btn>
+      <v-btn
+        :loading="loading"
+        :disabled="loading"
+        color="cyan"
+        @click.native="loader = 'loading'"
+        ripple
+      >
+        여러분의 생각도 들려주세요!
+      </v-btn>
 
+      <v-btn
+        :loading="loading"
+        :disabled="loading"
+        color="cyan"
+        @click.native="loader = 'loading'"
+        ripple
+      >
+        끝
+      </v-btn>
     </v-flex>
 
 <!--    
