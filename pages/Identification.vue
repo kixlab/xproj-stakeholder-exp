@@ -7,13 +7,13 @@
         <v-icon>arrow_drop_up</v-icon>
         언제나 위 <strong>제목</strong>을 누르면 자세한 설명을 읽을 수 있습니다.
         <br><br>
-        아래에서 내 생각과 <strong>가장 가까운</strong> 단어를 선택해주세요.<br>
+        아래에서 내 생각과 <strong style="color:red">가장 가까운</strong> 단어를 선택해주세요.<br>
         </div>
         <v-space></v-space>
         <p class="body-1 prompt">
           <v-flex xs12>
             <v-card color="grey lighten-4">
-              <v-card-text>이 정책을 시행했을 때 [-----] 영향을 받을 것 같다.</v-card-text>  
+              <v-card-text>이 정책을 시행했을 때 _____ 영향을 받을 것 같다.</v-card-text>  
             </v-card>
           </v-flex>
         </p>       
@@ -28,7 +28,7 @@
         <p class="body-1 prompt">
           <v-flex xs12>
             <v-card color="grey lighten-4">
-              <v-card-text>이 정책을 시행하는 것을 [-----]한다.</v-card-text>  
+              <v-card-text>이 정책을 시행하는 것을 _____한다.</v-card-text>  
             </v-card>
           </v-flex>
         </p>       
@@ -38,11 +38,11 @@
         </v-radio-group>
 
 
-        <v-btn v-if="effect.type != 4 && effect.type != 2" block color="primary" @click="onNextButtonClick">다음</v-btn>
-        <v-else>
+        <v-btn v-if="effect.type != 4 && effect.procon != 2" block color="primary" @click="onNextButtonClick">다음</v-btn>
+        <template v-else>
           <p style="color:red">모두 고르셔야 다음으로 넘어갈 수 있습니다.</p>
           <v-btn block disabled>다음</v-btn>
-        </v-else>
+        </template>
       </v-form>
     </v-flex>
   </v-layout>

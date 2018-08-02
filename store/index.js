@@ -1,9 +1,34 @@
 export const state = () => ({
   sidebar: false,
   promiseIdx: 1,
-  promise: {
+  policy: {
     title: '복합쇼핑몰에 대한 입지제한과 영업제한',
     description: '설명.............'
+  },
+  stakeholderGroup: {
+    policy: '',
+    name: ''
+  },
+  summary: {
+    stakeholder_group: '',
+    text: '',
+    likes: 'int'
+  },
+  userPolicy: {
+    user: '',
+    policy: '',
+    effect_size: 'int',
+    stance: 'int',
+    is_stakeholder: true,
+    stakeholder: ''
+  },
+  effect: {
+    userPolicy: '',
+    stakeholder_group: '',
+    stakeholder_detail: '',
+    isBenefit: true,
+    description: '',
+    likes: 'int'
   },
   firstImpression: 0
 })

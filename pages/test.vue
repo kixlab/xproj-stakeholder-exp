@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <promise-pane :promise="promise"></promise-pane>
+    <promise-pane :promise="policy"></promise-pane>
     <v-flex xs12>
       <!-- <p class="promise">{{promise}}</p> -->
       <p class="body-1">
@@ -32,7 +32,7 @@
             <v-flex xs12 sm6 offset-sm3>
             <v-card>
             <v-list two-line>
-                <template v-for="(object, index) in opinion">
+                <template v-for="(object, index) in effect">
                     <v-list-tile
                     :key="object"
                     avatar
@@ -41,7 +41,7 @@
                     >
              <v-list-tile-content>
                 <v-list-tile-title>{{ object.identity }}</v-list-tile-title>
-                <v-list-tile-sub-title class="text--primary">{{ object.character }}</v-list-tile-sub-title>
+                <v-list-tile-sub-title class="text--primary">{{ object.stakeholder_detail }}</v-list-tile-sub-title>
                 <v-list-tile-sub-title>{{ object.message }}</v-list-tile-sub-title>
               </v-list-tile-content>
 
@@ -63,12 +63,12 @@
               </v-list-tile-action>
                 <v-slide-y-transition>
                     <v-list-tile-action-text v-show=object.show>
-                        {{object.specific_message}}
+                        {{object.description}}
                     </v-list-tile-action-text>
                 </v-slide-y-transition>
             </v-list-tile>
             <v-divider
-              v-if="index + 1 < opinion.length"
+              v-if="index + 1 < effect.length"
               :key="index"
             ></v-divider>
 
@@ -160,8 +160,8 @@ export default {
     })
   },
   computed: {
-    promise: function () {
-      return this.$store.state.promise
+    policy: function () {
+      return this.$store.state.policy
     },
     filteredData: function () {
       if (!this.data) {
@@ -193,19 +193,19 @@ export default {
       items: [
         {message: 'Foo'}
       ],
-      opinion: [
+      effect: [
         {
-          character: '세 살 배기 아이의',
+          stakeholder_detail: '세 살 배기 아이의',
           identity: '엄마',
-          message: '우리 아이는 너무나 귀여워요!!! 사랑스러워 죽겠어요~ :)',
-          specific_message: '위대한 태양이 외면하는 겨울에는 땅은 슬픔의 계곡으로 들어가 단식하고 통곡하며 상복에 몸을 가리고 자신의 결혼식 화환이 썩도록 내버려둔다. 그리고는 태양이 키스와 함께 돌아오는 봄이 되면 다시 생동한다.',
+          description: '위대한 태양이 외면하는 겨울에는 땅은 슬픔의 계곡으로 들어가 단식하고 통곡하며 상복에 몸을 가리고 자신의 결혼식 화환이 썩도록 내버려둔다. 그리고는 태양이 키스와 함께 돌아오는 봄이 되면 다시 생동한다.',
+          isBenefit: false,
           show: false
         },
         {
-          character: '애기엄마가 윗집에 사는',
+          stakeholder_detail: '애기엄마가 윗집에 사는',
           identity: '이웃',
-          message: '아이 울음 소리가 너무 시끄러운 것 같아요!',
-          specific_message: '우습게 들릴지 모르지만, 진정한 혁명가를 이끄는 것은 위대한 사랑의 감정이다, 이런 자질이 없는 혁명가는 생각할 수 없다.',
+          description: '우습게 들릴지 모르지만, 진정한 혁명가를 이끄는 것은 위대한 사랑의 감정이다, 이런 자질이 없는 혁명가는 생각할 수 없다.',
+          isBenefit: true,
           show: false
         }
       ],
