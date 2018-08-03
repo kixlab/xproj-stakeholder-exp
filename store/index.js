@@ -28,7 +28,7 @@ export const state = () => ({
     is_stakeholder: true,
     stakeholder: ''
   },
-  predictedStakeholders: [],
+  predictedEffects: [],
   effects: [
     {
       userPolicy: '',
@@ -66,7 +66,7 @@ export const mutations = {
   setPolicyIdx (state, payload) {
     state.policyIdx = payload.policyIdx
   },
-  setPredictedStakeholder (state, payload) {
-    state.predictedStakeholders = payload
+  setPredictedEffects (state, payload) {
+    state.predictedEffects = payload
   }
 }

@@ -34,6 +34,9 @@ export default {
     promise: function () {
       return this.$store.state.policy
     }
+    // predictedEffects: function () {
+    //   return this.$store.state.
+    // }
   },
   methods: {
     addCategory: function () {

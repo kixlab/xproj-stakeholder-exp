@@ -64,8 +64,8 @@ export default {
         effect: ''
       },
       stakeholders: [
-        { 
-          stakeholder: '주말에만 쉬는 워킹맘', 
+        {
+          stakeholder: '주말에만 쉬는 워킹맘',
           isBenefit: 1,
           effect: '주말에 장보기와 여가 생활을 동시에 즐기기 어려워짐'
         }

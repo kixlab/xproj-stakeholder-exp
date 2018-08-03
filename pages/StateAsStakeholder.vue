@@ -34,6 +34,7 @@ export default {
   methods: {
     addEffect: function () {
       this.effect.policy = this.$store.state.policyIdx
+      // this.$store.commit('push')
       // this.$axios.$post('/effects', this.effect)
       // TODO: record user activity
       this.$router.push('GuessStakeholders')
