@@ -28,6 +28,7 @@ export const state = () => ({
     is_stakeholder: true,
     stakeholder: ''
   },
+  predictedStakeholders: [],
   effects: [
     {
       userPolicy: '',
@@ -62,10 +63,10 @@ export const mutations = {
   setPromise (state, payload) {
     state.policy = payload
   },
-  setFirstImpression (state, payload) {
-    state.firstImpression = payload.firstImpression
+  setPolicyIdx (state, payload) {
+    state.policyIdx = payload.policyIdx
   },
-  setPromiseIdx (state, payload) {
-    state.policyIdx = payload.promiseIdx
+  setPredictedStakeholder (state, payload) {
+    state.predictedStakeholders = payload
   }
 }

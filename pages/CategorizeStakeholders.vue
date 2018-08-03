@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     promise: function () {
-      return this.$store.state.promise
+      return this.$store.state.policy
     }
   },
   methods: {

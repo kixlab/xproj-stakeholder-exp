@@ -18,10 +18,10 @@
           </v-flex>
         </p>       
         <v-radio-group v-model="effect.effect_size">
-          <v-radio label="매우 적은" value="0"></v-radio>
-          <v-radio label="적은" value="1"></v-radio> 
-          <v-radio label="큰" value="2"></v-radio>
-          <v-radio label="매우 큰" value="3"></v-radio> 
+          <v-radio label="매우 적은" :value="0"></v-radio>
+          <v-radio label="적은" :value="1"></v-radio> 
+          <v-radio label="큰" :value="2"></v-radio>
+          <v-radio label="매우 큰" :value="3"></v-radio> 
         </v-radio-group>
         
         <v-spacer></v-spacer>
@@ -49,7 +49,13 @@
 </template>
 <script>
 import PromisePane from '~/components/PromisePane.vue'
+
 export default {
+  // Policy list will be fetched from here.
+  // fetch: async function ({app, store, params}) {
+  //   let policy = await app.$axios.$get('/api/policies/' + store.state.policyIdx + '/')
+  //   store.commit('setPolicy', policy)
+  // },
   components: {
     PromisePane
   },
@@ -64,8 +70,8 @@ export default {
   methods: {
     onNextButtonClick: function () {
       this.effect.policy = this.policyIdx
-      this.effect.effect_size = parseInt(this.effect.effect_size)
-      let to = this.effect.effect_size >= 2 ? 'ExploreOpinions' : 'EstimateBenefits' // modify here
+      // this.effect.effect_size = parseInt(this.effect.effect_size)
+      let to = this.effect.effect_size >= 2 ? 'StateAsStakeholder' : 'GuessStakeholders'
       this.$router.push(to)
     }
   },

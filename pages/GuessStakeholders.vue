@@ -3,32 +3,23 @@
     <promise-pane :promise="promise" />
     <v-flex xs12>
       <v-list two-line>
-        <template v-for="(item, index) in items">
-          <v-list-tile :key="index" avatar ripple @click="" class='previous'>
-            <v-list-tile-content>
-              <v-list-tile-title>{{item.Stakeholder}}</v-list-tile-title>
-              <v-list-tile-sub-title class="text--primary multiline">{{item.effect}}</v-list-tile-sub-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-btn-toggle v-model="item.isBenefit">
-                  <v-btn outline round color="primary" class="binarybtn">혜택</v-btn>
-                  <v-btn outline round color="error"class="binarybtn">손해</v-btn>
-                </v-btn-toggle>
-              </v-list-tile-action>
-            </v-list-tile>
-          </template>
-          <v-list-tile class='current'>
-            <v-list-tile-content>
-              <v-list-tile-title><input type="text" style="text-align: center;" placeholder="사람/집단" id='newstakeholder'></v-list-tile-title>
-              <v-list-tile-sub-title><v-text-field placeholder="어떤 영향을 받나요?" style="font-size:10px;" id='neweffect'></v-text-field></v-list-tile-sub-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-btn-toggle id='newbenefit'>
-                  <v-btn outline round color="primary" class="binarybtn">혜택</v-btn>
-                  <v-btn outline round color="error"class="binarybtn">손해</v-btn>
-                </v-btn-toggle>
-              </v-list-tile-action>
-            </v-list-tile>  
+        <stakeholder-guess-item v-for="stakeholder in stakeholders" :key="stakeholder.stakeholder"></stakeholder-guess-item>
+        <v-list-tile class='current'>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              <input type="text" style="text-align: center;" placeholder="사람/집단" v-model="newStakeholder.stakeholder">
+            </v-list-tile-title>
+            <v-list-tile-sub-title>
+              <v-text-field placeholder="어떤 영향을 받나요?" style="font-size:10px;" v-model="newStakeholder.effect"></v-text-field>
+            </v-list-tile-sub-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-btn-toggle v-model="newStakeholder.isBenefit">
+              <v-btn outline round color="primary" class="binarybtn" :value="1">혜택</v-btn>
+              <v-btn outline round color="error" class="binarybtn" :value="0">손해</v-btn>
+            </v-btn-toggle>
+          </v-list-tile-action>
+        </v-list-tile>  
       </v-list>
 
       <v-btn block color="secondary" @click="addRow">추가하기</v-btn>
@@ -39,32 +30,45 @@
 </template>
 <script>
 import PromisePane from '~/components/PromisePane.vue'
+import StakeholderGuessItem from '~/components/StakeholderGuessItem.vue'
 export default {
   components: {
-    PromisePane
+    PromisePane,
+    StakeholderGuessItem
   },
   computed: {
     promise: function () {
-      return this.$store.state.promise
+      return this.$store.state.policy
     }
   },
   methods: {
     addRow: function (items) {
-      var newS = document.getElementById('newstakeholder').value
-      var newE = document.getElementById('neweffect').value
-      var newB = document.getElementById('newbenefit').value
-      items.push({Stakeholder: newS, isBenefit: newB, effect: newE})
+      this.stakeholders.push(this.newStakeholder)
+      this.newStakeholder.stakeholder = ''
+      this.newStakeholder.isBenefit = 0
+      this.newStakeholder.effect = ''
     },
     addEffect: function () {
       // this.$axios.$post('/effects', this.effect)
       // TODO: record user activity
+      this.stakeholders.push(this.newStakeholder)
+      this.$store.commit('setPredictedStakeholder', this.stakeholders)
       this.$router.push('CategorizeStakeholders')
     }
   },
   data () {
     return {
-      items: [
-        {Stakeholder: '주말에만 쉬는 워킹맘', isBenefit: 1, effect: '주말에 장보기와 여가 생활을 동시에 즐기기 어려워짐'}
+      newStakeholder: {
+        stakeholder: '',
+        isBenefit: 0,
+        effect: ''
+      },
+      stakeholders: [
+        { 
+          stakeholder: '주말에만 쉬는 워킹맘', 
+          isBenefit: 1,
+          effect: '주말에 장보기와 여가 생활을 동시에 즐기기 어려워짐'
+        }
       ]
     }
   }

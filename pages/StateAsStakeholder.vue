@@ -4,10 +4,10 @@
     <v-flex xs12>
       <v-form>
         <p class="body-1 prompt">이 정책은 나에게 어떤 영향을 주나요? </p>
-                <v-btn-toggle v-model="effect.isBenefit">
-                  <v-btn outline round color="primary" class="binarybtn">혜택</v-btn>
-                  <v-btn outline round color="error"class="binarybtn">손해</v-btn>
-                </v-btn-toggle>
+        <v-btn-toggle v-model="effect.isBenefit">
+          <v-btn outline round color="primary" class="binarybtn">혜택</v-btn>
+          <v-btn outline round color="error" class="binarybtn">손해</v-btn>
+        </v-btn-toggle>
         <p class="body-1 prompt">이 정책이 나에게 주는 영향에 대해 자세히 적어주세요.</p>
         <v-text-field multi-line v-model="effect.detail">
         </v-text-field>
@@ -28,12 +28,12 @@ export default {
   },
   computed: {
     promise: function () {
-      return this.$store.state.promise
+      return this.$store.state.policy
     }
   },
   methods: {
     addEffect: function () {
-      this.effect.policy = this.$store.state.promiseIdx
+      this.effect.policy = this.$store.state.policyIdx
       // this.$axios.$post('/effects', this.effect)
       // TODO: record user activity
       this.$router.push('GuessStakeholders')
