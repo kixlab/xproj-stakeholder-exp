@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <promise-pane :promise="promise" />
+    <promise-pane :policy="policy" />
     <v-flex xs12>
       <v-form>   
         <p class="body-1 prompt">이 정책으로 어떤 사람들이 영향을 받나요?</p>
@@ -30,7 +30,7 @@ export default {
     PromisePane
   },
   computed: {
-    promise: function () {
+    policy: function () {
       return this.$store.state.policy
     }
   },

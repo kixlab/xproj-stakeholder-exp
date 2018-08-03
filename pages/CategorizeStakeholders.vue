@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <promise-pane :promise="promise" />
+    <promise-pane :policy="policy" />
     <v-flex xs12>
         <p class="body-1 prompt">생각해내신 사람/집단은 다음 중 어디에 속하나요?</p>
         <v-list two-line>
@@ -31,7 +31,7 @@ export default {
     PromisePane
   },
   computed: {
-    promise: function () {
+    policy: function () {
       return this.$store.state.policy
     }
     // predictedEffects: function () {

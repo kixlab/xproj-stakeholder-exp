@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <promise-pane :promise="promise" />
+    <promise-pane :policy="policy" />
     <v-flex xs12>
       <v-form>
         <p class="body-1 prompt">이 공약의 부정적인 효과를 받을 사회적 집단은 누구인가요?</p>
@@ -25,7 +25,7 @@ export default {
     PromisePane
   },
   computed: {
-    promise: function () {
+    policy: function () {
       return this.$store.state.policy
     }
   },

@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <promise-pane :promise="promise" />
+    <promise-pane :policy="policy" />
     <v-flex xs12>
       <v-list two-line>
         <stakeholder-guess-item v-for="stakeholder in stakeholders" :key="stakeholder.stakeholder"></stakeholder-guess-item>
@@ -37,7 +37,7 @@ export default {
     StakeholderGuessItem
   },
   computed: {
-    promise: function () {
+    policy: function () {
       return this.$store.state.policy
     }
   },
@@ -52,7 +52,7 @@ export default {
       // this.$axios.$post('/effects', this.effect)
       // TODO: record user activity
       this.stakeholders.push(this.newStakeholder)
-      this.$store.commit('setPredictedStakeholder', this.stakeholders)
+      this.$store.commit('setPredictedStakeholder', this.stakeholders) // commiting new predicted effects
       this.$router.push('CategorizeStakeholders')
     }
   },

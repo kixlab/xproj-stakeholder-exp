@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap>
-    <promise-pane :promise="promise"></promise-pane>
+    <promise-pane :policy="policy"></promise-pane>
     <v-flex xs12>
       <div class="prompt">다음과 같은 사람들이 이 공약에 영향을 받습니다.</div>
 
@@ -14,7 +14,7 @@
 import PromisePane from '~/components/PromisePane.vue'
 export default {
   computed: {
-    promise: function () {
+    policy: function () {
       return this.$store.state.policy
     }
   },
