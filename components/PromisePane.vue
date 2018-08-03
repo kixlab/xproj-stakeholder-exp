@@ -1,18 +1,3 @@
-
-<!--
-<template>
-  <v-flex xs12>
-
-    <a @click.prevent="showDetails = !showDetails">{{promise.title}}</a>
-    <v-slide-y-transition>
-      <div v-show="showDetails">
-        {{promise.description}}
-      </div>
-    </v-slide-y-transition>
-
-  </v-flex>
-</template>
--->
 <template>
   <v-app id="inspire">
     <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
@@ -20,7 +5,7 @@
         <div style="cursor: pointer;">
           <!-- Length of policy name should be less than 18 Korean syllables -->
           <!-- The line must be ended with a single space -->
-          <small>{{promise.title}} </small>
+          <small>{{policy.title}} </small>
           <v-icon dark>arrow_drop_down</v-icon>
         </div>
       </v-toolbar-title>
@@ -70,7 +55,7 @@
     }),
     props: {
       source: String,
-      promise: {
+      policy: {
         validator: function (value) {
           return ('title' in value) && ('description' in value)
         }

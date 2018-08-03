@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <promise-pane :promise="policy"></promise-pane>
+    <promise-pane :policy="policy"></promise-pane>
     <v-flex xs12>
       <!-- <p class="promise">{{promise}}</p> -->
       <p class="body-1">
@@ -150,6 +150,9 @@ export default {
   computed: {
     policy: function () {
       return this.$store.state.policy
+    },
+    effect: function () {
+      return this.$store.state.effect
     },
     filteredData: function () {
       if (!this.data) {
