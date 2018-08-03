@@ -21,7 +21,7 @@ import PromisePane from '~/components/PromisePane.vue'
 export default {
   // Policy list will be fetched from here.
   // fetch: async function ({app, store, params}) {
-  //   let promise = await app.$axios.$get('/api/policies/' + store.state.promiseIdx + '/')
+  //   let promise = await app.$axios.$get('/api/policies/' + store.state.policyIdx + '/')
   //   store.commit('setPromise', promise)
   // },
   components: {
@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     promise: function () {
-      return this.$store.state.promise
+      return this.$store.state.policy
     }
   },
   data: function () {

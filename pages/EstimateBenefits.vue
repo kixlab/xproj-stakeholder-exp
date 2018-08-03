@@ -31,12 +31,12 @@ export default {
   },
   computed: {
     promise: function () {
-      return this.$store.state.promise
+      return this.$store.state.policy
     }
   },
   methods: {
     addEffect: function () {
-      this.effect.policy = this.$store.state.promiseIdx
+      this.effect.policy = this.$store.state.policyIdx
       // this.$axios.$post('/effects', this.effect)
       // TODO: record user activity
       this.$router.push('ExploreStakeholders')
