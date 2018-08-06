@@ -3,7 +3,7 @@ export const state = () => ({
   policyIdx: 1,
   policy: {
     title: '복합쇼핑몰에 대한 입지제한과 영업제한',
-    description: '설명.............'
+    description: '정부는 신세계 스타필드, 이케아 등 복합쇼핑몰 및 전문점에 대해 영업, 출점을 제한하는 규제법안을 추진하고 있다. 정부는 이 정책을 통해 재래시장 및 상점가 등 소상공인을 보호할 수 있을 것으로 내다봤다. 그러나 유통업계는 소비자 권리를 침해할 뿐만 아니라, 경제에 끼칠 악영향을 우려한다며 반발했다.'
   },
   stakeholderGroup: [
     {
@@ -15,11 +15,23 @@ export const state = () => ({
       name: '이웃'
     }
   ],
-  summary: {
-    stakeholder_group: '',
-    text: '',
-    likes: 'int'
-  },
+  summaries: [
+    {
+      stakeholder_name: '복합쇼핑몰 직',
+      text: '저희는 휴가 언제 가나요?',
+      likes: '3'
+    },
+    {
+      stakeholder_name: '주변 주민',
+      text: '차가 많아서, 너무 복잡해요',
+      likes: '5'
+    },
+    {
+      stakeholder_name: 'A',
+      text: 'B',
+      likes: '7'
+    }
+  ],
   userPolicy: {
     user: '',
     policy: '',
