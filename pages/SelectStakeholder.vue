@@ -4,100 +4,37 @@
     <v-flex xs12>
       <!-- <p class="promise">{{promise}}</p> -->
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{opinion[0].identity}}</strong>에게<br>
-        끼치는 영향을 보여드릴게요!
+        이제 이 정책의 이해당사자들이 받게 될 영향입니다.<br>
+        이 정책은 우리 사회에 어떤 영향을 끼칠까요?
       </p>
 
-      <!-- Make those as component for easy management -->
-      <v-flex xs12 sm6 offset-sm3
-        v-for="object in opinion"
-        :key="object">
-        <v-spacer></v-spacer>
-        <v-card>
-          <v-card-title primary-title>
-            <div>
-              <div>
-                <font size="2">{{object.character}}</font>
-                &nbsp;
-                <font size="3"><strong>{{object.identity}}</strong></font>
-              </div>
-              <span>{{object.message}}</span>
-            </div>
-          </v-card-title>
-          <v-divider light></v-divider>
-          <v-card-actions>
-            <v-btn flat icon color="blue lighten-2">
-              <v-icon>thumb_up</v-icon>
-            </v-btn>
-
-            <v-btn flat icon color="red lighten-2">
-              <v-icon>thumb_down</v-icon>
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="object.show = !object.show">
-              <v-icon>{{ object.show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-            </v-btn>
-          </v-card-actions>
-
-          <v-slide-y-transition>
-            <v-card-text v-show=object.show>
-              {{object.specific_message}}
-            </v-card-text>
-          </v-slide-y-transition>
-        </v-card>
-      </v-flex>
-
-      
-      <v-btn 
-        v-if = "active_button"
-        color = "success"
-        @click="onNextButtonClick"
-        block ripple>
-        다른 것도 볼래요!
-      </v-btn>
-      <v-btn
-        :loading="loading"
-        :disabled="loading"
-        color="cyan"
-        @click.native="loader = 'loading'"
-        ripple
-      >
-        여러분의 생각도 들려주세요!
-      </v-btn>
-
-      <v-btn
-        :loading="loading"
-        :disabled="loading"
-        color="cyan"
-        @click.native="loader = 'loading'"
-        ripple
-      >
-        끝
-      </v-btn>
+      <v-layout row wrap>
+          <v-flex d-flex xs6>
+            <v-card color="purple" dark ripple @click="">
+            <v-card-title primary class="title">복합쇼핑몰 직</v-card-title>
+            <v-card-text><small>저희는 휴가 언제 가나요?</small></v-card-text>
+            </v-card>          
+          </v-flex>
+          <v-flex d-flex xs6>
+            <v-card color="purple" dark ripple @click="">
+            <v-card-title primary class="title">주변 주민</v-card-title>
+            <v-card-text><small>차가 많아서, 너무 복잡해요</small></v-card-text>
+            </v-card>          
+          </v-flex>
+          <v-flex d-flex xs6>
+            <v-card color="purple" dark ripple @click="">
+            <v-card-title primary class="title">A</v-card-title>
+            <v-card-text>B</v-card-text>
+            </v-card>          
+          </v-flex>
+          <v-flex d-flex xs6>
+            <v-card color="dark blue" dark ripple @click="">
+            <v-card-text><small>혹시 영향을 받을<br>다른 사람들도 있을까요?</small></v-card-text>
+            </v-card>          
+          </v-flex>          
+      </v-layout>
+    
     </v-flex>
-
-<!--    
-    <v-flex xs12>
-      <opinion-chart :bar-data="barData" @bar-click="onBarClick"></opinion-chart>
-    </v-flex>
-    <v-slide-y-transition>
-      <v-flex xs12 v-show="opinionTexts">
-        <v-card>
-          <v-card-actions>
-            이 공약에 대한 의견입니다.
-            <v-spacer></v-spacer>
-            <v-btn icon @click="opinionTexts = false">
-              <v-icon>close</v-icon>
-            </v-btn>
-          </v-card-actions>
-          <div v-for="text in opinionTexts" :key="text">{{text}}</div>
-        </v-card>
-      </v-flex>
-    </v-slide-y-transition>
-    <v-flex xs12>
-      <v-btn block color="primary" to="EstimateBenefits">새 효과 추가하기</v-btn>
-    </v-flex>
-    -->
   </v-layout>
 </template>
 <script>
@@ -193,9 +130,6 @@ export default {
     },
     next () {
       this.items.push({message: 'Baz'})
-    },
-    onNextButtonClick: function () {
-      this.$router.push('SelectStakeholder')
     }
 
   }
