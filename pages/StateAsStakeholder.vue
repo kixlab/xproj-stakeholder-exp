@@ -23,14 +23,14 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 export default {
-  asyncData: async function ({app, store}) {
-    let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
-      params: {
-        policy: store.state.policyIdx
-      }
-    })
-    return {stakeholderGroups: stakeholderGroups.results}
-  },
+  // asyncData: async function ({app, store}) {
+  //   let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
+  //     params: {
+  //       policy: store.state.policyIdx
+  //     }
+  //   })
+  //   return {stakeholderGroups: stakeholderGroups.results}
+  // },
   components: {
     PromisePane
   },
