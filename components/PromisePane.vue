@@ -1,5 +1,4 @@
 <template>
-  <v-app id="inspire">
     <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
       <v-toolbar-title>
         <div style="cursor: pointer;">
@@ -45,7 +44,6 @@
       </v-dialog>
     </v-toolbar>
 
-  </v-app>
 </template>
 
 <script>

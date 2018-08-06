@@ -1,52 +1,19 @@
 <template>
   <v-layout row wrap justify-center>
-    <promise-pane :policy="policy"></promise-pane>
+    <promise-pane :policy="policy" />
     <v-flex xs12>
       <!-- <p class="promise">{{promise}}</p> -->
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{opinion[0].identity}}</strong>에게<br>
+        이 정책이 <strong class="red--text">{{effect[0].stakeholder_name}}</strong>에게<br>
         끼치는 영향을 보여드릴게요!
       </p>
 
-      <!-- Make those as component for easy management -->
       <v-flex xs12 sm6 offset-sm3
-        v-for="object in opinion"
+        v-for="object in effect"
         :key="object">
         <v-spacer></v-spacer>
-        <v-card>
-          <v-card-title primary-title>
-            <div>
-              <div>
-                <font size="2">{{object.character}}</font>
-                &nbsp;
-                <font size="3"><strong>{{object.identity}}</strong></font>
-              </div>
-              <span>{{object.message}}</span>
-            </div>
-          </v-card-title>
-          <v-divider light></v-divider>
-          <v-card-actions>
-            <v-btn flat icon color="blue lighten-2">
-              <v-icon>thumb_up</v-icon>
-            </v-btn>
-
-            <v-btn flat icon color="red lighten-2">
-              <v-icon>thumb_down</v-icon>
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="object.show = !object.show">
-              <v-icon>{{ object.show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-            </v-btn>
-          </v-card-actions>
-
-          <v-slide-y-transition>
-            <v-card-text v-show=object.show>
-              {{object.specific_message}}
-            </v-card-text>
-          </v-slide-y-transition>
-        </v-card>
+        <effect-card :effect="object" />
       </v-flex>
-
       
       <v-btn 
         v-if = "active_button"
@@ -75,29 +42,6 @@
         끝
       </v-btn>
     </v-flex>
-
-<!--    
-    <v-flex xs12>
-      <opinion-chart :bar-data="barData" @bar-click="onBarClick"></opinion-chart>
-    </v-flex>
-    <v-slide-y-transition>
-      <v-flex xs12 v-show="opinionTexts">
-        <v-card>
-          <v-card-actions>
-            이 공약에 대한 의견입니다.
-            <v-spacer></v-spacer>
-            <v-btn icon @click="opinionTexts = false">
-              <v-icon>close</v-icon>
-            </v-btn>
-          </v-card-actions>
-          <div v-for="text in opinionTexts" :key="text">{{text}}</div>
-        </v-card>
-      </v-flex>
-    </v-slide-y-transition>
-    <v-flex xs12>
-      <v-btn block color="primary" to="EstimateBenefits">새 효과 추가하기</v-btn>
-    </v-flex>
-    -->
   </v-layout>
 </template>
 <script>
@@ -106,11 +50,13 @@ import _ from 'lodash'
 import OpinionChart from '~/components/OpinionChart.vue'
 import OpinionSelector from '~/components/OpinionSelector.vue'
 import PromisePane from '~/components/PromisePane.vue'
+import EffectCard from '~/components/EffectCard.vue'
 export default {
   components: {
     OpinionChart,
     OpinionSelector,
-    PromisePane
+    PromisePane,
+    EffectCard
   },
   mounted: function () {
     d3.csv('/data.csv', function (d) {
@@ -159,26 +105,7 @@ export default {
       },
       availableTypes: ['sex', 'age', 'job', 'kid'],
       opinionTexts: false,
-      active_button: true,
-      items: [
-        {message: 'Foo'}
-      ],
-      opinion: [
-        {
-          character: '세 살 배기 아이의',
-          identity: '엄마',
-          message: '우리 아이는 너무나 귀여워요!!! 사랑스러워 죽겠어요~ :)',
-          specific_message: '위대한 태양이 외면하는 겨울에는 땅은 슬픔의 계곡으로 들어가 단식하고 통곡하며 상복에 몸을 가리고 자신의 결혼식 화환이 썩도록 내버려둔다. 그리고는 태양이 키스와 함께 돌아오는 봄이 되면 다시 생동한다.',
-          show: false
-        },
-        {
-          character: '애기엄마가 윗집에 사는',
-          identity: '이웃',
-          message: '아이 울음 소리가 너무 시끄러운 것 같아요!',
-          specific_message: '우습게 들릴지 모르지만, 진정한 혁명가를 이끄는 것은 위대한 사랑의 감정이다, 이런 자질이 없는 혁명가는 생각할 수 없다.',
-          show: false
-        }
-      ]
+      active_button: true
     }
   },
   methods: {
