@@ -45,7 +45,7 @@ export default {
       // this.$store.commit('setMyEffect', this.myEffect)
       // this.$axios.$post('/effects', this.effect)
       // TODO: record user activity
-      this.$router.push('GuessEffects')
+      this.$router.push('GuessEffect')
     }
   },
   data: function () {

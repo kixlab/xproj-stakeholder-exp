@@ -11,6 +11,7 @@
         <v-radio label="특별한 근거 없음" value="none"></v-radio>
         <v-radio label="기타" value="etc"></v-radio>
       </v-radio-group>
+      <v-btn @click="onNextClick">다음</v-btn>
     </v-flex>
   </v-layout>
 </template>
@@ -23,6 +24,7 @@ export default {
     let effectsLength = store.state.effects.length
     let randomNumber = Math.floor(Math.random() * effectsLength)
     let randomEffect = store.state.effects[randomNumber]
+    store.commit('setRandomEffect', randomEffect)
     return {randomEffect: randomEffect}
   },
   components: {
@@ -31,6 +33,11 @@ export default {
   computed: {
     policy: function () {
       return this.$store.state.policy
+    }
+  },
+  methods: {
+    onNextClick: function () {
+      this.$router.push('VerifyEffect')
     }
   }
 }
