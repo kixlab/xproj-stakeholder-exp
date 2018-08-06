@@ -54,13 +54,15 @@ export const state = () => ({
       description: '업무가 제한되어야 우리의 휴식이 보장됩니다. 다른 친구들은 다 휴가도 가고 하던데, 저는 갈래야 갈 수 없어요 :(',
       likes: '1'
     }
-  ]})
+  ],
+  myEffect: {}
+})
 
 export const mutations = {
   toggleSidebar (state) {
     state.sidebar = !state.sidebar
   },
-  setPromise (state, payload) {
+  setPolicy (state, payload) {
     state.policy = payload
   },
   setPolicyIdx (state, payload) {
@@ -68,5 +70,11 @@ export const mutations = {
   },
   setPredictedEffects (state, payload) {
     state.predictedEffects = payload
+  },
+  setMyEffect (state, payload) {
+    state.myEffect = payload
+  },
+  setEffects (state, payload) {
+    state.effects = payload
   }
 }

@@ -17,13 +17,13 @@
             </v-card>
           </v-flex>
         </p>       
-        <v-radio-group v-model="effect.effect_size">
+        <v-radio-group v-model="userPolicy.effect_size">
           <v-radio label="매우 적은" :value="0"></v-radio>
           <v-radio label="적은" :value="1"></v-radio> 
           <v-radio label="큰" :value="2"></v-radio>
           <v-radio label="매우 큰" :value="3"></v-radio> 
         </v-radio-group>
-        
+<!--         
         <v-spacer></v-spacer>
         <p class="body-1 prompt">
           <v-flex xs12>
@@ -32,13 +32,13 @@
             </v-card>
           </v-flex>
         </p>       
-        <v-radio-group v-model="effect.procon">
+        <v-radio-group v-model="userPolicy.procon">
           <v-radio label="찬성" value="0"></v-radio>
           <v-radio label="반대" value="1"></v-radio> 
-        </v-radio-group>
+        </v-radio-group> -->
 
 
-        <v-btn v-if="effect.effect_size != 4 && effect.procon != 2" block color="primary" @click="onNextButtonClick">다음</v-btn>
+        <v-btn v-if="userPolicy.effect_size != 4 && userPolicy.procon != 2" block color="primary" @click="onNextButtonClick">다음</v-btn>
         <template v-else>
           <p style="color:red">모두 고르셔야 다음으로 넘어갈 수 있습니다.</p>
           <v-btn block disabled>다음</v-btn>
@@ -52,10 +52,16 @@ import PromisePane from '~/components/PromisePane.vue'
 
 export default {
   // Policy list will be fetched from here.
-  // fetch: async function ({app, store, params}) {
-  //   let policy = await app.$axios.$get('/api/policies/' + store.state.policyIdx + '/')
-  //   store.commit('setPolicy', policy)
-  // },
+  fetch: async function ({app, store, params}) {
+    // let policy = await app.$axios.$get('/api/policies/' + store.state.policyIdx + '/')
+    // store.commit('setPolicy', policy)
+    let effects = await app.$axios.$get('/api/effects/', {
+      params: {
+        policy: store.state.policyIdx
+      }
+    })
+    store.commit('setEffects', effects.results)
+  },
   components: {
     PromisePane
   },
@@ -69,20 +75,21 @@ export default {
   },
   methods: {
     onNextButtonClick: function () {
-      this.effect.policy = this.policyIdx
-      // this.effect.effect_size = parseInt(this.effect.effect_size)
-      let to = this.effect.effect_size >= 2 ? 'StateAsStakeholder' : 'GuessStakeholders'
+      this.userPolicy.policy = this.policyIdx
+      // this.userPolicy.effect_size = parseInt(this.userPolicy.effect_size)
+      let to = this.userPolicy.effect_size >= 2 ? 'StateAsStakeholder' : 'GuessEffect'
       this.$router.push(to)
     }
   },
   data: function () {
     return {
-      effect: {
-        effect_size: '4',
+      userPolicy: {
+        effect_size: 4,
         identity: '',
         stakeholder: '',
-        stance: '2'
+        stance: 2
       }
+      // TODO: Do we need it?
     }
   }
 }
