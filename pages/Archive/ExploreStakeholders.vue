@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap>
-    <promise-pane :policy="policy" />
+    <promise-pane :policy="policy"></promise-pane>
     <v-flex xs12>
       <div class="prompt">다음과 같은 사람들이 이 공약에 영향을 받습니다.</div>
 

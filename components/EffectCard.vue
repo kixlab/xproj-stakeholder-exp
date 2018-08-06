@@ -32,7 +32,7 @@
     </v-card>
 </template>
 
-<style>
+<style scoped>
 #description {
     text-align: left;
 }

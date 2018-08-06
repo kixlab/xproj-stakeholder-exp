@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <promise-pane :promise="promise" />
+    <promise-pane :policy="policy" />
     <v-flex xs12>
       <v-form>
         <p class="body-1 prompt">이 공약으로 혜택이나 손해를 받으시나요?</p>
@@ -41,8 +41,8 @@ export default {
     PromisePane
   },
   computed: {
-    promise: function () {
-      return this.$store.state.promise
+    policy: function () {
+      return this.$store.state.policy
     }
   },
   methods: {

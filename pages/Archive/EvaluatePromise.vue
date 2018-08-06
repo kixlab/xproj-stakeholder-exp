@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <promise-pane :promise="promise" />
+    <promise-pane :policy="policy" />
     <v-flex xs12>
       <v-form>
         <p class="body-1 prompt">이 정책을 지지하시나요?</p>
@@ -21,15 +21,15 @@ import PromisePane from '~/components/PromisePane.vue'
 export default {
   // Policy list will be fetched from here.
   // fetch: async function ({app, store, params}) {
-  //   let promise = await app.$axios.$get('/api/policies/' + store.state.promiseIdx + '/')
-  //   store.commit('setPromise', promise)
+  //   let policy = await app.$axios.$get('/api/policies/' + store.state.policyIdx + '/')
+  //   store.commit('setPolicy', policy)
   // },
   components: {
     PromisePane
   },
   computed: {
-    promise: function () {
-      return this.$store.state.promise
+    policy: function () {
+      return this.$store.state.policy
     }
   },
   data: function () {

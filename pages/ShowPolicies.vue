@@ -2,9 +2,9 @@
   <v-layout row wrap justify-center>
     <v-flex xs12>
       <ul>
-        <li v-for="promise in promises" :key="promise.id">
-          <a @click="onPromiseClick(promise.id, $event)">
-            {{promise.title}}
+        <li v-for="policy in policies" :key="policy.id">
+          <a @click="onPolicyClick(policy.id, $event)">
+            {{policy.title}}
           </a>
         </li>
       </ul>
@@ -15,14 +15,14 @@
 export default {
   // List of policies fetched from here
   // asyncData: async function ({app, store}) { // fetch the list of policies from the server
-  //   let promises = await app.$axios.$get('/api/policies/')
-  //   return {promises: promises.results}
+  //   let policies = await app.$axios.$get('/api/policies/')
+  //   return {policies: policies.results}
   // },
   methods: {
-    onPromiseClick: function (idx, $ev) { // update the promise index in store
-      this.$store.commit('setPromiseIdx', {promiseIdx: idx})
+    onPolicyClick: function (idx, $ev) { // update the policy index in store
+      this.$store.commit('setPolicyIdx', {policyIdx: idx})
       // TODO: Log to database
-      this.$router.push('EvaluatePromise')
+      this.$router.push('Identify')
     }
   }
 }

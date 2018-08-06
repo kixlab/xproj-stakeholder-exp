@@ -1,6 +1,6 @@
 export const state = () => ({
   sidebar: false,
-  promiseIdx: 1,
+  policyIdx: 1,
   policy: {
     title: '복합쇼핑몰에 대한 입지제한과 영업제한',
     description: '설명.............'
@@ -28,7 +28,8 @@ export const state = () => ({
     is_stakeholder: true,
     stakeholder: ''
   },
-  effect: [
+  predictedEffects: [],
+  effects: [
     {
       userPolicy: '',
       stakeholder_name: '엄마',
@@ -60,12 +61,12 @@ export const mutations = {
     state.sidebar = !state.sidebar
   },
   setPromise (state, payload) {
-    state.promise = payload
+    state.policy = payload
   },
-  setFirstImpression (state, payload) {
-    state.firstImpression = payload.firstImpression
+  setPolicyIdx (state, payload) {
+    state.policyIdx = payload.policyIdx
   },
-  setPromiseIdx (state, payload) {
-    state.promiseIdx = payload.promiseIdx
+  setPredictedEffects (state, payload) {
+    state.predictedEffects = payload
   }
 }
