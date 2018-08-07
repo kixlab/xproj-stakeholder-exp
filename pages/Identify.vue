@@ -17,7 +17,7 @@
             </v-card>
           </v-flex>
         </p>       
-        <v-radio-group v-model="effect.effect_size">
+        <v-radio-group v-model="userPolicy.effect_size">
           <v-radio label="영향을 받지 않는다" :value="0"></v-radio>
           <v-radio label="조금 영향을 받는다" :value="1"></v-radio> 
           <v-radio label="적당히 영향을 받는다" :value="2"></v-radio>
@@ -25,7 +25,7 @@
           <v-radio label="영향을 받게 될지 알 수 없다" :value="4"></v-radio>         
         </v-radio-group>
 
-        <v-btn v-if="effect.effect_size != 5" block color="primary" @click="onNextButtonClick">다음</v-btn>
+        <v-btn v-if="userPolicy.effect_size != 5" block color="primary" @click="onNextButtonClick">다음</v-btn>
         <template v-else>
           <p style="color:red">모두 고르셔야 다음으로 넘어갈 수 있습니다.</p>
           <v-btn block disabled>다음</v-btn>
@@ -40,8 +40,15 @@ import PromisePane from '~/components/PromisePane.vue'
 export default {
   // Policy list will be fetched from here.
   // fetch: async function ({app, store, params}) {
-  //   let policy = await app.$axios.$get('/api/policies/' + store.state.policyIdx + '/')
-  //   store.commit('setPolicy', policy)
+  //   // let policy = await app.$axios.$get('/api/policies/' + store.state.policyIdx + '/')
+  //   // store.commit('setPolicy', policy)
+  //   let effects = await app.$axios.$get('/api/effects/', {
+  //     params: {
+  //       policy: store.state.policyIdx,
+  //       get_stakeholder_names: true
+  //     }
+  //   })
+  //   store.commit('setEffects', effects.results)
   // },
   components: {
     PromisePane
@@ -53,19 +60,21 @@ export default {
   },
   methods: {
     onNextButtonClick: function () {
-      this.effect.policy = this.policyIdx
-      // this.effect.effect_size = parseInt(this.effect.effect_size)
-      let to = this.effect.effect_size >= 2 ? 'StateAsStakeholder' : 'GuessStakeholders'
+      this.userPolicy.policy = this.policyIdx
+      // this.userPolicy.effect_size = parseInt(this.userPolicy.effect_size)
+      let to = this.userPolicy.effect_size >= 2 ? 'StateAsStakeholder' : 'GuessEffect'
       this.$router.push(to)
     }
   },
   data: function () {
     return {
-      effect: {
+      userPolicy: {
         effect_size: '5',
         identity: '',
         detail: ''
       }
+      // TODO: Do we need it?
+      // ANS : No, it will be removed. The model in vuex will be replaced instead.
     }
   }
 }
