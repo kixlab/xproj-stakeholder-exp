@@ -22,11 +22,13 @@ module.exports = {
   plugins: ['~/plugins/vuetify.js', '~plugins/axios'],
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
+    '@nuxtjs/google-analytics'
   ],
+  'google-analytics': {
+    id: 'UA-123523203-1'
+  },
   axios: {
-    // baseURL: 'https://localhost/api/',
-    // browserBaseURL: 'https://localhost/api/',
     proxy: true
   },
   proxy: {
