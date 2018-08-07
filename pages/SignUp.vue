@@ -5,37 +5,20 @@
         <div>
           <!-- Length of policy name should be less than 18 Korean syllables -->
           <!-- The line must be ended with a single space -->
-          <small> 어서오세요! </small>
+          <small> 회원가입 </small>
           <v-icon dark>tag_faces</v-icon>
         </div>
       </v-toolbar-title>
     </v-toolbar>
     <v-flex xs12>
-      안녕하세요!<br>
+      안녕하세요!
       데꿀멍을 통해 정책이 우리의 삶에 끼치는 영향을 알아보세요!
-      <v-spacer />
-      <v-spacer />
-      <v-btn @click="lookaround" ripple> 구경하기 </v-btn>
-      <v-btn @click="participate" ripple> 참여하기 </v-btn>
     </v-flex>
-
   </v-layout>
 </template>
-<script>
-export default {
-  data: function () {
-    return {
-
-    }
-  },
-
-  methods: {
-    lookaround () {
-      this.$router.push('ShowPolicies')
-    },
-    participate () {
-      this.$router.push('SignIn')
-    }
-  }
+<style scoped>
+#lala {
+  margin: 0 auto;
+  cursor: pointer;
 }
-</script>
+</style>
