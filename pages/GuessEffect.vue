@@ -2,7 +2,7 @@
   <v-layout row wrap justify-center>
     <promise-pane :policy="policy"></promise-pane>
     <v-flex xs12>
-      <p>혹시 당신이 {{randomEffect.stakeholder_detail}}이라면 이 정책으로 어떤 영향을 받게 될까요?</p>
+      <p>혹시 당신이 {{randomStakeholderGroup.name}}이라면 이 정책으로 어떤 영향을 받게 될까요?</p>
       <v-text-field></v-text-field>
       왜 그렇게 생각하셨나요?
       <v-radio-group>
@@ -20,12 +20,19 @@
 import PromisePane from '~/components/PromisePane.vue'
 export default {
   // Guess effect to the stakeholder given by the system
-  asyncData: function ({app, store}) {
-    let effectsLength = store.state.effects.length
-    let randomNumber = Math.floor(Math.random() * effectsLength)
-    let randomEffect = store.state.effects[randomNumber]
-    store.commit('setRandomEffect', randomEffect)
-    return {randomEffect: randomEffect}
+  // fetch: function ({app, store}) {
+  //   // let effectsLength = store.state.effects.length
+  //   // let randomNumber = Math.floor(Math.random() * effectsLength)
+  //   // let randomEffect = store.state.effects[randomNumber]
+  //   // store.commit('setRandomEffect', randomEffect)
+  //   // return {randomEffect: randomEffect}
+  //   let stakeholderLength = store.state.stakeholderGroups.lehgth
+  //   let randomNumber = Math.floor(Math.random() * stakeholderLength)
+  //   let randomStakeholderGroup = store.state.stakeholderGroups[randomNumber]
+  //   store.commit('setRandomStakeholderGroup')
+  // },
+  mounted: function () {
+    this.$store.commit('setRandomStakeholderGroup')
   },
   components: {
     PromisePane
@@ -33,6 +40,9 @@ export default {
   computed: {
     policy: function () {
       return this.$store.state.policy
+    },
+    randomStakeholderGroup: function () {
+      return this.$store.getters.randomStakeholderGroup
     }
   },
   methods: {

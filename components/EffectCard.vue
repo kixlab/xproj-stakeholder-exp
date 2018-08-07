@@ -47,7 +47,7 @@
       source: String,
       effect: {
         validator: function (value) {
-          return ('stakeholder_name' in value) && ('stakeholder_detail' in value) && ('description' in value)
+          return ('stakeholder_group' in value) && ('stakeholder_detail' in value) && ('description' in value)
         }
       }
     }

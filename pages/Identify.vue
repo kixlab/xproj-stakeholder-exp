@@ -37,18 +37,24 @@
 import PromisePane from '~/components/PromisePane.vue'
 
 export default {
-  // Policy list will be fetched from here.
-  // fetch: async function ({app, store, params}) {
-  //   // let policy = await app.$axios.$get('/api/policies/' + store.state.policyIdx + '/')
-  //   // store.commit('setPolicy', policy)
-  //   let effects = await app.$axios.$get('/api/effects/', {
-  //     params: {
-  //       policy: store.state.policyIdx,
-  //       get_stakeholder_names: true
-  //     }
-  //   })
-  //   store.commit('setEffects', effects.results)
-  // },
+  // Stakeholders will be fetched from here.
+  fetch: async function ({app, store, params}) {
+    // let policy = await app.$axios.$get('/api/policies/' + store.state.policyIdx + '/')
+    // store.commit('setPolicy', policy)
+    // let effects = await app.$axios.$get('/api/effects/', {
+    //   params: {
+    //     policy: store.state.policyIdx,
+    //     get_stakeholder_names: true
+    //   }
+    // })
+    // store.commit('setEffects', effects.results)
+    let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
+      params: {
+        policy: store.state.policyIdx
+      }
+    })
+    store.commit('setStakeholderGroups', stakeholderGroups.results)
+  },
   components: {
     PromisePane
   },
