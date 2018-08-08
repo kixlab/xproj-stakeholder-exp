@@ -68,7 +68,8 @@ export const state = () => ({
     }
   ],
   myEffect: {},
-  randomStakeholderGroupIdx: 0
+  randomStakeholderGroupIdx: 0,
+  userToken: ''
 })
 
 export const mutations = {
@@ -97,6 +98,9 @@ export const mutations = {
     let stakeholderLength = state.stakeholderGroups.length
     let randomNumber = Math.floor(Math.random() * stakeholderLength)
     state.randomStakeholderGroupIdx = randomNumber
+  },
+  setUserToken (state, payload) {
+    state.userToken = payload
   }
 }
 

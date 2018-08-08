@@ -24,15 +24,16 @@
             required
           ></v-text-field>   
           <v-text-field
-            v-validate="'required|alpha_num|min:6'"
+            v-validate="'required|min:8'"
             v-model="password"
             :error-messages="errors.collect('password')"
+            type="password"
             label="비밀번호"
             placeholder="password"
             name="password"
             required
             ></v-text-field>
-          <v-btn @click="submit" ripple> 로그인 </v-btn>
+          <v-btn @click="onLoginClick" ripple> 로그인 </v-btn>
           <v-btn @click="register" ripple> 회원가입 </v-btn>
         </v-form>
       </v-card>
@@ -66,8 +67,25 @@ export default {
   },
 
   methods: {
-    submit () {
-      this.$validator.validateAll()
+    onLoginClick () {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          this.$store.commit('setUser', {
+            email: this.email
+          })
+          this.$ga.set({
+            userId: this.email
+          })
+          this.$axios.$post('/api/auth/login/', {
+            email: this.email,
+            password: this.password
+          }).then((result) => {
+            this.$axios.setToken(result.key, 'Token')
+            this.$store.commit('setUserToken', result.key)
+            this.$router.push('ShowPolicies')
+          })
+        }
+      })
     },
     register () {
       this.$router.push('SignUp')
