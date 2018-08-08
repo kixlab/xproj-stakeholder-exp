@@ -14,10 +14,10 @@
 <script>
 export default {
   // List of policies fetched from here
-  // asyncData: async function ({app, store}) { // fetch the list of policies from the server
-  //   let policies = await app.$axios.$get('/api/policies/')
-  //   return {policies: policies.results}
-  // },
+  asyncData: async function ({app, store}) { // fetch the list of policies from the server
+    let policies = await app.$axios.$get('/api/policies/')
+    return {policies: policies.results}
+  },
   methods: {
     onPolicyClick: function (policy) { // update the policy index in store
       this.$store.commit('setPolicyIdx', {policyIdx: policy.id})
