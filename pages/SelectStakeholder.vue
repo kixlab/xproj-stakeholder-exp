@@ -8,12 +8,12 @@
       </p>
 
       <v-layout row wrap>
-        <template v-for="stakeholder in summaries">
-          <v-flex d-flex xs6 :key="stakeholder">
+        <template v-for="stakeholder in stakeholderGroups">
+          <v-flex d-flex xs6 :key="stakeholder.name">
             <v-card color="purple" dark ripple @click="1==1">
-            <v-card-title primary class="title">{{stakeholder.stakeholder_name}}</v-card-title>
-            <v-card-text><small>{{stakeholder.text}}</small></v-card-text>
-            </v-card>          
+              <v-card-title primary class="title">{{stakeholder.name}}</v-card-title>
+              <v-card-text><small>{{stakeholder.keywords}}</small></v-card-text>
+            </v-card>
           </v-flex>
         </template>       
           <v-flex d-flex xs6>
@@ -39,9 +39,12 @@ export default {
     effect: function () {
       return this.$store.state.effect
     },
-    summaries: function () {
-      return this.$store.state.summaries
+    stakeholderGroups: function () {
+      return this.$store.state.stakeholderGroups
     }
+    // summaries: function () {
+    //   return this.$store.state.summaries
+    // }
   },
   data: function () {
     return {

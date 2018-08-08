@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     onExploreOpinionsClick: function () {
-      this.$router.push('ExploreOpinions')
+      this.$router.push('SelectStakeholder')
     },
     onPredictMoreClick: function () {
       this.$router.push('GuessEffect')
