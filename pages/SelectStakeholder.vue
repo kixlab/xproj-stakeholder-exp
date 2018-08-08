@@ -8,14 +8,7 @@
       </p>
 
       <v-layout row wrap>
-        <template v-for="stakeholder in stakeholderGroups">
-          <v-flex d-flex xs6 :key="stakeholder.name">
-            <v-card color="purple" dark ripple @click="1==1">
-              <v-card-title primary class="title">{{stakeholder.name}}</v-card-title>
-              <v-card-text><small>{{stakeholder.keywords}}</small></v-card-text>
-            </v-card>
-          </v-flex>
-        </template>       
+          <stakeholder-overview-item v-for="sg in stakeholderGroups" :key="sg.stakeholder_group" :stakeholder="sg" @stakeholder-item-click="onStakeholderItemClick"></stakeholder-overview-item>
           <v-flex d-flex xs6>
             <v-card color="dark blue" dark ripple @click="1==1">
             <v-card-text><small>혹시 영향을 받을<br>다른 사람들도 있을까요?</small></v-card-text>
@@ -28,9 +21,11 @@
 </template>
 <script>
 import PromisePane from '~/components/PromisePane.vue'
+import StakeholderOverviewItem from '~/components/StakeholderOverviewItem.vue'
 export default {
   components: {
-    PromisePane
+    PromisePane,
+    StakeholderOverviewItem
   },
   computed: {
     policy: function () {
@@ -54,8 +49,20 @@ export default {
   methods: {
     next () {
       this.items.push({message: 'Baz'})
+    },
+    onStakeholderItemClick: async function (stakeholderId) {
+      console.log(stakeholderId)
+      const effects = await this.$axios.$get('/api/effects/', {
+        params: {
+          policy: this.policy.id,
+          stakeholder_group: stakeholderId,
+          get_stakeholder_names: true
+        }
+      })
+      console.log(effects)
+      this.$store.commit('setEffects', effects.results)
+      this.$router.push('ExploreOpinions')
     }
-
   }
 }
 </script>

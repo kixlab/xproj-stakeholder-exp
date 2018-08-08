@@ -3,15 +3,15 @@
     <promise-pane :policy="policy" />
     <v-flex xs12>
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{effects[0].stakeholder_name}}</strong>에게<br>
+        이 정책이 <strong class="red--text">{{effects[0].stakeholder_group}}</strong>에게<br>
         끼치는 영향을 보여드릴게요!
       </p>
 
       <v-flex xs12 sm6 offset-sm3
-        v-for="object in effects"
-        :key="object">
+        v-for="effect in effects"
+        :key="effect.stakeholder_detail">
         <v-spacer></v-spacer>
-        <effect-card :effect="object" />
+        <effect-card :effect="effect" />
       </v-flex>
       
       <v-btn 

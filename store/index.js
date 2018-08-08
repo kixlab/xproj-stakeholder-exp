@@ -69,7 +69,8 @@ export const state = () => ({
   ],
   myEffect: {},
   randomStakeholderGroupIdx: 0,
-  userToken: ''
+  userToken: '',
+  user: {}
 })
 
 export const mutations = {
@@ -101,6 +102,9 @@ export const mutations = {
   },
   setUserToken (state, payload) {
     state.userToken = payload
+  },
+  setUser (state, payload) {
+    state.user = payload
   }
 }
 

@@ -54,9 +54,21 @@ export default {
   },
   methods: {
     onExploreOpinionsClick: function () {
+      this.$ga.event({
+        eventCategory: 'VerifyEffect',
+        eventAction: 'ToExploreOpinions',
+        eventLabel: this.randomStakeholderGroup.name,
+        eventValue: 0
+      })
       this.$router.push('SelectStakeholder')
     },
     onPredictMoreClick: function () {
+      this.$ga.event({
+        eventCategory: 'VerifyEffect',
+        eventAction: 'ToPredictMore',
+        eventLabel: this.randomStakeholderGroup.name,
+        eventValue: 0
+      })
       this.$router.push('GuessEffect')
     }
   },
