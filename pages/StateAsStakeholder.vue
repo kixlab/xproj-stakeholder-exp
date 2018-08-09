@@ -52,6 +52,12 @@ export default {
       // this.$store.commit('setMyEffect', this.myEffect)
       this.$axios.$post('/api/effects/', this.myEffect)
       // TODO: record user activity
+      this.$ga.event({
+        eventCategory: 'StateAsStakeholder',
+        eventAction: 'AddEffect',
+        eventLabel: this.myEffect.stakeholder_detail,
+        eventValue: 0
+      })
       this.$router.push('GuessEffect')
     }
   },

@@ -67,8 +67,14 @@ export default {
   methods: {
     onNextButtonClick: function () {
       this.userPolicy.policy = this.policyIdx
+      const to = this.userPolicy.effect_size >= 2 ? 'StateAsStakeholder' : 'GuessEffect'
       // this.userPolicy.effect_size = parseInt(this.userPolicy.effect_size)
-      let to = this.userPolicy.effect_size >= 2 ? 'StateAsStakeholder' : 'GuessEffect'
+      this.$ga.event({
+        eventCategory: 'Identify',
+        eventAction: 'ClickNextButton',
+        eventLabel: this.policy.title,
+        eventValue: 0
+      })
       this.$router.push(to)
     }
   },

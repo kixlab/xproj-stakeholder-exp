@@ -53,17 +53,18 @@ export default {
   },
   methods: {
     onShowDescriptionButtonClick: function () {
+      console.log(this.$router.currentRoute.path)
       if (this.show) {
         this.$ga.event({
-          eventCategory: 'EffectCard',
-          eventAction: 'DescriptionClosed',
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'CloseDescription',
           eventLabel: this.effect.stakeholder_detail,
           eventValue: 0
         })
       } else {
         this.$ga.event({
-          eventCategory: 'EffectCard',
-          eventAction: 'DescriptionOpened',
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'OpenDescription',
           eventLabel: this.effect.stakeholder_detail,
           eventValue: 0
         })

@@ -47,6 +47,12 @@ export default {
   },
   methods: {
     onNextClick: function () {
+      this.$ga.event({
+        eventCategory: 'GuessEffect',
+        eventAction: 'ToVerifyEffect',
+        eventLabel: this.randomStakeholderGroup.name,
+        eventValue: 0
+      })
       this.$router.push('VerifyEffect')
     }
   }
