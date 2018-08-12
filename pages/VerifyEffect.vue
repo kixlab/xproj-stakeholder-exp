@@ -2,11 +2,42 @@
   <v-layout row wrap justify-center>
     <promise-pane :policy="policy"></promise-pane>
     <v-flex xs12>
-      <p>실제 {{randomStakeholderGroup.name}}들이 받게 될 영향을 보여드릴게요.</p>
-      <effect-card v-for="effect in filteredEffects" :key="effect.stakeholder_detail" :effect="effect">
-      </effect-card>
-      <v-btn @click="onPredictMoreClick">영향 더 예상하기</v-btn>
-      <v-btn @click="onExploreOpinionsClick">효과 모두 보기</v-btn>
+      <p class="body-1">
+        이 정책이 <strong class="red--text">{{effects[0].stakeholder_name}}</strong>에게<br>
+        끼치는 영향을 보여드릴게요!
+      </p>
+
+      <v-flex xs12 sm6 offset-sm3
+        v-for="effect in effects"
+        :key="effect.stakeholder_detail"
+        v-if="effects[0].stakeholder_name==effect.stakeholder_name">
+        <v-spacer></v-spacer>
+        <effect-card :effect="effect" />
+      </v-flex>
+      
+      <v-btn 
+        v-if = "active_button"
+        color = "success"
+        @click="onPredictMoreClick"
+        block ripple>
+        다른 것도 볼래요!
+      </v-btn>
+      <v-btn 
+        v-if = "active_button"
+        color = "success"
+        @click="onExploreOpinionsClick"
+        block ripple>
+        효과 모두 보기
+      </v-btn>
+
+      <v-btn
+        :loading="loading"
+        :disabled="loading"
+        color="cyan"
+        @click.native="loader = 'loading'"
+        ripple>
+        끝
+      </v-btn>
     </v-flex>
   </v-layout>
 </template>
@@ -23,7 +54,7 @@ export default {
   //   store.commit('setRandomEffect', randomEffect)
   //   return {randomEffect: randomEffect}
   // },
-  asyncData: async function ({app, store}) {
+/*   asyncData: async function ({app, store}) {
     let effects = await app.$axios.$get('/api/effects/', {
       params: {
         policy: store.state.policyIdx,
@@ -34,7 +65,7 @@ export default {
     console.log(effects)
     // store.commit('setEffects', effects.results)
     return {filteredEffects: effects.results}
-  },
+  }, */
   computed: {
     randomStakeholderGroup: function () {
       return this.$store.getters.randomStakeholderGroup
@@ -46,6 +77,9 @@ export default {
     // },
     policy: function () {
       return this.$store.state.policy
+    },
+    effects: function () {
+      return this.$store.state.effects
     }
   },
   components: {
@@ -78,7 +112,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

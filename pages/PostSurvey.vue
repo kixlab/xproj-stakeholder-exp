@@ -5,16 +5,16 @@
         <v-icon dark id="goback" @click="goback">arrow_back</v-icon>
         <div style="flex: 1;">
           <!-- The line must be ended with a single space -->
-          <small> 회원가입 </small>
+          <small> 사용 후 설문 </small>
           <v-icon dark>tag_faces</v-icon>
         </div>
+        
       </v-toolbar-title>
     </v-toolbar>
     <v-flex xs12>
-      <h1>으쌰으쌰 <v-icon>build</v-icon></h1>
-      죄송합니다. <br>
-      시스템을 열심히 짓고 있는 중입니다! <br><br>
-      회원가입은 조금만 더 기다려주세요!
+      <h1>수고 많으셨습니다!</h1>
+      이제 마지막입니다.
+      사용 후 설문조사를 완료하시면 10,000원 상당의 기프티콘을 드립니다.
     </v-flex>
   </v-layout>
 </template>
@@ -33,7 +33,7 @@
 export default {
   methods: {
     goback () {
-      this.$router.push('SignIn')
+      this.$router.push('showPolicies')
     }
   }
 }

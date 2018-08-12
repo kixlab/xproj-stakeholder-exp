@@ -3,13 +3,14 @@
     <promise-pane :policy="policy" />
     <v-flex xs12>
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{effects[0].stakeholder_group}}</strong>에게<br>
+        이 정책이 <strong class="red--text">{{effects[0].stakeholder_name}}</strong>에게<br>
         끼치는 영향을 보여드릴게요!
       </p>
 
       <v-flex xs12 sm6 offset-sm3
         v-for="effect in effects"
-        :key="effect.stakeholder_detail">
+        :key="effect.stakeholder_detail"
+        v-if="effects[0].stakeholder_name==effect.stakeholder_name">
         <v-spacer></v-spacer>
         <effect-card :effect="effect" />
       </v-flex>
@@ -62,7 +63,8 @@ export default {
   data: function () {
     return {
       opinionTexts: false,
-      active_button: true
+      active_button: true,
+      loading: false
     }
   },
   methods: {
@@ -71,6 +73,16 @@ export default {
     },
     onNextButtonClick: function () {
       this.$router.push('SelectStakeholder')
+    }
+  },
+  watch: {
+    loader () {
+      const l = this.loader
+      this[l] = !this[l]
+
+      setTimeout(() => (this[l] = false), 3000)
+
+      this.loader = null
     }
   }
 }

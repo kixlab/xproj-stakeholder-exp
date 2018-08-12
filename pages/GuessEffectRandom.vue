@@ -8,47 +8,7 @@
         </v-card-text>
       </v-card>
       
-      <v-dialog
-        v-model="dialog"
-        width="500"
-      >
-      <v-btn slot="activator" color="blue-grey" dark block>이해당사자 고르기</v-btn>
-
-      <v-card>
-        <v-card-title
-          class="headline grey lighten-2"
-          primary-title
-        >
-          어떤 사람의 입장이 되어보시겠어요?
-        </v-card-title>
-
-        <v-card-text>
-          <v-radio-group hide-details v-model="predictedEffect.stakeholder_group">
-            <template v-for="sg in stakeholderGroups" v-if="sg.id != userPolicy.stakeholder">
-              <v-radio :key="sg.name" :label="sg.name" :value="sg.id"></v-radio>
-            </template>
-          </v-radio-group>
-        </v-card-text>
-
-        <v-divider></v-divider>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            flat
-            @click="dialog = false"
-          >
-            선택!
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-
-      <template v-if="predictedEffect.stakeholder_group != 0">
-      <v-divider/>
-      <p class="body-1 prompt head">좋습니다! <strong>{{findStakeholderName(predictedEffect.stakeholder_group)}}</strong>의 입장에서 생각해주세요!</p>
+      <p class="body-1 prompt head"><strong>{{randomStakeholderGroup.name}}</strong>의 입장에서 생각해주세요!</p>
       <br>
       <p class="question">
       우선 소설 속 주인공처럼 인물을 더욱 자세히 머릿 속에 그려보세요!
@@ -85,10 +45,6 @@
       :error-messages="errors.collect('email')"       
       name="stakeholder_detail"/>
       <v-btn block dark color="primary" @click="onNextClick">다음</v-btn>
-
-      </template>
-      
-
     </v-flex>
   </v-layout>
 </template>

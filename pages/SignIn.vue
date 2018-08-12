@@ -24,7 +24,7 @@
             required
           ></v-text-field>   
           <v-text-field
-            v-validate="'required|min:8'"
+            v-validate="'required|min:8|alpha_num'"
             v-model="password"
             :error-messages="errors.collect('password')"
             type="password"
@@ -40,12 +40,7 @@
     </v-flex>
   </v-layout>
 </template>
-<style scoped>
-#lala {
-  margin: 0 auto;
-  cursor: pointer;
-}
-</style>
+
 <script>
 export default {
   data: function () {
@@ -54,7 +49,7 @@ export default {
       password: '',
       dictionary: {
         attributes: {
-          email: '이 ',
+          email: '이메일 ',
           password: '비밀번호 '
           // custom attributes
         }

@@ -1,7 +1,7 @@
 <template>
   <v-flex d-flex xs6>
-    <v-card color="purple" dark ripple @click.capture="onStakeholderOverviewItemClick">
-      <v-card-title primary class="title">{{stakeholder.name}}</v-card-title>
+    <v-card color="success" dark ripple @click.capture="onStakeholderOverviewItemClick">
+      <v-card-title primary>{{stakeholder.name}}</v-card-title>
       <v-card-text><small>{{stakeholder.keywords}}</small></v-card-text>
     </v-card>
   </v-flex>

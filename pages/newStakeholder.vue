@@ -4,70 +4,35 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-          다른 사람의 입장에서<br>정책을 이해해보세요!
+          새로운 이해당사자를 알려주세요!
         </v-card-text>
       </v-card>
       
-      <v-dialog
-        v-model="dialog"
-        width="500"
-      >
-      <v-btn slot="activator" color="blue-grey" dark block>이해당사자 고르기</v-btn>
-
-      <v-card>
-        <v-card-title
-          class="headline grey lighten-2"
-          primary-title
-        >
-          어떤 사람의 입장이 되어보시겠어요?
-        </v-card-title>
-
-        <v-card-text>
-          <v-radio-group hide-details v-model="predictedEffect.stakeholder_group">
-            <template v-for="sg in stakeholderGroups" v-if="sg.id != userPolicy.stakeholder">
-              <v-radio :key="sg.name" :label="sg.name" :value="sg.id"></v-radio>
-            </template>
-          </v-radio-group>
-        </v-card-text>
-
-        <v-divider></v-divider>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            flat
-            @click="dialog = false"
-          >
-            선택!
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-
-      <template v-if="predictedEffect.stakeholder_group != 0">
-      <v-divider/>
-      <p class="body-1 prompt head">좋습니다! <strong>{{findStakeholderName(predictedEffect.stakeholder_group)}}</strong>의 입장에서 생각해주세요!</p>
-      <br>
-      <p class="question">
-      우선 소설 속 주인공처럼 인물을 더욱 자세히 머릿 속에 그려보세요!
-      예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
-      장소, 직장, 연령 등을 고려하여 더 구체적으로요.<br>
-      그리고 여러분만의 주인공을 설명해주세요!
+      <p class="body-1 prompt question">
+        정책의 영향을 받지만, 어디에도 속하지 않는 사람이 있었다구요?
+        저희에게만 살짝 두 단계로 알려주세요!
+        예를 들어, 그 사람이 '선생님'이라면 소분류에는 '선생님'을, 대분류에는 '공무원'을 쓰시면 됩니다.
       </p>
       <v-text-field
       v-validate="'required'"
       v-model="predictedEffect.stakeholder_detail"
       :error-messages="errors.collect('email')"       
       name="stakeholder_detail"
-      placeholder="여기에 설명해주세요!" />
-      
-      <p class="question">그럼 그 인물은 이 정책으로 어떤 영향을 받게 될까요?</p>
+      placeholder="대분류"/>
+
+      <v-text-field
+      v-validate="'required'"
+      v-model="predictedEffect.stakeholder_detail"
+      :error-messages="errors.collect('email')"       
+      name="stakeholder_detail"
+      placeholder="소분류" />
+      <!-- Check if it really is not included in any group -->
+
+      <p class="question">그럼 그 사람은 이 정책으로 어떤 영향을 받게 될까요?</p>
       <v-textarea box auto-grow v-model="predictedEffect.description"/>
 
       <div>
-        <p class="body-1 prompt question">이 영향은 그 인물에게 긍정적인가요? 부정적인가요? </p>
+        <p class="body-1 prompt question">이 영향은 그 사람에게 긍정적인가요? 부정적인가요? </p>
         <template v-if="predictedEffect.isBenefit==0">
           <v-btn dark color="primary" class="binarybtn"> 긍정적 </v-btn>
           <v-btn outline color="error" class="binarybtn" @click="predictedEffect.isBenefit=!predictedEffect.isBenefit"> 부정적 </v-btn>
@@ -84,11 +49,9 @@
       v-model="predictedEffect.source"
       :error-messages="errors.collect('email')"       
       name="stakeholder_detail"/>
-      <v-btn block dark color="primary" @click="onNextClick">다음</v-btn>
-
-      </template>
-      
-
+      <br>
+      <p class="body-1 prompt" style="color:red;"> (주의) 입력한 내용이 곧바로 반영되지 않습니다! </p>
+      <v-btn block dark color="primary" @click="goBack">돌아가기</v-btn>
     </v-flex>
   </v-layout>
 </template>
@@ -129,14 +92,14 @@ export default {
     }
   },
   methods: {
-    onNextClick: function () {
+    goBack: function () {
       this.$validator.validateAll().then((result) => {
         if (result) {
           // this.myEffect.policy = this.$store.state.policyIdx
           // this.$store.commit('setMyEffect', this.myEffect)
           // this.$axios.$post('/api/effects/', this.myEffect)
           // TODO: record user activity
-          this.$router.push('VerifyEffect')
+          this.$router.push('SelectStakeholder')
         }
       }
       )

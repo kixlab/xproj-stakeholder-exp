@@ -105,3 +105,11 @@
   //   }
   // }
 </script>
+<style>
+.container.grid-list-md.text-xs-center {
+  padding: 8px;
+}
+* {
+  font-family: 'Nanum Gothic', sans-serif;
+}
+</style>
