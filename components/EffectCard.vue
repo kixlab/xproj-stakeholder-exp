@@ -1,10 +1,11 @@
 <template>
+<v-layout>
   <v-card ripple @click.native="onShowDescriptionButtonClick">
     <v-card-title primary-title>
     <v-flex xs3 align-space-around fill-height row wrap>
       <v-card flat>
         <v-card-text>
-          <small><strong>{{effect.stakeholder_name}}</strong></small>
+          <small><strong>{{effect.stakeholder_detail}}</strong></small>
         </v-card-text>
       </v-card>
     </v-flex>
@@ -21,14 +22,78 @@
 
     <v-divider light></v-divider>
     <v-card-actions>
-    <v-btn flat small outline color="blue lighten-2" @click.stop="1==1">
-      새로워!
-    </v-btn>
+    <template v-if="newClicked === false">
+      <v-btn flat small outline color="blue lighten-2" @click.stop="newClicked = !newClicked">
+        새로워!
+      </v-btn>
+    </template>
+    <template v-else>
+      <v-btn dark small color="primary" @click.stop="newClicked = !newClicked">
+        {{effect.likes}}
+      </v-btn>
+    </template>      
 
-    <v-btn flat small outline color="red lighten-2" @click.stop="1==1">
-      공감해!
-    </v-btn>
+    <template v-if="yeaClicked === false">
+      <v-btn flat small outline color="red lighten-2" @click.stop="yeaClicked = !yeaClicked">
+        공감해!
+      </v-btn>
+    </template>
+    <template v-else>
+      <v-btn dark small color="error" @click.stop="yeaClicked = !yeaClicked">
+        {{effect.likes}}
+      </v-btn>
+    </template>     
     <v-spacer></v-spacer>
+    
+    <v-dialog
+      v-model="dialog"
+      width="500"
+    >
+      <v-icon slot="activator" color="red lighten-2" ripple>
+        report
+      </v-icon>
+
+      <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
+        <div class="dialog">
+          신고하기
+        </div>
+        </v-card-title>
+
+        <v-card-text>
+          <div class="dialog">
+          신고 사유를 적어주세요.
+          <v-textarea box v-model="reportReason"/>
+          </div>
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            flat
+            @click="dialog = false"
+            ripple
+          >
+            돌아가기
+          </v-btn>
+          <v-btn
+            color="error"
+            flat
+            @click="reportEffect"
+            ripple
+          >
+            신고하기
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-btn icon>
       <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
     </v-btn>
@@ -40,6 +105,21 @@
     </v-card-text>
     </v-slide-y-transition>
   </v-card>
+  <v-snackbar
+  v-model="snackbar"
+  bottom
+  :timeout="3000"
+>
+  접수되었습니다.
+  <v-btn
+    color="pink"
+    flat
+    @click="snackbar = false"
+  >
+    닫기
+  </v-btn>
+</v-snackbar>
+</v-layout>
 </template>
 
 <style scoped>
@@ -62,12 +142,20 @@
 .left-align {
   text-align: left;
 }
+.dialog {
+  padding: 8px;
+}
 </style>
 
 <script>
 export default {
   data: () => ({
-    show: false
+    show: false,
+    dialog: false,
+    snackbar: false,
+    newClicked: false,
+    yeaClicked: false,
+    reportReason: ''
   }),
   props: {
     source: String,
@@ -95,6 +183,11 @@ export default {
         })
       }
       this.show = !this.show
+    },
+    reportEffect: function () {
+      this.dialog = false
+      this.snackbar = true
+      // Report to server
     }
   }
 }

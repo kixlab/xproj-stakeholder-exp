@@ -11,7 +11,8 @@
       </v-toolbar-title>
     </v-toolbar>
     <v-flex xs12>
-      참여해주셔서 고맙습니다.
+      참여해주셔서 고맙습니다.<br>
+      참여를 위해 먼저 로그인 해주세요.
       <v-card flat>
         <v-form>
           <v-text-field

@@ -68,9 +68,6 @@ export default {
     }
   },
   methods: {
-    next () {
-      this.items.push({message: 'Baz'})
-    },
     onNextButtonClick: function () {
       this.$router.push('SelectStakeholder')
     }

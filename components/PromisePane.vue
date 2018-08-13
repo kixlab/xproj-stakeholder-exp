@@ -1,11 +1,15 @@
 <template>
-  <v-toolbar dense color="indigo" @click.stop="onOpenDialog" dark fixed app>
+<v-layout>
+  <navigation-drawer :drawer="drawer"></navigation-drawer>
+
+  <v-toolbar dense color="indigo" @click.native="onOpenDialog" dark fixed app>
+    <v-toolbar-side-icon ripple @click.stop="test"></v-toolbar-side-icon>
     <v-toolbar-title>
       <div style="cursor: pointer;">
         <!-- Length of policy name should be less than 18 Korean syllables -->
         <!-- The line must be ended with a single space -->
         <small>{{policy.title}} </small>
-        <v-icon dark>arrow_drop_down</v-icon>
+        <v-icon dark fixed>arrow_drop_down</v-icon>
       </div>
     </v-toolbar-title>
     
@@ -22,7 +26,7 @@
         </v-card-title>
 
         <v-card-text>
-          {{policy.description}}
+          <span v-html="policy.description"/>
         </v-card-text>
 
       <v-divider></v-divider>
@@ -40,13 +44,24 @@
       </v-card>
     </v-dialog>
   </v-toolbar>
-
+</v-layout>
 </template>
 
 <script>
+import NavigationDrawer from '~/components/NavigationDrawer.vue'
+
 export default {
+  computed: {
+    user: function () {
+      return this.$store.state.user
+    }
+  },
+  components: {
+    NavigationDrawer
+  },
   data: () => ({
-    dialog: false
+    dialog: false,
+    drawer: false
   }),
   props: {
     source: String,
@@ -83,6 +98,10 @@ export default {
         eventValue: 0
       })
       this.dialog = false
+    },
+    test: function () {
+      console.log('pushed')
+      this.drawer = !this.drawer
     }
   }
 }

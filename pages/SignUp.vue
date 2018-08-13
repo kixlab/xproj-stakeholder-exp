@@ -1,9 +1,9 @@
 <template>
   <v-layout row wrap justify-center>
     <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
-      <v-toolbar-title id="header">
-        <v-icon dark id="goback" @click="goback">arrow_back</v-icon>
-        <div style="flex: 1;">
+      <v-toolbar-title style="margin: 0 auto;">
+        <div>
+          <!-- Length of policy name should be less than 18 Korean syllables -->
           <!-- The line must be ended with a single space -->
           <small> 회원가입 </small>
           <v-icon dark>tag_faces</v-icon>
@@ -11,29 +11,88 @@
       </v-toolbar-title>
     </v-toolbar>
     <v-flex xs12>
-      <h1>으쌰으쌰 <v-icon>build</v-icon></h1>
-      죄송합니다. <br>
-      시스템을 열심히 짓고 있는 중입니다! <br><br>
-      회원가입은 조금만 더 기다려주세요!
+      회원가입을 위해 이메일과 비밀번호를 입력해주세요.
+      <v-card flat>
+        <v-form>
+          <v-text-field
+            v-validate="'required|email'"
+            v-model="email"
+            :error-messages="errors.collect('email')"
+            label="이메일"
+            placeholder="abc@example.com"
+            name="email"
+            required
+          ></v-text-field>   
+          <v-text-field
+            v-validate="'required|min:8'"
+            v-model="password"
+            :error-messages="errors.collect('password')"
+            type="password"
+            label="비밀번호"
+            placeholder="password"
+            name="password"
+            ref="password"
+            required
+            ></v-text-field>
+          <v-text-field
+            v-validate="'required|min:8|confirmed:password'"
+            v-model="password2"
+            :error-messages="errors.collect('password_confirm')"
+            type="password"
+            label="비밀번호 다시 입력"
+            placeholder="password again"
+            data-vv-name="password_confirm"
+            required
+            ></v-text-field>
+          <v-btn @click="onRegisterClick" block ripple> 회원가입 후 시작 </v-btn>
+        </v-form>
+      </v-card>
     </v-flex>
   </v-layout>
 </template>
-<style scoped>
-#goback {
-    float: left;
-    position: absolute;
-}
-#header {
-    flex: 1;
-    display: flex;
-    position: relative;
-}
-</style>
+
 <script>
 export default {
+  data: function () {
+    return {
+      email: '',
+      password: '',
+      password2: '',
+      dictionary: {
+        attributes: {
+          email: '이메일 ',
+          password: '비밀번호 ',
+          password_confirm: '비밀번호 '
+          // custom attributes
+        }
+      }
+    }
+  },
+
+  mounted () {
+    this.$validator.localize('ko', this.dictionary)
+  },
+
   methods: {
-    goback () {
-      this.$router.push('SignIn')
+    onRegisterClick () {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          this.$store.commit('setUser', {
+            email: this.email
+          })
+          this.$ga.set({
+            userId: this.email
+          })
+          this.$axios.$post('/api/auth/login/', {
+            email: this.email,
+            password: this.password
+          }).then((result) => {
+            this.$axios.setToken(result.key, 'Token')
+            this.$store.commit('setUserToken', result.key)
+            this.$router.push('ShowPolicies')
+          })
+        }
+      })
     }
   }
 }
