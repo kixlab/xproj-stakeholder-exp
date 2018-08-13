@@ -54,6 +54,12 @@ export default {
   },
   methods: {
     onPolicyClick: function (policy) { // update the policy index in store
+      this.$ga.event({
+        eventCategory: 'ShowPolicies',
+        eventAction: 'SelectPolicy',
+        eventLabel: policy.title,
+        eventValue: 0
+      })
       this.$store.commit('setPolicyIdx', {policyIdx: policy.id})
       this.$store.commit('setPolicy', policy)
       // TODO: Log to database

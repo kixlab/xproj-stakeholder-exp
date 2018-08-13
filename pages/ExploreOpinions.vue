@@ -36,7 +36,7 @@
         :loading="loading"
         :disabled="loading"
         color="cyan"
-        @click.native="loader = 'loading'"
+        @click.native="onEndButtonClick"
         ripple
       >
         끝
@@ -72,7 +72,30 @@ export default {
       this.items.push({message: 'Baz'})
     },
     onNextButtonClick: function () {
+      this.$ga.event({
+        eventCategory: 'ExploreOpinions',
+        eventAction: 'SeeMoreEffects',
+        eventLabel: this.effects[0].stakeholder_group,
+        eventValue: 0
+      })
       this.$router.push('SelectStakeholder')
+    },
+    onEndButtonClick: function () {
+      this.$ga.event({
+        eventCategory: 'ExploreOpinions',
+        eventAction: 'ClickEndButton',
+        eventLabel: this.effects[0].stakeholder_group,
+        eventValue: 0
+      })
+      this.$router.push('ShowPolicies')
+    },
+    onPostNewEffectButtonClick: function () {
+      this.$ga.event({
+        eventCategory: 'ExploreOpinions',
+        eventAction: 'PostNewEffect',
+        eventLabel: this.effects[0].stakeholder_group,
+        eventValue: 0
+      })
     }
   },
   watch: {
