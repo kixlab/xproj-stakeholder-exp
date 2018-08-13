@@ -84,7 +84,8 @@ export default {
         eventLabel: this.effects[0].stakeholder_group,
         eventValue: 0
       })
-      this.$router.push('ShowPolicies')
+      // In second case, redirect to PostSurvey directly.
+      this.$router.push('MiniSurvey')
     },
     onPostNewEffectButtonClick: function () {
       this.$ga.event({
