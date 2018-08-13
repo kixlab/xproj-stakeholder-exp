@@ -58,7 +58,6 @@ export default {
   },
   methods: {
     onNextButtonClick: function () {
-      this.userPolicy.policy = this.policyIdx
       // this.userPolicy.effect_size = parseInt(this.userPolicy.effect_size)
       const to = this.userPolicy.effect_size >= 3 ? 'StateAsStakeholder' : 'GuessEffectRandom'
       this.$ga.event({
@@ -67,6 +66,7 @@ export default {
         eventLabel: this.policy.title,
         eventValue: 0
       })
+      this.$store.dispatch('setUserPolicyEffectSize', this.userPolicy.effect_size)
       this.$router.push(to)
     }
   },

@@ -67,10 +67,32 @@ export default {
       })
       this.$store.commit('setPolicyIdx', {policyIdx: policy.id})
       this.$store.commit('setPolicy', policy)
-      if (this.isLookingAround) {
-        this.$router.push('SelectStakeholder')
+      if (this.$store.state.user) {
+        this.$axios.$get('/api/userpolicy/', {
+          params: {
+            user: this.$store.state.user.pk,
+            policy: policy.id
+          }
+        }).then((userpolicy) => {
+          if (userpolicy.count === 0) {
+            const newUP = {
+              user: this.$store.state.user.pk,
+              policy: policy.id,
+              effect_size: 0,
+              user_type: this.$store.getters.experimentCondition,
+              stakeholders_answered: 0,
+              stakeholders_seen: 0
+            }
+            this.$axios.$post('/api/userpolicy', newUP).then((result) => {
+              this.$store.commit('setUserPolicy', result)
+            })
+          } else {
+            this.$store.commit('setUserPolicy', userpolicy.results[0])
+          }
+          this.$router.push('Identify')
+        })
       } else {
-        this.$router.push('Identify')
+        this.$router.push('SelectStakeholder')
       }
     },
     postSurvey: function () {

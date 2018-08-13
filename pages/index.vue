@@ -22,7 +22,6 @@
   </v-layout>
 </template>
 <style>
-@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic&subset=korean');
 
 </style>
 <script>

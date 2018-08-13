@@ -132,9 +132,9 @@ export default {
     onNextClick: function () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          // this.myEffect.policy = this.$store.state.policyIdx
+          this.predictedEffect.policy = this.$store.state.policyIdx
           // this.$store.commit('setMyEffect', this.myEffect)
-          // this.$axios.$post('/api/effects/', this.myEffect)
+          this.$axios.$post('/api/effects/', this.predictedEffect)
           // TODO: record user activity
           this.$ga.event({
             eventCategory: 'GuessEffect',
@@ -142,6 +142,7 @@ export default {
             eventLabel: this.randomStakeholderGroup.name,
             eventValue: 0
           })
+          this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
           this.$router.push('VerifyEffect')
         }
       })
@@ -160,12 +161,10 @@ export default {
   data: function () {
     return {
       predictedEffect: {
-        isBenefit: '',
+        isBenefit: 0,
         stakeholder_detail: '',
         stakeholder_group: '0',
         description: '',
-        empathy: 0,
-        novelty: 0,
         source: ''
       },
       dialog: false

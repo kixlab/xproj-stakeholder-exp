@@ -50,6 +50,9 @@
 import EffectCard from '~/components/EffectCard.vue'
 import PromisePane from '~/components/PromisePane.vue'
 export default {
+  fetch: async function ({app, store}) {
+    store.dispatch('incrementUserPolicyStakeholdersSeen')
+  },
   components: {
     EffectCard,
     PromisePane

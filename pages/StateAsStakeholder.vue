@@ -95,7 +95,7 @@ export default {
     return {
       // TODO: Adjust effect according to the data model
       myEffect: {
-        isBenefit: '',
+        isBenefit: 0,
         stakeholder_detail: '',
         stakeholder_group: '0',
         stakeholder_custom: '',

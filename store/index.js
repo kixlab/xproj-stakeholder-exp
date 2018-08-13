@@ -1,3 +1,5 @@
+// import { isContext } from 'vm'
+
 export const state = () => ({
   sidebar: false,
   policyIdx: 1,
@@ -51,12 +53,6 @@ export const state = () => ({
     }
   ],
   userPolicy: {
-    user: '',
-    policy: '',
-    effect_size: 'int',
-    stance: 'int',
-    is_stakeholder: true,
-    stakeholder: '2'
   },
   predictedEffects: [],
   effects: [
@@ -163,6 +159,18 @@ export const mutations = {
   },
   setLookAround (state, payload) {
     state.isLookingAround = payload
+  },
+  setUserPolicy (state, payload) {
+    state.userPolicy = payload
+  },
+  setUserPolicyEffectSize (state, payload) {
+    state.userPolicy.effect_size = payload
+  },
+  incrementUserPolicysStakeholdersAnswered (state) {
+    state.userPolicy.stakeholders_answered += 1
+  },
+  incrementUserPolicyStakeholdersSeen (state) {
+    state.userPolicy.stakeholders_seen += 1
   }
 }
 
@@ -172,5 +180,29 @@ export const getters = {
   },
   experimentCondition (state) {
     return state.user.pk % 6
+  }
+}
+
+export const actions = {
+  async setUserPolicyEffectSize (context, effectSize) {
+    const userpolicyId = context.state.userPolicy.id
+    const userPolicy = Object.assign({}, context.state.userPolicy)
+    userPolicy.effect_size = effectSize
+    context.commit('setUserPolicy', userPolicy)
+    await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+  },
+  async incrementUserPolicyStakeholdersSeen (context) {
+    const userpolicyId = context.state.userPolicy.id
+    const userPolicy = Object.assign({}, context.state.userPolicy)
+    userPolicy.stakeholders_seen += 1
+    context.commit('setUserPolicy', userPolicy)
+    await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+  },
+  async incrementUserPolicyStakeholdersAnswered (context) {
+    const userpolicyId = context.state.userPolicy.id
+    const userPolicy = Object.assign({}, context.state.userPolicy)
+    userPolicy.stakeholders_answered += 1
+    context.commit('setUserPolicy', userPolicy)
+    await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
   }
 }
