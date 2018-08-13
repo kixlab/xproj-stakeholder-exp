@@ -88,9 +88,8 @@ export default {
     onNextClick: function () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          // this.myEffect.policy = this.$store.state.policyIdx
-          // this.$store.commit('setMyEffect', this.myEffect)
-          // this.$axios.$post('/api/effects/', this.myEffect)
+          this.predictedEffect.policy = this.$store.state.policyIdx
+          this.$axios.$post('/api/effects/', this.predictedEffect)
           // TODO: record user activity
           this.$router.push('VerifyEffect')
         }

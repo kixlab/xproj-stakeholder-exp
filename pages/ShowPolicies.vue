@@ -43,13 +43,18 @@
 <script>
 export default {
   // List of policies fetched from here
-  // asyncData: async function ({app, store}) { // fetch the list of policies from the server
-  //  let policies = await app.$axios.$get('/api/policies/')
-  //  return {policies: policies.results}
-  // },
+  asyncData: async function ({app, store}) { // fetch the list of policies from the server
+    let policies = await app.$axios.$get('/api/policies/')
+    return {policies: policies.results}
+  },
   data: function () {
     return {
       surveyActive: false
+    }
+  },
+  computed: {
+    isLookingAround: function () {
+      return this.$store.state.isLookingAround
     }
   },
   methods: {
@@ -62,8 +67,11 @@ export default {
       })
       this.$store.commit('setPolicyIdx', {policyIdx: policy.id})
       this.$store.commit('setPolicy', policy)
-      // TODO: Log to database
-      this.$router.push('Identify')
+      if (this.isLookingAround) {
+        this.$router.push('SelectStakeholder')
+      } else {
+        this.$router.push('Identify')
+      }
     },
     postSurvey: function () {
       this.$router.push('postSurvey')

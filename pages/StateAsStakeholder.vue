@@ -46,6 +46,7 @@
         <p class="body-1 prompt question">
           <strong>{{findStakeholderName(myEffect.stakeholder_group)}}</strong>으로서 이 정책이 실현된다면 어떤 영향을 받으시나요?
         </p>
+        
         <v-textarea box auto-grow v-model="myEffect.description"/>
 
         <div>
@@ -79,7 +80,6 @@ export default {
   //   })
   //   return {stakeholderGroups: stakeholderGroups.results}
   // },
-
   components: {
     PromisePane
   },
@@ -124,8 +124,8 @@ export default {
       this.$validator.validateAll().then((result) => {
         if (result) {
           this.myEffect.policy = this.$store.state.policyIdx
-          // this.$store.commit('setMyEffect', this.myEffect)
-          // this.$axios.$post('/api/effects/', this.myEffect)
+          this.$store.commit('setMyEffect', this.myEffect)
+          this.$axios.$post('/api/effects/', this.myEffect)
           this.$ga.event({
             eventCategory: 'StateAsStakeholder',
             eventAction: 'AddEffect',

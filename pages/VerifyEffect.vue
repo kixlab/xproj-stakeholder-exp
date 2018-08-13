@@ -47,14 +47,8 @@ import PromisePane from '~/components/PromisePane.vue'
 import EffectCard from '~/components/EffectCard.vue'
 export default {
   // Verify the guessed effect
-  // asyncData: function ({app, store}) {
-  //   let effectsLength = store.state.effects.length
-  //   let randomNumber = Math.floor(Math.random() * effectsLength)
-  //   let randomEffect = store.state.effects[randomNumber]
-  //   store.commit('setRandomEffect', randomEffect)
-  //   return {randomEffect: randomEffect}
-  // },
-/*   asyncData: async function ({app, store}) {
+
+  asyncData: async function ({app, store}) {
     let effects = await app.$axios.$get('/api/effects/', {
       params: {
         policy: store.state.policyIdx,
@@ -63,18 +57,12 @@ export default {
       }
     })
     console.log(effects)
-    // store.commit('setEffects', effects.results)
     return {filteredEffects: effects.results}
-  }, */
+  },
   computed: {
     randomStakeholderGroup: function () {
       return this.$store.getters.randomStakeholderGroup
     },
-    // filteredEffects: function () {
-    //   return this.$store.state.effects.filter((effect) => {
-    //     return effect.stakeholder_group === this.randomEffect.stakeholder_group
-    //   })
-    // },
     policy: function () {
       return this.$store.state.policy
     },

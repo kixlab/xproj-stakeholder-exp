@@ -41,6 +41,7 @@ export default {
         eventLabel: '',
         eventValue: 0
       })
+      this.$store.commit('setLookAround', true)
       this.$router.push('ShowPolicies')
     },
     onParticipateButtonClick () {

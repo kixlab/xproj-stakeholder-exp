@@ -7,26 +7,26 @@ export const state = () => ({
   },
   stakeholderGroups: [
     // id must start from 1.
-    {
-      policy: '',
-      id: '1',
-      name: '공공부문 종사자'
-    },
-    {
-      policy: '',
-      id: '2',
-      name: '민간부문 종사자'
-    },
-    {
-      policy: '',
-      id: '3',
-      name: '경력자'
-    },
-    {
-      policy: '',
-      id: '4',
-      name: '고등학생'
-    }
+    // {
+    //   policy: '',
+    //   id: '1',
+    //   name: '공공부문 종사자'
+    // },
+    // {
+    //   policy: '',
+    //   id: '2',
+    //   name: '민간부문 종사자'
+    // },
+    // {
+    //   policy: '',
+    //   id: '3',
+    //   name: '경력자'
+    // },
+    // {
+    //   policy: '',
+    //   id: '4',
+    //   name: '고등학생'
+    // }
   ],
   summaries: [
     {
@@ -121,7 +121,8 @@ export const state = () => ({
   randomStakeholderGroupIdx: 0,
   userToken: '',
   user: {},
-  selectedStakeholder: ''
+  selectedStakeholder: '',
+  isLookingAround: false
 })
 
 export const mutations = {
@@ -156,6 +157,9 @@ export const mutations = {
   },
   setUser (state, payload) {
     state.user = payload
+  },
+  setLookAround (state, payload) {
+    state.isLookingAround = payload
   }
 }
 

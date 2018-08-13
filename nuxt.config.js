@@ -1,8 +1,3 @@
-// var environment = {
-//   API_URL: 'https://localhost/api/',
-//   API_URL_BROWSER: 'https://localhost/api/'
-// }
-
 module.exports = {
   /*
   ** Headers of the page
@@ -19,7 +14,14 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
     ]
   },
-  plugins: ['~/plugins/vuetify.js', '~plugins/axios', '~/plugins/vee-validate.js'],
+  plugins: ['~/plugins/vuetify.js',
+    // '~/plugins/axios',
+    '~/plugins/vee-validate.js',
+    {
+      src: '~/plugins/localStorage.js',
+      ssr: false
+    }
+  ],
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
@@ -53,8 +55,7 @@ module.exports = {
 
   build: {
     vendor: [
-      '~/plugins/vuetify.js',
-      'lodash'
+      '~/plugins/vuetify.js'
     ],
     extractCSS: true,
     /*

@@ -21,11 +21,11 @@
 
     <v-divider light></v-divider>
     <v-card-actions>
-    <v-btn flat small outline color="blue lighten-2" @click.stop="1==1">
+    <v-btn flat small outline color="blue lighten-2" @click.stop="onNoveltyButtonClick">
       새로워!
     </v-btn>
 
-    <v-btn flat small outline color="red lighten-2" @click.stop="1==1">
+    <v-btn flat small outline color="red lighten-2" @click.stop="onEmpathyButtonClick">
       공감해!
     </v-btn>
     <v-spacer></v-spacer>
@@ -96,6 +96,12 @@ export default {
         })
       }
       this.show = !this.show
+    },
+    onNoveltyButtonClick: function () {
+      this.$emit('novelty-button-click')
+    },
+    onEmpathyButtonClick: function () {
+      this.$emit('empathy-button-click')
     }
   }
 }

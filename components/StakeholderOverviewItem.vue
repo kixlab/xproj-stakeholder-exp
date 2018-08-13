@@ -2,7 +2,10 @@
   <v-flex d-flex xs6>
     <v-card color="success" dark ripple @click.capture="onStakeholderOverviewItemClick">
       <v-card-title primary>{{stakeholder.name}}</v-card-title>
-      <v-card-text><small>{{stakeholder.keywords}}</small></v-card-text>
+      <v-card-text>
+        <small>{{stakeholder.keywords.positive}}</small>
+        <small>{{stakeholder.keywords.negative}}</small>
+      </v-card-text>
     </v-card>
   </v-flex>
 </template>
@@ -17,8 +20,7 @@ export default {
   },
   methods: {
     onStakeholderOverviewItemClick: function () {
-      console.log('fired')
-      this.$emit('stakeholder-item-click', this.stakeholder.id)
+      this.$emit('stakeholder-item-click')
     }
   }
 }

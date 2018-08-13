@@ -12,7 +12,9 @@
         :key="effect.stakeholder_detail"
         v-if="effects[0].stakeholder_name==effect.stakeholder_name">
         <v-spacer></v-spacer>
-        <effect-card :effect="effect" />
+        <effect-card :effect="effect"
+        @empathy-button-click="onEmpathyButtonClick(effect)"
+        @novelty-button-click="onNoveltyButtonClick(effect)" />
       </v-flex>
       
       <v-btn 
@@ -94,6 +96,28 @@ export default {
         eventCategory: 'ExploreOpinions',
         eventAction: 'PostNewEffect',
         eventLabel: this.effects[0].stakeholder_group,
+        eventValue: 0
+      })
+    },
+    onNoveltyButtonClick: function (effect) {
+      this.$axios.$post('/api/novelty/', {
+        effect: effect.id
+      })
+      this.$ga.event({
+        eventCategory: 'ExploreOpinions',
+        eventAction: 'UpvoteNovelty',
+        eventLabel: effect.id,
+        eventValue: 0
+      })
+    },
+    onEmpathyButtonClick: function (effect) {
+      this.$axios.$post('/api/empathy/', {
+        effect: effect.id
+      })
+      this.$ga.event({
+        eventCategory: 'ExploreOpinions',
+        eventAction: 'UpvoteNovelty',
+        eventLabel: effect.id,
         eventValue: 0
       })
     }
