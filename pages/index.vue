@@ -16,7 +16,7 @@
       <v-spacer />
       <v-spacer />
       <v-btn @click="onLookAroundButtonClick" ripple> 구경하기 </v-btn>
-      <v-btn @click="onParticipateButtonClick" ripple> 참여하기 </v-btn>
+      <v-btn @click="onParticipateButtonClick" ripple> 실험에 참여하기 </v-btn>
     </v-flex>
 
   </v-layout>
@@ -51,6 +51,7 @@ export default {
         eventLabel: '',
         eventValue: 0
       })
+      this.$store.commit('setLookAround', false)
       this.$router.push('SignIn')
     }
   }

@@ -1,7 +1,9 @@
 <template>
   <v-flex d-flex xs6>
     <v-card color="success" dark ripple @click.capture="onStakeholderOverviewItemClick">
-      <v-card-title primary>{{stakeholder.name}}</v-card-title>
+      <v-card-title primary>
+        <span class="name">{{stakeholder.name}}</span>
+      </v-card-title>
       <v-card-text>
         <small>{{stakeholder.keywords.positive}}</small>
         <small>{{stakeholder.keywords.negative}}</small>
@@ -26,6 +28,11 @@ export default {
 }
 </script>
 <style scoped>
-
+.name {
+  cursor: pointer;
+}
+small {
+  cursor: pointer;
+}
 </style>
 

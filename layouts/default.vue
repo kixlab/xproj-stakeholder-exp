@@ -106,6 +106,8 @@
   // }
 </script>
 <style>
+@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic&subset=korean');
+
 .container.grid-list-md.text-xs-center {
   padding: 8px;
 }

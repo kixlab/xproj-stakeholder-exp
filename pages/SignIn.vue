@@ -11,7 +11,8 @@
       </v-toolbar-title>
     </v-toolbar>
     <v-flex xs12>
-      참여해주셔서 고맙습니다.
+      참여해주셔서 고맙습니다.<br>
+      참여를 위해 먼저 로그인 해주세요.
       <v-card flat>
         <v-form>
           <v-text-field
@@ -24,7 +25,7 @@
             required
           ></v-text-field>   
           <v-text-field
-            v-validate="'required|min:8|alpha_num'"
+            v-validate="'required|min:8'"
             v-model="password"
             :error-messages="errors.collect('password')"
             type="password"
@@ -65,9 +66,6 @@ export default {
     onLoginClick () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          this.$store.commit('setUser', {
-            email: this.email
-          })
           this.$ga.set({
             userId: this.email
           })
@@ -78,7 +76,11 @@ export default {
           }).then((result) => {
             this.$axios.setToken(result.key, 'Token')
             this.$store.commit('setUserToken', result.key)
-            this.$router.push('ShowPolicies')
+          }).then(() => {
+            this.$axios.$get('/api/auth/user/').then((result) => {
+              this.$store.commit('setUser', result)
+              this.$router.push('ShowPolicies')
+            })
           })
         }
       })

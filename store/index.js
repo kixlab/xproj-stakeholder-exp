@@ -2,8 +2,8 @@ export const state = () => ({
   sidebar: false,
   policyIdx: 1,
   policy: {
-    title: '복합쇼핑몰에 대한 입지제한과 영업제한',
-    description: '정부는 신세계 스타필드, 이케아 등 복합쇼핑몰 및 전문점에 대해 영업, 출점을 제한하는 규제법안을 추진하고 있다. 정부는 이 정책을 통해 재래시장 및 상점가 등 소상공인을 보호할 수 있을 것으로 내다봤다. 그러나 유통업계는 소비자 권리를 침해할 뿐만 아니라, 경제에 끼칠 악영향을 우려한다며 반발했다.'
+    title: '복합쇼핑몰 입지제한 및 영업제한',
+    description: '정부는 신세계 스타필드, 이케아 등 복합쇼핑몰 및 전문점에 대해 영업, 출점을 제한하는 규제법안을 추진하고 있다.<br>정부는 이 정책을 통해 재래시장 및 상점가 등 소상공인을 보호할 수 있을 것으로 내다봤다.<br>그러나 유통업계는 소비자 권리를 침해할 뿐만 아니라, 경제에 끼칠 악영향을 우려한다며 반발했다.'
   },
   stakeholderGroups: [
     // id must start from 1.
@@ -120,7 +120,10 @@ export const state = () => ({
   myEffect: {},
   randomStakeholderGroupIdx: 0,
   userToken: '',
-  user: {},
+  user: {
+    email: 'abcdef@kaist.ac.kr',
+    expr_group: '0'
+  },
   selectedStakeholder: '',
   isLookingAround: false
 })
@@ -166,5 +169,8 @@ export const mutations = {
 export const getters = {
   randomStakeholderGroup (state) {
     return state.stakeholderGroups[state.randomStakeholderGroupIdx]
+  },
+  experimentCondition (state) {
+    return state.user.pk % 6
   }
 }

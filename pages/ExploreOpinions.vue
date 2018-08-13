@@ -3,14 +3,14 @@
     <promise-pane :policy="policy" />
     <v-flex xs12>
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{effects[0].stakeholder_name}}</strong>에게<br>
+        이 정책이 <strong class="red--text">{{effects[0].stakeholder_group}}</strong>에게<br>
         끼치는 영향을 보여드릴게요!
       </p>
 
       <v-flex xs12 sm6 offset-sm3
         v-for="effect in effects"
         :key="effect.stakeholder_detail"
-        v-if="effects[0].stakeholder_name==effect.stakeholder_name">
+        v-if="effects[0].stakeholder_group==effect.stakeholder_group">
         <v-spacer></v-spacer>
         <effect-card :effect="effect"
         @empathy-button-click="onEmpathyButtonClick(effect)"
@@ -28,7 +28,7 @@
         :loading="loading"
         :disabled="loading"
         color="cyan"
-        @click.native="loader = 'loading'"
+        @click.native="onPostNewEffectButtonClick"
         ripple
       >
         여러분의 생각도 들려주세요!
@@ -70,9 +70,6 @@ export default {
     }
   },
   methods: {
-    next () {
-      this.items.push({message: 'Baz'})
-    },
     onNextButtonClick: function () {
       this.$ga.event({
         eventCategory: 'ExploreOpinions',
@@ -89,7 +86,7 @@ export default {
         eventLabel: this.effects[0].stakeholder_group,
         eventValue: 0
       })
-      this.$router.push('ShowPolicies')
+      this.$router.push('MiniSurvey')
     },
     onPostNewEffectButtonClick: function () {
       this.$ga.event({
@@ -98,10 +95,19 @@ export default {
         eventLabel: this.effects[0].stakeholder_group,
         eventValue: 0
       })
+      this.$router.push('GuessEffect')
     },
     onNoveltyButtonClick: function (effect) {
       this.$axios.$post('/api/novelty/', {
         effect: effect.id
+      }).then(() => {
+        this.$axios.$get('/api/stakeholdergroups/', {
+          params: {
+            policy: this.$store.state.policyIdx
+          }
+        }).then((result) => {
+          this.$store.commit('setStakeholderGroups', result.results)
+        })
       })
       this.$ga.event({
         eventCategory: 'ExploreOpinions',
@@ -113,6 +119,14 @@ export default {
     onEmpathyButtonClick: function (effect) {
       this.$axios.$post('/api/empathy/', {
         effect: effect.id
+      }).then(() => {
+        this.$axios.$get('/api/stakeholdergroups/', {
+          params: {
+            policy: this.$store.state.policyIdx
+          }
+        }).then((result) => {
+          this.$store.commit('setStakeholderGroups', result.results)
+        })
       })
       this.$ga.event({
         eventCategory: 'ExploreOpinions',

@@ -3,41 +3,30 @@
     <promise-pane :policy="policy"></promise-pane>
     <v-flex xs12>
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{effects[0].stakeholder_name}}</strong>에게<br>
+        이 정책이 <strong class="red--text">{{randomStakeholderGroup.name}}</strong>에게<br>
         끼치는 영향을 보여드릴게요!
       </p>
 
       <v-flex xs12 sm6 offset-sm3
-        v-for="effect in effects"
-        :key="effect.stakeholder_detail"
-        v-if="effects[0].stakeholder_name==effect.stakeholder_name">
+        v-for="effect in filteredEffects"
+        :key="effect.id">
         <v-spacer></v-spacer>
         <effect-card :effect="effect" />
       </v-flex>
       
       <v-btn 
-        v-if = "active_button"
         color = "success"
         @click="onPredictMoreClick"
         block ripple>
         다른 것도 볼래요!
       </v-btn>
       <v-btn 
-        v-if = "active_button"
         color = "success"
         @click="onExploreOpinionsClick"
         block ripple>
         효과 모두 보기
       </v-btn>
 
-      <v-btn
-        :loading="loading"
-        :disabled="loading"
-        color="cyan"
-        @click.native="loader = 'loading'"
-        ripple>
-        끝
-      </v-btn>
     </v-flex>
   </v-layout>
 </template>
