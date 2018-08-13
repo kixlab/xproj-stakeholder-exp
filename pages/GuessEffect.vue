@@ -136,10 +136,15 @@ export default {
           // this.$store.commit('setMyEffect', this.myEffect)
           // this.$axios.$post('/api/effects/', this.myEffect)
           // TODO: record user activity
+          this.$ga.event({
+            eventCategory: 'GuessEffect',
+            eventAction: 'ToVerifyEffect',
+            eventLabel: this.randomStakeholderGroup.name,
+            eventValue: 0
+          })
           this.$router.push('VerifyEffect')
         }
-      }
-      )
+      })
     },
     findStakeholderName: function (id) {
       if (id === 0) {

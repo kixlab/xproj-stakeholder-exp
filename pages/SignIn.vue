@@ -72,6 +72,7 @@ export default {
           this.$ga.set({
             userId: this.email
           })
+          this.$axios.setToken(false)
           this.$axios.$post('/api/auth/login/', {
             email: this.email,
             password: this.password

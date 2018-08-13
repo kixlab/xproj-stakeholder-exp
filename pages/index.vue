@@ -15,8 +15,8 @@
       데꿀멍을 통해 정책이 우리의 삶에 끼치는 영향을 알아보세요!
       <v-spacer />
       <v-spacer />
-      <v-btn @click="lookaround" ripple block disabled> 구경하기 </v-btn>
-      <v-btn @click="participate" ripple block> 실험에 참여하기 </v-btn>
+      <v-btn @click="onLookAroundButtonClick" ripple> 구경하기 </v-btn>
+      <v-btn @click="onParticipateButtonClick" ripple> 실험에 참여하기 </v-btn>
     </v-flex>
 
   </v-layout>
@@ -34,10 +34,22 @@ export default {
   },
 
   methods: {
-    lookaround () {
+    onLookAroundButtonClick () {
+      this.$ga.event({
+        eventCategory: 'index',
+        eventAction: 'ClickLookAroundButton',
+        eventLabel: '',
+        eventValue: 0
+      })
       this.$router.push('ShowPolicies')
     },
-    participate () {
+    onParticipateButtonClick () {
+      this.$ga.event({
+        eventCategory: 'index',
+        eventAction: 'ClickParticipateButton',
+        eventLabel: '',
+        eventValue: 0
+      })
       this.$router.push('SignIn')
     }
   }
