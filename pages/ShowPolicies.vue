@@ -20,13 +20,11 @@
       <v-spacer/><br>
       원하는 정책을 선택해주세요.
 
-      <ul>
-        <li v-for="policy in policies" :key="policy.id">
-          <a @click="onPolicyClick(policy)">
-            {{policy.title}}
-          </a>
-        </li>
-      </ul>
+      <template v-for="policy in policies">
+        <v-btn :key="policy.id" color="primary" block @click="onPolicyClick(policy)">
+          {{policy.title}}
+        </v-btn>
+      </template>
 
       <template v-if="!surveyActive">
         <v-btn block disabled color="primary">사용 후 설문</v-btn>

@@ -51,10 +51,10 @@
       <p class="body-1 prompt head">좋습니다! <strong>{{findStakeholderName(predictedEffect.stakeholder_group)}}</strong>의 입장에서 생각해주세요!</p>
       <br>
       <p class="question">
-      우선 소설 속 주인공처럼 인물을 더욱 자세히 머릿 속에 그려보세요!
+      우선 소설 속 주인공처럼 한 사람을 자세히 머릿 속에 그려보세요!
       예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
       장소, 직장, 연령 등을 고려하여 더 구체적으로요.<br>
-      그리고 여러분만의 주인공을 설명해주세요!
+      그럼 여러분만의 주인공을 간단히 설명해주시겠어요?
       </p>
       <v-text-field
       v-validate="'required'"
@@ -68,14 +68,20 @@
 
       <div>
         <p class="body-1 prompt question">이 영향은 그 인물에게 긍정적인가요? 부정적인가요? </p>
-        <template v-if="predictedEffect.isBenefit==0">
-          <v-btn dark color="primary" class="binarybtn"> 긍정적 </v-btn>
-          <v-btn outline color="error" class="binarybtn" @click="predictedEffect.isBenefit=!predictedEffect.isBenefit"> 부정적 </v-btn>
-        </template>
-        <template v-else>
-          <v-btn outline color="primary" class="binarybtn" @click="predictedEffect.isBenefit=!predictedEffect.isBenefit"> 긍정적 </v-btn>
-          <v-btn dark color="error" class="binarybtn"> 부정적 </v-btn>
-        </template>
+        <v-btn 
+        :outline="predictedEffect.isBenefit !== 0" 
+        :dark="predictedEffect.isBenefit == 0"
+        color="primary"
+        class="binarybtn"
+        @click="predictedEffect.isBenefit=0">
+        긍정적 </v-btn>
+        <v-btn 
+        :outline="predictedEffect.isBenefit !== 1" 
+        :dark="predictedEffect.isBenefit == 1"
+        color="error" 
+        class="binarybtn" 
+        @click="predictedEffect.isBenefit=1"> 
+        부정적 </v-btn>
       </div>
 
       <p class="question"> 왜 그렇게 생각하셨는지 간단히 써 주세요.</p>

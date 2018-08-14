@@ -1,13 +1,10 @@
 <template>
   <v-layout row wrap justify-center>
     <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
-      <v-toolbar-title id="header">
-        <v-icon dark id="goback" @click="goback">arrow_back</v-icon>
-        <div style="flex: 1;">
-          <!-- The line must be ended with a single space -->
-          <small> 사용 후 설문 </small>
-          <v-icon dark>tag_faces</v-icon>
-        </div>
+      <v-toolbar-title style="margin: 0 auto;">
+        <!-- The line must be ended with a single space -->
+        <small> 사용 후 설문 </small>
+        <v-icon dark>tag_faces</v-icon>
         
       </v-toolbar-title>
     </v-toolbar>
@@ -22,11 +19,6 @@
 #goback {
     float: left;
     position: absolute;
-}
-#header {
-    flex: 1;
-    display: flex;
-    position: relative;
 }
 </style>
 <script>

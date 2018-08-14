@@ -8,7 +8,7 @@
         이 정책의 이해당사자들은 어뗜 영향을 받을까요?
         </v-card-text>
       </v-card>
-      <p class="body-1 prompt"> 이 정책의 영향을 받는 사람들의 다양한 목소리를 들어보세요!</p>
+      <p class="body-1 prompt"> 이해당사자들의 다양한 목소리를 들어보세요!</p>
 
       <v-layout row wrap>
           <stakeholder-overview-item v-for="sg in stakeholderGroups" :key="sg.id" :stakeholder="sg" @stakeholder-item-click="onStakeholderItemClick(sg)"></stakeholder-overview-item>
