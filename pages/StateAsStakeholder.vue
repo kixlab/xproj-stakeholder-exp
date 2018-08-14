@@ -127,7 +127,7 @@ export default {
           this.$store.commit('setMyEffect', this.myEffect)
           this.$axios.$post('/api/effects/', this.myEffect)
           this.$ga.event({
-            eventCategory: 'StateAsStakeholder',
+            eventCategory: '/StateAsStakeholder',
             eventAction: 'AddEffect',
             eventLabel: this.myEffect.stakeholder_detail,
             eventValue: 0

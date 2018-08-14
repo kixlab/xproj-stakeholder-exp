@@ -66,7 +66,7 @@ export default {
   methods: {
     onExploreOpinionsClick: function () {
       this.$ga.event({
-        eventCategory: 'VerifyEffect',
+        eventCategory: '/VerifyEffect',
         eventAction: 'ToExploreOpinions',
         eventLabel: this.randomStakeholderGroup.name,
         eventValue: 0
@@ -75,7 +75,7 @@ export default {
     },
     onPredictMoreClick: function () {
       this.$ga.event({
-        eventCategory: 'VerifyEffect',
+        eventCategory: '/VerifyEffect',
         eventAction: 'ToPredictMore',
         eventLabel: this.randomStakeholderGroup.name,
         eventValue: 0

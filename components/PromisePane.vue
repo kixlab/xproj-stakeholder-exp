@@ -83,7 +83,7 @@ export default {
   methods: {
     onOpenDialog: function () {
       this.$ga.event({
-        eventCategory: 'PromisePane',
+        eventCategory: this.$router.currentRoute.path,
         eventAction: 'OpenPolicyExplanation',
         eventLabel: this.policy.title,
         eventValue: 0
@@ -92,7 +92,7 @@ export default {
     },
     onCloseDialog: function () {
       this.$ga.event({
-        eventCategory: 'PromisePane',
+        eventCategory: this.$router.currentRoute.path,
         eventAction: 'ClosePolicyExplanation',
         eventLabel: this.policy.title,
         eventValue: 0

@@ -27,10 +27,10 @@
       </template>
 
       <template v-if="!surveyActive">
-        <v-btn block disabled color="primary">사용 후 설문</v-btn>
+        <v-btn block disabled color="secondary">사용 후 설문</v-btn>
       </template>
       <template v-else>
-        <v-btn block color="primary" @click="postSurvey">사용 후 설문</v-btn>
+        <v-btn block color="secondary" @click="postSurvey">사용 후 설문</v-btn>
       </template>
 
     </v-flex>
@@ -42,23 +42,29 @@
 export default {
   // List of policies fetched from here
   asyncData: async function ({app, store}) { // fetch the list of policies from the server
-    let policies = await app.$axios.$get('/api/policies/')
-    return {policies: policies.results}
-  },
-  data: function () {
+    const policies = await app.$axios.$get('/api/policies/')
+    const userpolicies = await app.$axios.$get('/api/userpolicy/', {
+      params: {
+        user: store.state.user.pk
+      }
+    })
     return {
-      surveyActive: false
+      policies: policies.results,
+      surveyActive: (userpolicies.count >= 2) // more logic here...? or should it be placed on the backend?
     }
   },
   computed: {
     isLookingAround: function () {
       return this.$store.state.isLookingAround
+    },
+    experimentCondition: function () {
+      return this.$store.getters.experimentCondition
     }
   },
   methods: {
     onPolicyClick: function (policy) { // update the policy index in store
       this.$ga.event({
-        eventCategory: 'ShowPolicies',
+        eventCategory: '/ShowPolicies',
         eventAction: 'SelectPolicy',
         eventLabel: policy.title,
         eventValue: 0
@@ -87,7 +93,7 @@ export default {
           } else {
             this.$store.commit('setUserPolicy', userpolicy.results[0])
           }
-          this.$router.push('Identify')
+          this.$router.push('ReadNews')
         })
       } else {
         this.$router.push('SelectStakeholder')

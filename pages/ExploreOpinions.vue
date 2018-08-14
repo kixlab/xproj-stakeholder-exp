@@ -75,7 +75,7 @@ export default {
   methods: {
     onNextButtonClick: function () {
       this.$ga.event({
-        eventCategory: 'ExploreOpinions',
+        eventCategory: '/ExploreOpinions',
         eventAction: 'SeeMoreEffects',
         eventLabel: this.effects[0].stakeholder_group,
         eventValue: 0
@@ -84,7 +84,7 @@ export default {
     },
     onEndButtonClick: function () {
       this.$ga.event({
-        eventCategory: 'ExploreOpinions',
+        eventCategory: '/ExploreOpinions',
         eventAction: 'ClickEndButton',
         eventLabel: this.effects[0].stakeholder_group,
         eventValue: 0
@@ -94,7 +94,7 @@ export default {
     },
     onPostNewEffectButtonClick: function () {
       this.$ga.event({
-        eventCategory: 'ExploreOpinions',
+        eventCategory: '/ExploreOpinions',
         eventAction: 'PostNewEffect',
         eventLabel: this.effects[0].stakeholder_group,
         eventValue: 0
@@ -114,7 +114,7 @@ export default {
         })
       })
       this.$ga.event({
-        eventCategory: 'ExploreOpinions',
+        eventCategory: '/ExploreOpinions',
         eventAction: 'UpvoteNovelty',
         eventLabel: effect.id,
         eventValue: 0
@@ -133,7 +133,7 @@ export default {
         })
       })
       this.$ga.event({
-        eventCategory: 'ExploreOpinions',
+        eventCategory: '/ExploreOpinions',
         eventAction: 'UpvoteNovelty',
         eventLabel: effect.id,
         eventValue: 0

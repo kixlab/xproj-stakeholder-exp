@@ -35,7 +35,7 @@ export default {
   methods: {
     onLookAroundButtonClick () {
       this.$ga.event({
-        eventCategory: 'index',
+        eventCategory: '/',
         eventAction: 'ClickLookAroundButton',
         eventLabel: '',
         eventValue: 0
@@ -45,7 +45,7 @@ export default {
     },
     onParticipateButtonClick () {
       this.$ga.event({
-        eventCategory: 'index',
+        eventCategory: '/',
         eventAction: 'ClickParticipateButton',
         eventLabel: '',
         eventValue: 0

@@ -91,7 +91,7 @@ export default {
           }).then(() => {
             this.$axios.$get('/api/auth/user/').then((result) => {
               this.$store.commit('setUser', result)
-              this.$router.push('ShowPolicies')
+              this.$router.push('PreSurvey')
             })
           })
         }

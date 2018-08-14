@@ -36,28 +36,6 @@ export const state = () => ({
     //   name: '고등학생'
     // }
   ],
-  summaries: [
-    {
-      stakeholder_name: '공공부문 종사자',
-      text: '저희는 휴가 언제 가나요?',
-      likes: '3'
-    },
-    {
-      stakeholder_name: '민간부문 종사자',
-      text: '차가 많아서, 너무 복잡해요',
-      likes: '5'
-    },
-    {
-      stakeholder_name: '경력자',
-      text: 'B',
-      likes: '7'
-    },
-    {
-      stakeholder_name: '고등학생',
-      text: 'B',
-      likes: '7'
-    }
-  ],
   userPolicy: {
   },
   predictedEffects: [],
@@ -121,7 +99,7 @@ export const state = () => ({
   ],
   myEffect: {},
   randomStakeholderGroupIdx: 0,
-  userToken: '',
+  userToken: null,
   user: {
     email: 'abcdef@kaist.ac.kr',
     expr_group: '0',
@@ -191,6 +169,9 @@ export const getters = {
   },
   experimentCondition (state) {
     return state.user.pk % 6
+  },
+  isLookingAround (state) {
+    return !state.userToken || state.isLookingAround
   }
 }
 

@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     policy: function () {
-      return this.$store.state.policies[0]
+      return this.$store.state.policy
     }
   },
   methods: {
@@ -61,7 +61,7 @@ export default {
       // this.userPolicy.effect_size = parseInt(this.userPolicy.effect_size)
       const to = this.userPolicy.effect_size >= 3 ? 'StateAsStakeholder' : 'GuessEffectRandom'
       this.$ga.event({
-        eventCategory: 'Identify',
+        eventCategory: '/Identify',
         eventAction: 'ClickNextButton',
         eventLabel: this.policy.title,
         eventValue: 0

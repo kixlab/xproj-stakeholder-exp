@@ -143,7 +143,7 @@ export default {
           this.$axios.$post('/api/effects/', this.predictedEffect)
           // TODO: record user activity
           this.$ga.event({
-            eventCategory: 'GuessEffect',
+            eventCategory: '/GuessEffect',
             eventAction: 'ToVerifyEffect',
             eventLabel: this.randomStakeholderGroup.name,
             eventValue: 0

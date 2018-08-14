@@ -65,7 +65,7 @@ export default {
   methods: {
     onNewStakeholderGroupClick: function () {
       this.$ga.event({
-        eventCategory: 'SelectStakeholder',
+        eventCategory: '/SelectStakeholder',
         eventAction: 'ClickedNewStakeholderGroupButton',
         eventLabel: this.policy.title,
         eventValue: 0
@@ -81,7 +81,7 @@ export default {
         }
       })
       this.$ga.event({
-        eventCategory: 'SelectStakeholder',
+        eventCategory: '/SelectStakeholder',
         eventAction: 'ClickedStakeholderGroup',
         eventLabel: `${this.policy.title} / ${sg.name}`,
         eventValue: 0

@@ -60,7 +60,7 @@
       </v-card>
       <v-card flat colot="transparent">
         <v-card-text>
-          이 정책에 대한 내 입장{{myStance()}}은 확고하다.<br>
+          이 정책에 대한 내 입장{{myStance}}은 확고하다.<br>
           <v-slider
             v-model="fourth_answer"
             :tick-labels="numericScales"
@@ -90,31 +90,22 @@ export default {
     goback () {
       this.$router.push('showPolicies')
     },
-    myStance () {
-      if (this.third_answer === 0) {
-        return '(찬성)'
-      } else if (this.third_answer === 1) {
-        return '(반대)'
-      } else {
-        return ''
-      }
-    },
     nextPolicy () {
       console.log(this.third_answer)
       if (this.third_answer !== '-1') {
         this.$store.commit('setNextstep')
-        switch (this.$store.state.user.order % 6) {
+        switch (this.experimentCondition) {
           case 1:
           case 2:
             this.$router.push('readNews')
             break
           case 3:
             this.$store.commit('setPolicy', this.$store.state.policies[0])
-            this.$router.push('selectStakeholder')
+            this.$router.push('SelectStakeholder')
             break
           case 4:
             this.$store.commit('setPolicy', this.$store.state.policies[1])
-            this.$router.push('selectStakeholder')
+            this.$router.push('SelectStakeholder')
             break
           case 5:
             this.$store.commit('setPolicy', this.$store.state.policies[0])
@@ -125,6 +116,20 @@ export default {
             this.$router.push('Identify')
             break
         }
+      }
+    },
+    computed: {
+      myStance: function () {
+        if (this.third_answer === 0) {
+          return '(찬성)'
+        } else if (this.third_answer === 1) {
+          return '(반대)'
+        } else {
+          return ''
+        }
+      },
+      experimentCondition: function () {
+        return this.$store.getters.experimentCondition
       }
     }
   },

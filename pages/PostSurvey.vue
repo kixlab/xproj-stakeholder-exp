@@ -5,7 +5,6 @@
         <!-- The line must be ended with a single space -->
         <small> 사용 후 설문 </small>
         <v-icon dark>tag_faces</v-icon>
-        
       </v-toolbar-title>
     </v-toolbar>
     <v-flex xs12>
