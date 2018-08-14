@@ -196,5 +196,12 @@ export const actions = {
     userPolicy.stakeholders_answered += 1
     context.commit('setUserPolicy', userPolicy)
     await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+  },
+  async incrementUserPolicyArticlesSeen (context) {
+    const userpolicyId = context.state.userPolicy.id
+    const userPolicy = Object.assign({}, context.state.userPolicy)
+    userPolicy.articles_seen += 1
+    context.commit('setUserPolicy', userPolicy)
+    await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
   }
 }

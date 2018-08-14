@@ -58,6 +58,7 @@ export default {
       email: '',
       password: '',
       password2: '',
+      isParticipant: '',
       dictionary: {
         attributes: {
           email: '이메일 ',
@@ -89,7 +90,10 @@ export default {
             this.$axios.setToken(result.key, 'Token')
             this.$store.commit('setUserToken', result.key)
           }).then(() => {
-            this.$axios.$get('/api/auth/user/').then((result) => {
+            this.$axios.$put('/api/auth/user/', {
+              username: this.email,
+              is_participant: this.isParticipant
+            }).then((result) => {
               this.$store.commit('setUser', result)
               this.$router.push('PreSurvey')
             })

@@ -31,6 +31,7 @@
 </style>
 <script>
 export default {
+  // TODO: fetch policy list
   computed: {
     experimentCondition: function () {
       return this.$store.getters.experimentCondition
