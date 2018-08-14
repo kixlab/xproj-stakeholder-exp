@@ -90,9 +90,17 @@ export default {
     goback () {
       this.$router.push('showPolicies')
     },
-    nextPolicy () {
+    async nextPolicy () {
       console.log(this.third_answer)
       if (this.third_answer !== '-1') {
+        await this.$axios.$post('/api/minisurvey/', {
+          user: this.user.id,
+          policy: this.policy.id,
+          first_answer: this.first_answer,
+          second_answer: this.second_answer,
+          third_answer: this.third_answer,
+          fourth_answer: this.fourth_answer
+        })
         this.$store.commit('setNextstep')
         switch (this.experimentCondition) {
           case 1:
@@ -127,6 +135,12 @@ export default {
         } else {
           return ''
         }
+      },
+      user: function () {
+        return this.$store.state.user
+      },
+      policy: function () {
+        return this.$store.state.policy
       },
       experimentCondition: function () {
         return this.$store.getters.experimentCondition

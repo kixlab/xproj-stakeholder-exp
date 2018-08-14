@@ -10,6 +10,9 @@
         </div>
       </v-toolbar-title>
     </v-toolbar>
+    <v-alert v-model="alert" type="error" dismissible>
+      {{error}}
+    </v-alert>
     <v-flex xs12>
       회원가입을 위해 이메일과 비밀번호를 입력해주세요.
       <v-card flat>
@@ -58,7 +61,7 @@ export default {
       email: '',
       password: '',
       password2: '',
-      isParticipant: '',
+      isParticipant: false,
       dictionary: {
         attributes: {
           email: '이메일 ',
@@ -66,7 +69,9 @@ export default {
           password_confirm: '비밀번호 '
           // custom attributes
         }
-      }
+      },
+      alert: false,
+      error: ''
     }
   },
 
@@ -75,31 +80,34 @@ export default {
   },
 
   methods: {
-    onRegisterClick () {
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          this.$ga.set({
-            userId: this.email
-          })
-          this.$axios.$post('/api/auth/register/', {
+    // error as {"password1":["비밀번호가 너무 일상적인 단어입니다.","비밀번호가 전부 숫자로 되어 있습니다."]}
+    async onRegisterClick () {
+      const result = await this.$validator.validateAll()
+      if (result) {
+        this.$axios.setToken(null)
+        try {
+          const res = await this.$axios.$post('/api/auth/signup/', {
             username: this.email,
             email: this.email,
             password1: this.password,
             password2: this.password2
-          }).then((result) => {
-            this.$axios.setToken(result.key, 'Token')
-            this.$store.commit('setUserToken', result.key)
-          }).then(() => {
-            this.$axios.$put('/api/auth/user/', {
-              username: this.email,
-              is_participant: this.isParticipant
-            }).then((result) => {
-              this.$store.commit('setUser', result)
-              this.$router.push('PreSurvey')
-            })
           })
+          this.$axios.setToken(res.key, 'Token')
+          this.$store.commit('setUserToken', res.key)
+          this.$ga.set({
+            userId: this.email
+          })
+          const user = await this.$axios.$put('/api/auth/user/', {
+            username: this.email,
+            is_participant: this.isParticipant
+          })
+          this.$store.commit('setUser', user)
+          this.$router.push('PreSurvey')
+        } catch (error) {
+          this.alert = true
+          this.error = error.response.data
         }
-      })
+      }
     }
   }
 }
