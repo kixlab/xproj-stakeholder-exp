@@ -1,16 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
-      <v-toolbar-title id="header">
-        <v-icon dark id="gohome" @click="gohome">home</v-icon>
-        <div style="flex: 1;">
-          <!-- The line must be ended with a single space -->
-          <small> 기사 읽기 </small>
-          <v-icon dark>tag_faces</v-icon>
-        </div>
-        
-      </v-toolbar-title>
-    </v-toolbar>
+    <promise-pane :policy="policy"/>
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
@@ -33,6 +23,8 @@
 }
 </style>
 <script>
+import PromisePane from '~/components/PromisePane.vue'
+
 export default {
   computed: {
     userGroup: function () {
@@ -57,7 +49,13 @@ export default {
         case -1:
           return 'Identify'
       }
+    },
+    policy: function (){
+      return this.$store.state.policy
     }
+  },
+  components: {
+    PromisePane
   },
   methods: {
     gohome () {

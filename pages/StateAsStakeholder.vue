@@ -44,7 +44,7 @@
           name="stakeholder_detail" />
 
         <p class="body-1 prompt question">
-          <strong>{{findStakeholderName(myEffect.stakeholder_group)}}</strong>으로서 이 정책이 실현된다면 어떤 영향을 받으시나요?
+          <strong>{{findStakeholderName(myEffect.stakeholder_group)}}</strong>(으)로서 이 정책이 실현된다면 어떤 영향을 받으시나요?
         </p>
         
         <v-textarea box auto-grow v-model="myEffect.description"/>
@@ -85,7 +85,7 @@ export default {
   },
   computed: {
     policy: function () {
-      return this.$store.state.policies[0]
+      return this.$store.state.policies[this.$store.state.policyIdx - 1]
     },
     stakeholderGroups: function () {
       return this.$store.state.stakeholderGroups
@@ -143,6 +143,7 @@ export default {
           eventLabel: this.myEffect.stakeholder_detail,
           eventValue: 0
         })
+        this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
         this.$router.push('GuessEffectRandom')
       }
     },
