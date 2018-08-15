@@ -1,31 +1,49 @@
 <template>
-  <v-layout row wrap justify-center>
-    <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
-      <v-toolbar-title style="margin: 0 auto;">
-        <div>
-          <!-- Length of policy name should be less than 18 Korean syllables -->
-          <!-- The line must be ended with a single space -->
-          <small> 어서오세요! </small>
-          <v-icon dark>tag_faces</v-icon>
-        </div>
-      </v-toolbar-title>
-    </v-toolbar>
-    <v-flex xs12>
-      안녕하세요!<br>
-      데꿀멍을 통해 정책이 우리의 삶에 끼치는 영향을 알아보세요!
-      <v-spacer />
-      <v-spacer />
-      <v-btn @click="onLookAroundButtonClick" ripple> 구경하기 </v-btn>
-      <v-btn @click="onParticipateButtonClick" ripple> 실험에 참여하기 </v-btn>
-    </v-flex>
+  <div class="test">
+    <div class="cover">
+        <v-flex id="title">
+          <h3 class="display-3" style="color: white;">데꿀멍</h3>
+        </v-flex>
 
-  </v-layout>
+        <v-flex xs12 id="btn_location">
+          <v-btn @click="onLookAroundButtonClick" ripple block large> 구경하기 </v-btn>
+          <v-btn @click="onParticipateButtonClick" ripple block large> 실험에 참여하기 </v-btn>
+        </v-flex>
+    </div>
+  </div>
 </template>
-<style>
-
+<style scoped>
+.container.grid-list-md.text-xs-center {
+  padding: 0;
+  height: 100%;
+  display: flex;
+  vertical-align: middle;
+}
+.cover {
+  height:100%;
+  padding: 6px;
+  background-color:rgba(94, 26, 26, 0.5);
+}
+.test {
+  background-image: url('https://images.pexels.com/photos/910332/pexels-photo-910332.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+  background-size: cover;
+  background-repeat:no-repeat;
+  background-position:center;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+#btn_location {
+  position: relative;
+  margin-top: 60%;
+}
+#title {
+  margin-top: 20%;
+}
 </style>
 <script>
 export default {
+  layout: 'index',
   data: function () {
     return {
 

@@ -92,7 +92,7 @@ export default {
     },
     async nextPolicy () {
       console.log(this.third_answer)
-      if (this.third_answer !== '-1') {
+      if (this.third_answer !== -1) {
         await this.$axios.$post('/api/minisurvey/', {
           user: this.user.id,
           policy: this.policy.id,
@@ -102,28 +102,7 @@ export default {
           fourth_answer: this.fourth_answer
         })
         this.$store.commit('setNextstep')
-        switch (this.experimentCondition) {
-          case 1:
-          case 2:
-            this.$router.push('readNews')
-            break
-          case 3:
-            this.$store.commit('setPolicy', this.$store.state.policies[0])
-            this.$router.push('SelectStakeholder')
-            break
-          case 4:
-            this.$store.commit('setPolicy', this.$store.state.policies[1])
-            this.$router.push('SelectStakeholder')
-            break
-          case 5:
-            this.$store.commit('setPolicy', this.$store.state.policies[0])
-            this.$router.push('Identify')
-            break
-          case 0:
-            this.$store.commit('setPolicy', this.$store.state.policies[1])
-            this.$router.push('Identify')
-            break
-        }
+        this.$router.push('ShowPolicies')
       }
     },
     computed: {
@@ -153,7 +132,7 @@ export default {
       confidenceScales: ['매우 적음', '', '보통', '', '매우 확신'],
       first_answer: '',
       second_answer: '',
-      third_answer: '-1',
+      third_answer: -1,
       fourth_answer: ''
     }
   }

@@ -18,7 +18,7 @@
         </v-card-text>
       </v-card>
     </v-flex>
-    <v-btn block color="primary" @click="onClickComplete">완료</v-btn>
+    <v-btn block color="primary" @click="onClickComplete">다음</v-btn>
   </v-layout>
 </template>
 <style scoped>
@@ -34,16 +34,37 @@
 </style>
 <script>
 export default {
+  computed: {
+    userGroup: function () {
+      if (!this.$store.state.user.isParticipant) {
+        console.log('fire')
+        return -1
+      } else {
+        console.log(this.$store.getters.experimentCondition)
+        return this.$store.getters.experimentCondition
+      }
+    },
+    nextRoute: function () {
+      switch (this.userGroup) {
+        case 1:
+        case 2:
+          return 'ReadNews'
+        case 3:
+        case 4:
+          return 'SelectStakeholder'
+        case 5:
+        case 0:
+        case -1:
+          return 'Identify'
+      }
+    }
+  },
   methods: {
     gohome () {
       this.$router.push('/')
     },
     onClickComplete: function () {
-      if (this.$store.state.user.step === 1) {
-        this.$router.push('MiniSurvey')
-      } else if (this.$store.state.user.step === 2) {
-        this.$router.push('PostSurvey')
-      }
+      this.$router.push(this.nextRoute)
     }
   }
 }

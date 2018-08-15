@@ -18,19 +18,22 @@
         </v-card-text>
       </v-card>
       <v-spacer/><br>
-      원하는 정책을 선택해주세요.
+      원하는 정책을 선택해주세요.<br>
+      <template v-if="userGroup>-1">
+        <strong style="color: red;"> 실험 중에는 선택된 정책만 보실 수 있습니다. </strong>
+      </template>
 
       <template v-for="policy in policies">
-        <v-btn :key="policy.id" color="primary" block @click="onPolicyClick(policy)">
+        <v-btn :key="policy.id" :disabled="selectPolicy(policy.id)" color="primary" block @click="onPolicyClick(policy)">
           {{policy.title}}
         </v-btn>
       </template>
 
-      <template v-if="!surveyActive">
-        <v-btn block disabled color="secondary">사용 후 설문</v-btn>
+      <template v-if="experimentDone">
+        <v-btn block color="primary" @click="postSurvey">사용 후 설문</v-btn>
       </template>
       <template v-else>
-        <v-btn block color="secondary" @click="postSurvey">사용 후 설문</v-btn>
+        <v-btn block disabled color="primary">사용 후 설문</v-btn>
       </template>
 
     </v-flex>
@@ -41,28 +44,45 @@
 <script>
 export default {
   // List of policies fetched from here
-  asyncData: async function ({app, store}) { // fetch the list of policies from the server
+  fetch: async function ({app, store}) {
     const policies = await app.$axios.$get('/api/policies/')
+    store.commit('setPolicies', policies.results)
+  },
+  asyncData: async function ({app, store}) { // fetch the list of policies from the server
     const userpolicies = await app.$axios.$get('/api/userpolicy/', {
       params: {
         user: store.state.user.pk
       }
     })
     return {
-      policies: policies.results,
-      surveyActive: (userpolicies.count >= 2) // more logic here...? or should it be placed on the backend?
+      userpolicies: userpolicies.results
     }
   },
   computed: {
     isLookingAround: function () {
       return this.$store.state.isLookingAround
     },
-    experimentCondition: function () {
-      return this.$store.getters.experimentCondition
+    policies: function () {
+      return this.$store.state.policies
+    },
+    userGroup: function () {
+      if (!this.$store.state.user.isParticipant) {
+        console.log('fire')
+        return -1
+      } else {
+        console.log(this.$store.getters.experimentCondition)
+        return this.$store.getters.experimentCondition
+      }
+    },
+    userStep: function () {
+      return this.$store.state.user.step
+    },
+    experimentDone: function () {
+      return (this.userGroup > -1 && this.userStep === 3)
     }
   },
   methods: {
-    onPolicyClick: function (policy) { // update the policy index in store
+    onPolicyClick: async function (policy) { // update the policy index in store
       this.$ga.event({
         eventCategory: '/ShowPolicies',
         eventAction: 'SelectPolicy',
@@ -72,31 +92,45 @@ export default {
       this.$store.commit('setPolicyIdx', {policyIdx: policy.id})
       this.$store.commit('setPolicy', policy)
       if (this.$store.state.user) {
-        this.$axios.$get('/api/userpolicy/', {
-          params: {
-            user: this.$store.state.user.pk,
-            policy: policy.id
-          }
-        }).then((userpolicy) => {
-          if (userpolicy.count === 0) {
-            const newUP = {
-              user: this.$store.state.user.pk,
-              policy: policy.id,
-              effect_size: 0,
-              user_type: this.$store.getters.experimentCondition,
-              stakeholders_answered: 0,
-              stakeholders_seen: 0
-            }
-            this.$axios.$post('/api/userpolicy', newUP).then((result) => {
-              this.$store.commit('setUserPolicy', result)
-            })
-          } else {
-            this.$store.commit('setUserPolicy', userpolicy.results[0])
-          }
-          this.$router.push('ReadNews')
+        // const userpolicy = await this.$axios.$get('/api/userpolicy/', {
+        //   params: {
+        //     user: this.$store.state.user.pk,
+        //     policy: policy.id
+        //   }
+        // })
+        const upIdx = this.userpolicies.findIndex((up) => {
+          return up.policy === policy.id
         })
+        if (upIdx === -1) {
+          const newUP = {
+            user: this.$store.state.user.pk,
+            policy: policy.id,
+            effect_size: 0,
+            user_type: this.$store.getters.experimentCondition,
+            stakeholders_answered: 0,
+            stakeholders_seen: 0
+          }
+          this.$axios.$post('/api/userpolicy', newUP).then((result) => {
+            this.$store.commit('setUserPolicy', result)
+          })
+        } else {
+          this.$store.commit('setUserPolicy', this.userpolicies[upIdx])
+        }
+        this.$router.push('ReadNews')
       } else {
         this.$router.push('SelectStakeholder')
+      }
+    },
+    selectPolicy: function (policyID) {
+      if (this.userGroup === -1) {
+        return false
+      }
+      if (this.userStep === 1) {
+        return 2 - (this.userGroup % 2) !== policyID
+      } else if (this.userStep === 2) {
+        return 1 + (this.userGroup % 2) !== policyID
+      } else {
+        return true
       }
     },
     postSurvey: function () {

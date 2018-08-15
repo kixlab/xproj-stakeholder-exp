@@ -17,8 +17,9 @@ export const state = () => ({
   user: {
     email: 'abcdef@kaist.ac.kr',
     expr_group: '0',
-    order: 15,
-    step: 1
+    pk: 1,
+    step: 1,
+    isParticipant: true
   },
   selectedStakeholder: '',
   isLookingAround: false
@@ -77,6 +78,9 @@ export const mutations = {
   },
   setNextstep (state) {
     state.user.step += 1
+  },
+  setPolicies (state, payload) {
+    state.policies = payload
   }
 }
 
