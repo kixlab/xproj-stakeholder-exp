@@ -21,6 +21,7 @@
             :error-messages="errors.collect('email')"
             label="이메일"
             placeholder="abc@example.com"
+            type="email"
             name="email"
             required
           ></v-text-field>   

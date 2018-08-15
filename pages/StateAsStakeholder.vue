@@ -122,10 +122,10 @@ export default {
     },
     addNewStakeholder: async function () {
       if (this.stakeholder_custom.length > 0) {
-        const newStakeholder = this.$axios.$post('/api/stakeholdergroups/', {
+        const newStakeholder = await this.$axios.$post('/api/stakeholdergroups/', {
           policy: this.$store.state.policyIdx,
           is_visible: false,
-          name: this.stakeholder_custom
+          name: this.myEffect.stakeholder_custom
         })
         this.myEffect.stakeholder_group = newStakeholder.id
       }
