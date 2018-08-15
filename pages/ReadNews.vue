@@ -50,7 +50,7 @@ export default {
           return 'Identify'
       }
     },
-    policy: function (){
+    policy: function () {
       return this.$store.state.policy
     }
   },

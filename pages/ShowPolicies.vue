@@ -66,7 +66,7 @@ export default {
       return this.$store.state.policies
     },
     userGroup: function () {
-      if (!this.$store.state.user.isParticipant) {
+      if (!this.$store.state.userToken || !this.$store.state.user.isParticipant) {
         console.log('fire')
         return -1
       } else {
@@ -91,7 +91,7 @@ export default {
       })
       this.$store.commit('setPolicyIdx', {policyIdx: policy.id})
       this.$store.commit('setPolicy', policy)
-      if (this.$store.state.user) {
+      if (this.$store.state.userToken) {
         // const userpolicy = await this.$axios.$get('/api/userpolicy/', {
         //   params: {
         //     user: this.$store.state.user.pk,
@@ -130,7 +130,7 @@ export default {
       } else if (this.userStep === 2) {
         return 1 + (this.userGroup % 2) !== policyID
       } else {
-        return true
+        return false
       }
     },
     postSurvey: function () {

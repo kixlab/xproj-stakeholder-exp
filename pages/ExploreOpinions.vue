@@ -24,8 +24,9 @@
         다른 것도 볼래요!
       </v-btn>
       <v-btn
+        
         :loading="loading"
-        :disabled="loading"
+        :disabled="$store.state.userToken || loading"
         color="cyan"
         @click.native="onPostNewEffectButtonClick"
         ripple
