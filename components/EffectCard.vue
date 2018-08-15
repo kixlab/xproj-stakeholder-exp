@@ -172,29 +172,72 @@ export default {
         this.$ga.event({
           eventCategory: this.$router.currentRoute.path,
           eventAction: 'CloseDescription',
-          eventLabel: this.effect.stakeholder_detail,
+          eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
           eventValue: 0
         })
       } else {
         this.$ga.event({
           eventCategory: this.$router.currentRoute.path,
           eventAction: 'OpenDescription',
-          eventLabel: this.effect.stakeholder_detail,
+          eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
           eventValue: 0
         })
       }
       this.show = !this.show
     },
     onNoveltyButtonClick: function () {
-      this.$emit('novelty-button-click')
+      this.$axios.$post('/api/novelty/', {
+        effect: this.effect.id
+      }).then(() => {
+        this.$axios.$get('/api/stakeholdergroups/', {
+          params: {
+            policy: this.$store.state.policyIdx
+          }
+        }).then((result) => {
+          this.$store.commit('setStakeholderGroups', result.results)
+        })
+      })
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'UpvoteNovelty',
+        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+        eventValue: 0
+      })
     },
     onEmpathyButtonClick: function () {
-      this.$emit('empathy-button-click')
+      this.$axios.$post('/api/empathy/', {
+        effect: this.effect.id
+      }).then(() => {
+        this.$axios.$get('/api/stakeholdergroups/', {
+          params: {
+            policy: this.$store.state.policyIdx
+          }
+        }).then((result) => {
+          this.$store.commit('setStakeholderGroups', result.results)
+        })
+      })
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'UpvoteEmpathy',
+        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+        eventValue: 0
+      })
+      // this.$emit('empathy-button-click')
     },
-    reportEffect: function () {
+    reportEffect: async function () {
       this.dialog = false
       this.snackbar = true
       // Report to server
+      await this.$axios.$post('/api/flag/', {
+        effect: this.effect.id,
+        reason: this.reportReason
+      })
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'Flag',
+        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+        eventValue: 0
+      })
     }
   }
 }

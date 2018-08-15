@@ -120,22 +120,31 @@ export default {
     submit: function () {
       this.$validator.validateAll()
     },
-    addEffect: function () {
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          this.myEffect.policy = this.$store.state.policyIdx
-          this.$store.commit('setMyEffect', this.myEffect)
-          this.$axios.$post('/api/effects/', this.myEffect)
-          this.$ga.event({
-            eventCategory: '/StateAsStakeholder',
-            eventAction: 'AddEffect',
-            eventLabel: this.myEffect.stakeholder_detail,
-            eventValue: 0
-          })
-          this.$router.push('GuessEffectRandom')
-        }
+    addNewStakeholder: async function () {
+      if (this.stakeholder_custom.length > 0) {
+        const newStakeholder = this.$axios.$post('/api/stakeholdergroups/', {
+          policy: this.$store.state.policyIdx,
+          is_visible: false,
+          name: this.stakeholder_custom
+        })
+        this.myEffect.stakeholder_group = newStakeholder.id
       }
-      )
+    },
+    addEffect: async function () {
+      const result = await this.$validator.validateAll()
+      if (result) {
+        await this.addNewStakeholder()
+        this.myEffect.policy = this.$store.state.policyIdx
+        this.$store.commit('setMyEffect', this.myEffect)
+        this.$axios.$post('/api/effects/', this.myEffect)
+        this.$ga.event({
+          eventCategory: '/StateAsStakeholder',
+          eventAction: 'AddEffect',
+          eventLabel: this.myEffect.stakeholder_detail,
+          eventValue: 0
+        })
+        this.$router.push('GuessEffectRandom')
+      }
     },
     findStakeholderName: function (id) {
       if (id === 0) {

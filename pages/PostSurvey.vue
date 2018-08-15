@@ -24,7 +24,7 @@
 export default {
   methods: {
     goback () {
-      this.$router.push('showPolicies')
+      this.$router.push('ShowPolicies')
     }
   }
 }

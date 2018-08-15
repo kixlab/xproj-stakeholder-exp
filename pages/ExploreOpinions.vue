@@ -89,7 +89,7 @@ export default {
         eventLabel: this.effects[0].stakeholder_group,
         eventValue: 0
       })
-      // In second case, redirect to PostSurvey directly.
+      // TODO:In second case, redirect to PostSurvey directly.
       this.$router.push('MiniSurvey')
     },
     onPostNewEffectButtonClick: function () {
@@ -102,42 +102,10 @@ export default {
       this.$router.push('GuessEffect')
     },
     onNoveltyButtonClick: function (effect) {
-      this.$axios.$post('/api/novelty/', {
-        effect: effect.id
-      }).then(() => {
-        this.$axios.$get('/api/stakeholdergroups/', {
-          params: {
-            policy: this.$store.state.policyIdx
-          }
-        }).then((result) => {
-          this.$store.commit('setStakeholderGroups', result.results)
-        })
-      })
-      this.$ga.event({
-        eventCategory: '/ExploreOpinions',
-        eventAction: 'UpvoteNovelty',
-        eventLabel: effect.id,
-        eventValue: 0
-      })
+
     },
     onEmpathyButtonClick: function (effect) {
-      this.$axios.$post('/api/empathy/', {
-        effect: effect.id
-      }).then(() => {
-        this.$axios.$get('/api/stakeholdergroups/', {
-          params: {
-            policy: this.$store.state.policyIdx
-          }
-        }).then((result) => {
-          this.$store.commit('setStakeholderGroups', result.results)
-        })
-      })
-      this.$ga.event({
-        eventCategory: '/ExploreOpinions',
-        eventAction: 'UpvoteNovelty',
-        eventLabel: effect.id,
-        eventValue: 0
-      })
+
     }
   },
   watch: {

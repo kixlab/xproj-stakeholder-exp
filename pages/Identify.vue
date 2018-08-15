@@ -62,7 +62,7 @@ export default {
       const to = this.userPolicy.effect_size >= 3 ? 'StateAsStakeholder' : 'GuessEffectRandom'
       this.$ga.event({
         eventCategory: '/Identify',
-        eventAction: 'ClickNextButton',
+        eventAction: 'SubmitIdentity',
         eventLabel: this.policy.title,
         eventValue: 0
       })
