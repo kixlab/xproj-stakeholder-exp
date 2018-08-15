@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     policy: function () {
-      return this.$store.state.policy
+      return this.$store.state.policies[this.$store.state.policyIdx - 1]
     },
     randomStakeholderGroup: function () {
       return this.$store.getters.randomStakeholderGroup
@@ -98,6 +98,7 @@ export default {
           // this.$store.commit('setMyEffect', this.myEffect)
           // this.$axios.$post('/api/effects/', this.myEffect)
           // TODO: record user activity
+          this.$actions.incrementUserPolicyStakeholdersAnswered()
           this.$router.push('VerifyEffect')
         }
       }

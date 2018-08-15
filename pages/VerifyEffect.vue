@@ -76,7 +76,7 @@ export default {
     //   })
     // },
     policy: function () {
-      return this.$store.state.policy
+      return this.$store.state.policies[this.$store.state.policyIdx - 1]
     },
     effects: function () {
       return this.$store.state.effects

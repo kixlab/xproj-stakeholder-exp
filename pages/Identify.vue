@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     policy: function () {
-      return this.$store.state.policies[0]
+      return this.$store.state.policies[this.$store.state.policyIdx - 1]
     }
   },
   methods: {

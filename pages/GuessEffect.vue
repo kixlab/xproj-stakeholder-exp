@@ -122,7 +122,7 @@ export default {
   },
   computed: {
     policy: function () {
-      return this.$store.state.policy
+      return this.$store.state.policies[this.$store.state.policyIdx - 1]
     },
     randomStakeholderGroup: function () {
       return this.$store.getters.randomStakeholderGroup
@@ -148,6 +148,7 @@ export default {
             eventLabel: this.randomStakeholderGroup.name,
             eventValue: 0
           })
+          this.$actions.incrementUserPolicyStakeholdersAnswered()
           this.$router.push('VerifyEffect')
         }
       })
