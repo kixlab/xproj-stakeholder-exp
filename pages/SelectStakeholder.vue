@@ -27,14 +27,12 @@ import PromisePane from '~/components/PromisePane.vue'
 import StakeholderOverviewItem from '~/components/StakeholderOverviewItem.vue'
 export default {
   fetch: async function ({app, store, params}) {
-    if (store.state.stakeholderGroups.length === 0) {
-      let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
-        params: {
-          policy: store.state.policyIdx
-        }
-      })
-      store.commit('setStakeholderGroups', stakeholderGroups.results)
-    }
+    let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
+      params: {
+        policy: store.state.policyIdx
+      }
+    })
+    store.commit('setStakeholderGroups', stakeholderGroups.results)
   },
   components: {
     PromisePane,
@@ -80,13 +78,14 @@ export default {
           get_stakeholder_names: true
         }
       })
+      this.$store.commit('setEffects', effects.results)
       this.$ga.event({
         eventCategory: '/SelectStakeholder',
         eventAction: 'ClickedStakeholderGroup',
         eventLabel: `${this.policy.title} / ${sg.name}`,
         eventValue: 0
       })
-      this.$store.commit('setEffects', effects.results)
+      this.$store.commit('setStakeholderGroupIdx', sg.id)
       this.$router.push('ExploreOpinions')
     }
   }

@@ -58,8 +58,8 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 export default {
-  mounted: function () {
-    this.$store.commit('setRandomStakeholderGroup')
+  fetch: function ({app, store}) {
+    store.commit('setRandomStakeholderGroup')
   },
   components: {
     PromisePane

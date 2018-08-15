@@ -98,7 +98,7 @@ export default {
         isBenefit: 0,
         stakeholder_detail: '',
         stakeholder_group: '0',
-        stakeholder_custom: '',
+        stakeholder_custom: null,
         description: '',
         empathy: 0,
         novelty: 0,
@@ -121,7 +121,7 @@ export default {
       this.$validator.validateAll()
     },
     addNewStakeholder: async function () {
-      if (this.stakeholder_custom.length > 0) {
+      if (this.stakeholder_custom && this.stakeholder_custom.length > 0) {
         const newStakeholder = await this.$axios.$post('/api/stakeholdergroups/', {
           policy: this.$store.state.policyIdx,
           is_visible: false,

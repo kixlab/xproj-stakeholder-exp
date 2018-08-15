@@ -48,7 +48,7 @@ export default {
       switch (this.userGroup) {
         case 1:
         case 2:
-          return 'ReadNews'
+          return 'MiniSurvey'
         case 3:
         case 4:
           return 'SelectStakeholder'

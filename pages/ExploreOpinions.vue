@@ -3,14 +3,13 @@
     <promise-pane :policy="policy" />
     <v-flex xs12>
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{effects[0].stakeholder_group}}</strong>에게<br>
+        이 정책이 <strong class="red--text">{{stakeholderName}}</strong>에게<br>
         끼치는 영향을 보여드릴게요!
       </p>
 
       <v-flex xs12 sm6 offset-sm3
         v-for="effect in effects"
-        :key="effect.stakeholder_detail"
-        v-if="effects[0].stakeholder_group==effect.stakeholder_group">
+        :key="effect.stakeholder_detail">
         <v-spacer></v-spacer>
         <effect-card :effect="effect"
         @empathy-button-click="onEmpathyButtonClick(effect)"
@@ -63,6 +62,9 @@ export default {
     },
     effects: function () {
       return this.$store.state.effects
+    },
+    stakeholderName: function () {
+      return this.$store.getters.randomStakeholderGroup.name
     }
   },
   data: function () {
@@ -77,7 +79,7 @@ export default {
       this.$ga.event({
         eventCategory: '/ExploreOpinions',
         eventAction: 'SeeMoreEffects',
-        eventLabel: this.effects[0].stakeholder_group,
+        eventLabel: this.stakeholderName,
         eventValue: 0
       })
       this.$router.push('SelectStakeholder')
@@ -86,7 +88,7 @@ export default {
       this.$ga.event({
         eventCategory: '/ExploreOpinions',
         eventAction: 'ClickEndButton',
-        eventLabel: this.effects[0].stakeholder_group,
+        eventLabel: this.stakeholderName,
         eventValue: 0
       })
       this.$router.push('MiniSurvey')
@@ -95,7 +97,7 @@ export default {
       this.$ga.event({
         eventCategory: '/ExploreOpinions',
         eventAction: 'PostNewEffect',
-        eventLabel: this.effects[0].stakeholder_group,
+        eventLabel: this.stakeholderName,
         eventValue: 0
       })
       this.$router.push('GuessEffect')

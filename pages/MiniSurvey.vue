@@ -104,26 +104,6 @@ export default {
         this.$store.commit('setNextstep')
         this.$router.push('ShowPolicies')
       }
-    },
-    computed: {
-      myStance: function () {
-        if (this.third_answer === 0) {
-          return '(찬성)'
-        } else if (this.third_answer === 1) {
-          return '(반대)'
-        } else {
-          return ''
-        }
-      },
-      user: function () {
-        return this.$store.state.user
-      },
-      policy: function () {
-        return this.$store.state.policy
-      },
-      experimentCondition: function () {
-        return this.$store.getters.experimentCondition
-      }
     }
   },
   data: function () {
@@ -134,6 +114,26 @@ export default {
       second_answer: '',
       third_answer: -1,
       fourth_answer: ''
+    }
+  },
+  computed: {
+    myStance: function () {
+      if (this.third_answer === 0) {
+        return '(찬성)'
+      } else if (this.third_answer === 1) {
+        return '(반대)'
+      } else {
+        return ''
+      }
+    },
+    user: function () {
+      return this.$store.state.user
+    },
+    policy: function () {
+      return this.$store.state.policy
+    },
+    experimentCondition: function () {
+      return this.$store.getters.experimentCondition
     }
   }
 }

@@ -110,7 +110,7 @@ export default {
             stakeholders_answered: 0,
             stakeholders_seen: 0
           }
-          this.$axios.$post('/api/userpolicy', newUP).then((result) => {
+          this.$axios.$post('/api/userpolicy/', newUP).then((result) => {
             this.$store.commit('setUserPolicy', result)
           })
         } else {
