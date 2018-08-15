@@ -10,6 +10,9 @@
         </div>
       </v-toolbar-title>
     </v-toolbar>
+    <v-alert v-model="alert" type="error" dismissible>
+      {{error}}
+    </v-alert>
     <v-flex xs12>
       <br>
       <v-card flat>
@@ -20,6 +23,7 @@
             :error-messages="errors.collect('email')"
             label="이메일"
             placeholder="abc@example.com"
+            type="email"
             name="email"
             required
           ></v-text-field>   
@@ -175,6 +179,7 @@ export default {
       email: '',
       password: '',
       password2: '',
+      isParticipant: false,
       dialog: false,
       dialog2: false,
       agreement: false,
@@ -185,7 +190,9 @@ export default {
           password_confirm: '비밀번호 '
           // custom attributes
         }
-      }
+      },
+      alert: false,
+      error: ''
     }
   },
 
@@ -194,45 +201,61 @@ export default {
   },
 
   methods: {
-    onRegisterClick () {
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          if (this.agreement) {
-            this.$store.commit('setUser', {
-              email: this.email
-            })
-            this.$ga.set({
-              userId: this.email
-            })
-            this.$axios.$post('/api/auth/login/', {
-              email: this.email,
-              password: this.password
-            }).then((result) => {
-              this.$axios.setToken(result.key, 'Token')
-              this.$store.commit('setUserToken', result.key)
-              this.$router.push('PreSurvey')
-            })
-          } else {
-            this.dialog2 = true
-          }
+    // error as {"password1":["비밀번호가 너무 일상적인 단어입니다.","비밀번호가 전부 숫자로 되어 있습니다."]}
+    async onRegisterClick () {
+      const result = await this.$validator.validateAll()
+      if (result && this.agreement) {
+        this.$axios.setToken(null)
+        try {
+          const res = await this.$axios.$post('/api/auth/signup/', {
+            username: this.email,
+            email: this.email,
+            password1: this.password,
+            password2: this.password2
+          })
+          this.$axios.setToken(res.key, 'Token')
+          this.$store.commit('setUserToken', res.key)
+          this.$ga.set({
+            userId: this.email
+          })
+          const user = await this.$axios.$put('/api/auth/user/', {
+            username: this.email,
+            is_participant: this.agreement
+          })
+          this.$store.commit('setUser', user)
+          this.$router.push('PreSurvey')
+        } catch (error) {
+          this.alert = true
+          this.error = error.response.data
         }
-      })
+      } else if (result && !this.agreement) {
+        this.dialog2 = true
+      }
     },
-    onContinueClick () {
-      this.$store.commit('setUser', {
-        email: this.email
-      })
-      this.$ga.set({
-        userId: this.email
-      })
-      this.$axios.$post('/api/auth/login/', {
-        email: this.email,
-        password: this.password
-      }).then((result) => {
-        this.$axios.setToken(result.key, 'Token')
-        this.$store.commit('setUserToken', result.key)
+    async onContinueClick () {
+      this.$axios.setToken(null)
+      try {
+        const res = await this.$axios.$post('/api/auth/signup/', {
+          username: this.email,
+          email: this.email,
+          password1: this.password,
+          password2: this.password2
+        })
+        this.$axios.setToken(res.key, 'Token')
+        this.$store.commit('setUserToken', res.key)
+        this.$ga.set({
+          userId: this.email
+        })
+        const user = await this.$axios.$put('/api/auth/user/', {
+          username: this.email,
+          is_participant: this.agreement
+        })
+        this.$store.commit('setUser', user)
         this.$router.push('ShowPolicies')
-      })
+      } catch (error) {
+        this.alert = true
+        this.error = error.response.data
+      }
     }
   }
 }

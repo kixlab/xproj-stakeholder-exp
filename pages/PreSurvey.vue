@@ -34,12 +34,18 @@
 </style>
 <script>
 export default {
+  // TODO: fetch policy list
+  computed: {
+    experimentCondition: function () {
+      return this.$store.getters.experimentCondition
+    }
+  },
   methods: {
     gohome () {
       this.$router.push('/')
     },
     onClickComplete: function () {
-      this.$router.push('showPolicies')
+      this.$router.push('ShowPolicies')
     }
   }
 }

@@ -15,9 +15,9 @@
       </p>
       <v-text-field
       v-validate="'required'"
-      v-model="predictedEffect.stakeholder_detail"
+      v-model="predictedEffect.stakeholder_custom"
       :error-messages="errors.collect('email')"       
-      name="stakeholder_detail"
+      name="stakeholder_custom"
       placeholder="대분류"/>
 
       <v-text-field
@@ -57,6 +57,7 @@
       name="stakeholder_detail"/>
       <br>
       <p class="body-1 prompt" style="color:red;"> (주의) 입력한 내용이 곧바로 반영되지 않습니다! </p>
+      <v-btn block dark color="primary" @click="onAddNewStakeholderButtonClick">추가하기</v-btn>
       <v-btn block dark color="primary" @click="goBack">돌아가기</v-btn>
     </v-flex>
   </v-layout>
@@ -65,21 +66,6 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 export default {
-  // Guess effect to the stakeholder given by the system
-  // fetch: function ({app, store}) {
-  //   // let effectsLength = store.state.effects.length
-  //   // let randomNumber = Math.floor(Math.random() * effectsLength)
-  //   // let randomEffect = store.state.effects[randomNumber]
-  //   // store.commit('setRandomEffect', randomEffect)
-  //   // return {randomEffect: randomEffect}
-  //   let stakeholderLength = store.state.stakeholderGroups.lehgth
-  //   let randomNumber = Math.floor(Math.random() * stakeholderLength)
-  //   let randomStakeholderGroup = store.state.stakeholderGroups[randomNumber]
-  //   store.commit('setRandomStakeholderGroup')
-  // },
-  mounted: function () {
-    this.$store.commit('setRandomStakeholderGroup')
-  },
   components: {
     PromisePane
   },
@@ -99,16 +85,21 @@ export default {
   },
   methods: {
     goBack: function () {
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          // this.myEffect.policy = this.$store.state.policyIdx
-          // this.$store.commit('setMyEffect', this.myEffect)
-          // this.$axios.$post('/api/effects/', this.myEffect)
-          // TODO: record user activity
-          this.$router.push('SelectStakeholder')
-        }
+      this.$router.push('SelectStakeholder')
+    },
+    onAddNewStakeholderButtonClick: async function () {
+      const result = await this.$validator.validateAll()
+      if (!result) {
+        return
       }
-      )
+      const newStakeholder = await this.$axios.$post('/api/stakeholdergroups/', {
+        policy: this.$store.state.policyIdx,
+        is_visible: false,
+        name: this.stakeholder_custom
+      })
+      this.predictedEffect.stakeholder_group = newStakeholder.id
+      await this.$axios.$post('/api/effects/', this.predictedEffect)
+      this.$router.push('SelectStakeholder')
     },
     findStakeholderName: function (id) {
       if (id === 0) {
@@ -126,7 +117,7 @@ export default {
       predictedEffect: {
         isBenefit: '',
         stakeholder_detail: '',
-        stakeholder_group: '0',
+        stakeholder_group: 0,
         description: '',
         empathy: 0,
         novelty: 0,

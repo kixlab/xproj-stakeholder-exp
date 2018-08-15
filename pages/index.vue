@@ -22,7 +22,7 @@
 .cover {
   height:100%;
   padding: 6px;
-  background-color:rgba(0,0,0,0.5);
+  background-color:rgba(94, 26, 26, 0.5);
 }
 .test {
   background-image: url('https://images.pexels.com/photos/910332/pexels-photo-910332.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
@@ -43,6 +43,7 @@
 </style>
 <script>
 export default {
+  layout: 'index',
   data: function () {
     return {
 
@@ -52,20 +53,22 @@ export default {
   methods: {
     onLookAroundButtonClick () {
       this.$ga.event({
-        eventCategory: 'index',
+        eventCategory: '/',
         eventAction: 'ClickLookAroundButton',
         eventLabel: '',
         eventValue: 0
       })
+      this.$store.commit('setLookAround', true)
       this.$router.push('ShowPolicies')
     },
     onParticipateButtonClick () {
       this.$ga.event({
-        eventCategory: 'index',
+        eventCategory: '/',
         eventAction: 'ClickParticipateButton',
         eventLabel: '',
         eventValue: 0
       })
+      this.$store.commit('setLookAround', false)
       this.$router.push('SignIn')
     }
   }

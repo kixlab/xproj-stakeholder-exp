@@ -24,13 +24,13 @@
       </template>
 
       <template v-for="policy in policies">
-        <v-btn :key="policy.id" :disabled="selectPolicy(policy.id)" color="primary" block @click="onPolicyClick(policy)">
+        <v-btn :key="policy.id" :disabled="selectPolicy(policy.id)" color="primary" large block @click="onPolicyClick(policy)">
           {{policy.title}}
         </v-btn>
       </template>
-
-      <template v-if="experimentDone()">
-        <v-btn block color="primary" @click="postSurvey">사용 후 설문</v-btn>
+      <br>
+      <template v-if="experimentDone">
+        <v-btn block color="success" @click="postSurvey">사용 후 설문</v-btn>
       </template>
       <template v-else>
         <v-btn block disabled color="primary">사용 후 설문</v-btn>
@@ -44,16 +44,24 @@
 <script>
 export default {
   // List of policies fetched from here
-  // asyncData: async function ({app, store}) { // fetch the list of policies from the server
-  //  let policies = await app.$axios.$get('/api/policies/')
-  //  return {policies: policies.results}
-  // },
-  data: function () {
+  fetch: async function ({app, store}) {
+    const policies = await app.$axios.$get('/api/policies/')
+    store.commit('setPolicies', policies.results)
+  },
+  asyncData: async function ({app, store}) { // fetch the list of policies from the server
+    const userpolicies = await app.$axios.$get('/api/userpolicy/', {
+      params: {
+        user: store.state.user.pk
+      }
+    })
     return {
-      surveyActive: false
+      userpolicies: userpolicies.results
     }
   },
   computed: {
+    isLookingAround: function () {
+      return this.$store.state.isLookingAround
+    },
     policies: function () {
       return this.$store.state.policies
     },
@@ -68,33 +76,49 @@ export default {
     },
     userStep: function () {
       return this.$store.state.user.step
+    },
+    experimentDone: function () {
+      return (this.userGroup > -1 && this.userStep === 3)
     }
   },
   methods: {
-    onPolicyClick: function (policy) { // update the policy index in store
+    onPolicyClick: async function (policy) { // update the policy index in store
       this.$ga.event({
-        eventCategory: 'ShowPolicies',
+        eventCategory: '/ShowPolicies',
         eventAction: 'SelectPolicy',
         eventLabel: policy.title,
         eventValue: 0
       })
       this.$store.commit('setPolicyIdx', {policyIdx: policy.id})
       this.$store.commit('setPolicy', policy)
-      // TODO: Log to database
-      switch (this.userGroup) {
-        case 1:
-        case 2:
-          this.$router.push('readNews')
-          break
-        case 3:
-        case 4:
-          this.$router.push('selectStakeholder')
-          break
-        case 5:
-        case 0:
-        case -1:
-          this.$router.push('Identify')
-          break
+      if (this.$store.state.user) {
+        // const userpolicy = await this.$axios.$get('/api/userpolicy/', {
+        //   params: {
+        //     user: this.$store.state.user.pk,
+        //     policy: policy.id
+        //   }
+        // })
+        const upIdx = this.userpolicies.findIndex((up) => {
+          return up.policy === policy.id
+        })
+        if (upIdx === -1) {
+          const newUP = {
+            user: this.$store.state.user.pk,
+            policy: policy.id,
+            effect_size: 0,
+            user_type: this.$store.getters.experimentCondition,
+            stakeholders_answered: 0,
+            stakeholders_seen: 0
+          }
+          this.$axios.$post('/api/userpolicy', newUP).then((result) => {
+            this.$store.commit('setUserPolicy', result)
+          })
+        } else {
+          this.$store.commit('setUserPolicy', this.userpolicies[upIdx])
+        }
+        this.$router.push('ReadNews')
+      } else {
+        this.$router.push('SelectStakeholder')
       }
     },
     selectPolicy: function (policyID) {
@@ -108,12 +132,6 @@ export default {
       } else {
         return true
       }
-    },
-    experimentDone: function () {
-      if (this.userGroup > -1 && this.userStep === 3) {
-        return true
-      }
-      return false
     },
     postSurvey: function () {
       this.$router.push('postSurvey')

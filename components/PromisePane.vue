@@ -72,10 +72,8 @@ export default {
       type: Object,
       default: function () {
         return {
-          title: '복합쇼핑몰에 대한 입지제한과 영업제한',
-          description: `정부는 신세계 스타필드, 이케아 등 복합쇼핑몰 및 전문점에 대해 영업, 출점을 제한하는 규제법안을 추진하고 있다.<br><br>
-          정부는 이 정책을 통해 <strong>재래시장 및 상점가 등 소상공인을 보호할 수 있을 것</strong>으로 내다봤다.<br><br>
-          그러나 유통업계는 <strong>소비자 권리를 침해할 뿐만 아니라, 경제에 끼칠 악영향을 우려한다</strong>며 반발했다.`
+          title: '',
+          description: `정책 설명`
         }
       }
     }
@@ -83,7 +81,7 @@ export default {
   methods: {
     onOpenDialog: function () {
       this.$ga.event({
-        eventCategory: 'PromisePane',
+        eventCategory: this.$router.currentRoute.path,
         eventAction: 'OpenPolicyExplanation',
         eventLabel: this.policy.title,
         eventValue: 0
@@ -92,7 +90,7 @@ export default {
     },
     onCloseDialog: function () {
       this.$ga.event({
-        eventCategory: 'PromisePane',
+        eventCategory: this.$router.currentRoute.path,
         eventAction: 'ClosePolicyExplanation',
         eventLabel: this.policy.title,
         eventValue: 0

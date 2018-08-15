@@ -3,41 +3,30 @@
     <promise-pane :policy="policy"></promise-pane>
     <v-flex xs12>
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{effects[0].stakeholder_name}}</strong>에게<br>
+        이 정책이 <strong class="red--text">{{randomStakeholderGroup.name}}</strong>에게<br>
         끼치는 영향을 보여드릴게요!
       </p>
 
       <v-flex xs12 sm6 offset-sm3
-        v-for="effect in effects"
-        :key="effect.stakeholder_detail"
-        v-if="effects[0].stakeholder_name==effect.stakeholder_name">
+        v-for="effect in filteredEffects"
+        :key="effect.id">
         <v-spacer></v-spacer>
         <effect-card :effect="effect" />
       </v-flex>
       
       <v-btn 
-        v-if = "active_button"
         color = "success"
         @click="onPredictMoreClick"
         block ripple>
         다른 것도 볼래요!
       </v-btn>
       <v-btn 
-        v-if = "active_button"
         color = "success"
         @click="onExploreOpinionsClick"
         block ripple>
         효과 모두 보기
       </v-btn>
 
-      <v-btn
-        :loading="loading"
-        :disabled="loading"
-        color="cyan"
-        @click.native="loader = 'loading'"
-        ripple>
-        끝
-      </v-btn>
     </v-flex>
   </v-layout>
 </template>
@@ -47,14 +36,8 @@ import PromisePane from '~/components/PromisePane.vue'
 import EffectCard from '~/components/EffectCard.vue'
 export default {
   // Verify the guessed effect
-  // asyncData: function ({app, store}) {
-  //   let effectsLength = store.state.effects.length
-  //   let randomNumber = Math.floor(Math.random() * effectsLength)
-  //   let randomEffect = store.state.effects[randomNumber]
-  //   store.commit('setRandomEffect', randomEffect)
-  //   return {randomEffect: randomEffect}
-  // },
-/*   asyncData: async function ({app, store}) {
+
+  asyncData: async function ({app, store}) {
     let effects = await app.$axios.$get('/api/effects/', {
       params: {
         policy: store.state.policyIdx,
@@ -63,18 +46,12 @@ export default {
       }
     })
     console.log(effects)
-    // store.commit('setEffects', effects.results)
     return {filteredEffects: effects.results}
-  }, */
+  },
   computed: {
     randomStakeholderGroup: function () {
       return this.$store.getters.randomStakeholderGroup
     },
-    // filteredEffects: function () {
-    //   return this.$store.state.effects.filter((effect) => {
-    //     return effect.stakeholder_group === this.randomEffect.stakeholder_group
-    //   })
-    // },
     policy: function () {
       return this.$store.state.policies[this.$store.state.policyIdx - 1]
     },
@@ -89,7 +66,7 @@ export default {
   methods: {
     onExploreOpinionsClick: function () {
       this.$ga.event({
-        eventCategory: 'VerifyEffect',
+        eventCategory: '/VerifyEffect',
         eventAction: 'ToExploreOpinions',
         eventLabel: this.randomStakeholderGroup.name,
         eventValue: 0
@@ -98,7 +75,7 @@ export default {
     },
     onPredictMoreClick: function () {
       this.$ga.event({
-        eventCategory: 'VerifyEffect',
+        eventCategory: '/VerifyEffect',
         eventAction: 'ToPredictMore',
         eventLabel: this.randomStakeholderGroup.name,
         eventValue: 0

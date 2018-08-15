@@ -60,7 +60,7 @@
       </v-card>
       <v-card flat colot="transparent">
         <v-card-text>
-          이 정책에 대한 내 입장{{myStance()}}은 확고하다.<br>
+          이 정책에 대한 내 입장{{myStance}}은 확고하다.<br>
           <v-slider
             v-model="fourth_answer"
             :tick-labels="numericScales"
@@ -90,20 +90,39 @@ export default {
     goback () {
       this.$router.push('showPolicies')
     },
-    myStance () {
-      if (this.third_answer === 0) {
-        return '(찬성)'
-      } else if (this.third_answer === 1) {
-        return '(반대)'
-      } else {
-        return ''
-      }
-    },
-    nextPolicy () {
+    async nextPolicy () {
       console.log(this.third_answer)
       if (this.third_answer !== -1) {
+        await this.$axios.$post('/api/minisurvey/', {
+          user: this.user.id,
+          policy: this.policy.id,
+          first_answer: this.first_answer,
+          second_answer: this.second_answer,
+          third_answer: this.third_answer,
+          fourth_answer: this.fourth_answer
+        })
         this.$store.commit('setNextstep')
-        this.$router.push('showPolicies')
+        this.$router.push('ShowPolicies')
+      }
+    },
+    computed: {
+      myStance: function () {
+        if (this.third_answer === 0) {
+          return '(찬성)'
+        } else if (this.third_answer === 1) {
+          return '(반대)'
+        } else {
+          return ''
+        }
+      },
+      user: function () {
+        return this.$store.state.user
+      },
+      policy: function () {
+        return this.$store.state.policy
+      },
+      experimentCondition: function () {
+        return this.$store.getters.experimentCondition
       }
     }
   },

@@ -3,16 +3,18 @@
     <promise-pane :policy="policy" />
     <v-flex xs12>
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{effects[0].stakeholder_name}}</strong>에게<br>
+        이 정책이 <strong class="red--text">{{effects[0].stakeholder_group}}</strong>에게<br>
         끼치는 영향을 보여드릴게요!
       </p>
 
       <v-flex xs12 sm6 offset-sm3
         v-for="effect in effects"
         :key="effect.stakeholder_detail"
-        v-if="effects[0].stakeholder_name==effect.stakeholder_name">
+        v-if="effects[0].stakeholder_group==effect.stakeholder_group">
         <v-spacer></v-spacer>
-        <effect-card :effect="effect" />
+        <effect-card :effect="effect"
+        @empathy-button-click="onEmpathyButtonClick(effect)"
+        @novelty-button-click="onNoveltyButtonClick(effect)" />
       </v-flex>
       
       <v-btn 
@@ -26,7 +28,7 @@
         :loading="loading"
         :disabled="loading"
         color="cyan"
-        @click.native="loader = 'loading'"
+        @click.native="onPostNewEffectButtonClick"
         ripple
       >
         여러분의 생각도 들려주세요!
@@ -48,6 +50,9 @@
 import EffectCard from '~/components/EffectCard.vue'
 import PromisePane from '~/components/PromisePane.vue'
 export default {
+  fetch: async function ({app, store}) {
+    store.dispatch('incrementUserPolicyStakeholdersSeen')
+  },
   components: {
     EffectCard,
     PromisePane
@@ -70,7 +75,7 @@ export default {
   methods: {
     onNextButtonClick: function () {
       this.$ga.event({
-        eventCategory: 'ExploreOpinions',
+        eventCategory: '/ExploreOpinions',
         eventAction: 'SeeMoreEffects',
         eventLabel: this.effects[0].stakeholder_group,
         eventValue: 0
@@ -79,7 +84,7 @@ export default {
     },
     onEndButtonClick: function () {
       this.$ga.event({
-        eventCategory: 'ExploreOpinions',
+        eventCategory: '/ExploreOpinions',
         eventAction: 'ClickEndButton',
         eventLabel: this.effects[0].stakeholder_group,
         eventValue: 0
@@ -88,11 +93,18 @@ export default {
     },
     onPostNewEffectButtonClick: function () {
       this.$ga.event({
-        eventCategory: 'ExploreOpinions',
+        eventCategory: '/ExploreOpinions',
         eventAction: 'PostNewEffect',
         eventLabel: this.effects[0].stakeholder_group,
         eventValue: 0
       })
+      this.$router.push('GuessEffect')
+    },
+    onNoveltyButtonClick: function (effect) {
+
+    },
+    onEmpathyButtonClick: function (effect) {
+
     }
   },
   watch: {

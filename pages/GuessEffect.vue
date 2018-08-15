@@ -25,7 +25,7 @@
         <v-card-text>
           <v-radio-group hide-details v-model="predictedEffect.stakeholder_group">
             <template v-for="sg in stakeholderGroups" v-if="sg.id != userPolicy.stakeholder">
-              <v-radio :key="sg.name" :label="sg.name" :value="sg.id"></v-radio>
+              <v-radio :key="sg.name" :label="sg.name" :value="sg.id" @click="onStakeholderGroupClick(sg)"></v-radio>
             </template>
           </v-radio-group>
         </v-card-text>
@@ -102,21 +102,6 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 export default {
-  // Guess effect to the stakeholder given by the system
-  // fetch: function ({app, store}) {
-  //   // let effectsLength = store.state.effects.length
-  //   // let randomNumber = Math.floor(Math.random() * effectsLength)
-  //   // let randomEffect = store.state.effects[randomNumber]
-  //   // store.commit('setRandomEffect', randomEffect)
-  //   // return {randomEffect: randomEffect}
-  //   let stakeholderLength = store.state.stakeholderGroups.lehgth
-  //   let randomNumber = Math.floor(Math.random() * stakeholderLength)
-  //   let randomStakeholderGroup = store.state.stakeholderGroups[randomNumber]
-  //   store.commit('setRandomStakeholderGroup')
-  // },
-  mounted: function () {
-    this.$store.commit('setRandomStakeholderGroup')
-  },
   components: {
     PromisePane
   },
@@ -135,20 +120,28 @@ export default {
     }
   },
   methods: {
+    onStakeholderGroupClick: function (sg) {
+      this.$ga.event({
+        eventCategory: '/GuessEffect',
+        eventAction: 'SelectStakeholderGroup',
+        eventLabel: sg.name,
+        eventValue: 0
+      })
+    },
     onNextClick: function () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          // this.myEffect.policy = this.$store.state.policyIdx
-          // this.$store.commit('setMyEffect', this.myEffect)
-          // this.$axios.$post('/api/effects/', this.myEffect)
+          this.$store.commit('setStakeholderGroupIdx', this.predictedEffect.stakeholder_group)
+          this.predictedEffect.policy = this.$store.state.policyIdx
+          this.$axios.$post('/api/effects/', this.predictedEffect)
           // TODO: record user activity
           this.$ga.event({
-            eventCategory: 'GuessEffect',
-            eventAction: 'ToVerifyEffect',
+            eventCategory: '/GuessEffect',
+            eventAction: 'SubmitGuess',
             eventLabel: this.randomStakeholderGroup.name,
             eventValue: 0
           })
-          this.$actions.incrementUserPolicyStakeholdersAnswered()
+          this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
           this.$router.push('VerifyEffect')
         }
       })
@@ -167,12 +160,10 @@ export default {
   data: function () {
     return {
       predictedEffect: {
-        isBenefit: '',
+        isBenefit: 0,
         stakeholder_detail: '',
-        stakeholder_group: '0',
+        stakeholder_group: 0,
         description: '',
-        empathy: 0,
-        novelty: 0,
         source: ''
       },
       dialog: false

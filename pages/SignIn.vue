@@ -21,6 +21,7 @@
             :error-messages="errors.collect('email')"
             label="이메일"
             placeholder="abc@example.com"
+            type="email"
             name="email"
             required
           ></v-text-field>   
@@ -63,26 +64,27 @@ export default {
   },
 
   methods: {
-    onLoginClick () {
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          this.$store.commit('setUser', {
-            email: this.email
+    async onLoginClick () {
+      const result = await this.$validator.validateAll()
+      if (result) {
+        this.$axios.setToken(false)
+        try {
+          const tokenRes = await this.$axios.$post('/api/auth/login/', {
+            email: this.email,
+            password: this.password
           })
+          this.$axios.setToken(tokenRes.key, 'Token')
+          this.$store.commit('setUserToken', tokenRes.key)
           this.$ga.set({
             userId: this.email
           })
-          this.$axios.setToken(false)
-          this.$axios.$post('/api/auth/login/', {
-            email: this.email,
-            password: this.password
-          }).then((result) => {
-            this.$axios.setToken(result.key, 'Token')
-            this.$store.commit('setUserToken', result.key)
-            this.$router.push('ShowPolicies')
-          })
+          const user = await this.$axios.$get('/api/auth/user/')
+          this.$store.commit('setUser', user)
+          this.$router.push('ShowPolicies')
+        } catch (err) {
+          this.error = err.response.data
         }
-      })
+      }
     },
     register () {
       this.$router.push('SignUp')

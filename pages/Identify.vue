@@ -40,23 +40,14 @@ import PromisePane from '~/components/PromisePane.vue'
 
 export default {
   // Stakeholders will be fetched from here.
-/*   fetch: async function ({app, store, params}) {
-    // let policy = await app.$axios.$get('/api/policies/' + store.state.policyIdx + '/')
-    // store.commit('setPolicy', policy)
-    // let effects = await app.$axios.$get('/api/effects/', {
-    //   params: {
-    //     policy: store.state.policyIdx,
-    //     get_stakeholder_names: true
-    //   }
-    // })
-    // store.commit('setEffects', effects.results)
+  fetch: async function ({app, store, params}) {
     let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
       params: {
         policy: store.state.policyIdx
       }
     })
     store.commit('setStakeholderGroups', stakeholderGroups.results)
-  }, */
+  },
   components: {
     PromisePane
   },
@@ -67,15 +58,15 @@ export default {
   },
   methods: {
     onNextButtonClick: function () {
-      this.userPolicy.policy = this.policyIdx
       // this.userPolicy.effect_size = parseInt(this.userPolicy.effect_size)
       const to = this.userPolicy.effect_size >= 3 ? 'StateAsStakeholder' : 'GuessEffectRandom'
       this.$ga.event({
-        eventCategory: 'Identify',
-        eventAction: 'ClickNextButton',
+        eventCategory: '/Identify',
+        eventAction: 'SubmitIdentity',
         eventLabel: this.policy.title,
         eventValue: 0
       })
+      this.$store.dispatch('setUserPolicyEffectSize', this.userPolicy.effect_size)
       this.$router.push(to)
     }
   },
