@@ -25,7 +25,7 @@
             required
           ></v-text-field>   
           <v-text-field
-            v-validate="'required|min:8|alpha_num'"
+            v-validate="'required|min:8'"
             v-model="password"
             :error-messages="errors.collect('password')"
             type="password"

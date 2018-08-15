@@ -39,11 +39,7 @@ export default {
       this.$router.push('/')
     },
     onClickComplete: function () {
-      if (this.$store.state.user.step === 1) {
-        this.$router.push('MiniSurvey')
-      } else if (this.$store.state.user.step === 2) {
-        this.$router.push('PostSurvey')
-      }
+      this.$router.push('MiniSurvey')
     }
   }
 }

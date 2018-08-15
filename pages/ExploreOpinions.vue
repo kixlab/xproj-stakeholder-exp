@@ -84,7 +84,6 @@ export default {
         eventLabel: this.effects[0].stakeholder_group,
         eventValue: 0
       })
-      // In second case, redirect to PostSurvey directly.
       this.$router.push('MiniSurvey')
     },
     onPostNewEffectButtonClick: function () {
