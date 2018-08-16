@@ -104,40 +104,50 @@ export const getters = {
 
 export const actions = {
   async setUserPolicyEffectSize (context, effectSize) {
-    const userpolicyId = context.state.userPolicy.id
-    const userPolicy = Object.assign({}, context.state.userPolicy)
-    userPolicy.effect_size = effectSize
-    context.commit('setUserPolicy', userPolicy)
-    await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    if (context.state.userToken) {
+      const userpolicyId = context.state.userPolicy.id
+      const userPolicy = Object.assign({}, context.state.userPolicy)
+      userPolicy.effect_size = effectSize
+      context.commit('setUserPolicy', userPolicy)
+      await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    }
   },
   async incrementUserPolicyStakeholdersSeen (context) {
-    const userpolicyId = context.state.userPolicy.id
-    const userPolicy = Object.assign({}, context.state.userPolicy)
-    userPolicy.stakeholders_seen += 1
-    context.commit('setUserPolicy', userPolicy)
-    await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    if (context.state.userToken) {
+      const userpolicyId = context.state.userPolicy.id
+      const userPolicy = Object.assign({}, context.state.userPolicy)
+      userPolicy.stakeholders_seen += 1
+      context.commit('setUserPolicy', userPolicy)
+      await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    }
   },
   async incrementUserPolicyStakeholdersAnswered (context) {
-    const userpolicyId = context.state.userPolicy.id
-    const userPolicy = Object.assign({}, context.state.userPolicy)
-    userPolicy.stakeholders_answered += 1
-    context.commit('setUserPolicy', userPolicy)
-    await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    if (context.state.userToken) {
+      const userpolicyId = context.state.userPolicy.id
+      const userPolicy = Object.assign({}, context.state.userPolicy)
+      userPolicy.stakeholders_answered += 1
+      context.commit('setUserPolicy', userPolicy)
+      await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    }
   },
   async incrementUserPolicyArticlesSeen (context) {
-    const userpolicyId = context.state.userPolicy.id
-    const userPolicy = Object.assign({}, context.state.userPolicy)
-    userPolicy.articles_seen += 1
-    context.commit('setUserPolicy', userPolicy)
-    await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    if (context.state.userToken) {
+      const userpolicyId = context.state.userPolicy.id
+      const userPolicy = Object.assign({}, context.state.userPolicy)
+      userPolicy.articles_seen += 1
+      context.commit('setUserPolicy', userPolicy)
+      await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    }
   },
   async incrementUserStep (context) {
     context.commit('setNextstep')
-    const user = context.state.user
-    await this.$axios.$put('/api/auth/user/', {
-      username: this.email,
-      step: user.step,
-      is_participant: user.is_participant
-    })
+    if (context.state.userToken) {
+      const user = context.state.user
+      await this.$axios.$put('/api/auth/user/', {
+        username: this.email,
+        step: user.step,
+        is_participant: user.is_participant
+      })
+    }
   }
 }
