@@ -95,7 +95,11 @@ export default {
         eventLabel: this.policy.title,
         eventValue: 0
       })
-      this.$router.push('ShowPolicies')
+      if (!this.$store.state.userToken || !this.$store.user.isParticipant) {
+        this.$router.push('ShowPolicies')
+      } else {
+        this.$router.push('MiniSurvey')
+      }
     }
   }
 }
