@@ -13,7 +13,7 @@
         <v-card flat>
           <v-card-text>
             <div class="left-align">
-            <font size="2">{{effect.description.slice(0, 40)}}</font>
+            <font size="2">{{shortDescription}}</font>
             </div>
           </v-card-text>
         </v-card>
@@ -164,6 +164,15 @@ export default {
     effect: {
       validator: function (value) {
         return ('stakeholder_group' in value) && ('stakeholder_detail' in value) && ('description' in value)
+      }
+    }
+  },
+  computed: {
+    shortDescription: function () {
+      if (this.effect.description.length > 40) {
+        return this.effect.description.slice(0, 37) + '...'
+      } else {
+        return this.effect.description
       }
     }
   },

@@ -140,7 +140,7 @@ export default {
       }
     },
     postSurvey: function () {
-      this.$router.push('/postSurvey')
+      this.$router.push('/PostSurvey')
     }
   }
 }

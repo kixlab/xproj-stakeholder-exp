@@ -9,7 +9,7 @@
         <!-- Length of policy name should be less than 18 Korean syllables -->
         <!-- The line must be ended with a single space -->
         <small>{{policy.title}} </small>
-        <v-icon dark fixed>arrow_drop_down</v-icon>
+        <small><v-icon dark fixed>info</v-icon></small>
       </div>
     </v-toolbar-title>
     

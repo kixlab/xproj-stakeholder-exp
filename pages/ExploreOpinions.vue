@@ -4,7 +4,8 @@
     <v-flex xs12>
       <p class="body-1">
         이 정책이 <strong class="red--text">{{stakeholderName}}</strong>에게<br>
-        끼치는 영향을 보여드릴게요!
+        줄 수 있는 영향을 보여드릴게요!
+        <!--TODO: Disclaimer -->
       </p>
 
       <v-flex xs12 sm6 offset-sm3

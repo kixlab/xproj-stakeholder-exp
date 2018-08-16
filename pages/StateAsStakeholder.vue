@@ -34,7 +34,7 @@
           <strong>{{findStakeholderName(myEffect.stakeholder_group)}}</strong>이셨군요!<br>
           </p>
           <p class="question">
-          혹시 조금만 더 자세히 설명해주시겠어요? 예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
+          혹시 본인에 대해 조금만 더 자세히 설명해주시겠어요? 예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
           장소, 직장, 연령 등을 고려하여 더 구체적으로 적어주세요.
           </p>
           <v-text-field
