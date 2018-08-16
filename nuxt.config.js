@@ -34,7 +34,7 @@ module.exports = {
     proxy: true
   },
   proxy: {
-    '/api': { target: 'https://xproj-api.hyunwoo.me' }
+    '/api': { target: 'https://xproj-api.hyunwoo.me/' }
   },
   css: [
     '~/assets/style/app.styl'
@@ -48,7 +48,7 @@ module.exports = {
   //   fallback: true
   // },
 
-  // mode: 'spa',
+  mode: 'spa',
   /*
   ** Build configuration
   */

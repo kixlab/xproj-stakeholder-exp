@@ -12,7 +12,7 @@
       이제 마지막입니다.
       사용 후 설문조사를 완료하시면 10,000원 상당의 기프티콘을 드립니다.
     </v-flex>
-    <v-btn block color="primary" @click="toPostSurveyLink">
+    <v-btn block color="primary" @click="onSurveyLinkClick">
       설문조사 하러 가기
     </v-btn>
   </v-layout>
