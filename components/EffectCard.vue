@@ -148,6 +148,7 @@
 </style>
 
 <script>
+import setTokenMixin from '~/components/setToken.js'
 export default {
   data: () => ({
     show: false,
@@ -157,6 +158,7 @@ export default {
     yeaClicked: false,
     reportReason: ''
   }),
+  mixins: [setTokenMixin],
   props: {
     source: String,
     effect: {
