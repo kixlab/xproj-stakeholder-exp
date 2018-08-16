@@ -148,7 +148,7 @@
 </style>
 
 <script>
-import setTokenMixin from '~/components/setToken.js'
+import setTokenMixin from '~/mixins/setToken.js'
 export default {
   data: () => ({
     show: false,
