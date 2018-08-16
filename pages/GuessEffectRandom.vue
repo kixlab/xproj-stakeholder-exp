@@ -11,10 +11,11 @@
       <p class="body-1 prompt head"><strong>{{randomStakeholderGroup.name}}</strong>의 입장에서 생각해주세요!</p>
       <br>
       <p class="question">
-      우선 소설 속 주인공처럼 한 사람을 자세히 머릿 속에 그려보세요!
+      여러분은 <strong>{{randomStakeholderGroup.name}}</strong>이(가) 주인공인 소설을 쓰고 있습니다.
+      여러분이 정한 주인공을 머릿 속에서 <strong>더욱 자세히 상상</strong>해보세요!
       예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
-      장소, 직장, 연령 등을 고려하여 더 구체적으로요.<br>
-      그럼 여러분만의 주인공을 간단히 설명해주시겠어요?
+      장소, 직장, 연령 등을 고려해서 더 구체적으로요.<br>
+      이제 여러분만의 주인공을 간단히 설명해주시겠어요?
       </p>
       <v-text-field
       v-validate="'required'"
@@ -115,7 +116,7 @@ export default {
   data: function () {
     return {
       predictedEffect: {
-        isBenefit: 0,
+        isBenefit: -1,
         stakeholder_detail: '',
         stakeholder_group: '0',
         description: '',

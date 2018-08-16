@@ -21,13 +21,13 @@
         color = "success"
         @click="onNextButtonClick"
         block ripple>
-        다른 효과도 볼래요!
+        다른 이해당사자의 목소리도 살펴보세요!
       </v-btn>
       <v-btn
-        
         :loading="loading"
         :disabled="!$store.state.userToken || loading"
-        color="cyan"
+        color="primary"
+        dark
         @click.native="onPostNewEffectButtonClick"
         ripple
       >
@@ -37,7 +37,8 @@
       <v-btn
         :loading="loading"
         :disabled="loading"
-        color="cyan"
+        color="primary"
+        dark
         @click.native="onEndButtonClick"
         ripple
       >

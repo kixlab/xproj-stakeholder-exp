@@ -15,17 +15,72 @@
       </v-flex>
       
       <v-btn 
-        color = "success"
+        color = "primary"
         @click="onPredictMoreClick"
         block ripple>
-        다른 것도 볼래요!
+        다른 사람의 입장도 되어 볼래요!
       </v-btn>
-      <v-btn 
-        color = "success"
-        @click="onExploreOpinionsClick"
-        block ripple>
-        효과 모두 보기
+    
+    
+    <v-dialog
+      v-model="dialog"
+      width="500"
+      full-width
+    >
+      <v-btn
+        slot="activator"
+        color="primary"
+        dark block ripple
+      >
+        끝! 이제 정책 영향을 한눈에 보여주세요!
       </v-btn>
+
+      <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        > 주의
+        </v-card-title>
+
+        <v-card-text>
+          현재 '정책의 영향 추론' 단계에서는 모든 실험자가
+          추론을 적어도 세 번 해야 보상을 받을 수 있습니다. <br><br>
+          <template v-if="answer_left>0">
+          귀하는 <strong><font size="4">{{answer_left}}번</font></strong> 남으셨습니다.<br>
+          아래 <strong style="color:red;"> 추론하기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
+          <br><br>
+          <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
+          넘어가시면, 포기로 간주되며 보상을 받을 수 없습니다. </strong>
+          </template>
+
+          <template v-else>
+          귀하는 조건을 모두 충족하셨습니다.<br>
+          <strong style="color:blue;"> 다음으로 </strong> 넘어가주세요.<br><br>
+
+          그런데, 혹시 더 해보시고 싶으시면 <strong style="color:red;">추론하기</strong>를 누르셔도 좋습니다. :)
+          </template>          
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-btn
+            color="red"
+            flat outline ripple
+            @click="onPredictMoreClick"
+          > 추론하기 </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            flat outline ripple
+            @click="onExploreOpinionsClick"
+          >
+            다음으로
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
 
     </v-flex>
   </v-layout>
@@ -58,6 +113,10 @@ export default {
     },
     effects: function () {
       return this.$store.state.effects
+    },
+    answer_left: function () {
+      console.log(this.$store.state.userPolicy)
+      return 3 - this.$store.state.userPolicy.stakeholders_answered
     }
   },
   components: {
@@ -72,6 +131,7 @@ export default {
         eventLabel: this.randomStakeholderGroup.name,
         eventValue: 0
       })
+      this.dialog = false
       this.$router.push('SelectStakeholder')
     },
     onPredictMoreClick: function () {
@@ -81,11 +141,13 @@ export default {
         eventLabel: this.randomStakeholderGroup.name,
         eventValue: 0
       })
+      this.dialog = false
       this.$router.push('GuessEffect')
     }
   },
   data: function () {
     return {
+      dialog: false
     }
   }
 }
