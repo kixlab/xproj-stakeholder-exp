@@ -144,7 +144,7 @@ export const actions = {
     if (context.state.userToken) {
       const user = context.state.user
       await this.$axios.$put('/api/auth/user/', {
-        username: this.email,
+        username: user.email,
         step: user.step,
         is_participant: user.is_participant
       })

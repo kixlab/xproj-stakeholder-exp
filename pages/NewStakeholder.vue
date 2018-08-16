@@ -15,7 +15,7 @@
       </p>
       <v-text-field
       v-validate="'required'"
-      v-model="predictedEffect.stakeholder_custom"
+      v-model="stakeholder_custom"
       :error-messages="errors.collect('email')"       
       name="stakeholder_custom"
       placeholder="대분류"/>
@@ -65,10 +65,12 @@
 
 <script>
 import PromisePane from '~/components/PromisePane.vue'
+import setTokenMixin from '~/mixins/setToken.js'
 export default {
   components: {
     PromisePane
   },
+  mixins: [setTokenMixin],
   computed: {
     policy: function () {
       return this.$store.state.policy
@@ -114,13 +116,12 @@ export default {
   },
   data: function () {
     return {
+      stakeholder_custom: '',
       predictedEffect: {
         isBenefit: '',
         stakeholder_detail: '',
         stakeholder_group: 0,
         description: '',
-        empathy: 0,
-        novelty: 0,
         source: ''
       },
       dialog: false

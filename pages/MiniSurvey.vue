@@ -12,7 +12,7 @@
       </v-toolbar-title>
     </v-toolbar>
     <v-flex xs12>
-      <h2>첫 번째 정책은 잘 보셨나요?</h2>
+      <h2>{{step}}번째 정책은 잘 보셨나요?</h2>
       아래 설문을 완료한 뒤 다음으로 넘어가주세요.<br>
       (1 : 매우 부정 ~ 5 : 매우 긍정)
     </v-flex>
@@ -114,10 +114,10 @@ export default {
     return {
       numericScales: ['1', '2', '3', '4', '5'],
       confidenceScales: ['매우 적음', '', '보통', '', '매우 확신'],
-      first_answer: '',
-      second_answer: '',
+      first_answer: 3,
+      second_answer: 3,
       third_answer: -1,
-      fourth_answer: ''
+      fourth_answer: 3
     }
   },
   computed: {
@@ -138,6 +138,13 @@ export default {
     },
     experimentCondition: function () {
       return this.$store.getters.experimentCondition
+    },
+    step: function () {
+      if (this.user.step === 1) {
+        return '첫'
+      } else if (this.user.step === 2) {
+        return '두'
+      }
     }
   }
 }

@@ -203,7 +203,7 @@ export default {
         this.$axios.$get('/api/effects/', {
           params: {
             policy: this.$store.state.policyIdx,
-            stakeholder_group: this.effect.stakeholder_group
+            stakeholder_group: this.$store.getters.randomStakeholderGroup.id
           }
         }).then((result) => {
           this.$store.commit('setEffects', result.results)
@@ -223,7 +223,7 @@ export default {
         this.$axios.$get('/api/effects/', {
           params: {
             policy: this.$store.state.policyIdx,
-            stakeholder_group: this.effect.stakeholder_group
+            stakeholder_group: this.$store.getters.randomStakeholderGroup.id
           }
         }).then((result) => {
           this.$store.commit('setEffects', result.results)

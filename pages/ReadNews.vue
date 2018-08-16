@@ -38,6 +38,7 @@
     <template v-if="!(read1&&read2)">
       <strong style="color:red;">기사를 모두 읽으셔야 다음으로 넘어가실 수 있습니다.</strong>
     </template>
+    <br>
     <v-btn block :disabled="!(read1 && read2)" color="primary" @click="onClickComplete">다음</v-btn>
   </v-layout>
 </template>
