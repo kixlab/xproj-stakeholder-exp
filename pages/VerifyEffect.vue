@@ -36,7 +36,6 @@ import PromisePane from '~/components/PromisePane.vue'
 import EffectCard from '~/components/EffectCard.vue'
 export default {
   // Verify the guessed effect
-
   asyncData: async function ({app, store}) {
     let effects = await app.$axios.$get('/api/effects/', {
       params: {

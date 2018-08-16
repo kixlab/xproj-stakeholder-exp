@@ -34,7 +34,7 @@ module.exports = {
     proxy: true
   },
   proxy: {
-    '/api': { target: 'https://13.209.19.48', secure: false }
+    '/api': { target: 'https://54.180.49.138', secure: false }
   },
   css: [
     '~/assets/style/app.styl'
