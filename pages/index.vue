@@ -1,16 +1,16 @@
 <template>
-  <div class="test">
-    <div class="cover">
-        <v-flex id="title">
-          <h3 class="display-3" style="color: white;">데꿀멍</h3>
-        </v-flex>
+  <!-- <div class="test"> -->
+    <div>
+      <v-flex id="title">
+        <h3 class="display-3" style="color: white;">다른 사람 얘기</h3>
+      </v-flex>
 
-        <v-flex xs12 id="btn_location">
-          <v-btn @click="onLookAroundButtonClick" ripple block large> 구경하기 </v-btn>
-          <v-btn @click="onParticipateButtonClick" ripple block large> 실험에 참여하기 </v-btn>
-        </v-flex>
+      <v-flex xs12 id="btn_location">
+        <v-btn @click="onLookAroundButtonClick" ripple block large> 구경하기 </v-btn>
+        <v-btn @click="onParticipateButtonClick" ripple block large> 실험에 참여하기 </v-btn>
+      </v-flex>
     </div>
-  </div>
+  <!-- </div> -->
 </template>
 <style scoped>
 .container.grid-list-md.text-xs-center {
@@ -19,7 +19,7 @@
   display: flex;
   vertical-align: middle;
 }
-.cover {
+/* .cover {
   height:100%;
   padding: 6px;
   background-color:rgba(94, 26, 26, 0.5);
@@ -32,7 +32,7 @@
   margin: 0;
   height: 100%;
   width: 100%;
-}
+} */
 #btn_location {
   position: relative;
   margin-top: 60%;

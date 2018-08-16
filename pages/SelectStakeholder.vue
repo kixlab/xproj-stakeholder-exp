@@ -18,7 +18,7 @@
           </v-card>
         </v-flex>          
       </v-layout>
-    
+      <v-btn block color="primary" @click="onShowPolicyListClick">다른 정책 보기</v-btn>
     </v-flex>
   </v-layout>
 </template>
@@ -87,6 +87,15 @@ export default {
       })
       this.$store.commit('setStakeholderGroupIdx', sg.id)
       this.$router.push('ExploreOpinions')
+    },
+    onShowPolicyListClick: function () {
+      this.$ga.event({
+        eventCategory: '/SelectStakeholder',
+        eventAction: 'ClickedShowPoliciesButton',
+        eventLabel: this.policy.title,
+        eventValue: 0
+      })
+      this.$router.push('ShowPolicies')
     }
   }
 }
