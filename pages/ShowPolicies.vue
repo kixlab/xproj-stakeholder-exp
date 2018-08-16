@@ -78,6 +78,10 @@ export default {
       return this.$store.state.user.step
     },
     experimentDone: function () {
+      console.log('fire2')
+      console.log(this.userGroup)
+      console.log('fire2')
+      console.log(this.userStep)
       return (this.userGroup > -1 && this.userStep === 3)
     }
   },
@@ -110,7 +114,7 @@ export default {
             stakeholders_answered: 0,
             stakeholders_seen: 0
           }
-          this.$axios.$post('/api/userpolicy', newUP).then((result) => {
+          this.$axios.$post('/api/userpolicy/', newUP).then((result) => {
             this.$store.commit('setUserPolicy', result)
           })
         } else {
@@ -122,6 +126,7 @@ export default {
       }
     },
     selectPolicy: function (policyID) {
+      console.log(policyID)
       if (this.userGroup === -1) {
         return false
       }
@@ -134,6 +139,7 @@ export default {
       }
     },
     postSurvey: function () {
+      console.log(this.userStep)
       this.$router.push('postSurvey')
     }
   }

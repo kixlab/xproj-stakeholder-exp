@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     policy: function () {
-      return this.$store.state.policies[this.$store.state.policyIdx - 1]
+      return this.$store.state.policy
     }
   },
   methods: {

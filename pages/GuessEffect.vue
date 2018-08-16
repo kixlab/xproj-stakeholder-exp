@@ -25,7 +25,8 @@
         <v-card-text>
           <v-radio-group hide-details v-model="predictedEffect.stakeholder_group">
             <template v-for="sg in stakeholderGroups" v-if="sg.id != userPolicy.stakeholder">
-              <v-radio :key="sg.name" :label="sg.name" :value="sg.id" @click="onStakeholderGroupClick(sg)"></v-radio>
+              <v-radio :key="sg.name" :label="sg.name" :value="sg.id"></v-radio> 
+              <!--@click="onStakeholderGroupClick(sg)-->
             </template>
           </v-radio-group>
         </v-card-text>

@@ -50,7 +50,7 @@ export const mutations = {
   setRandomStakeholderGroup (state) {
     let stakeholderLength = state.stakeholderGroups.length
     let randomNumber = Math.floor(Math.random() * stakeholderLength)
-    state.stakeholderGroupIdx = randomNumber
+    state.stakeholderGroupIdx = state.stakeholderGroups[randomNumber].id
   },
   setStakeholderGroupIdx (state, idx) {
     state.stakeholderGroupIdx = idx
@@ -86,7 +86,9 @@ export const mutations = {
 
 export const getters = {
   randomStakeholderGroup (state) {
-    return state.stakeholderGroups[state.stakeholderGroupIdx]
+    return state.stakeholderGroups.find((sg) => {
+      return sg.id === state.stakeholderGroupIdx
+    })
   },
   experimentCondition (state) {
     return state.user.pk % 6

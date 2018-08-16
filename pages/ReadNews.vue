@@ -41,19 +41,11 @@
 import PromisePane from '~/components/PromisePane.vue'
 
 export default {
-  components: {
-    PromisePane
-  },
   computed: {
-    policy: function () {
-      return this.$store.state.policies[this.$store.state.policyIdx - 1]
-    },
     userGroup: function () {
       if (!this.$store.state.user.isParticipant) {
-        console.log('fire')
         return -1
       } else {
-        console.log(this.$store.getters.experimentCondition)
         return this.$store.getters.experimentCondition
       }
     },
@@ -71,7 +63,13 @@ export default {
         case -1:
           return 'Identify'
       }
+    },
+    policy: function () {
+      return this.$store.state.policy
     }
+  },
+  components: {
+    PromisePane
   },
   methods: {
     gohome () {
