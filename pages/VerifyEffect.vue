@@ -72,7 +72,7 @@ export default {
         eventLabel: this.randomStakeholderGroup.name,
         eventValue: 0
       })
-      this.$router.push('SelectStakeholder')
+      this.$router.push('/SelectStakeholder')
     },
     onPredictMoreClick: function () {
       this.$ga.event({
@@ -81,7 +81,7 @@ export default {
         eventLabel: this.randomStakeholderGroup.name,
         eventValue: 0
       })
-      this.$router.push('GuessEffect')
+      this.$router.push('/GuessEffect')
     }
   },
   data: function () {

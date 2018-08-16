@@ -85,7 +85,7 @@ export default {
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
-      this.$router.push('SelectStakeholder')
+      this.$router.push('/SelectStakeholder')
     },
     onEndButtonClick: function () {
       this.$ga.event({
@@ -95,9 +95,9 @@ export default {
         eventValue: 0
       })
       if (!this.$store.state.userToken || !this.$store.user.is_participant) {
-        this.$router.push('ShowPolicies')
+        this.$router.push('/ShowPolicies')
       } else {
-        this.$router.push('MiniSurvey')
+        this.$router.push('/MiniSurvey')
       }
     },
     onPostNewEffectButtonClick: function () {
@@ -107,7 +107,7 @@ export default {
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
-      this.$router.push('GuessEffect')
+      this.$router.push('/GuessEffect')
     },
     onNoveltyButtonClick: function (effect) {
 

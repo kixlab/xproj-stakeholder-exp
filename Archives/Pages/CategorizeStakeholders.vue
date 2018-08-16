@@ -42,7 +42,7 @@ export default {
     addCategory: function () {
       // this.$axios.$post('/effects', this.effect)
       // TODO: record user activity
-      this.$router.push('ExploreStakeholders')
+      this.$router.push('/ExploreStakeholders')
     }
   },
   data () {

@@ -119,9 +119,9 @@ export default {
         } else {
           this.$store.commit('setUserPolicy', this.userpolicies[upIdx])
         }
-        this.$router.push('ReadNews')
+        this.$router.push('/ReadNews')
       } else {
-        this.$router.push('SelectStakeholder')
+        this.$router.push('/SelectStakeholder')
       }
     },
     selectPolicy: function (policyID) {
@@ -137,7 +137,7 @@ export default {
       }
     },
     postSurvey: function () {
-      this.$router.push('postSurvey')
+      this.$router.push('/postSurvey')
     }
   }
 }

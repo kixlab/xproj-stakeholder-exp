@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     goBack: function () {
-      this.$router.push('SelectStakeholder')
+      this.$router.push('/SelectStakeholder')
     },
     onAddNewStakeholderButtonClick: async function () {
       const result = await this.$validator.validateAll()
@@ -99,7 +99,7 @@ export default {
       })
       this.predictedEffect.stakeholder_group = newStakeholder.id
       await this.$axios.$post('/api/effects/', this.predictedEffect)
-      this.$router.push('SelectStakeholder')
+      this.$router.push('/SelectStakeholder')
     },
     findStakeholderName: function (id) {
       if (id === 0) {

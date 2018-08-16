@@ -62,7 +62,7 @@ export default {
     },
     onClickComplete: function () {
       if (this.code === this.answer) {
-        this.$router.push('ShowPolicies')
+        this.$router.push('/ShowPolicies')
       }
     },
     onSurveyLinkClick () {

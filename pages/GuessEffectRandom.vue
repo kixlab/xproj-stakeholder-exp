@@ -96,7 +96,7 @@ export default {
             eventValue: 0
           })
           this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
-          this.$router.push('VerifyEffect')
+          this.$router.push('/VerifyEffect')
         }
       }
       )

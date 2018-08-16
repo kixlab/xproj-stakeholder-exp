@@ -146,7 +146,7 @@ export default {
           eventValue: 0
         })
         this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
-        this.$router.push('GuessEffectRandom')
+        this.$router.push('/GuessEffectRandom')
       }
     },
     findStakeholderName: function (id) {

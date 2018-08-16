@@ -52,6 +52,7 @@ export default {
 
   methods: {
     onLookAroundButtonClick () {
+      this.$store.commit('logout')
       this.$ga.event({
         eventCategory: '/',
         eventAction: 'ClickLookAroundButton',
@@ -59,7 +60,7 @@ export default {
         eventValue: 0
       })
       this.$store.commit('setLookAround', true)
-      this.$router.push('ShowPolicies')
+      this.$router.push('/ShowPolicies')
     },
     onParticipateButtonClick () {
       this.$ga.event({
@@ -69,7 +70,7 @@ export default {
         eventValue: 0
       })
       this.$store.commit('setLookAround', false)
-      this.$router.push('SignIn')
+      this.$router.push('/SignIn')
     }
   }
 }

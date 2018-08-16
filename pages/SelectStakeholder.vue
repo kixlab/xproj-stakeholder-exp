@@ -70,7 +70,7 @@ export default {
         eventLabel: this.policy.title,
         eventValue: 0
       })
-      this.$router.push('NewStakeholder')
+      this.$router.push('/NewStakeholder')
     },
     onStakeholderItemClick: async function (sg) {
       const effects = await this.$axios.$get('/api/effects/', {
@@ -88,7 +88,7 @@ export default {
         eventValue: 0
       })
       this.$store.commit('setStakeholderGroupIdx', sg.id)
-      this.$router.push('ExploreOpinions')
+      this.$router.push('/ExploreOpinions')
     },
     onShowPolicyListClick: function () {
       this.$ga.event({
@@ -98,9 +98,9 @@ export default {
         eventValue: 0
       })
       if (!this.$store.state.userToken || !this.$store.state.user.is_participant) {
-        this.$router.push('ShowPolicies')
+        this.$router.push('/ShowPolicies')
       } else {
-        this.$router.push('MiniSurvey')
+        this.$router.push('/MiniSurvey')
       }
     }
   }

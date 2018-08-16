@@ -53,7 +53,7 @@ export default {
       // TODO: record user activity
       this.stakeholders.push(this.newStakeholder)
       this.$store.commit('setPredictedStakeholder', this.stakeholders) // commiting new predicted effects
-      this.$router.push('CategorizeStakeholders')
+      this.$router.push('/CategorizeStakeholders')
     }
   },
   data () {

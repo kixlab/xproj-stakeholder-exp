@@ -90,7 +90,7 @@ import setTokenMixin from '~/mixins/setToken.js'
 export default {
   methods: {
     goback () {
-      this.$router.push('showPolicies')
+      this.$router.push('/showPolicies')
     },
     async nextPolicy () {
       console.log(this.third_answer)
@@ -105,7 +105,7 @@ export default {
         })
         // this.$store.commit('setNextstep')
         this.$store.dispatch('incrementUserStep')
-        this.$router.push('ShowPolicies')
+        this.$router.push('/ShowPolicies')
       }
     }
   },

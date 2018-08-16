@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     goback () {
-      this.$router.push('ShowPolicies')
+      this.$router.push('/ShowPolicies')
     },
     onSurveyLinkClick () {
       window.open(this.surveyAddr, '_blank')

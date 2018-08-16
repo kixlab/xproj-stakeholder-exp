@@ -80,14 +80,14 @@ export default {
           })
           const user = await this.$axios.$get('/api/auth/user/')
           this.$store.commit('setUser', user)
-          this.$router.push('ShowPolicies')
+          this.$router.push('/ShowPolicies')
         } catch (err) {
           this.error = err.response.data
         }
       }
     },
     register () {
-      this.$router.push('SignUp')
+      this.$router.push('/SignUp')
     }
   }
 }
