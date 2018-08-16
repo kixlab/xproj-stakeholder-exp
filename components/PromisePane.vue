@@ -1,15 +1,16 @@
 <template>
 <v-layout>
-  <navigation-drawer :drawer="drawer"></navigation-drawer>
+  <navigation-drawer :drawer="drawer" @emitterdrawer="test"></navigation-drawer>
 
   <v-toolbar dense color="indigo" @click.native="onOpenDialog" dark fixed app>
-    <v-toolbar-side-icon ripple @click.stop="test"></v-toolbar-side-icon>
+    <v-toolbar-side-icon ripple @click.stop="drawer = !drawer"></v-toolbar-side-icon>
     <v-toolbar-title>
       <div style="cursor: pointer;">
         <!-- Length of policy name should be less than 18 Korean syllables -->
         <!-- The line must be ended with a single space -->
-        <small>{{policy.title}} </small>
+        <small> {{policy.title}} </small>
         <small><v-icon dark fixed>info</v-icon></small>
+
       </div>
     </v-toolbar-title>
     
@@ -97,9 +98,8 @@ export default {
       })
       this.dialog = false
     },
-    test: function () {
-      console.log('pushed')
-      this.drawer = !this.drawer
+    test: function (val) {
+      this.drawer = val
     }
   }
 }

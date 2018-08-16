@@ -11,7 +11,7 @@
       <p class="body-1 prompt question">
         정책의 영향을 받지만, 어디에도 속하지 않는 사람이 있었다구요?
         저희에게만 살짝 두 단계로 알려주세요!
-        예를 들어, 그 사람이 '선생님'이라면 소분류에는 '선생님'을, 대분류에는 '공무원'을 쓰시면 됩니다.
+        예를 들어, 그 사람이 '선생님'이라면 [소분류: '선생님', 대분류: '공무원']처럼 두 단계로 나누어 써주세요.
       </p>
       <v-text-field
       v-validate="'required'"
@@ -49,7 +49,7 @@
         부정적 </v-btn>
       </div>
 
-      <p class="question"> 왜 그렇게 생각하셨는지 간단히 써 주세요.</p>
+      <p class="question"> 위 빈칸에 '영향'을 쓰실 때 가장 큰 영향을 끼친 사람/상황 등이 있다면 간단히 적어주세요.<br>(예. 언론기사, 지인 등)</p>
       <v-text-field
       v-validate="'required'"
       v-model="predictedEffect.source"
@@ -57,8 +57,11 @@
       name="stakeholder_detail"/>
       <br>
       <p class="body-1 prompt" style="color:red;"> (주의) 입력한 내용이 곧바로 반영되지 않습니다! </p>
-      <v-btn block dark color="primary" @click="onAddNewStakeholderButtonClick">추가하기</v-btn>
-      <v-btn block dark color="secondary" @click="goBack">돌아가기</v-btn>
+      
+      <p v-if="!allFilled" style="color:red;">모든 빈칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
+      <v-btn v-if="!allFilled" disabled> 추가하기 </v-btn>
+      <v-btn v-else dark color="primary" @click="onAddNewStakeholderButtonClick">추가하기</v-btn>   
+      <v-btn dark color="secondary" @click="goBack">돌아가기</v-btn>
     </v-flex>
   </v-layout>
 </template>
@@ -83,6 +86,11 @@ export default {
     },
     userPolicy: function () {
       return this.$store.state.userPolicy
+    },
+    allFilled: function () {
+      return (this.stakeholder_custom !== '' && this.predictedEffect.description !== '' &&
+      this.predictedEffect.stakeholder_detail !== '' && this.predictedEffect.isBenefit !== -1 &&
+      this.predictedEffect.source !== '')
     }
   },
   methods: {
@@ -118,7 +126,7 @@ export default {
     return {
       stakeholder_custom: '',
       predictedEffect: {
-        isBenefit: '',
+        isBenefit: -1,
         stakeholder_detail: '',
         stakeholder_group: 0,
         description: '',

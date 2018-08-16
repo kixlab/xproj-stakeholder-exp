@@ -27,7 +27,7 @@
 
         <v-btn v-if="userPolicy.effect_size != 5" block color="primary" @click="onNextButtonClick">다음</v-btn>
         <template v-else>
-          <span style="color:red">답을 고르셔야 다음으로 넘어갈 수 있습니다.</span>
+          <span style="color:red;">답을 고르셔야 다음으로 넘어갈 수 있습니다.</span>
           <v-btn block disabled>다음</v-btn>
         </template>
       </v-form>

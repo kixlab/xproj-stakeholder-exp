@@ -29,7 +29,7 @@
           </v-text-field>
         </template>
 
-        <template v-if="myEffect.stakeholder_group > 0 || myEffect.stakeholder_custom != ''">
+        <template v-if="myEffect.stakeholder_group > 0 || myEffect.stakeholder_custom != null">
           <p class="body-1 prompt">
           <strong>{{findStakeholderName(myEffect.stakeholder_group)}}</strong>이셨군요!<br>
           </p>
@@ -64,7 +64,9 @@
         
         <br>
         
-        <v-btn block color="primary" @click="addEffect">다음</v-btn>
+      <p v-if="!allFilled" style="color:red;">모든 빈칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
+      <v-btn v-if="!allFilled" disabled block> 다음 </v-btn>
+      <v-btn v-else dark block color="primary" @click="addEffect">다음</v-btn>    
       </v-form>
     </v-flex>
   </v-layout>
@@ -91,6 +93,10 @@ export default {
     },
     stakeholderGroups: function () {
       return this.$store.state.stakeholderGroups
+    },
+    allFilled: function () {
+      return (this.myEffect.description !== '' && this.myEffect.stakeholder_custom !== null &&
+      this.myEffect.isBenefit !== -1 && this.myEffect.stakeholder_group !== 0)
     }
   },
   data: function () {
@@ -99,7 +105,7 @@ export default {
       myEffect: {
         isBenefit: 0,
         stakeholder_detail: '',
-        stakeholder_group: '0',
+        stakeholder_group: 0,
         stakeholder_custom: null,
         description: '',
         empathy: 0,

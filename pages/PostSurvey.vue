@@ -10,11 +10,18 @@
     <v-flex xs12>
       <h1>수고 많으셨습니다!</h1>
       이제 마지막입니다.
-      사용 후 설문조사를 완료하시면 10,000원 상당의 기프티콘을 드립니다.
+      사용 후 설문조사를 완료하시면 7,500원 상당의 기프티콘을 드립니다.
     </v-flex>
-    <v-btn block color="primary" @click="onSurveyLinkClick">
-      설문조사 하러 가기
-    </v-btn>
+    <strong style="color:red;"> (주의) 이 설문에 참여하셔야 보상을 받을 수 있습니다. </strong>
+    <v-btn block color="primary" @click="onSurveyLinkClick">설문조사 하러 가기</v-btn>
+
+    <v-flex xs12 v-if="isSurveyClicked">
+      <v-divider/>
+      <br>
+      설문을 모두 완료하셨다면, 이것으로 실험은 끝났습니다.
+      아래 버튼을 누르셔서 다른 정책이 사회에 끼치는 영향도 확인해보세요!
+      <v-btn block color="success" @click="onClickComplete">다른 정책 보러 가기</v-btn>
+    </v-flex>
   </v-layout>
 </template>
 <script>
@@ -48,6 +55,10 @@ export default {
     onSurveyLinkClick () {
       window.open(this.surveyAddr, '_blank')
       this.isSurveyClicked = true
+    },
+    onClickComplete () {
+      // is_participant must be set to false
+      this.$router.push('/ShowPolicies')
     }
   }
 }

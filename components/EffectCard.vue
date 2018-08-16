@@ -193,6 +193,7 @@ export default {
           eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
           eventValue: 0
         })
+        this.$store.dispatch('incrementUserPolicyArticlesSeen')
       }
       this.show = !this.show
     },

@@ -43,8 +43,8 @@
         </v-card-title>
 
         <v-card-text>
-          현재 '정책의 영향 추론' 단계에서는 모든 실험자가
-          추론을 적어도 세 번 해야 보상을 받을 수 있습니다. <br><br>
+          현재 '정책의 영향 추론' 단계에서는 실험자가
+          추론을 최소 3번 해야 보상을 받을 수 있습니다. <br><br>
           <template v-if="answer_left>0">
           귀하는 <strong><font size="4">{{answer_left}}번</font></strong> 남으셨습니다.<br>
           아래 <strong style="color:red;"> 추론하기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.

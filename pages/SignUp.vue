@@ -224,7 +224,7 @@ export default {
             step: 1
           })
           this.$store.commit('setUser', user)
-          this.$router.push('/PreSurvey')
+          this.$router.push('/Tutorial')
         } catch (error) {
           this.alert = true
           this.error = error.response.data
@@ -253,7 +253,7 @@ export default {
           step: 1
         })
         this.$store.commit('setUser', user)
-        this.$router.push('/ShowPolicies')
+        this.$router.push('/Tutorial')
       } catch (error) {
         this.alert = true
         this.error = error.response.data

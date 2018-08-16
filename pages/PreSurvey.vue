@@ -17,13 +17,16 @@
       <p style="text-align:left;">
         <br>
       시스템을 사용하시고, 시스템 사용 전후 설문조사에 참여하시면
-      7,500원 상당 기프티콘을 드립니다. (최대 1시간 소요) <br>
+      7,500원 상당의 기프티콘을 드립니다. (최대 1시간 소요) <br>
       <br>
       </p>
-      <strong style="color:red;"> (주의) 설문에 참여하지 않고 진행하시면 보상을 받을 수 없습니다. </strong>
+      <strong> (주의)<br>
+      1. 회원가입에서 사용했던 <font size="4">이메일</font>을 꼭 기억하세요!<br>
+      2. 설문조사를 완료한 후 <font size="4">코드</font>를 확인하세요!</strong>
+      
     </v-flex>
     <!-- The survey link must be added. -->
-    <v-btn block color="primary" @click="onSurveyLinkClick">설문 하러 가기</v-btn>
+    <v-btn block color="primary" @click="onSurveyLinkClick">설문조사 하러 가기</v-btn>
 
     <v-flex xs12 v-if="isSurveyClicked">
       설문을 완료하신 뒤 받은 코드를 적어주세요.
