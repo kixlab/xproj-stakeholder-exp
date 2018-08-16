@@ -58,7 +58,7 @@
       <br>
       <p class="body-1 prompt" style="color:red;"> (주의) 입력한 내용이 곧바로 반영되지 않습니다! </p>
       <v-btn block dark color="primary" @click="onAddNewStakeholderButtonClick">추가하기</v-btn>
-      <v-btn block dark color="primary" @click="goBack">돌아가기</v-btn>
+      <v-btn block dark color="secondary" @click="goBack">돌아가기</v-btn>
     </v-flex>
   </v-layout>
 </template>

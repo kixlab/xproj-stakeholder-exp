@@ -57,16 +57,19 @@
 
 <script>
 import PromisePane from '~/components/PromisePane.vue'
+import setTokenMixin from '~/mixins/setToken.js'
+
 export default {
   fetch: function ({app, store}) {
     store.commit('setRandomStakeholderGroup')
   },
+  mixins: [setTokenMixin],
   components: {
     PromisePane
   },
   computed: {
     policy: function () {
-      return this.$store.state.policies[this.$store.state.policyIdx - 1]
+      return this.$store.state.policy
     },
     randomStakeholderGroup: function () {
       return this.$store.getters.randomStakeholderGroup
@@ -83,6 +86,7 @@ export default {
       this.$validator.validateAll().then((result) => {
         if (result) {
           this.predictedEffect.policy = this.$store.state.policyIdx
+          this.predictedEffect.stakeholder_group = this.randomStakeholderGroup.id
           this.$axios.$post('/api/effects/', this.predictedEffect)
           // TODO: record user activity
           this.$ga.event({

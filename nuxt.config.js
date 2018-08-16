@@ -31,11 +31,14 @@ module.exports = {
     id: 'UA-123523203-1'
   },
   axios: {
-    proxy: true
+    baseURL: 'https://xproj-api.hyunwoo.me/',
+    retry: {
+      retries: 3
+    }
   },
-  proxy: {
-    '/api': { target: 'https://13.209.19.48', secure: false }
-  },
+  // proxy: {
+  //   '/api': { target: 'https://xproj-api.hyunwoo.me/' }
+  // },
   css: [
     '~/assets/style/app.styl'
   ],
@@ -48,7 +51,7 @@ module.exports = {
   //   fallback: true
   // },
 
-  // mode: 'spa',
+  mode: 'spa',
   /*
   ** Build configuration
   */

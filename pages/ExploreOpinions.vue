@@ -21,11 +21,12 @@
         color = "success"
         @click="onNextButtonClick"
         block ripple>
-        다른 것도 볼래요!
+        다른 효과도 볼래요!
       </v-btn>
       <v-btn
+        
         :loading="loading"
-        :disabled="loading"
+        :disabled="!$store.state.userToken || loading"
         color="cyan"
         @click.native="onPostNewEffectButtonClick"
         ripple
@@ -40,7 +41,7 @@
         @click.native="onEndButtonClick"
         ripple
       >
-        끝
+        다른 정책으로 넘어가기
       </v-btn>
     </v-flex>
   </v-layout>
@@ -48,10 +49,12 @@
 <script>
 import EffectCard from '~/components/EffectCard.vue'
 import PromisePane from '~/components/PromisePane.vue'
+import setTokenMixin from '~/mixins/setToken.js'
 export default {
   fetch: async function ({app, store}) {
     store.dispatch('incrementUserPolicyStakeholdersSeen')
   },
+  mixins: [setTokenMixin],
   components: {
     EffectCard,
     PromisePane
@@ -91,7 +94,11 @@ export default {
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
-      this.$router.push('MiniSurvey')
+      if (!this.$store.state.userToken || !this.$store.user.isParticipant) {
+        this.$router.push('ShowPolicies')
+      } else {
+        this.$router.push('MiniSurvey')
+      }
     },
     onPostNewEffectButtonClick: function () {
       this.$ga.event({

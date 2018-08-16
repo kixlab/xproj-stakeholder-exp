@@ -42,8 +42,10 @@
 </template>
 
 <script>
+import setTokenMixin from '~/mixins/setToken.js'
 export default {
   // List of policies fetched from here
+  mixins: [setTokenMixin],
   fetch: async function ({app, store}) {
     const policies = await app.$axios.$get('/api/policies/')
     store.commit('setPolicies', policies.results)
@@ -66,7 +68,7 @@ export default {
       return this.$store.state.policies
     },
     userGroup: function () {
-      if (!this.$store.state.user.isParticipant) {
+      if (!this.$store.state.userToken || !this.$store.state.user.isParticipant) {
         console.log('fire')
         return -1
       } else {
@@ -95,7 +97,7 @@ export default {
       })
       this.$store.commit('setPolicyIdx', {policyIdx: policy.id})
       this.$store.commit('setPolicy', policy)
-      if (this.$store.state.user) {
+      if (this.$store.state.userToken) {
         // const userpolicy = await this.$axios.$get('/api/userpolicy/', {
         //   params: {
         //     user: this.$store.state.user.pk,
@@ -112,7 +114,8 @@ export default {
             effect_size: 0,
             user_type: this.$store.getters.experimentCondition,
             stakeholders_answered: 0,
-            stakeholders_seen: 0
+            stakeholders_seen: 0,
+            articles_seen: 0
           }
           this.$axios.$post('/api/userpolicy/', newUP).then((result) => {
             this.$store.commit('setUserPolicy', result)
@@ -135,7 +138,7 @@ export default {
       } else if (this.userStep === 2) {
         return 1 + (this.userGroup % 2) !== policyID
       } else {
-        return true
+        return false
       }
     },
     postSurvey: function () {

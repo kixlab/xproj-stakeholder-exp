@@ -18,7 +18,16 @@
       <strong style="color:red;"> (주의) 설문에 참여하지 않고 진행하시면 보상을 받을 수 없습니다. </strong>
     </v-flex>
     <!-- The survey link must be added. -->
-    <v-btn block color="primary" @click="onClickComplete">완료</v-btn>
+    <v-btn block color="primary" @click="onSurveyLinkClick">설문 하러 가기</v-btn>
+
+    <v-flex xs12 v-if="isSurveyClicked">
+      설문을 완료하신 뒤 받은 코드를 적어주세요.
+      <v-text-field 
+        v-model="code"
+        label="코드"
+      ></v-text-field>
+      <v-btn block color="primary" :disabled="this.code !== this.answer" @click="onClickComplete">완료</v-btn>
+    </v-flex>
   </v-layout>
 </template>
 <style scoped>
@@ -40,12 +49,25 @@ export default {
       return this.$store.getters.experimentCondition
     }
   },
+  data: function () {
+    return {
+      isSurveyClicked: false,
+      code: '',
+      answer: '이명박'
+    }
+  },
   methods: {
     gohome () {
       this.$router.push('/')
     },
     onClickComplete: function () {
-      this.$router.push('ShowPolicies')
+      if (this.code === this.answer) {
+        this.$router.push('ShowPolicies')
+      }
+    },
+    onSurveyLinkClick () {
+      window.open('https://goo.gl/forms/qQsZlH1US44ejRWn2', '_blank')
+      this.isSurveyClicked = true
     }
   }
 }

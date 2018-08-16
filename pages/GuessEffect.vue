@@ -102,10 +102,13 @@
 
 <script>
 import PromisePane from '~/components/PromisePane.vue'
+import setTokenMixin from '~/mixins/setToken.js'
+
 export default {
   components: {
     PromisePane
   },
+  mixins: [setTokenMixin],
   computed: {
     policy: function () {
       return this.$store.state.policies[this.$store.state.policyIdx - 1]

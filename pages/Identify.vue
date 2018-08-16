@@ -37,7 +37,7 @@
 
 <script>
 import PromisePane from '~/components/PromisePane.vue'
-
+import setTokenMixin from '~/mixins/setToken.js'
 export default {
   // Stakeholders will be fetched from here.
   fetch: async function ({app, store, params}) {
@@ -48,6 +48,7 @@ export default {
     })
     store.commit('setStakeholderGroups', stakeholderGroups.results)
   },
+  mixins: [setTokenMixin],
   components: {
     PromisePane
   },

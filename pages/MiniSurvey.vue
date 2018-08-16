@@ -85,6 +85,8 @@
 }
 </style>
 <script>
+import setTokenMixin from '~/mixins/setToken.js'
+
 export default {
   methods: {
     goback () {
@@ -106,6 +108,7 @@ export default {
       }
     }
   },
+  mixins: [setTokenMixin],
   data: function () {
     return {
       numericScales: ['1', '2', '3', '4', '5'],

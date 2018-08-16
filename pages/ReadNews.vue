@@ -39,7 +39,6 @@
 </style>
 <script>
 import PromisePane from '~/components/PromisePane.vue'
-
 export default {
   computed: {
     userGroup: function () {
