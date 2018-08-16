@@ -94,7 +94,7 @@ export default {
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
-      if (!this.$store.state.userToken || !this.$store.user.isParticipant) {
+      if (!this.$store.state.userToken || !this.$store.user.is_participant) {
         this.$router.push('ShowPolicies')
       } else {
         this.$router.push('MiniSurvey')
