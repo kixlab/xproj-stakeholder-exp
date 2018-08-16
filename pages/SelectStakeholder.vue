@@ -97,7 +97,7 @@ export default {
         eventLabel: this.policy.title,
         eventValue: 0
       })
-      if (!this.$store.state.userToken || !this.$store.state.user.is_participant) {
+      if (!this.$store.state.userToken || !this.$store.state.user.is_participant || this.$store.state.user.step > 2) {
         this.$router.push('/ShowPolicies')
       } else {
         this.$router.push('/MiniSurvey')

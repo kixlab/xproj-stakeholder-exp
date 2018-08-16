@@ -13,7 +13,7 @@
         <v-card flat>
           <v-card-text>
             <div class="left-align">
-            <font size="2">{{effect.description.slice(0, 40)}}</font>
+            <font size="2">{{shortDescription}}</font>
             </div>
           </v-card-text>
         </v-card>
@@ -167,6 +167,15 @@ export default {
       }
     }
   },
+  computed: {
+    shortDescription: function () {
+      if (this.effect.description.length > 40) {
+        return this.effect.description.slice(0, 37) + '...'
+      } else {
+        return this.effect.description
+      }
+    }
+  },
   methods: {
     onShowDescriptionButtonClick: function () {
       console.log(this.$router.currentRoute.path)
@@ -194,7 +203,7 @@ export default {
         this.$axios.$get('/api/effects/', {
           params: {
             policy: this.$store.state.policyIdx,
-            stakeholder_group: this.effect.stakeholder_group
+            stakeholder_group: this.$store.getters.randomStakeholderGroup.id
           }
         }).then((result) => {
           this.$store.commit('setEffects', result.results)
@@ -214,7 +223,7 @@ export default {
         this.$axios.$get('/api/effects/', {
           params: {
             policy: this.$store.state.policyIdx,
-            stakeholder_group: this.effect.stakeholder_group
+            stakeholder_group: this.$store.getters.randomStakeholderGroup.id
           }
         }).then((result) => {
           this.$store.commit('setEffects', result.results)

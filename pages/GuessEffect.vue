@@ -87,7 +87,7 @@
       </div>
 
       <p class="question"> 위 빈칸에 '영향'을 쓰실 때 가장 큰 영향을 끼친 사람/사물이 있다면 적어주세요.<br>(예. 언론기사, 지인 등)</p>
-      <v-text-field placeholder="여기에 설명해주세요!"/>
+      <v-text-field placeholder="여기에 설명해주세요!" v-model="predictedEffect.source"/>
       <v-btn block dark color="primary" @click="onNextClick">다음</v-btn>
 
       </template>

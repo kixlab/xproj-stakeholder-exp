@@ -5,8 +5,9 @@
         <span class="name">{{stakeholder.name}}</span>
       </v-card-title>
       <v-card-text>
-        <small>{{stakeholder.keywords.positive}}</small>
-        <small>{{stakeholder.keywords.negative}}</small>
+        <small> +: {{positiveText}}</small>
+        <br>
+        <small> -: {{negativeText}}</small>
       </v-card-text>
     </v-card>
   </v-flex>
@@ -17,6 +18,22 @@ export default {
     stakeholder: {
       validator: function (obj) {
         return ('name' in obj) && ('keywords' in obj)
+      }
+    }
+  },
+  computed: {
+    positiveText: function () {
+      if (this.stakeholder.keywords.positive.length > 33) {
+        return this.stakeholder.keywords.positive.slice(0, 30).concat('...')
+      } else {
+        return this.stakeholder.keywords.positive
+      }
+    },
+    negativeText: function () {
+      if (this.stakeholder.keywords.negative.length > 33) {
+        return this.stakeholder.keywords.negative.slice(0, 30) + '...'
+      } else {
+        return this.stakeholder.keywords.negative
       }
     }
   },
