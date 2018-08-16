@@ -24,13 +24,13 @@
       </template>
 
       <template v-for="policy in policies">
-        <v-btn :key="policy.id" :disabled="selectPolicy(policy.id)" color="primary" block @click="onPolicyClick(policy)">
+        <v-btn :key="policy.id" :disabled="selectPolicy(policy.id)" color="primary" large block @click="onPolicyClick(policy)">
           {{policy.title}}
         </v-btn>
       </template>
-
+      <br>
       <template v-if="experimentDone">
-        <v-btn block color="primary" @click="postSurvey">사용 후 설문</v-btn>
+        <v-btn block color="success" @click="postSurvey">사용 후 설문</v-btn>
       </template>
       <template v-else>
         <v-btn block disabled color="primary">사용 후 설문</v-btn>
@@ -68,8 +68,9 @@ export default {
       return this.$store.state.policies
     },
     userGroup: function () {
-      if (!this.$store.state.userToken || !this.$store.state.user.isParticipant) {
-        console.log('fire')
+      if (!this.$store.state.userToken || !this.$store.state.user.is_participant) {
+        console.log(this.$store.state.userToken)
+        console.log(this.$store.state.user.is_participant)
         return -1
       } else {
         console.log(this.$store.getters.experimentCondition)
@@ -77,6 +78,7 @@ export default {
       }
     },
     userStep: function () {
+      console.log(this.$store.state.user)
       return this.$store.state.user.step
     },
     experimentDone: function () {
@@ -125,6 +127,7 @@ export default {
       }
     },
     selectPolicy: function (policyID) {
+      console.log(policyID)
       if (this.userGroup === -1) {
         return false
       }

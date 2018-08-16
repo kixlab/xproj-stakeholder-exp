@@ -49,13 +49,14 @@
 
       <template v-if="predictedEffect.stakeholder_group != 0">
       <v-divider/>
-      <p class="body-1 prompt head">좋습니다! <strong>{{findStakeholderName(predictedEffect.stakeholder_group)}}</strong>의 입장에서 생각해주세요!</p>
+      <p class="body-1 prompt head"><strong>{{findStakeholderName(predictedEffect.stakeholder_group)}}</strong>의 입장에서 생각해주세요!</p>
       <br>
       <p class="question">
-      우선 소설 속 주인공처럼 한 사람을 자세히 머릿 속에 그려보세요!
+      여러분은 <strong>{{findStakeholderName(predictedEffect.stakeholder_group)}}</strong>이(가) 주인공인 소설을 쓰고 있습니다.
+      여러분이 정한 주인공을 머릿 속에서 <strong>더욱 자세히 상상</strong>해보세요!
       예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
-      장소, 직장, 연령 등을 고려하여 더 구체적으로요.<br>
-      그럼 여러분만의 주인공을 간단히 설명해주시겠어요?
+      장소, 직장, 연령 등을 고려해서 더 구체적으로요.<br>
+      이제 여러분만의 주인공을 간단히 설명해주시겠어요?
       </p>
       <v-text-field
       v-validate="'required'"
@@ -64,11 +65,11 @@
       name="stakeholder_detail"
       placeholder="여기에 설명해주세요!" />
       
-      <p class="question">그럼 그 인물은 이 정책으로 어떤 영향을 받게 될까요?</p>
+      <p class="question">그럼 그 사람은 이 정책으로 어떤 영향을 받게 될까요?</p>
       <v-textarea box auto-grow v-model="predictedEffect.description"/>
 
       <div>
-        <p class="body-1 prompt question">이 영향은 그 인물에게 긍정적인가요? 부정적인가요? </p>
+        <p class="body-1 prompt question">방금 쓰신 내용이 그 사람에게 긍정적인가요? 부정적인가요? </p>
         <v-btn 
         :outline="predictedEffect.isBenefit !== 0" 
         :dark="predictedEffect.isBenefit == 0"
@@ -85,12 +86,8 @@
         부정적 </v-btn>
       </div>
 
-      <p class="question"> 왜 그렇게 생각하셨는지 간단히 써 주세요.</p>
-      <v-text-field
-      v-validate="'required'"
-      v-model="predictedEffect.source"
-      :error-messages="errors.collect('email')"       
-      name="stakeholder_detail"/>
+      <p class="question"> 위 빈칸에 '영향'을 쓰실 때 가장 큰 영향을 끼친 사람/사물이 있다면 적어주세요.<br>(예. 언론기사, 지인 등)</p>
+      <v-text-field placeholder="여기에 설명해주세요!"/>
       <v-btn block dark color="primary" @click="onNextClick">다음</v-btn>
 
       </template>
@@ -164,7 +161,7 @@ export default {
   data: function () {
     return {
       predictedEffect: {
-        isBenefit: 0,
+        isBenefit: -1,
         stakeholder_detail: '',
         stakeholder_group: 0,
         description: '',
