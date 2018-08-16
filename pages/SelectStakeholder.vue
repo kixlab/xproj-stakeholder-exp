@@ -14,7 +14,9 @@
         <stakeholder-overview-item v-for="sg in stakeholderGroups" :key="sg.id" :stakeholder="sg" @stakeholder-item-click="onStakeholderItemClick(sg)"></stakeholder-overview-item>
         <v-flex d-flex xs6>
           <v-card color="dark blue" dark ripple @click.native="onNewStakeholderGroupClick" v-if="!isLookingAround">
-            <v-card-text>혹시 영향을 받을<br>다른 사람들도 있을까요?</v-card-text>
+            <v-card-text>
+              <span class="link">혹시 영향을 받을<br>다른 사람들도 있을까요?</span>
+            </v-card-text>
           </v-card>
         </v-flex>          
       </v-layout>
@@ -95,7 +97,7 @@ export default {
         eventLabel: this.policy.title,
         eventValue: 0
       })
-      if (!this.$store.state.userToken || !this.$store.user.isParticipant) {
+      if (!this.$store.state.userToken || !this.$store.state.user.is_participant) {
         this.$router.push('ShowPolicies')
       } else {
         this.$router.push('MiniSurvey')
@@ -104,4 +106,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+.link {
+  cursor: pointer;
+}
+</style>
+
 

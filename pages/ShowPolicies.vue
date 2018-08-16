@@ -42,8 +42,10 @@
 </template>
 
 <script>
+import setTokenMixin from '~/mixins/setToken.js'
 export default {
   // List of policies fetched from here
+  mixins: [setTokenMixin],
   fetch: async function ({app, store}) {
     const policies = await app.$axios.$get('/api/policies/')
     store.commit('setPolicies', policies.results)
@@ -108,7 +110,8 @@ export default {
             effect_size: 0,
             user_type: this.$store.getters.experimentCondition,
             stakeholders_answered: 0,
-            stakeholders_seen: 0
+            stakeholders_seen: 0,
+            articles_seen: 0
           }
           this.$axios.$post('/api/userpolicy/', newUP).then((result) => {
             this.$store.commit('setUserPolicy', result)

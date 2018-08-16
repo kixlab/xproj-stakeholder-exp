@@ -71,6 +71,7 @@
 </template>
 <script>
 import PromisePane from '~/components/PromisePane.vue'
+import setTokenMixin from '~/mixins/setToken.js'
 export default {
   // asyncData: async function ({app, store}) {
   //   let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
@@ -83,6 +84,7 @@ export default {
   components: {
     PromisePane
   },
+  mixins: [setTokenMixin],
   computed: {
     policy: function () {
       return this.$store.state.policies[this.$store.state.policyIdx - 1]

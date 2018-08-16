@@ -49,10 +49,12 @@
 <script>
 import EffectCard from '~/components/EffectCard.vue'
 import PromisePane from '~/components/PromisePane.vue'
+import setTokenMixin from '~/mixins/setToken.js'
 export default {
   fetch: async function ({app, store}) {
     store.dispatch('incrementUserPolicyStakeholdersSeen')
   },
+  mixins: [setTokenMixin],
   components: {
     EffectCard,
     PromisePane
