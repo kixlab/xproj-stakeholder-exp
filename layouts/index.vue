@@ -35,8 +35,8 @@
   /* height: 100%;
   width: 100%; */
 }
-.application theme--light {
-  background: rgba(250, 250, 250, 0.7);
+#app {
+  background: rgba(250, 250, 250, 0.7) !important;
 }
 
 .container.grid-list-md.text-xs-center {
