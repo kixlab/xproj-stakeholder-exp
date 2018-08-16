@@ -34,7 +34,7 @@ module.exports = {
     proxy: true
   },
   proxy: {
-    '/api': { target: 'https://54.180.49.138', secure: false }
+    '/api': { target: 'https://xproj-api.hyunwoo.me' }
   },
   css: [
     '~/assets/style/app.styl'
