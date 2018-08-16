@@ -130,5 +130,14 @@ export const actions = {
     userPolicy.articles_seen += 1
     context.commit('setUserPolicy', userPolicy)
     await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+  },
+  async incrementUserStep (context) {
+    context.commit('setNextstep')
+    const user = context.state.user
+    await this.$axios.$put('/api/auth/user/', {
+      username: this.email,
+      step: user.step,
+      is_participant: user.is_participant
+    })
   }
 }

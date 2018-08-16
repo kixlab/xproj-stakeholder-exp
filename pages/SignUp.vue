@@ -220,7 +220,8 @@ export default {
           })
           const user = await this.$axios.$put('/api/auth/user/', {
             username: this.email,
-            is_participant: this.agreement
+            is_participant: this.agreement,
+            step: 1
           })
           this.$store.commit('setUser', user)
           this.$router.push('PreSurvey')
@@ -248,7 +249,8 @@ export default {
         })
         const user = await this.$axios.$put('/api/auth/user/', {
           username: this.email,
-          is_participant: this.agreement
+          is_participant: this.agreement,
+          step: 1
         })
         this.$store.commit('setUser', user)
         this.$router.push('ShowPolicies')
