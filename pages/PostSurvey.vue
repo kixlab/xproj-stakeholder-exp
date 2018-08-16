@@ -17,12 +17,6 @@
     </v-btn>
   </v-layout>
 </template>
-<style scoped>
-#goback {
-    float: left;
-    position: absolute;
-}
-</style>
 <script>
 export default {
   computed: {
@@ -51,9 +45,6 @@ export default {
     }
   },
   methods: {
-    goback () {
-      this.$router.push('/ShowPolicies')
-    },
     onSurveyLinkClick () {
       window.open(this.surveyAddr, '_blank')
       this.isSurveyClicked = true

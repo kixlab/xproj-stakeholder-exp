@@ -1,20 +1,25 @@
 <template>
   <v-layout row wrap justify-center>
     <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
-      <v-toolbar-title id="header">
-        <v-icon dark id="gohome" @click="gohome">home</v-icon>
-        <div style="flex: 1;">
-          <!-- The line must be ended with a single space -->
-          <small> 사용 전 설문 </small>
-          <v-icon dark>tag_faces</v-icon>
-        </div>
-        
+      <v-toolbar-title style="margin: 0 auto;">
+        <!-- The line must be ended with a single space -->
+        <small> 사용 전 설문 </small>
+        <v-icon dark>tag_faces</v-icon>
       </v-toolbar-title>
     </v-toolbar>
+        
     <v-flex xs12>
-      시스템 이용 전후 설문조사와, 시스템 내에서 정책 세 번에 대해 여러분의 목소리를 들려주시면
-      10,000원 상당의 기프티콘을 드립니다. (약 1시간 소요) <br>
+      <v-card color="grey lighten-4">
+        <v-card-text>
+          <strong>"다른 사람 얘기"</strong>를 통해<br>정책도 이해하고, 기프티콘도 받아가세요!
+        </v-card-text>
+      </v-card>
+      <p style="text-align:left;">
+        <br>
+      시스템을 사용하시고, 시스템 사용 전후 설문조사에 참여하시면
+      7,500원 상당 기프티콘을 드립니다. (최대 1시간 소요) <br>
       <br>
+      </p>
       <strong style="color:red;"> (주의) 설문에 참여하지 않고 진행하시면 보상을 받을 수 없습니다. </strong>
     </v-flex>
     <!-- The survey link must be added. -->
@@ -30,17 +35,6 @@
     </v-flex>
   </v-layout>
 </template>
-<style scoped>
-#gohome {
-    float: left;
-    position: absolute;
-}
-#header {
-    flex: 1;
-    display: flex;
-    position: relative;
-}
-</style>
 <script>
 export default {
   // TODO: fetch policy list
@@ -57,9 +51,6 @@ export default {
     }
   },
   methods: {
-    gohome () {
-      this.$router.push('/')
-    },
     onClickComplete: function () {
       if (this.code === this.answer) {
         this.$router.push('/ShowPolicies')

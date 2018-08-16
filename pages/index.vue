@@ -6,7 +6,7 @@
       </v-flex>
 
       <v-flex xs12 id="btn_location">
-        <v-btn @click="onLookAroundButtonClick" ripple block large> 구경하기 </v-btn>
+        <v-btn @click="onLookAroundButtonClick" ripple block large> 둘러보기 </v-btn>
         <v-btn @click="onParticipateButtonClick" ripple block large> 실험에 참여하기 </v-btn>
       </v-flex>
     </div>
