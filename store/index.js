@@ -16,7 +16,7 @@ export const state = () => ({
   userToken: null,
   user: {
     email: 'abcdef@kaist.ac.kr',
-    expr_group: '0',
+    expr_group: 0,
     pk: 1,
     step: 1,
     isParticipant: true

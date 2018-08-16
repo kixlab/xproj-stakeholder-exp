@@ -2,7 +2,7 @@
   <!-- <div class="test"> -->
     <div>
       <v-flex id="title">
-        <h3 class="display-3" style="color: white;">다른 사람 얘기</h3>
+        <div id="title_word"><font size="7">다른 사람 얘기</font></div>
       </v-flex>
 
       <v-flex xs12 id="btn_location">
@@ -39,6 +39,11 @@
 }
 #title {
   margin-top: 20%;
+}
+#title_word {
+  color: white;
+  background-color: rgba(0,0,0, 0.4);
+
 }
 </style>
 <script>

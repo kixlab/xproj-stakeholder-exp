@@ -13,16 +13,20 @@
     <v-flex xs12>
       <span style="text-align:left;"><strong> 첫 번째 기사 </strong></span>
       <v-divider/>
-      <v-btn block color="success" href="policy.article1_link">{{policy.article1_title}}</v-btn>
+      <v-btn block flat outline color="success" :href="policy.article1_link" @click="read1=true">{{policy.article1_title.slice(0,30)}}</v-btn>
       <br>
     </v-flex>
     <v-flex xs12>
       <span style="text-align:left;"><strong> 두 번째 기사 </strong></span>
       <v-divider/>
-      <v-btn block color="success" href="policy.article2_link">{{policy.article2_title}}</v-btn>
+      <v-btn block flat outline color="success" :href="policy.article2_link" @click="read2=true">{{policy.article2_title.slice(0,30)}}</v-btn>
       <br>
     </v-flex>
 
+<!--     <template v-if="!(read1&&read2)">
+      <strong style="color:red;">기사를 모두 읽으셔야 다음으로 넘어가실 수 있습니다.</strong>
+    </template>
+    <v-btn block :disabled="!(read1 && read2)" color="primary" @click="onClickComplete">다음</v-btn> -->
     <v-btn block color="primary" @click="onClickComplete">다음</v-btn>
   </v-layout>
 </template>
@@ -40,6 +44,12 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 export default {
+  data: function () {
+    return {
+      read1: false,
+      read2: false
+    }
+  },
   computed: {
     userGroup: function () {
       if (!this.$store.state.user.isParticipant) {

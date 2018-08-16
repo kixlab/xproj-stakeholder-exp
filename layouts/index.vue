@@ -1,6 +1,5 @@
 <template>
   <div class="test">
-    <div class="cover">
       <v-app>
         <v-content>
           <v-container grid-list-md text-xs-center>
@@ -12,7 +11,6 @@
           </v-container>
         </v-content>
       </v-app>
-    </div>
   </div>
 </template>
 
@@ -24,7 +22,7 @@
 .cover {
   height:100%;
   padding: 6px;
-  background-color:rgba(94, 26, 26, 0.5);
+  background-color:rgba(0, 0, 0, 0.8);
 }
 .test {
   background-image: url('https://images.pexels.com/photos/910332/pexels-photo-910332.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
@@ -36,7 +34,7 @@
   width: 100%; */
 }
 #app {
-  background: rgba(250, 250, 250, 0.7) !important;
+  background: rgba(255,255,255,0.2) !important;
 }
 
 .container.grid-list-md.text-xs-center {

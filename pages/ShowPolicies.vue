@@ -68,8 +68,9 @@ export default {
       return this.$store.state.policies
     },
     userGroup: function () {
-      if (!this.$store.state.userToken || !this.$store.state.user.isParticipant) {
-        console.log('fire')
+      if (!this.$store.state.userToken || !this.$store.state.user.is_participant) {
+        console.log(this.$store.state.userToken)
+        console.log(this.$store.state.user.is_participant)
         return -1
       } else {
         console.log(this.$store.getters.experimentCondition)
@@ -77,13 +78,10 @@ export default {
       }
     },
     userStep: function () {
+      console.log(this.$store.state.user)
       return this.$store.state.user.step
     },
     experimentDone: function () {
-      console.log('fire2')
-      console.log(this.userGroup)
-      console.log('fire2')
-      console.log(this.userStep)
       return (this.userGroup > -1 && this.userStep === 3)
     }
   },
@@ -142,7 +140,6 @@ export default {
       }
     },
     postSurvey: function () {
-      console.log(this.userStep)
       this.$router.push('postSurvey')
     }
   }
