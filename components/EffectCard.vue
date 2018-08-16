@@ -148,6 +148,7 @@
 </style>
 
 <script>
+import setTokenMixin from '~/mixins/setToken.js'
 export default {
   data: () => ({
     show: false,
@@ -157,6 +158,7 @@ export default {
     yeaClicked: false,
     reportReason: ''
   }),
+  mixins: [setTokenMixin],
   props: {
     source: String,
     effect: {
@@ -189,12 +191,13 @@ export default {
       this.$axios.$post('/api/novelty/', {
         effect: this.effect.id
       }).then(() => {
-        this.$axios.$get('/api/stakeholdergroups/', {
+        this.$axios.$get('/api/effects/', {
           params: {
-            policy: this.$store.state.policyIdx
+            policy: this.$store.state.policyIdx,
+            stakeholder_group: this.effect.stakeholder_group
           }
         }).then((result) => {
-          this.$store.commit('setStakeholderGroups', result.results)
+          this.$store.commit('setEffects', result.results)
         })
       })
       this.$ga.event({
@@ -208,12 +211,13 @@ export default {
       this.$axios.$post('/api/empathy/', {
         effect: this.effect.id
       }).then(() => {
-        this.$axios.$get('/api/stakeholdergroups/', {
+        this.$axios.$get('/api/effects/', {
           params: {
-            policy: this.$store.state.policyIdx
+            policy: this.$store.state.policyIdx,
+            stakeholder_group: this.effect.stakeholder_group
           }
         }).then((result) => {
-          this.$store.commit('setStakeholderGroups', result.results)
+          this.$store.commit('setEffects', result.results)
         })
       })
       this.$ga.event({

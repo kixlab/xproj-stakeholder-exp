@@ -81,6 +81,10 @@ export const mutations = {
   },
   setPolicies (state, payload) {
     state.policies = payload
+  },
+  logout (state) {
+    state.user = {}
+    state.userToken = null
   }
 }
 
