@@ -41,7 +41,8 @@
       </v-card>
       <v-card flat colot="transparent">
         <v-card-text>
-          나는 이 정책을 시행하는데 ______한다.
+          나는 이 정책을 시행하는데 {{myStance ? `${myStance}` : '_____'}}한다.
+          <br>
           <v-btn 
           :outline="third_answer !== 0" 
           :dark="third_answer == 0"
@@ -60,7 +61,7 @@
       </v-card>
       <v-card flat colot="transparent">
         <v-card-text>
-          이 정책에 대한 내 입장{{myStance}}은 확고하다.<br>
+          이 정책에 대한 내 입장{{myStance ? `(${myStance})` : ''}}은 확고하다.<br>
           <v-slider
             v-model="fourth_answer"
             :tick-labels="numericScales"
@@ -129,9 +130,9 @@ export default {
   computed: {
     myStance: function () {
       if (this.third_answer === 0) {
-        return '(찬성)'
+        return '찬성'
       } else if (this.third_answer === 1) {
-        return '(반대)'
+        return '반대'
       } else {
         return ''
       }

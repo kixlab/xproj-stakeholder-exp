@@ -11,7 +11,7 @@
       <p class="body-1 prompt question">
         정책의 영향을 받지만, 어디에도 속하지 않는 사람이 있었다구요?
         저희에게만 살짝 두 단계로 알려주세요!
-        예를 들어, 그 사람이 '선생님'이라면 [소분류: '선생님', 대분류: '공무원']처럼 두 단계로 나누어 써주세요.
+        예를 들어, 그 사람이 '선생님'이라면 [대분류: '공무원', 소분류: '선생님']처럼 두 단계로 나누어 써주세요.
       </p>
       <v-text-field
       v-validate="'required'"
@@ -113,6 +113,7 @@ export default {
         is_visible: false,
         name: this.stakeholder_custom
       })
+      this.predictedEffect.policy = this.$store.state.policyIdx
       this.predictedEffect.stakeholder_group = newStakeholder.id
       await this.$axios.$post('/api/effects/', this.predictedEffect)
       this.$ga.event({

@@ -106,7 +106,7 @@ export default {
         isBenefit: 0,
         stakeholder_detail: '',
         stakeholder_group: 0,
-        stakeholder_custom: null,
+        stakeholder_custom: '',
         description: '',
         empathy: 0,
         novelty: 0,
@@ -125,9 +125,6 @@ export default {
     this.$validator.localize('ko', this.dictionary)
   },
   methods: {
-    submit: function () {
-      this.$validator.validateAll()
-    },
     addNewStakeholder: async function () {
       if (this.stakeholder_custom && this.stakeholder_custom.length > 0) {
         const newStakeholder = await this.$axios.$post('/api/stakeholdergroups/', {

@@ -19,7 +19,7 @@
         :flat="read1==false"
         :outline="read1==false"
         @click="openFirstArticle"
-        block ripple>{{policy.article1_title.slice(0,30)}}</v-btn>
+        block ripple>{{policy.article1_title}}</v-btn>
       <br>
     </v-flex>
     <v-flex xs12>
@@ -31,7 +31,7 @@
         :flat="read2==false"
         :outline="read2==false"
         @click="openSecondArticle"
-        block ripple>{{policy.article2_title.slice(0,30)}}</v-btn>
+        block ripple>{{policy.article2_title}}</v-btn>
       <br>
     </v-flex>
 
@@ -77,14 +77,14 @@ export default {
         case 1:
         case 2:
           this.$store.commit('setNextstep')
-          return 'MiniSurvey'
+          return '/MiniSurvey'
         case 3:
         case 4:
-          return 'SelectStakeholder'
+          return '/SelectStakeholder'
         case 5:
         case 0:
         case -1:
-          return 'Identify'
+          return '/Identify'
       }
     },
     policy: function () {
