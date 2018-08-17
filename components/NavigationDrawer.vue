@@ -117,7 +117,7 @@ export default {
       return 'guest'
     },
     userGroup: function () {
-      if (!this.$store.state.user.isParticipant) {
+      if (!this.$store.state.user.is_participant) {
         return -1
       } else {
         return this.$store.getters.experimentCondition

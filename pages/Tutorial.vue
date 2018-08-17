@@ -17,9 +17,9 @@
 </template>
 <script>
   export default {
-    beforeRouterEnter (to, from, next) {
-      next(vm => {
-        vm.prevRoute = from
+    beforeRouteEnter (to, from, next) {
+      next((vm) => {
+        vm.prevRoute = from.path
       })
     },
     data () {
@@ -64,7 +64,7 @@
     },
     computed: {
       userGroup: function () {
-        if (!this.$store.state.user.isParticipant) {
+        if (!this.$store.state.user.is_participant) {
           return -1
         } else {
           return this.$store.getters.experimentCondition

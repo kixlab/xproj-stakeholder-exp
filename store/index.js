@@ -19,7 +19,7 @@ export const state = () => ({
     expr_group: 0,
     pk: 1,
     step: 1,
-    isParticipant: true
+    is_participant: true
   },
   selectedStakeholder: '',
   isLookingAround: false

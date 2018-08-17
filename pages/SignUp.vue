@@ -179,7 +179,6 @@ export default {
       email: '',
       password: '',
       password2: '',
-      isParticipant: false,
       dialog: false,
       dialog2: false,
       agreement: false,
