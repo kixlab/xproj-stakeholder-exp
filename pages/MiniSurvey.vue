@@ -91,7 +91,7 @@ import setTokenMixin from '~/mixins/setToken.js'
 export default {
   methods: {
     goback () {
-      this.$router.push('/ShowPolicies')
+      this.$router.go(-1)
     },
     async nextPolicy () {
       console.log(this.third_answer)
