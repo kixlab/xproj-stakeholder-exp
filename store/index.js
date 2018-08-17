@@ -95,7 +95,7 @@ export const getters = {
     })
   },
   experimentCondition (state) {
-    return state.user.pk % 6
+    return ((state.user.pk % 4) + 3) % 6
   },
   isLookingAround (state) {
     return !state.userToken || state.isLookingAround
