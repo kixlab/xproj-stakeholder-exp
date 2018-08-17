@@ -114,10 +114,10 @@ export default {
     return {
       numericScales: ['1', '2', '3', '4', '5'],
       confidenceScales: ['매우 적음', '', '보통', '', '매우 확신'],
-      first_answer: 3,
-      second_answer: 3,
+      first_answer: 2,
+      second_answer: 2,
       third_answer: -1,
-      fourth_answer: 3
+      fourth_answer: 2
     }
   },
   computed: {
