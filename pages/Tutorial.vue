@@ -17,8 +17,14 @@
 </template>
 <script>
   export default {
+    beforeRouterEnter (to, from, next) {
+      next(vm => {
+        vm.prevRoute = from
+      })
+    },
     data () {
       return {
+        prevRoute: ''
       }
     },
     methods: {
@@ -38,17 +44,21 @@
         }
       },
       goNext: function () {
-        switch (this.userGroup) {
-          case 1:
-          case 2:
-          case 3:
-          case 4:
-          case 5:
-          case 0:
-            this.$router.push('/PreSurvey')
-            break
-          case -1:
-            this.$router.push('/ShowPolicies')
+        if (this.prevRoute === '/SignUp') {
+          switch (this.userGroup) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 0:
+              this.$router.push('/PreSurvey')
+              break
+            case -1:
+              this.$router.push('/ShowPolicies')
+          }
+        } else {
+          this.$router.go(-1)
         }
       }
     },
