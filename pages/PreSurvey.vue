@@ -56,10 +56,22 @@ export default {
   methods: {
     onClickComplete: function () {
       if (this.code === this.answer) {
+        this.$ga.event({
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'FinishPreSurvey',
+          eventLabel: `${this.policy}`,
+          eventValue: 0
+        })
         this.$router.push('/ShowPolicies')
       }
     },
     onSurveyLinkClick () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenPreSurvey',
+        eventLabel: ``,
+        eventValue: 0
+      })
       window.open('https://goo.gl/forms/qQsZlH1US44ejRWn2', '_blank')
       this.isSurveyClicked = true
     }

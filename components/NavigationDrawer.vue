@@ -200,7 +200,7 @@ export default {
         eventAction: 'GiveUp',
         eventLabel: ``,
         eventValue: 0
-        })
+      })
       this.$router.push('/')
     },
     tutorial: function () {
@@ -209,7 +209,7 @@ export default {
         eventAction: 'SeeTutorial',
         eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
         eventValue: 0
-        })
+      })
       this.$router.push('/Tutorial')
     }
   }

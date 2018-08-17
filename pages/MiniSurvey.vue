@@ -90,10 +90,16 @@ import setTokenMixin from '~/mixins/setToken.js'
 export default {
   methods: {
     goback () {
-      this.$router.push('/showPolicies')
+      this.$router.push('/ShowPolicies')
     },
     async nextPolicy () {
       console.log(this.third_answer)
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'FinishMiniSurvey',
+        eventLabel: `${this.policy.title}`,
+        eventValue: 0
+      })
       if (this.third_answer !== -1) {
         await this.$axios.$post('/api/minisurvey/', {
           user: this.user.id,

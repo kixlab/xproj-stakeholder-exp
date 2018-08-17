@@ -53,10 +53,22 @@ export default {
   },
   methods: {
     onSurveyLinkClick () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenPreSurvey',
+        eventLabel: ``,
+        eventValue: 0
+      })
       window.open(this.surveyAddr, '_blank')
       this.isSurveyClicked = true
     },
     onClickComplete () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenPostSurvey',
+        eventLabel: ``,
+        eventValue: 0
+      })
       // is_participant must be set to false
       this.$router.push('/ShowPolicies')
     }

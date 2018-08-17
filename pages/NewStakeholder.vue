@@ -95,6 +95,12 @@ export default {
   },
   methods: {
     goBack: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'GoBackToStakeholderList',
+        eventLabel: `${this.policy.title}`,
+        eventValue: 0
+      })
       this.$router.push('/SelectStakeholder')
     },
     onAddNewStakeholderButtonClick: async function () {
@@ -109,6 +115,12 @@ export default {
       })
       this.predictedEffect.stakeholder_group = newStakeholder.id
       await this.$axios.$post('/api/effects/', this.predictedEffect)
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'AddNewStakeholder',
+        eventLabel: ``,
+        eventValue: 0
+      })
       this.$router.push('/SelectStakeholder')
     },
     findStakeholderName: function (id) {
