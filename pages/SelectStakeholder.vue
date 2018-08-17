@@ -135,7 +135,7 @@ export default {
     onNewStakeholderGroupClick: function () {
       this.$ga.event({
         eventCategory: '/SelectStakeholder',
-        eventAction: 'ClickedNewStakeholderGroupButton',
+        eventAction: 'NewStakeholderGroup',
         eventLabel: this.policy.title,
         eventValue: 0
       })
@@ -152,7 +152,7 @@ export default {
       this.$store.commit('setEffects', effects.results)
       this.$ga.event({
         eventCategory: '/SelectStakeholder',
-        eventAction: 'ClickedStakeholderGroup',
+        eventAction: 'ShowStakeholderGroupEffects',
         eventLabel: `${this.policy.title} / ${sg.name}`,
         eventValue: 0
       })
@@ -162,7 +162,7 @@ export default {
     onShowPolicyListClick: function () {
       this.$ga.event({
         eventCategory: '/SelectStakeholder',
-        eventAction: 'ClickedShowPoliciesButton',
+        eventAction: 'ShowPolicyList',
         eventLabel: this.policy.title,
         eventValue: 0
       })

@@ -31,9 +31,9 @@ export default {
       if (this.$store.getters.experimentCondition === 1 || this.$store.getters.experimentCondition === 2) {
         return 'https://goo.gl/forms/RuE9zgh1FoEWNReE3'
       } else if (this.$store.getters.experimentCondition === 3 || this.$store.getters.experimentCondition === 4) {
-        return 'https://goo.gl/forms/FZMGfoCZTc36Uj662'
+        return 'https://goo.gl/forms/4gAH15cbvJvHFqJh2'
       } else if (this.$store.getters.experimentCondition === 5 || this.$store.getters.experimentCondition === 0) {
-        return 'https://goo.gl/forms/jXUzwEm6Wff9FckF2'
+        return 'https://goo.gl/forms/PvhGf8mFOXtzPmFI3'
       }
     // },
     // answer: function () {

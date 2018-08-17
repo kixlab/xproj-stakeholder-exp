@@ -2,14 +2,14 @@
   <div>
     <v-card ripple @click.native="onShowDescriptionButtonClick">
       <v-card-title primary-title>
-      <v-flex xs3 align-space-around fill-height row wrap>
+      <v-flex xs4 align-space-around fill-height row wrap>
         <v-card flat>
           <v-card-text>
             <small><strong>{{effect.stakeholder_detail}}</strong></small>
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex xs9 fill-height row column wrap class="aa">
+      <v-flex xs8 fill-height row column wrap class="aa">
         <v-card flat>
           <v-card-text>
             <div class="left-align">
@@ -141,6 +141,7 @@
 }
 .left-align {
   text-align: left;
+  cursor: pointer;
 }
 .dialog {
   padding: 8px;

@@ -102,10 +102,22 @@ export default {
       this.$router.push(this.nextRoute)
     },
     openFirstArticle () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenFirstArticle',
+        eventLabel: `${this.policy}`,
+        eventValue: 0
+      })
       window.open(this.policy.article1_link, '_blank')
       this.read1 = true
     },
     openSecondArticle () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenSecondArticle',
+        eventLabel: `${this.policy}`,
+        eventValue: 0
+      })
       window.open(this.policy.article2_link, '_blank')
       this.read2 = true
     }

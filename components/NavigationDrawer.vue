@@ -195,9 +195,21 @@ export default {
       this.$router.push('/')
     },
     giveUp: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'GiveUp',
+        eventLabel: ``,
+        eventValue: 0
+        })
       this.$router.push('/')
     },
     tutorial: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'SeeTutorial',
+        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+        eventValue: 0
+        })
       this.$router.push('/Tutorial')
     }
   }
