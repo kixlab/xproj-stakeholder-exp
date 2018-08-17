@@ -50,7 +50,7 @@ export default {
     return {
       isSurveyClicked: false,
       code: '',
-      answer: '이명박'
+      answer: 'kixlab'
     }
   },
   methods: {
