@@ -80,8 +80,7 @@ export default {
           })
           const user = await this.$axios.$get('/api/auth/user/')
           this.$store.commit('setUser', user)
-          if (user.is_participant && !user.presurvey_done)
-          {
+          if (user.is_participant && !user.presurvey_done) {
             this.$router.push('/PreSurvey')
           }
           this.$router.push('/ShowPolicies')

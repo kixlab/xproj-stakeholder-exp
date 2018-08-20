@@ -62,6 +62,7 @@ export default {
           eventLabel: `${this.policy}`,
           eventValue: 0
         })
+        this.$store.dispatch('finishPresurvey')
         this.$router.push('/ShowPolicies')
       }
     },
