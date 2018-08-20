@@ -79,11 +79,14 @@ export default {
             userId: this.email
           })
           const user = await this.$axios.$get('/api/auth/user/')
+          console.log(user.is_participant)
+          console.log(user.presurvey_done)
           this.$store.commit('setUser', user)
-          if (user.is_participant && !user.presurvey_done) {
+          if (user.is_participant && !(user.presurvey_done)) {
             this.$router.push('/PreSurvey')
+          } else {
+            this.$router.push('/ShowPolicies')
           }
-          this.$router.push('/ShowPolicies')
         } catch (err) {
           this.error = err.response.data
         }
