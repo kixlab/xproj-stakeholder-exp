@@ -85,6 +85,9 @@ export const mutations = {
   logout (state) {
     state.user = {}
     state.userToken = null
+  },
+  finishPresurvey (state) {
+    state.user.presurvey_done = true
   }
 }
 
@@ -146,7 +149,20 @@ export const actions = {
       await this.$axios.$put('/api/auth/user/', {
         username: user.email,
         step: user.step,
-        is_participant: user.is_participant
+        is_participant: user.is_participant,
+        presurvey_done: user.presurvey_done
+      })
+    }
+  },
+  async finishPresurvey (context) {
+    context.commit('finishPresurvey')
+    if (context.state.userToken) {
+      const user = context.state.user
+      await this.$axios.$put('/api/auth/user/', {
+        username: user.email,
+        step: user.step,
+        is_participant: user.is_participant,
+        presurvey_done: user.presurvey_done
       })
     }
   }

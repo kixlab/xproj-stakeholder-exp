@@ -13,7 +13,7 @@
         <v-card flat>
           <v-card-text>
             <div class="left-align">
-            <font size="2">{{shortDescription}}</font>
+            <font size="2">{{show ? effect.description : shortDescription}}</font>
             </div>
           </v-card-text>
         </v-card>

@@ -1,19 +1,19 @@
 <template>
-    <v-flex xs12>
-  <v-carousel
-    dark hide-controls
-    cycle="false"
-    interval="60000">
-    <v-carousel-item
-      v-for="i in tutorialImg"
-      :key="i"
-      :src="imgURL(i)"
-      style="width:100%;"
-    ></v-carousel-item>
-  </v-carousel>
-  <!-- If it is redirected from navigation drawer, this button must be 돌아가기 -->
-  <v-btn color="primary" block @click.native="goNext">다 봤어요!</v-btn>
-    </v-flex>
+  <v-flex xs12>
+    <v-carousel
+      dark hide-controls
+      cycle="false"
+      interval="60000">
+      <v-carousel-item
+        v-for="i in tutorialImg"
+        :key="i"
+        :src="imgURL(i)"
+        style="width:100%;"
+      ></v-carousel-item>
+    </v-carousel>
+    <!-- If it is redirected from navigation drawer, this button must be 돌아가기 -->
+    <v-btn color="primary" block @click.native="goNext">다 봤어요!</v-btn>
+  </v-flex>
 </template>
 <script>
   export default {

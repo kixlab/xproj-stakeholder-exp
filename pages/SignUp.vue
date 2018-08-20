@@ -94,10 +94,10 @@
         본 연구의 참여와 관련하여 문의 및 불만 사항이 있으신 경우에는 언제든지 연구진에게 연락 하여 주시기 바랍니다.<br>
         <br>
         연구 책임자:<br>
-        김주호, 카이스트 전산학과 조교수, 042-350-3570<br>
+        김주호, 카이스트 전산학부 조교수, 042-350-3570<br>
         <br>
         연락 담당자:<br>
-        김현우, 카이스트 전산학과, <a href="#">khw0726@kaist.ac.kr</a><br>
+        김현우, 카이스트 전산학부, <a href="#">khw0726@kaist.ac.kr</a><br>
         <br>
         <v-divider/>
         <br>
@@ -220,7 +220,8 @@ export default {
           const user = await this.$axios.$put('/api/auth/user/', {
             username: this.email,
             is_participant: this.agreement,
-            step: 1
+            step: 1,
+            presurvey_done: false
           })
           this.$store.commit('setUser', user)
           this.$router.push('/Tutorial')
@@ -249,7 +250,8 @@ export default {
         const user = await this.$axios.$put('/api/auth/user/', {
           username: this.email,
           is_participant: this.agreement,
-          step: 1
+          step: 1,
+          presurvey_done: false
         })
         this.$store.commit('setUser', user)
         this.$router.push('/Tutorial')
