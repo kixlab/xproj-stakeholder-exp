@@ -194,49 +194,59 @@ export default {
           eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
           eventValue: 0
         })
-        this.$store.dispatch('incrementUserPolicyArticlesSeen')
+        this.$store.dispatch('incrementUserPolicyEffectsSeen')
       }
       this.show = !this.show
     },
-    onNoveltyButtonClick: function () {
-      this.$axios.$post('/api/novelty/', {
-        effect: this.effect.id
-      }).then(() => {
-        this.$axios.$get('/api/effects/', {
+    onNoveltyButtonClick: async function () {
+      try {
+        await this.$axios.$post('/api/novelty/', {
+          effect: this.effect.id
+        })
+        this.$store.commit('incrementNoveltyCount', {
+          effect: this.effect.id
+        })
+        this.$ga.event({
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'UpvoteNovelty',
+          eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+          eventValue: 0
+        })
+        const result = await this.$axios.$get('/api/effects/', {
           params: {
             policy: this.$store.state.policyIdx,
             stakeholder_group: this.$store.getters.randomStakeholderGroup.id
           }
-        }).then((result) => {
-          this.$store.commit('setEffects', result.results)
         })
-      })
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'UpvoteNovelty',
-        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
-        eventValue: 0
-      })
+        this.$store.commit('setEffects', result.results)
+      } catch (err) {
+        console.log(err)
+      }
     },
-    onEmpathyButtonClick: function () {
-      this.$axios.$post('/api/empathy/', {
-        effect: this.effect.id
-      }).then(() => {
-        this.$axios.$get('/api/effects/', {
+    onEmpathyButtonClick: async function () {
+      try {
+        await this.$axios.$post('/api/empathy/', {
+          effect: this.effect.id
+        })
+        this.$store.commit('incrementEmpathyCount', {
+          effect: this.effect.id
+        })
+        this.$ga.event({
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'UpvoteEmpathy',
+          eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+          eventValue: 0
+        })
+        const result = await this.$axios.$get('/api/effects/', {
           params: {
             policy: this.$store.state.policyIdx,
             stakeholder_group: this.$store.getters.randomStakeholderGroup.id
           }
-        }).then((result) => {
-          this.$store.commit('setEffects', result.results)
         })
-      })
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'UpvoteEmpathy',
-        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
-        eventValue: 0
-      })
+        this.$store.commit('setEffects', result.results)
+      } catch (err) {
+        console.log(err)
+      }
       // this.$emit('empathy-button-click')
     },
     reportEffect: async function () {
