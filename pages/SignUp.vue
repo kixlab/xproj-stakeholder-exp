@@ -11,7 +11,7 @@
       </v-toolbar-title>
     </v-toolbar>
     <v-alert v-model="alert" type="error" dismissible>
-      {{error}}
+      {{formattedError}}
     </v-alert>
     <v-flex xs12>
       <br>
@@ -194,7 +194,19 @@ export default {
       error: ''
     }
   },
-
+  computed: {
+    formattedError: function () {
+      if (this.error) {
+        if (this.error.email) {
+          return this.error.email[0]
+        } else if (this.error.password1) {
+          return this.error.password1[0]
+        }
+      } else {
+        return ''
+      }
+    }
+  },
   mounted () {
     this.$validator.localize('ko', this.dictionary)
   },
