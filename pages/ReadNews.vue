@@ -19,7 +19,7 @@
         :flat="read1==false"
         :outline="read1==false"
         @click="openFirstArticle"
-        block ripple>{{policy.article1_title}}</v-btn>
+        block ripple large><pre>{{article_title_cut(policy.article1_title)}}</pre></v-btn>
       <br>
     </v-flex>
     <v-flex xs12>
@@ -31,7 +31,7 @@
         :flat="read2==false"
         :outline="read2==false"
         @click="openSecondArticle"
-        block ripple>{{policy.article2_title}}</v-btn>
+        block ripple large>{{article_title_cut(policy.article2_title)}}</v-btn>
       <br>
     </v-flex>
 
@@ -120,6 +120,14 @@ export default {
       })
       window.open(this.policy.article2_link, '_blank')
       this.read2 = true
+    },
+    article_title_cut: function (str) {
+      if (str.length <= 30) {
+        return str
+      } else {
+        return str.slice(0, 20) + `
+        ` + str.slice(20)
+      }
     }
   }
 }

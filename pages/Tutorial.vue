@@ -2,7 +2,7 @@
   <v-flex xs12>
     <v-carousel
       dark hide-controls
-      cycle="false"
+      :cycle="false"
       interval="60000">
       <v-carousel-item
         v-for="i in tutorialImg"
@@ -77,12 +77,12 @@
             return 6
           case 3:
           case 4:
-            return 7
+            return 8
           case 5:
           case 0:
-            return 8
+            return 9
           case -1:
-            return 4
+            return 8
         }
       }
     }

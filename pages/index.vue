@@ -2,7 +2,21 @@
   <!-- <div class="test"> -->
     <div>
       <v-flex id="title">
-        <div id="title_word"><font size="7">다른 사람 얘기</font></div>
+        <div id="title_word">
+          <font size="7">정책<br>타</font>
+          <font size="4">인의 </font>
+          <font size="7">입</font>
+          <font size="4">장</font>
+        </div>
+      </v-flex>
+
+      <v-flex id="contents">
+        <div id="title_word">
+          정치에 참여할 기회조차 없었던 당신을 위해<br>
+          "정책의 타입"과 함께<br>
+          정책을 이해하고<br>
+          여러분의 목소리를 사회에 들려주세요!
+        </div>
       </v-flex>
 
       <v-flex xs12 id="btn_location">
@@ -35,15 +49,17 @@
 } */
 #btn_location {
   position: relative;
-  margin-top: 60%;
+  margin-top: 10%;
 }
 #title {
+  margin-top: 20%;
+}
+#contents {
   margin-top: 20%;
 }
 #title_word {
   color: white;
   background-color: rgba(0,0,0, 0.4);
-
 }
 </style>
 <script>

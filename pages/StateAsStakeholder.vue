@@ -29,9 +29,9 @@
           </v-text-field>
         </template>
 
-        <template v-if="myEffect.stakeholder_group > 0 || myEffect.stakeholder_custom != null">
+        <template v-if="myEffect.stakeholder_group > 0 || myEffect.stakeholder_custom != ''">
           <p class="body-1 prompt">
-          <strong>{{findStakeholderName(myEffect.stakeholder_group)}}</strong>이셨군요!<br>
+          <strong>{{findStakeholderName(myEffect.stakeholder_group)}}</strong>(이)셨군요!<br>
           </p>
           <p class="question">
           혹시 본인에 대해 조금만 더 자세히 설명해주시겠어요? 예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
@@ -95,8 +95,12 @@ export default {
       return this.$store.state.stakeholderGroups
     },
     allFilled: function () {
-      return (this.myEffect.description !== '' && this.myEffect.stakeholder_custom !== null &&
-      this.myEffect.isBenefit !== -1 && this.myEffect.stakeholder_group !== 0)
+      if (this.myEffect.stakeholder_group === -1) {
+        return (this.myEffect.description !== '' && this.myEffect.isBenefit !== -1 &&
+        this.myEffect.stakeholder_detail !== '' && this.myEffect.stakeholder_custom !== '')
+      }
+      return (this.myEffect.description !== '' && this.myEffect.isBenefit !== -1 &&
+      this.myEffect.stakeholder_detail !== '' && this.myEffect.stakeholder_group !== 0)
     }
   },
   data: function () {

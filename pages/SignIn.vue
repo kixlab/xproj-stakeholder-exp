@@ -83,7 +83,7 @@ export default {
           console.log(user.presurvey_done)
           this.$store.commit('setUser', user)
           if (user.is_participant && !(user.presurvey_done)) {
-            this.$router.push('/PreSurvey')
+            this.$router.push('/Tutorial')
           } else {
             this.$router.push('/ShowPolicies')
           }
