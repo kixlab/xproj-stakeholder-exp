@@ -10,6 +10,9 @@
         </div>
       </v-toolbar-title>
     </v-toolbar>
+    <v-alert type="error" v-model="error" dismissible>
+      로그인에 실패했습니다. 
+    </v-alert>
     <v-flex xs12>
       참여해주셔서 고맙습니다.<br>
       참여를 위해 먼저 로그인 해주세요.
@@ -55,7 +58,8 @@ export default {
           password: '비밀번호 '
           // custom attributes
         }
-      }
+      },
+      error: ''
     }
   },
 

@@ -58,13 +58,19 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 export default {
-  data: function () {
-    return {
-      read1: false,
-      read2: false
-    }
-  },
+  // data: function () {
+  //   return {
+  //     read1: false,
+  //     read2: false
+  //   }
+  // },
   computed: {
+    read1: function () {
+      return this.$store.state.userPolicy.articles_seen >= 1
+    },
+    read2: function () {
+      return this.$store.state.userPolicy.articles_seen >= 2
+    },
     userGroup: function () {
       if (!this.$store.state.user.is_participant) {
         return -1
@@ -109,7 +115,12 @@ export default {
         eventValue: 0
       })
       window.open(this.policy.article1_link, '_blank')
-      this.read1 = true
+      if (!this.read1) {
+        setTimeout(() => {
+          this.$store.dispatch('incrementUserPolicyArticlesSeen')
+        }, 60000)
+      }
+      // this.read1 = true
     },
     openSecondArticle () {
       this.$ga.event({
@@ -119,7 +130,12 @@ export default {
         eventValue: 0
       })
       window.open(this.policy.article2_link, '_blank')
-      this.read2 = true
+      if (!this.read2) {
+        setTimeout(() => {
+          this.$store.dispatch('incrementUserPolicyArticlesSeen')
+        }, 60000)
+      }
+      // this.read2 = true
     },
     article_title_cut: function (str) {
       if (str.length <= 30) {

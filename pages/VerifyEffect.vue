@@ -8,7 +8,7 @@
       </p>
 
       <v-flex xs12 sm6 offset-sm3
-        v-for="effect in filteredEffects"
+        v-for="effect in effects"
         :key="effect.id">
         <v-spacer></v-spacer>
         <effect-card :effect="effect" />
@@ -92,7 +92,7 @@ import EffectCard from '~/components/EffectCard.vue'
 import setTokenMixin from '~/mixins/setToken.js'
 export default {
   // Verify the guessed effect
-  asyncData: async function ({app, store}) {
+  fetch: async function ({app, store}) {
     let effects = await app.$axios.$get('/api/effects/', {
       params: {
         policy: store.state.policyIdx,
@@ -101,18 +101,18 @@ export default {
       }
     })
     console.log(effects)
-    return {filteredEffects: effects.results}
+    store.commit('setEffects', effects.results)
   },
   mixins: [setTokenMixin],
   computed: {
     randomStakeholderGroup: function () {
       return this.$store.getters.randomStakeholderGroup
     },
-    policy: function () {
-      return this.$store.state.policies[this.$store.state.policyIdx - 1]
-    },
     effects: function () {
       return this.$store.state.effects
+    },
+    policy: function () {
+      return this.$store.state.policies[this.$store.state.policyIdx - 1]
     },
     answer_left: function () {
       console.log(this.$store.state.userPolicy)

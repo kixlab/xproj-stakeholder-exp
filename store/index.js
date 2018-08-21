@@ -88,6 +88,19 @@ export const mutations = {
   },
   finishPresurvey (state) {
     state.user.presurvey_done = true
+  },
+  incrementNoveltyCount (state, payload) {
+    const effect = state.effects.find((value) => {
+      return value.id === payload.effect
+    })
+    effect.novelty += 1
+  },
+  incrementEmpathyCount (state, payload) {
+    const effect = state.effects.find((value) => {
+      console.log(value.id)
+      return value.id === payload.effect
+    })
+    effect.empathy += 1
   }
 }
 
@@ -138,6 +151,15 @@ export const actions = {
       const userpolicyId = context.state.userPolicy.id
       const userPolicy = Object.assign({}, context.state.userPolicy)
       userPolicy.articles_seen += 1
+      context.commit('setUserPolicy', userPolicy)
+      await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    }
+  },
+  async incrementUserPolicyEffectsSeen (context) {
+    if (context.state.userToken) {
+      const userpolicyId = context.state.userPolicy.id
+      const userPolicy = Object.assign({}, context.state.userPolicy)
+      userPolicy.effects_seen += 1
       context.commit('setUserPolicy', userPolicy)
       await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
     }
