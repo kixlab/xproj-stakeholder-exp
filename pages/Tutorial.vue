@@ -8,7 +8,6 @@
         v-for="i in tutorialImg"
         :key="i"
         :src="imgURL(i)"
-        style="width:100%;"
       ></v-carousel-item>
     </v-carousel>
     <!-- If it is redirected from navigation drawer, this button must be 돌아가기 -->
@@ -88,3 +87,16 @@
     }
   }
 </script>
+<style>
+.v-jumbotron__image {
+  /* max-width: 100%; */
+  max-width: 90vw;
+  object-fit: contain; 
+  max-height: 100%
+  /* min-width: 0px; */
+}
+
+.v-carousel__controls__item {
+  width: 10px !important;
+}
+</style>
