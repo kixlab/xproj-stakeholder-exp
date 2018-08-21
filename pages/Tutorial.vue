@@ -31,15 +31,15 @@
         switch (this.userGroup) {
           case 1:
           case 2:
-            return 'tutorialA/' + val + '.PNG'
+            return '/tutorialA/' + val + '.PNG'
           case 3:
           case 4:
-            return 'tutorialB/' + val + '.PNG'
+            return '/tutorialB/' + val + '.PNG'
           case 5:
           case 0:
-            return 'tutorialC/' + val + '.PNG'
+            return '/tutorialC/' + val + '.PNG'
           case -1:
-            return 'tutorialG/' + val + '.PNG'
+            return '/tutorialG/' + val + '.PNG'
         }
       },
       goNext: function () {
