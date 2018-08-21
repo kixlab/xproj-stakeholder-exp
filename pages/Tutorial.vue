@@ -1,7 +1,19 @@
 <template>
   <v-flex xs12>
     <v-carousel
+      v-if="$vuetify.breakpoint.smAndDown"
       dark hide-controls
+      :cycle="false"
+      interval="60000">
+      <v-carousel-item
+        v-for="i in tutorialImg"
+        :key="i"
+        :src="imgURL(i)"
+      ></v-carousel-item>
+    </v-carousel>
+    <v-carousel
+      v-else
+      light
       :cycle="false"
       interval="60000">
       <v-carousel-item
