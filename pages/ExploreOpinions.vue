@@ -8,13 +8,18 @@
         <!--TODO: Disclaimer -->
       </p>
 
-      <v-flex xs12 sm6 offset-sm3
-        v-for="effect in effects"
-        :key="effect.stakeholder_detail">
+      <v-flex xs12 sm6 offset-sm3 v-for="effect in effects"
+            :key="effect.stakeholder_detail">
         <v-spacer></v-spacer>
-        <effect-card :effect="effect"
-        @empathy-button-click="onEmpathyButtonClick(effect)"
-        @novelty-button-click="onNoveltyButtonClick(effect)" />
+        <!-- <v-list two-line> -->
+        <!-- <v-expansion-panel> -->
+          <effect-card
+            
+            :effect="effect"
+            @empathy-button-click="onEmpathyButtonClick(effect)"
+            @novelty-button-click="onNoveltyButtonClick(effect)" />
+        <!-- </v-expansion-panel> -->
+        <!-- </v-list> -->
       </v-flex>
       
       <v-btn 
