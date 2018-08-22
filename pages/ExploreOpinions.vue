@@ -7,7 +7,7 @@
         끼칠 수 있는 영향을 보여드릴게요!
         <!--TODO: Disclaimer -->
       </p>
-
+      <v-divider/>
       <v-flex xs12 sm6 offset-sm3 v-for="effect in effects"
             :key="effect.stakeholder_detail">
         <v-spacer></v-spacer>
@@ -38,7 +38,7 @@
       </v-btn>
       <v-divider/>
 
-    <v-btn v-if="!$store.state.userToken" color="primary" dark ripple block ="onEndButtonClick">
+    <v-btn v-if="!$store.state.userToken" color="primary" dark ripple block @click="onEndButtonClick">
       다른 정책 보기
     </v-btn>
     <v-dialog
