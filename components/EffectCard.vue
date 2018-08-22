@@ -201,8 +201,10 @@
           {{effect.isBenefit ? 'sentiment_very_satisfied' : 'sentiment_very_dissatisfied'}}
         </v-icon>
       </v-card-title>
-      <v-card-text>
-        <a @click="onShowDescriptionButtonClick">{{show ? effect.description : shortDescription}}</a>
+      <v-card-text class="effect-card__textbox">
+        <a @click="onShowDescriptionButtonClick">
+          <span class="effect-card__text">{{show ? effect.description : shortDescription}}</span>
+        </a>
       </v-card-text>
       <v-card-actions>
         <v-btn flat small @click.stop="onNoveltyButtonClick">
@@ -279,7 +281,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 
 /* #description {
   text-align: left;
@@ -304,12 +306,13 @@
 .dialog {
   padding: 8px;
 } */
-.v-card__text {
-  text-align: left !important;
-}
-a {
+.effect-card__text {
   color: black;
 }
+.effect-card__textbox {
+  text-align: left !important;
+}
+
 </style>
 
 <script>

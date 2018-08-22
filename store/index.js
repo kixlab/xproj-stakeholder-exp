@@ -66,6 +66,7 @@ export const mutations = {
     state.stakeholderGroupIdx = idx
   },
   setUserToken (state, payload) {
+    state.isLookingAround = false
     state.userToken = payload
   },
   setUser (state, payload) {
@@ -124,7 +125,7 @@ export const getters = {
     return ((state.user.pk % 4) + 3) % 6
   },
   isLookingAround (state) {
-    return !state.userToken || state.isLookingAround
+    return !state.userToken
   }
 }
 

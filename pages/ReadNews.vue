@@ -45,10 +45,6 @@
   </v-layout>
 </template>
 <style scoped>
-#gohome {
-    float: left;
-    position: absolute;
-}
 #header {
     flex: 1;
     display: flex;
@@ -104,9 +100,6 @@ export default {
     PromisePane
   },
   methods: {
-    gohome () {
-      this.$router.push('/')
-    },
     onClickComplete: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
