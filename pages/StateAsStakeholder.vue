@@ -51,7 +51,7 @@
 
         <div>
           <p class="body-1 prompt question">이 영향은 나에게 긍정적인가요? 부정적인가요? </p>
-          <template v-if="myEffect.isBenefit==0">
+          <template v-if="myEffect.isBenefit==1">
             <v-btn dark color="primary" class="binarybtn"> 긍정적 </v-btn>
             <v-btn outline color="error" class="binarybtn" @click="myEffect.isBenefit=0"> 부정적 </v-btn>
           </template>
