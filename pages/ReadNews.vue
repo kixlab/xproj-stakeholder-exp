@@ -57,19 +57,19 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 export default {
-  // data: function () {
-  //   return {
-  //     read1: false,
-  //     read2: false
-  //   }
-  // },
+  data: function () {
+    return {
+      read1: false,
+      read2: false
+    }
+  },
   computed: {
-    read1: function () {
-      return this.$store.state.userPolicy.articles_seen >= 1
-    },
-    read2: function () {
-      return this.$store.state.userPolicy.articles_seen >= 2
-    },
+    // read1: function () {
+    //   return this.$store.state.userPolicy.articles_seen >= 1
+    // },
+    // read2: function () {
+    //   return this.$store.state.userPolicy.articles_seen >= 2
+    // },
     userGroup: function () {
       if (!this.$store.state.user.is_participant) {
         return -1
@@ -81,7 +81,7 @@ export default {
       switch (this.userGroup) {
         case 1:
         case 2:
-          this.$store.commit('setNextstep')
+          // this.$store.commit('setNextstep')
           return '/MiniSurvey'
         case 3:
         case 4:
@@ -121,6 +121,7 @@ export default {
       if (!this.read1) {
         setTimeout(() => {
           this.$store.dispatch('incrementUserPolicyArticlesSeen')
+          this.read1 = true
         }, 60000)
       }
       // this.read1 = true
@@ -136,6 +137,7 @@ export default {
       if (!this.read2) {
         setTimeout(() => {
           this.$store.dispatch('incrementUserPolicyArticlesSeen')
+          this.read2 = true
         }, 60000)
       }
       // this.read2 = true

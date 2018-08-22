@@ -116,7 +116,7 @@ export default {
           third_answer: this.third_answer,
           fourth_answer: this.fourth_answer
         })
-        // this.$store.commit('setNextstep')
+        this.$store.commit('setNextstep')
         this.$store.dispatch('incrementUserStep')
         this.$router.push('/ShowPolicies')
       }

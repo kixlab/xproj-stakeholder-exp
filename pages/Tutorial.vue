@@ -65,7 +65,7 @@
           eventLabel: this.prevRoute,
           eventValue: 0
         })
-        if (this.prevRoute === '/SignUp') {
+        if (this.prevRoute === '/SignUp' || this.prevRoute === '/SignIn') {
           switch (this.userGroup) {
             case 1:
             case 2:
@@ -110,7 +110,7 @@
         }
       },
       tutorialDone: function () {
-        if (this.prevRoute !== '/SignUp') {
+        if (this.prevRoute !== '/SignUp' && this.prevRoute !== '/SignIn') {
           return true
         }
         const nArray = Array.from(Array(this.tutorialImg).keys())
