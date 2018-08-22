@@ -133,10 +133,10 @@ export default {
       return 3 - this.$store.state.userPolicy.stakeholders_seen
     },
     effect_left: function () {
-      if (this.$store.state.userPolicy.articles_seen > 9) {
+      if (this.$store.state.userPolicy.effects_seen > 9) {
         return 0
       }
-      return 9 - this.$store.state.userPolicy.articles_seen
+      return 9 - this.$store.state.userPolicy.effects_seen
     },
     pagenum: function () {
       return Math.ceil(this.effects.length / 5)

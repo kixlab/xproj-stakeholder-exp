@@ -100,7 +100,7 @@
           case 0:
             return 9
           case -1:
-            return 8
+            return 7
         }
       }
     }

@@ -15,7 +15,7 @@
         <v-flex d-flex xs6>
           <v-card color="dark blue" dark ripple @click.native="onNewStakeholderGroupClick" v-if="!isLookingAround">
             <v-card-text>
-              <span class="link">혹시 영향을 받을<br>다른 사람들도 있을까요?</span>
+              <span class="link">혹시 영향을 받을 다른 사람들도 있을까요?</span>
             </v-card-text>
           </v-card>
         </v-flex>          
@@ -113,7 +113,7 @@ export default {
       return this.$store.state.stakeholderGroups
     },
     isLookingAround: function () {
-      return this.$store.state.isLookingAround
+      return this.$store.getters.isLookingAround
     },
     stakeholder_left: function () {
       if (this.$store.state.userPolicy.stakeholders_seen > 3) {
@@ -122,10 +122,10 @@ export default {
       return 3 - this.$store.state.userPolicy.stakeholders_seen
     },
     effect_left: function () {
-      if (this.$store.state.userPolicy.articles_seen > 9) {
+      if (this.$store.state.userPolicy.effects_seen > 9) {
         return 0
       }
-      return 9 - this.$store.state.userPolicy.articles_seen
+      return 9 - this.$store.state.userPolicy.effects_seen
     }
   },
   data: function () {
@@ -199,6 +199,7 @@ export default {
 <style scoped>
 .link {
   cursor: pointer;
+  word-break: keep-all;
 }
 </style>
 

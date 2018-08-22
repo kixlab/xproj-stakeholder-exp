@@ -62,8 +62,8 @@
       <v-list-tile>
         <v-list-tile-title>(영향 읽기) 영향 수</v-list-tile-title>
         <v-list-tile-action>
-          <span v-if="articles_seen>=articles_seen_min" style="color:blue;">{{articles_seen}} / {{articles_seen_min}}</span>
-          <span v-else style="color:red;">{{articles_seen}} / {{articles_seen_min}}</span>
+          <span v-if="effects_seen>=effects_seen_min" style="color:blue;">{{effects_seen}} / {{effects_seen_min}}</span>
+          <span v-else style="color:red;">{{effects_seen}} / {{effects_seen_min}}</span>
         </v-list-tile-action>
       </v-list-tile>
     </v-list-group>
@@ -71,15 +71,6 @@
 
   <v-divider/>
   <v-list class="pt-0" dense>
-<!--   <v-list-tile @click="goHome">
-    <v-list-tile-action>
-      <v-icon>home</v-icon>
-    </v-list-tile-action>
-
-    <v-list-tile-content>
-      <v-list-tile-title>처음으로</v-list-tile-title>
-    </v-list-tile-content>
-  </v-list-tile> -->
 
   <v-list-tile @click="dialog=true">
     <v-list-tile-action>
@@ -140,10 +131,22 @@
       <v-list-tile-title>튜토리얼</v-list-tile-title>
     </v-list-tile-content>
   </v-list-tile>  
-</v-list>
-</template>
-</v-navigation-drawer>
+  </v-list>
+  </template>
+  <template v-else>
+    <v-list class="pt-0" dense>
+      <v-list-tile @click="tutorial">
+        <v-list-tile-action>
+          <v-icon>directions</v-icon>
+        </v-list-tile-action>
 
+        <v-list-tile-content>
+          <v-list-tile-title>튜토리얼</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>  
+    </v-list>
+  </template>
+</v-navigation-drawer>
 </template>
 
 <style scoped>
@@ -180,8 +183,8 @@ export default {
     stakeholders_seen: function () {
       return this.$store.state.userPolicy.stakeholders_seen
     },
-    articles_seen: function () {
-      return this.$store.state.userPolicy.articles_seen
+    effects_seen: function () {
+      return this.$store.state.userPolicy.effects_seen
     },
     stakeholders_answered_min: function () {
       switch (this.userGroup) {
@@ -189,10 +192,10 @@ export default {
         case 2:
         case 3:
         case 4:
+        case -1:
           return 0
         case 5:
         case 0:
-        case -1:
           return 3
       }
     },
@@ -200,30 +203,30 @@ export default {
       switch (this.userGroup) {
         case 1:
         case 2:
+        case -1:
           return 0
         case 3:
         case 4:
         case 5:
         case 0:
-        case -1:
           return 3
       }
     },
-    articles_seen_min: function () {
+    effects_seen_min: function () {
       switch (this.userGroup) {
         case 1:
         case 2:
+        case -1:
           return 0
         case 3:
         case 4:
         case 5:
         case 0:
-        case -1:
           return 9
       }
     },
     isGuest: function () {
-      return !this.$store.state.userToken
+      return !this.$store.state.userToken || !this.$store.state.user.is_participant
     },
     drawerFlag: {
       get: function () {

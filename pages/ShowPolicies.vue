@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     isLookingAround: function () {
-      return this.$store.state.isLookingAround
+      return this.$store.getters.isLookingAround
     },
     policies: function () {
       return this.$store.state.policies
@@ -113,7 +113,8 @@ export default {
             user_type: this.$store.getters.experimentCondition,
             stakeholders_answered: 0,
             stakeholders_seen: 0,
-            articles_seen: 0
+            articles_seen: 0,
+            effects_seen: 0
           }
           this.$axios.$post('/api/userpolicy/', newUP).then((result) => {
             this.$store.commit('setUserPolicy', result)
@@ -121,7 +122,11 @@ export default {
         } else {
           this.$store.commit('setUserPolicy', this.userpolicies[upIdx])
         }
-        this.$router.push('/ReadNews')
+        if (!this.$store.state.user.is_participant) {
+          this.$router.push('/Identify')
+        } else {
+          this.$router.push('/ReadNews')
+        }
       } else {
         this.$router.push('/SelectStakeholder')
       }

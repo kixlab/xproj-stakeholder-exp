@@ -9,8 +9,8 @@
       </v-card>
     </v-flex>
     <v-flex xs12>
-      각 기사를 <strong style="color:red;">1분 이상</strong> 읽어야 다음으로 넘어갈 수 있습니다.
-      <br>기사를 꼼꼼히 읽고 정책을 이해해주세요.<br>
+      각 기사를 <strong style="color:red;">1분 이상</strong> 읽어야 다음으로 넘어갈 수 있습니다.<br>
+      1분이 지나면 버튼이 <strong style="color:green;">초록색</strong>으로 바뀝니다.
     </v-flex>
 
     <v-flex xs12>
@@ -48,10 +48,6 @@
   </v-layout>
 </template>
 <style scoped>
-#gohome {
-    float: left;
-    position: absolute;
-}
 #header {
     flex: 1;
     display: flex;
@@ -107,9 +103,6 @@ export default {
     PromisePane
   },
   methods: {
-    gohome () {
-      this.$router.push('/')
-    },
     onClickComplete: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
