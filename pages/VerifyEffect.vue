@@ -100,7 +100,7 @@ export default {
         // get_stakeholder_names: true
       }
     })
-    console.log(effects)
+    // console.log(effects)
     store.commit('setEffects', effects.results)
   },
   mixins: [setTokenMixin],
@@ -115,7 +115,7 @@ export default {
       return this.$store.state.policies[this.$store.state.policyIdx - 1]
     },
     answer_left: function () {
-      console.log(this.$store.state.userPolicy)
+      // console.log(this.$store.state.userPolicy)
       return 3 - this.$store.state.userPolicy.stakeholders_answered
     }
   },

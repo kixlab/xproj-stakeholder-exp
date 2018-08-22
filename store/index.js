@@ -108,7 +108,7 @@ export const mutations = {
   },
   incrementEmpathyCount (state, payload) {
     const effect = state.effects.find((value) => {
-      console.log(value.id)
+      // console.log(value.id)
       return value.id === payload.effect
     })
     effect.empathy += 1

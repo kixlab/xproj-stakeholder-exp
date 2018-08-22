@@ -69,16 +69,16 @@ export default {
     },
     userGroup: function () {
       if (!this.$store.state.userToken || !this.$store.state.user.is_participant) {
-        console.log(this.$store.state.userToken)
-        console.log(this.$store.state.user.is_participant)
+        // console.log(this.$store.state.userToken)
+        // console.log(this.$store.state.user.is_participant)
         return -1
       } else {
-        console.log(this.$store.getters.experimentCondition)
+        // console.log(this.$store.getters.experimentCondition)
         return this.$store.getters.experimentCondition
       }
     },
     userStep: function () {
-      console.log(this.$store.state.user)
+      // console.log(this.$store.state.user)
       return this.$store.state.user.step
     },
     experimentDone: function () {
@@ -128,7 +128,7 @@ export default {
       }
     },
     selectPolicy: function (policyID) {
-      console.log(policyID)
+      // console.log(policyID)
       if (this.userGroup === -1) {
         return false
       }

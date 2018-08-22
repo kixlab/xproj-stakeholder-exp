@@ -89,8 +89,8 @@ export default {
             eventValue: 0
           })
           const user = await this.$axios.$get('/api/auth/user/')
-          console.log(user.is_participant)
-          console.log(user.presurvey_done)
+          // console.log(user.is_participant)
+          // console.log(user.presurvey_done)
           this.$store.commit('setUser', user)
           if (user.is_participant && !(user.presurvey_done)) {
             this.$router.push('/Tutorial')

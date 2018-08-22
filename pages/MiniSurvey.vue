@@ -100,7 +100,7 @@ export default {
       this.$router.go(-1)
     },
     async nextPolicy () {
-      console.log(this.third_answer)
+      // console.log(this.third_answer)
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'FinishMiniSurvey',

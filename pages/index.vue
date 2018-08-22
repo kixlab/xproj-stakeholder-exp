@@ -70,7 +70,9 @@ export default {
 
     }
   },
-
+  beforeRouteLeave: function () {
+    alert('a')
+  },
   methods: {
     onLookAroundButtonClick () {
       this.$store.commit('logout')

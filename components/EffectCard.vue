@@ -346,7 +346,6 @@ export default {
   },
   methods: {
     onShowDescriptionButtonClick: function () {
-      console.log(this.$router.currentRoute.path)
       if (this.show) {
         this.$ga.event({
           eventCategory: this.$router.currentRoute.path,
@@ -366,18 +365,18 @@ export default {
       this.show = !this.show
     },
     onNoveltyButtonClick: async function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'UpvoteNovelty',
+        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+        eventValue: 0
+      })
       try {
         await this.$axios.$post('/api/novelty/', {
           effect: this.effect.id
         })
         this.$store.commit('incrementNoveltyCount', {
           effect: this.effect.id
-        })
-        this.$ga.event({
-          eventCategory: this.$router.currentRoute.path,
-          eventAction: 'UpvoteNovelty',
-          eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
-          eventValue: 0
         })
         const result = await this.$axios.$get('/api/effects/', {
           params: {
@@ -391,18 +390,18 @@ export default {
       }
     },
     onEmpathyButtonClick: async function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'UpvoteEmpathy',
+        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+        eventValue: 0
+      })
       try {
         await this.$axios.$post('/api/empathy/', {
           effect: this.effect.id
         })
         this.$store.commit('incrementEmpathyCount', {
           effect: this.effect.id
-        })
-        this.$ga.event({
-          eventCategory: this.$router.currentRoute.path,
-          eventAction: 'UpvoteEmpathy',
-          eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
-          eventValue: 0
         })
         const result = await this.$axios.$get('/api/effects/', {
           params: {

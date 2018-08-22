@@ -4,7 +4,8 @@
       v-if="$vuetify.breakpoint.smAndDown"
       dark hide-controls
       :cycle="false"
-      interval="60000">
+      interval="60000"
+      @input="onTutorialPageChange">
       <v-carousel-item
         v-for="i in tutorialImg"
         :key="i"
@@ -15,7 +16,8 @@
       v-else
       light
       :cycle="false"
-      interval="60000">
+      interval="60000"
+      @input="onTutorialPageChange">
       <v-carousel-item
         v-for="i in tutorialImg"
         :key="i"
@@ -23,7 +25,7 @@
       ></v-carousel-item>
     </v-carousel>
     <!-- If it is redirected from navigation drawer, this button must be 돌아가기 -->
-    <v-btn color="primary" block @click.native="goNext">다 봤어요!</v-btn>
+    <v-btn color="primary" :disabled="!tutorialDone" block @click.native="goNext">다 봤어요!</v-btn>
   </v-flex>
 </template>
 <script>
@@ -35,7 +37,8 @@
     },
     data () {
       return {
-        prevRoute: ''
+        prevRoute: '',
+        seenPages: []
       }
     },
     methods: {
@@ -78,6 +81,9 @@
         } else {
           this.$router.push(this.prevRoute)
         }
+      },
+      onTutorialPageChange (payload) {
+        this.seenPages.push(payload)
       }
     },
     computed: {
@@ -102,6 +108,15 @@
           case -1:
             return 8
         }
+      },
+      tutorialDone: function () {
+        if (this.prevRoute !== '/SignUp') {
+          return true
+        }
+        const nArray = Array.from(Array(this.tutorialImg).keys())
+        return nArray.reduce((prevValue, curValue) => {
+          return prevValue && this.seenPages.includes(curValue)
+        }, true)
       }
     }
   }
