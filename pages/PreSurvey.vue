@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
+    <v-toolbar dense color="indigo" dark fixed app>
       <v-toolbar-title style="margin: 0 auto;">
         <!-- The line must be ended with a single space -->
         <small> 사용 전 설문 </small>
@@ -11,7 +11,7 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-          <strong>"다른 사람 얘기"</strong>를 통해<br>정책도 이해하고, 기프티콘도 받아가세요!
+          <strong>"정책타입"</strong>을 통해<br>정책도 이해하고, 기프티콘도 받아가세요!
         </v-card-text>
       </v-card>
       <p style="text-align:left;">
@@ -59,7 +59,7 @@ export default {
         this.$ga.event({
           eventCategory: this.$router.currentRoute.path,
           eventAction: 'FinishPreSurvey',
-          eventLabel: `${this.policy}`,
+          eventLabel: ``,
           eventValue: 0
         })
         this.$store.dispatch('finishPresurvey')

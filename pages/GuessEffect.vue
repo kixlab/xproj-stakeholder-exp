@@ -38,7 +38,7 @@
           <v-btn
             color="primary"
             flat
-            @click="dialog = false"
+            @click="chooseStakeholderGroup"
           >
             선택!
           </v-btn>
@@ -138,6 +138,15 @@ export default {
         eventLabel: sg.name,
         eventValue: 0
       })
+    },
+    chooseStakeholderGroup: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'ChooseStakeholderGroupForGuessing',
+        eventLabel: `${this.policy.title} / ${this.findStakeholderName(this.predictedEffect.stakeholder_group)}`,
+        eventValue: 0
+      })
+      this.dialog = false
     },
     onNextClick: function () {
       /* this.$validator.validateAll().then((result) => {

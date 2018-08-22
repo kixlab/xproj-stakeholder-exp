@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
+    <v-toolbar dense color="indigo" dark fixed app>
       <v-toolbar-title style="margin: 0 auto;">
         <div>
           <!-- Length of policy name should be less than 18 Korean syllables -->
@@ -14,7 +14,7 @@
       <v-card color="grey lighten-4">
         <v-card-text>
           여러분의 목소리를 내는 것은 물론,<br>
-          다양한 사람의 목소리를 한눈에 들을 수 있습니다!
+          다양한 사람의 목소리를 한눈에 볼 수 있습니다!
         </v-card-text>
       </v-card>
       <v-spacer/><br>
@@ -140,6 +140,12 @@ export default {
       }
     },
     postSurvey: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'ToPostSurvey',
+        eventLabel: '',
+        eventValue: 0
+      })
       this.$router.push('/PostSurvey')
     }
   }

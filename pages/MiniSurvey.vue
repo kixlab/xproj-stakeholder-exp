@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
+    <v-toolbar dense color="indigo" dark fixed app>
       <v-toolbar-title id="header">
         <v-icon dark id="goback" @click="goback">arrow_back</v-icon>
         <div style="flex: 1;">
@@ -91,6 +91,12 @@ import setTokenMixin from '~/mixins/setToken.js'
 export default {
   methods: {
     goback () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'GoBackFromMiniSurvey',
+        eventLabel: `${this.policy.title}`,
+        eventValue: 0
+      })
       this.$router.go(-1)
     },
     async nextPolicy () {

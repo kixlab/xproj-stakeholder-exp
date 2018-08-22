@@ -202,7 +202,7 @@
         </v-icon>
       </v-card-title>
       <v-card-text>
-        {{show ? effect.description : shortDescription}}
+        <a @click="onShowDescriptionButtonClick">{{show ? effect.description : shortDescription}}</a>
       </v-card-text>
       <v-card-actions>
         <v-btn flat small @click.stop="onNoveltyButtonClick">
@@ -306,6 +306,9 @@
 } */
 .v-card__text {
   text-align: left !important;
+}
+a {
+  color: black;
 }
 </style>
 

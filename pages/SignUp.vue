@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
+    <v-toolbar dense color="indigo" dark fixed app>
       <v-toolbar-title style="margin: 0 auto;">
         <div>
           <!-- Length of policy name should be less than 18 Korean syllables -->
@@ -50,8 +50,8 @@
             ></v-text-field>
         </v-form>
       </v-card>
-        <v-checkbox v-model="agreement" color="primary" hide-detials @click="dialog=true">
-          <span slot="label" @click.stop.prevent="dialog=true">본 <a href="#">인간대상 연구 동의서</a>를 읽었으며, 그 내용에 동의합니다. </span>
+        <v-checkbox v-model="agreement" color="primary" hide-detials @click="showInformedConsent">
+          <span slot="label" @click.stop.prevent="showInformedConsent">본 <a href="#">인간대상 연구 동의서</a>를 읽었으며, 그 내용에 동의합니다. </span>
         </v-checkbox>
         <v-dialog
           v-model="dialog"
@@ -116,7 +116,7 @@
             <v-btn
               class="white--text"
               color="error"
-              @click="agreement = false, dialog = false"
+              @click="disagreeInformedConsent"
             >
               동의하지 않음
             </v-btn>
@@ -124,7 +124,7 @@
             <v-btn
               class="white--text"
               color="primary"
-              @click="agreement = true, dialog = false"
+              @click="agreeInformedConsent"
             >
               동의
             </v-btn>
@@ -153,7 +153,7 @@
           <v-btn
             class="white--text"
             color="error"
-            @click="dialog2 = false"
+            @click="onGoBackClick"
           >
             돌아가기
           </v-btn>
@@ -229,6 +229,12 @@ export default {
           this.$ga.set({
             userId: this.email
           })
+          this.$ga.event({
+            eventCategory: this.$router.currentRoute.path,
+            eventAction: 'RegisterAsParticipant',
+            eventLabel: this.email,
+            eventValue: 0
+          })
           const user = await this.$axios.$put('/api/auth/user/', {
             username: this.email,
             is_participant: this.agreement,
@@ -245,8 +251,47 @@ export default {
         this.dialog2 = true
       }
     },
+    showInformedConsent: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'ShowInformedConsent',
+        eventLabel: this.email,
+        eventValue: 0
+      })
+      this.dialog = true
+    },
+    agreeInformedConsent: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'AgreeInformedConsent',
+        eventLabel: this.email,
+        eventValue: 0
+      })
+      this.agreement = true
+      this.dialog = false
+    },
+    disagreeInformedConsent: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'DisagreeInformedConsent',
+        eventLabel: this.email,
+        eventValue: 0
+      })
+      this.agreement = false
+      this.dialog = false
+    },
+    onGoBackClick: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'GoBackFromContinuingAsNonParticipant',
+        eventLabel: this.email,
+        eventValue: 0
+      })
+      this.dialog2 = false
+    },
     async onContinueClick () {
       this.$axios.setToken(null)
+      this.dialog2 = false
       try {
         const res = await this.$axios.$post('/api/auth/signup/', {
           username: this.email,
@@ -258,6 +303,12 @@ export default {
         this.$store.commit('setUserToken', res.key)
         this.$ga.set({
           userId: this.email
+        })
+        this.$ga.event({
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'RegisterAsNonParticipant',
+          eventLabel: this.email,
+          eventValue: 0
         })
         const user = await this.$axios.$put('/api/auth/user/', {
           username: this.email,

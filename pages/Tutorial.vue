@@ -40,6 +40,7 @@
     },
     methods: {
       imgURL: function (val) {
+        console.log(val)
         switch (this.userGroup) {
           case 1:
           case 2:
@@ -55,6 +56,12 @@
         }
       },
       goNext: function () {
+        this.$ga.event({
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'FinishTutorial',
+          eventLabel: this.prevRoute,
+          eventValue: 0
+        })
         if (this.prevRoute === '/SignUp') {
           switch (this.userGroup) {
             case 1:
@@ -69,7 +76,7 @@
               this.$router.push('/ShowPolicies')
           }
         } else {
-          this.$router.go(-1)
+          this.$router.push(this.prevRoute)
         }
       }
     },

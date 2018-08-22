@@ -92,6 +92,7 @@ small {
 .centre {
   text-align: center !important;
   vertical-align: center;
+  cursor: pointer;
 }
 </style>
 

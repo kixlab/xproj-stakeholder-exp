@@ -19,7 +19,7 @@
         :flat="read1==false"
         :outline="read1==false"
         @click="openFirstArticle"
-        block ripple large><pre>{{article_title_cut(policy.article1_title)}}</pre></v-btn>
+        block ripple large v-html="article_title_cut(policy.article1_title)"></v-btn>
       <br>
     </v-flex>
     <v-flex xs12>
@@ -31,7 +31,7 @@
         :flat="read2==false"
         :outline="read2==false"
         @click="openSecondArticle"
-        block ripple large>{{article_title_cut(policy.article2_title)}}</v-btn>
+        block ripple large v-html="article_title_cut(policy.article2_title)"></v-btn>
       <br>
     </v-flex>
 
@@ -53,6 +53,9 @@
     flex: 1;
     display: flex;
     position: relative;
+}
+.v-btn {
+  word-break: keep-all;
 }
 </style>
 <script>
@@ -105,6 +108,13 @@ export default {
       this.$router.push('/')
     },
     onClickComplete: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'FinishReadArticle',
+        eventLabel: `${this.policy.title}`,
+        eventValue: 0
+      })
+      this.dialog = false
       this.$router.push(this.nextRoute)
     },
     openFirstArticle () {
@@ -138,12 +148,13 @@ export default {
       // this.read2 = true
     },
     article_title_cut: function (str) {
-      if (str.length <= 30) {
-        return str
-      } else {
-        return str.slice(0, 20) + `
-        ` + str.slice(20)
-      }
+      // if (str.length <= 20) {
+      //   return str
+      // } else {
+      //   return str.slice(0, 20) + `
+      //   ` + str.slice(20)
+      // }
+      return str
     }
   }
 }

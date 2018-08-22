@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
+    <v-toolbar dense color="indigo" dark fixed app>
       <v-toolbar-title style="margin: 0 auto;">
         <div>
           <!-- Length of policy name should be less than 18 Korean syllables -->
@@ -82,6 +82,12 @@ export default {
           this.$ga.set({
             userId: this.email
           })
+          this.$ga.event({
+            eventCategory: this.$router.currentRoute.path,
+            eventAction: 'Login',
+            eventLabel: this.email,
+            eventValue: 0
+          })
           const user = await this.$axios.$get('/api/auth/user/')
           console.log(user.is_participant)
           console.log(user.presurvey_done)
@@ -97,6 +103,12 @@ export default {
       }
     },
     register () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'Register',
+        eventLabel: '',
+        eventValue: 0
+      })
       this.$router.push('/SignUp')
     }
   }

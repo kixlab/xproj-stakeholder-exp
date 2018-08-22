@@ -32,14 +32,17 @@
       <v-btn
         :disabled="!$store.state.userToken"
         color="success"
-        dark ripple block
+        ripple block
         @click.native="onPostNewEffectButtonClick">
         여러분의 생각도 들려주세요!
       </v-btn>
       <v-divider/>
 
-
+    <v-btn v-if="!$store.state.userToken" color="primary" dark ripple block ="onEndButtonClick">
+      다른 정책 보기
+    </v-btn>
     <v-dialog
+      v-else
       v-model="dialog"
       width="500"
       full-width
@@ -181,6 +184,24 @@ export default {
     },
     onEmpathyButtonClick: function (effect) {
 
+    },
+    onSeeOtherPolicyButtonClick: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'SeeOtherPolicy',
+        eventLabel: this.stakeholderName,
+        eventValue: 0
+      })
+      this.dialog = true
+    },
+    onDialogGoBackButtonClick: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'GoBackToEffects',
+        eventLabel: this.stakeholderName,
+        eventValue: 0
+      })
+      this.dialog = true
     }
   },
   watch: {

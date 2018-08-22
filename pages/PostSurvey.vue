@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <v-toolbar dense color="indigo" @click.stop="dialog = true" dark fixed app>
+    <v-toolbar dense color="indigo" dark fixed app>
       <v-toolbar-title style="margin: 0 auto;">
         <!-- The line must be ended with a single space -->
         <small> 사용 후 설문 </small>
@@ -55,7 +55,7 @@ export default {
     onSurveyLinkClick () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
-        eventAction: 'OpenPreSurvey',
+        eventAction: 'OpenPostSurvey',
         eventLabel: ``,
         eventValue: 0
       })
@@ -65,7 +65,7 @@ export default {
     onClickComplete () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
-        eventAction: 'OpenPostSurvey',
+        eventAction: 'FinishPostSurvey',
         eventLabel: ``,
         eventValue: 0
       })
