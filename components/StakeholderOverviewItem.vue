@@ -85,6 +85,7 @@ export default {
 <style scoped>
 .name {
   cursor: pointer;
+  word-break: keep-all;
 }
 small {
   cursor: pointer;

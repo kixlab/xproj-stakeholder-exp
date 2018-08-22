@@ -62,8 +62,8 @@
       <v-list-tile>
         <v-list-tile-title>(영향 읽기) 영향 수</v-list-tile-title>
         <v-list-tile-action>
-          <span v-if="articles_seen>=articles_seen_min" style="color:blue;">{{articles_seen}} / {{articles_seen_min}}</span>
-          <span v-else style="color:red;">{{articles_seen}} / {{articles_seen_min}}</span>
+          <span v-if="effects_seen>=effects_seen_min" style="color:blue;">{{effects_seen}} / {{effects_seen_min}}</span>
+          <span v-else style="color:red;">{{effects_seen}} / {{effects_seen_min}}</span>
         </v-list-tile-action>
       </v-list-tile>
     </v-list-group>
@@ -132,8 +132,8 @@ export default {
     stakeholders_seen: function () {
       return this.$store.state.userPolicy.stakeholders_seen
     },
-    articles_seen: function () {
-      return this.$store.state.userPolicy.articles_seen
+    effects_seen: function () {
+      return this.$store.state.userPolicy.effects_seen
     },
     stakeholders_answered_min: function () {
       switch (this.userGroup) {
@@ -161,7 +161,7 @@ export default {
           return 3
       }
     },
-    articles_seen_min: function () {
+    effects_seen_min: function () {
       switch (this.userGroup) {
         case 1:
         case 2:
