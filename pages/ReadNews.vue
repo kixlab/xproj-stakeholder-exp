@@ -8,7 +8,10 @@
         </v-card-text>
       </v-card>
     </v-flex>
-    <v-flex xs12> <br> </v-flex>
+    <v-flex xs12>
+      각 기사를 <strong style="color:red;">1분 이상</strong> 읽어야 다음으로 넘어갈 수 있습니다.
+      <br>기사를 꼼꼼히 읽고 정책을 이해해주세요.<br>
+    </v-flex>
 
     <v-flex xs12>
       <span style="text-align:left;"><strong> 첫 번째 기사 </strong></span>

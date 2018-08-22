@@ -81,13 +81,54 @@
     </v-list-tile-content>
   </v-list-tile> -->
 
-  <v-list-tile @click="giveUp">
+  <v-list-tile @click="dialog=true">
     <v-list-tile-action>
       <v-icon>pan_tool</v-icon>
     </v-list-tile-action>
 
     <v-list-tile-content>
-      <v-list-tile-title>포기하기</v-list-tile-title>
+
+    <v-dialog
+      v-model="dialog"
+      width="500"
+      full-width
+    >
+      <v-list-tile-title slot="activator">포기하기</v-list-tile-title>
+
+      <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          color="red"
+          primary-title
+        > 주의
+        </v-card-title>
+
+        <v-card-text>
+          <h2 strong style="color:red;"> 정말 포기하시겠습니까? </h2>
+          실험 도중 포기는 실험 참가자의 고유한 권리입니다.<br>
+          지금 포기하시면 여태까지 시스템에 입력하셨던 사용자의 정보가 안전히 폐기되며, 처음으로 돌아가게 됩니다.
+
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-btn
+            color="red"
+            flat outline ripple
+            @click="dialog=false"
+          > 돌아가기 </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            flat outline ripple
+            @click="giveUp"
+          >
+            포기하기
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     </v-list-tile-content>
   </v-list-tile>  
   <v-list-tile @click="tutorial">
@@ -104,6 +145,13 @@
 </v-navigation-drawer>
 
 </template>
+
+<style scoped>
+.grey.lighten-2 {
+  background-color: pink !important;
+}
+</style>
+
 <script>
 export default {
   computed: {
@@ -114,7 +162,7 @@ export default {
       if (this.user.email != null) {
         return this.user.email
       }
-      return 'guest'
+      return '둘러보기'
     },
     userGroup: function () {
       if (!this.$store.state.user.is_participant) {
@@ -211,6 +259,11 @@ export default {
         eventValue: 0
       })
       this.$router.push('/Tutorial')
+    }
+  },
+  data: function () {
+    return {
+      dialog: false
     }
   }
 }

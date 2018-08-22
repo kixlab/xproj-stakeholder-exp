@@ -8,18 +8,16 @@
         <!--TODO: Disclaimer -->
       </p>
       <v-divider/>
-      <v-flex xs12 sm6 offset-sm3 v-for="effect in effects"
-            :key="effect.stakeholder_detail">
-        <v-spacer></v-spacer>
-        <!-- <v-list two-line> -->
-        <!-- <v-expansion-panel> -->
+      <v-flex xs12 sm6 offset-sm3>
+        <v-flex v-for="i in cardnum(page)" :key="i">
           <effect-card
-            
-            :effect="effect"
+            :effect="effects[i+5*(page-1)-1]"
             @empathy-button-click="onEmpathyButtonClick(effect)"
-            @novelty-button-click="onNoveltyButtonClick(effect)" />
-        <!-- </v-expansion-panel> -->
-        <!-- </v-list> -->
+            @novelty-button-click="onNoveltyButtonClick(effect)"/>
+        </v-flex>
+        <v-pagination
+          v-model="page"
+          :length="pagenum"/>
       </v-flex>
       
       <v-btn 
@@ -122,6 +120,7 @@ export default {
       return this.$store.state.policy
     },
     effects: function () {
+      console.log(this.$store.state.effects[0])
       return this.$store.state.effects
     },
     stakeholderName: function () {
@@ -138,13 +137,17 @@ export default {
         return 0
       }
       return 9 - this.$store.state.userPolicy.articles_seen
+    },
+    pagenum: function () {
+      return Math.ceil(this.effects.length / 5)
     }
   },
   data: function () {
     return {
       opinionTexts: false,
       active_button: true,
-      dialog: false
+      dialog: false,
+      page: 1
     }
   },
   methods: {
@@ -202,6 +205,13 @@ export default {
         eventValue: 0
       })
       this.dialog = true
+    },
+    cardnum: function (page) {
+      if (page === this.pagenum) {
+        return this.effects.length % 5
+      } else {
+        return 5
+      }
     }
   },
   watch: {
