@@ -95,7 +95,7 @@ export default {
       })
       this.$store.commit('setPolicyIdx', {policyIdx: policy.id})
       this.$store.commit('setPolicy', policy)
-      if (this.$store.state.userToken) {
+      if (this.$store.state.userToken && (this.$store.state.user.step < 3)) {
         // const userpolicy = await this.$axios.$get('/api/userpolicy/', {
         //   params: {
         //     user: this.$store.state.user.pk,

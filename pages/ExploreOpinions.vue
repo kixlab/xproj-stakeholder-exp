@@ -173,11 +173,11 @@ export default {
     onPostNewEffectButtonClick: function () {
       this.$ga.event({
         eventCategory: '/ExploreOpinions',
-        eventAction: 'PostNewEffect',
+        eventAction: 'AddNewEffect',
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
-      this.$router.push('/GuessEffect')
+      this.$router.push('/AddNewEffect')
     },
     onNoveltyButtonClick: function (effect) {
 
