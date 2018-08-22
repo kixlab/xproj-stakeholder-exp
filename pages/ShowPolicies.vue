@@ -122,7 +122,11 @@ export default {
         } else {
           this.$store.commit('setUserPolicy', this.userpolicies[upIdx])
         }
-        this.$router.push('/ReadNews')
+        if (!this.$store.state.user.is_participant) {
+          this.$router.push('/Identify')
+        } else {
+          this.$router.push('/ReadNews')
+        }
       } else {
         this.$router.push('/SelectStakeholder')
       }

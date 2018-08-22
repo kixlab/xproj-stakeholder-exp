@@ -11,18 +11,18 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-          <strong>"정책타입"</strong>을 통해<br>정책도 이해하고, 기프티콘도 받아가세요!
+          <strong>"정책타입"</strong>과 함께<br>정책도 이해하고, 기프티콘도 받아가세요!
         </v-card-text>
       </v-card>
       <p style="text-align:left;">
         <br>
       시스템을 사용하시고, 시스템 사용 전후 설문조사에 참여하시면
-      7,500원 상당의 기프티콘을 드립니다. (최대 1시간 소요) <br>
+      7,500원 상당의 기프티콘을 드립니다.<br>(최대 1시간 소요) <br>
       <br>
       </p>
       <strong> (주의)<br>
       1. 회원가입에서 사용했던 <font size="4">이메일</font>을 꼭 기억하세요!<br>
-      2. 설문조사를 완료한 후 <font size="4">코드</font>를 확인하세요!</strong>
+      2. 설문조사를 완료한 후 <font size="4" style="color:red;">코드</font>를 확인하세요!</strong>
       
     </v-flex>
     <!-- The survey link must be added. -->

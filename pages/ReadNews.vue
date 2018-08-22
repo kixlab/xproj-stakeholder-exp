@@ -8,7 +8,10 @@
         </v-card-text>
       </v-card>
     </v-flex>
-    <v-flex xs12> <br> </v-flex>
+    <v-flex xs12>
+      각 기사를 <strong style="color:red;">1분 이상</strong> 읽어야 다음으로 넘어갈 수 있습니다.<br>
+      1분이 지나면 버튼이 <strong style="color:green;">초록색</strong>으로 바뀝니다.
+    </v-flex>
 
     <v-flex xs12>
       <span style="text-align:left;"><strong> 첫 번째 기사 </strong></span>
