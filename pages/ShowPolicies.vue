@@ -82,7 +82,7 @@ export default {
       return this.$store.state.user.step
     },
     experimentDone: function () {
-      return (this.userGroup > -1 && this.userStep === 3)
+      return (this.userGroup > -1 && this.userStep >= 3)
     }
   },
   methods: {
