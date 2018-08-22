@@ -39,7 +39,9 @@
         <v-card-title
           class="headline grey lighten-2"
           primary-title
-        > 주의
+          style="background-color:pink !important;
+          color:red;"
+        > <strong>주의</strong>
         </v-card-title>
 
         <v-card-text>

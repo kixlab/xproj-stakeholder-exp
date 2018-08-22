@@ -57,14 +57,16 @@
         <v-card-title
           class="headline grey lighten-2"
           primary-title
-        > 주의
+          style="background-color:pink !important;
+          color:red;"
+        > <strong>주의</strong>
         </v-card-title>
 
         <v-card-text>
           현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
-          <strong>3개 그룹</strong>의 영향을 둘러보고, 총 <strong>9개의 영향</strong>을 자세히 읽어야 보상을 받을 수 있습니다. <br><br>
-          <template v-if="stakeholder_left!=0 || effect_left!=0">
-          귀하는 <strong><font size="4">{{stakeholder_left}}개 그룹, {{effect_left}}개 영향을</font></strong> 더 읽으셔야 합니다.<br>
+          <strong>3개 그룹</strong>의 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
+          <template v-if="stakeholder_left!=0">
+          귀하는 <strong><font size="4">{{stakeholder_left}}개 그룹을</font></strong> 더 살펴보셔야 합니다.<br>
           아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
           <br><br>
           <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>

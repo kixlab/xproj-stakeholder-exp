@@ -15,21 +15,26 @@
         </v-card-text>
       </v-card>
       <p style="text-align:left;">
-        <br>
-      시스템을 사용하시고, 시스템 사용 전후 설문조사에 참여하시면
-      7,500원 상당의 기프티콘을 드립니다.<br>(최대 1시간 소요) <br>
       <br>
+      첫 번째 단계입니다. 
+      설문에 앞서 몇 가지 <strong>유의사항</strong>이 있으니 아래를 확인해주세요.<br>
+      <br>
+
+      <strong>1. 회원가입에서 사용했던 <font size="4">이메일</font>을 꼭 기억하세요!<br></strong>
+        - 이메일이 일치하지 않으면 보상이 지급되지 않습니다.<br><br>
+      <strong>2. 설문조사를 완료한 후 제시되는 <font size="4" style="color:red;">코드</font>를 
+      아래에 입력하시면 다음 단계로 넘어갈 수 있습니다!</strong>
       </p>
-      <strong> (주의)<br>
-      1. 회원가입에서 사용했던 <font size="4">이메일</font>을 꼭 기억하세요!<br>
-      2. 설문조사를 완료한 후 <font size="4" style="color:red;">코드</font>를 확인하세요!</strong>
       
     </v-flex>
     <!-- The survey link must be added. -->
     <v-btn block color="primary" @click="onSurveyLinkClick">설문조사 하러 가기</v-btn>
+    
 
-    <v-flex xs12 v-if="isSurveyClicked">
-      설문을 완료하신 뒤 받은 코드를 적어주세요.
+    <v-flex xs12>
+      <v-divider/>
+      <br>
+      설문을 완료했을 때 제시되는 코드를 아래 칸에 적어주세요.
       <v-text-field 
         v-model="code"
         label="코드"
@@ -73,7 +78,7 @@ export default {
         eventLabel: ``,
         eventValue: 0
       })
-      window.open('https://goo.gl/forms/qQsZlH1US44ejRWn2', '_blank')
+      window.open('https://goo.gl/forms/wDJjIte67eewZW6o1', '_blank')
       this.isSurveyClicked = true
     }
   }

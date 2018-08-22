@@ -118,6 +118,7 @@ export default {
         })
         // this.$store.commit('setNextstep')
         this.$store.dispatch('incrementUserStep')
+        console.log(this.user.step)
         this.$router.push('/ShowPolicies')
       }
     }

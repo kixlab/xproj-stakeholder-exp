@@ -51,7 +51,8 @@
         </v-form>
       </v-card>
         <v-checkbox v-model="agreement" color="primary" hide-detials @click="showInformedConsent">
-          <span slot="label" @click.stop.prevent="showInformedConsent">본 <a href="#">인간대상 연구 동의서</a>를 읽었으며, 그 내용에 동의합니다. </span>
+          <span slot="label" @click.stop.prevent="showInformedConsent">본 <a href="#">'인간대상 연구 동의서' 및 '개인정보 제공 및 활용 동의 안내'</a>를 읽었으며, 
+          그 내용에 동의합니다. </span>
         </v-checkbox>
         <v-dialog
           v-model="dialog"
@@ -60,10 +61,12 @@
           persistent
           >
         <v-card>
-          <v-card-title class="headline grey lighten-3">인간대상 연구 동의서</v-card-title>
+          <v-card-title class="headline grey lighten-3">실험 및 보상 지급 안내</v-card-title>
           <v-card-text>
         <strong style="color:red;"> 아래 내용을 꼼꼼히 읽은 뒤, 문서 제일 끝에서 동의 여부를 선택해주십시오. </strong>
         <br><br>
+        <v-divider/>
+        <strong><font size="5">1. 인간대상 연구 동의서 </font></strong><br><br>
         <strong>1. 연구의 배경 및 목적</strong><br>
         정부 정책은 다양한 이해 당사자에게 다양한 방법으로 영향을 미칩니다. 따라서, 시민이 정책의 효과를 제대로 판단하기 위해서는 각 이해 당사자가 받는 정책의 영향을 이해할 필요가 있습니다. 본 연구에서는 시민 참여를 통해 정책이 다양한 사회적 집단에 주는 영향을 쉽게 이해할 수 있는 방법을 탐색하고 있습니다.<br>
         구체적으로, 본 연구에서는 1) 각 사용자가 정부 정책이 이해 관계자에게 주는 영향을 공유하고, 2) 이를 바탕으로 다른 사용자가 정책을 이해하도록 돕는 온라인 플랫폼을 개발하고자 합니다. 플랫폼 사용 과정에서 시민의 정책에 대한 이해도와 인식이 높아질 것을 기대합니다.<br>
@@ -109,7 +112,24 @@
           2. 만 20세 이상, 만 64세 이하의 대한민국 국민이며, <br>
           3. 요양원 같은 수용 시설에 거주하거나, 인지 기능에 문제가 있지 아니하며, <br>
           4. 장애인이 아님을 확인합니다. <br>
+        <br>
+        <v-divider/>
+        <br>
+        <font size="5">2. 개인정보 제공 및 활용 동의 안내 </font><br>
+        실험 참가자에 대한 참여 보상(기프티콘) 지급을 위해 다음과 같은 정보를 실험 참여 후 설문에서 수집할 예정입니다.
+        아래 항목에 대해 응답하지 않는 경우 실험 보상을 지급받을 수 없습니다.<br><br>
+        
+        - 이름<br>
+        - 생년월일<br>
+        - 성별<br>
+        - 휴대폰번호<br>
+        - 이메일 주소<br>
+        - 거주지 주소 (읍/면/동까지)<br><br>
+
+        수집된 정보는 참여연구원에 의해서만 열람, 처리되며 참여 보상을 지급하는 용도로만 사용됩니다.<br><br>
           </strong>
+          <v-divider/><br>
+          <strong style="color:red;">위 인간대상 연구 동의서와 개인정보 제공 및 활용 동의 안내에 모두 동의하십니까?</strong>
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
