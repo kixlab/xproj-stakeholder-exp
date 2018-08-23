@@ -1,15 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <v-toolbar dense color="indigo" dark fixed app>
-      <v-toolbar-title style="margin: 0 auto;">
-        <div>
-          <!-- Length of policy name should be less than 18 Korean syllables -->
-          <!-- The line must be ended with a single space -->
-          <small> 정책 고르기! </small>
-          <v-icon dark>tag_faces</v-icon>
-        </div>
-      </v-toolbar-title>
-    </v-toolbar>
+    <general-toolbar :pagename="'정책 고르기'"/>
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
@@ -43,14 +34,23 @@
 
 <script>
 import setTokenMixin from '~/mixins/setToken.js'
+import GeneralToolbar from '~/components/GeneralToolbar.vue'
+
 export default {
   beforeRouteEnter (to, from, next) {
     next((vm) => {
       if (from.path === '/MiniSurvey') {
         vm.$store.dispatch('incrementUserStep')
-        console.log(1)
       }
     })
+  },
+  components: {
+    GeneralToolbar
+  },
+  data: function () {
+    return {
+      drawer: false
+    }
   },
   // List of policies fetched from here
   mixins: [setTokenMixin],
@@ -149,7 +149,7 @@ export default {
       } else if (this.userStep === 2) {
         return 1 + (this.userGroup % 2) !== policyID
       } else {
-        return false
+        return true
       }
     },
     postSurvey: function () {
@@ -160,6 +160,9 @@ export default {
         eventValue: 0
       })
       this.$router.push('/PostSurvey')
+    },
+    closeDrawer: function (val) {
+      this.drawer = val
     }
   }
 }

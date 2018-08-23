@@ -1,12 +1,7 @@
 <template>
   <v-layout row wrap justify-center>
-    <v-toolbar dense color="indigo" dark fixed app>
-      <v-toolbar-title style="margin: 0 auto;">
-        <!-- The line must be ended with a single space -->
-        <small> 사용 후 설문 </small>
-        <v-icon dark>tag_faces</v-icon>
-      </v-toolbar-title>
-    </v-toolbar>
+    <general-toolbar :pagename="'사용 후 설문'"/>
+
     <v-flex xs12>
       <h1>수고 많으셨습니다!</h1>
       이제 마지막입니다.
@@ -25,7 +20,12 @@
   </v-layout>
 </template>
 <script>
+import GeneralToolbar from '~/components/GeneralToolbar.vue'
+
 export default {
+  components: {
+    GeneralToolbar
+  },
   computed: {
     surveyAddr: function () {
       if (this.$store.getters.experimentCondition === 1 || this.$store.getters.experimentCondition === 2) {

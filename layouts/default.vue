@@ -2,34 +2,7 @@
   <v-app>
     <v-content>
       <v-container grid-list-md text-xs-center>
-        <nuxt />
-        <v-footer height="auto">
-          <v-layout row wrap>
-            <v-spacer></v-spacer>
-              <v-btn flat small @click.stop="onOpenAboutClick">
-                About
-              </v-btn>
-            <v-dialog v-model="dialog">
-              <v-card>
-                <v-card-title class="headline grey lighten-2" primary-title>
-                  About
-                </v-card-title>
-                <v-card-text>
-                  사용하시면서 불편하신 점이나 궁금하신 점이 있다면, <a href="#">xproject@kixlab.org</a>로 연락주세요.
-
-                  본 연구는 한국연구재단의 “소셜컴퓨팅 기술을 활용한 국가청렴도 개선” 과제의 일환입니다.
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="primary" flat @click.native="onCloseAboutClick">
-                    닫기
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-layout>
-        </v-footer>
+        <nuxt />      
       </v-container>
     </v-content>
   </v-app>
@@ -173,9 +146,8 @@ export default {
   font-family: 'Nanum Gothic', sans-serif;
 }
 .v-footer {
-/*   position: absolute;
- */  bottom: 0;
-  width: 96%;
+   position: relative;
+  bottom: 0;
   /* justify-content: center; */
   background-color: lightblue !important;
 }
