@@ -14,7 +14,7 @@
     <v-flex xs12>
       <h2>{{step}}번째 정책은 잘 보셨나요?</h2>
       아래 설문을 완료한 뒤 다음으로 넘어가주세요.<br>
-      (1 : 매우 부정 ~ 5 : 매우 긍정)
+      (1 : 매우 부정 ~ 7 : 매우 긍정)
     </v-flex>
     <v-flex xs12>
       <v-card flat colot="transparent">
@@ -23,18 +23,40 @@
           <v-slider
             v-model="first_answer"
             :tick-labels="numericScales"
-            :max="4"
+            :max="6"
             step="1"
             tick-size="2"/>
         </v-card-text>
       </v-card>
       <v-card flat colot="transparent">
         <v-card-text>
-          나는 이 정책이 나를 포함한 사회 구성원에게 미치는 영향을 잘 이해하고 있다.
+          나는 이 정책이 나에게 미치는 영향을 잘 이해하고 있다.
           <v-slider
             v-model="second_answer"
             :tick-labels="numericScales"
-            :max="4"
+            :max="6"
+            step="1"
+            tick-size="2"/>
+        </v-card-text>
+      </v-card>
+      <v-card flat colot="transparent">
+        <v-card-text>
+          나는 이 정책이 나에게 미치는 영향을 잘 이해하고 있다.
+          <v-slider
+            v-model="second_answer"
+            :tick-labels="numericScales"
+            :max="6"
+            step="1"
+            tick-size="2"/>
+        </v-card-text>
+      </v-card>
+      <v-card flat colot="transparent">
+        <v-card-text>
+          나는 이 정책이 다른 사회 구성원에게 미치는 영향을 잘 이해하고 있다.
+          <v-slider
+            v-model="third_answer"
+            :tick-labels="numericScales"
+            :max="6"
             step="1"
             tick-size="2"/>
         </v-card-text>
@@ -44,18 +66,18 @@
           나는 이 정책을 시행하는데 {{myStance ? `${myStance}` : '_____'}}한다.
           <br>
           <v-btn 
-          :outline="third_answer !== 0" 
-          :dark="third_answer == 0"
+          :outline="fourth_answer !== 0" 
+          :dark="fourth_answer == 0"
           color="primary"
           class="binarybtn"
-          @click="third_answer=0">
+          @click="fourth_answer=0">
           찬성 </v-btn>
           <v-btn 
-          :outline="third_answer !== 1" 
-          :dark="third_answer == 1"
+          :outline="fourth_answer !== 1" 
+          :dark="fourth_answer == 1"
           color="error" 
           class="binarybtn" 
-          @click="third_answer=1"> 
+          @click="fourth_answer=1"> 
           반대 </v-btn>
         </v-card-text>
       </v-card>
@@ -63,9 +85,9 @@
         <v-card-text>
           이 정책에 대한 내 입장{{myStance ? `(${myStance})` : ''}}은 확고하다.<br>
           <v-slider
-            v-model="fourth_answer"
+            v-model="fifth_answer"
             :tick-labels="numericScales"
-            :max="4"
+            :max="6"
             step="1"
             tick-size="2"/>
         </v-card-text>
@@ -100,21 +122,22 @@ export default {
       this.$router.go(-1)
     },
     async nextPolicy () {
-      // console.log(this.third_answer)
+      // console.log(this.fourth_answer)
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'FinishMiniSurvey',
         eventLabel: `${this.policy.title}`,
         eventValue: 0
       })
-      if (this.third_answer !== -1) {
+      if (this.fourth_answer !== -1) {
         await this.$axios.$post('/api/minisurvey/', {
           user: this.user.id,
           policy: this.policy.id,
           first_answer: this.first_answer,
           second_answer: this.second_answer,
           third_answer: this.third_answer,
-          fourth_answer: this.fourth_answer
+          fourth_answer: this.fourth_answer,
+          fifth_answer: this.fifth_answer
         })
         this.$store.dispatch('incrementUserStep')
         console.log(this.user.step)
@@ -125,19 +148,20 @@ export default {
   mixins: [setTokenMixin],
   data: function () {
     return {
-      numericScales: ['1', '2', '3', '4', '5'],
+      numericScales: ['1', '2', '3', '4', '5', '6', '7'],
       confidenceScales: ['매우 적음', '', '보통', '', '매우 확신'],
-      first_answer: 2,
-      second_answer: 2,
-      third_answer: -1,
-      fourth_answer: 2
+      first_answer: 3,
+      second_answer: 3,
+      third_answer: 3,
+      fourth_answer: -1,
+      fifth_answer: 3
     }
   },
   computed: {
     myStance: function () {
-      if (this.third_answer === 0) {
+      if (this.fourth_answer === 0) {
         return '찬성'
-      } else if (this.third_answer === 1) {
+      } else if (this.fourth_answer === 1) {
         return '반대'
       } else {
         return ''
