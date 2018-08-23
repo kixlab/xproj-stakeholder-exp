@@ -29,11 +29,11 @@ export default {
   computed: {
     surveyAddr: function () {
       if (this.$store.getters.experimentCondition === 1 || this.$store.getters.experimentCondition === 2) {
-        return 'https://goo.gl/forms/Zq4v6RGjBNd5NrDy1'
+        return 'https://goo.gl/forms/AUChMEOC6XjjkRi03'
       } else if (this.$store.getters.experimentCondition === 3 || this.$store.getters.experimentCondition === 4) {
-        return 'https://goo.gl/forms/8oB5FTWVQyo27jiF3'
+        return 'https://goo.gl/forms/DYYPtPoNRdQZJh7v1'
       } else if (this.$store.getters.experimentCondition === 5 || this.$store.getters.experimentCondition === 0) {
-        return 'https://goo.gl/forms/6EtAqkjcjn5lrKgc2'
+        return 'https://goo.gl/forms/4aTnnOenpV6Q2VCi1'
       }
     // },
     // answer: function () {

@@ -30,7 +30,8 @@
       <v-card-text class="centre">
         <!-- <v-slider readonly :value="negativeCols / (positiveCols + negativeCols) * 100" prepend-icon="mood_bad" append-icon="mood">
         </v-slider> -->
-        <v-icon x-large>{{sentiment}}</v-icon>
+        <v-icon style="color:blue;">sentiment_very_satisfied</v-icon> {{poscnt}}개 &nbsp;
+        <v-icon style="color:red;">sentiment_very_dissatisfied</v-icon> {{negcnt}}개
       </v-card-text>
     </v-card>
   </v-flex>
@@ -73,6 +74,12 @@ export default {
       } else {
         return 'sentiment_very_satisfied'
       }
+    },
+    poscnt: function () {
+      return this.stakeholder.counts.positive
+    },
+    negcnt: function () {
+      return this.stakeholder.counts.negative
     }
   },
   methods: {
@@ -94,6 +101,8 @@ small {
   text-align: center !important;
   vertical-align: center;
   cursor: pointer;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 </style>
 
