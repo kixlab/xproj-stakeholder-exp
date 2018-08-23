@@ -104,14 +104,45 @@ export const mutations = {
     const effect = state.effects.find((value) => {
       return value.id === payload.effect
     })
-    effect.novelty += 1
+    effect.novelty.push(state.user.pk)
   },
   incrementEmpathyCount (state, payload) {
     const effect = state.effects.find((value) => {
       // console.log(value.id)
       return value.id === payload.effect
     })
-    effect.empathy += 1
+    effect.empathy.push(state.user.pk)
+  },
+  incrementFishyCount (state, payload) {
+    const effect = state.effects.find((value) => {
+      // console.log(value.id)
+      return value.id === payload.effect
+    })
+    effect.fishy.push(state.user.pk)
+  },
+  decrementEmpathyCount (state, payload) {
+    const effect = state.effects.find((value) => {
+      // console.log(value.id)
+      return value.id === payload.effect
+    })
+    const idx = effect.empathy.indexOf(state.user.pk)
+    effect.empathy.splice(idx, 1)
+  },
+  decrementFishyCount (state, payload) {
+    const effect = state.effects.find((value) => {
+      // console.log(value.id)
+      return value.id === payload.effect
+    })
+    const idx = effect.fishy.indexOf(state.user.pk)
+    effect.fishy.splice(idx, 1)
+  },
+  decrementNoveltyCount (state, payload) {
+    const effect = state.effects.find((value) => {
+      // console.log(value.id)
+      return value.id === payload.effect
+    })
+    const idx = effect.novelty.indexOf(state.user.pk)
+    effect.novelty.splice(idx, 1)
   }
 }
 

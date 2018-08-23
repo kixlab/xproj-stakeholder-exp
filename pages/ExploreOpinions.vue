@@ -109,6 +109,9 @@ import PromisePane from '~/components/PromisePane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
 export default {
   fetch: async function ({app, store}) {
+    if (store.state.userToken) {
+      app.$axios.setToken(store.state.userToken, 'Token')
+    }
     store.dispatch('incrementUserPolicyStakeholdersSeen')
   },
   mixins: [setTokenMixin],
