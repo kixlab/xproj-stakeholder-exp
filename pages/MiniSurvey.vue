@@ -39,17 +39,6 @@
       </v-card>
       <v-card flat colot="transparent">
         <v-card-text>
-          나는 이 정책이 나에게 미치는 영향을 잘 이해하고 있다.
-          <v-slider
-            v-model="second_answer"
-            :tick-labels="numericScales"
-            :max="6"
-            step="1"
-            tick-size="2"/>
-        </v-card-text>
-      </v-card>
-      <v-card flat colot="transparent">
-        <v-card-text>
           나는 이 정책이 다른 사회 구성원에게 미치는 영향을 잘 이해하고 있다.
           <v-slider
             v-model="third_answer"
