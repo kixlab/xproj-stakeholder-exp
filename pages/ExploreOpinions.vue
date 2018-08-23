@@ -209,7 +209,11 @@ export default {
     },
     cardnum: function (page) {
       if (page === this.pagenum) {
-        return this.effects.length % 5
+        var rest = this.effects.length % 5
+        if (rest === 0) {
+          return 5
+        }
+        return rest
       } else {
         return 5
       }

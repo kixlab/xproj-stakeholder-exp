@@ -204,6 +204,9 @@ export default {
   cursor: pointer;
   word-break: keep-all;
 }
+.v-card__title {
+  padding-bottom:0 !important;
+}
 </style>
 
 

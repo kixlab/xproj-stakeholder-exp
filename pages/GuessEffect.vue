@@ -52,20 +52,13 @@
       <p class="body-1 prompt head"><strong>{{findStakeholderName(predictedEffect.stakeholder_group)}}</strong>의 입장에서 생각해주세요!</p>
       <br>
       <p class="question">
-      여러분은 <strong>{{findStakeholderName(predictedEffect.stakeholder_group)}}</strong>(이)가 주인공인 소설을 쓰고 있습니다.
-      여러분이 정한 주인공을 머릿 속에서 <strong>더욱 자세히 상상</strong>해보세요!
+      여러분이 <strong>{{findStakeholderName(predictedEffect.stakeholder_group)}}</strong>(이)가 주인공인 소설을 쓰고 있다고 상상해보세요
+      여러분이 정한 주인공을 머릿 속에서 <strong>더욱 자세히</strong> 그려보세요.
       예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
       장소, 직장, 연령 등을 고려해서 더 구체적으로요.<br>
       이제 여러분만의 주인공을 간단히 설명해주시겠어요?
       </p>
       <v-text-field v-model="predictedEffect.stakeholder_detail" placeholder="여기에 설명해주세요!" />
-
-<!--       <v-text-field
-      v-validate="'required'"
-      v-model="predictedEffect.stakeholder_detail"
-      :error-messages="errors.collect('email')"       
-      name="stakeholder_detail"
-      placeholder="여기에 설명해주세요!" /> -->
 
       <p class="question">그럼 그 사람은 이 정책으로 어떤 영향을 받게 될까요?</p>
       <v-textarea box auto-grow v-model="predictedEffect.description"/>
