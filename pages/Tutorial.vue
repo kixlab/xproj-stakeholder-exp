@@ -43,7 +43,6 @@
     },
     methods: {
       imgURL: function (val) {
-        console.log(val)
         switch (this.userGroup) {
           case 1:
           case 2:

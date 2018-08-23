@@ -5,7 +5,7 @@
       <v-card color="grey lighten-4">
         <v-card-text>
         이 정책은 우리 사회에 어떤 영향을 끼칠까요?<br>
-        이 정책의 이해당사자들은 어뗜 영향을 받을까요?
+        이 정책의 이해당사자들은 어떤 영향을 받을까요?
         </v-card-text>
       </v-card>
       &nbsp;
@@ -203,6 +203,9 @@ export default {
 .link {
   cursor: pointer;
   word-break: keep-all;
+}
+.v-card__title {
+  padding-bottom:0 !important;
 }
 </style>
 

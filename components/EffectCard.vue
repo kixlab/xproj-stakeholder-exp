@@ -15,10 +15,13 @@
       </v-card-text>
       <v-card-actions>
         <v-btn flat small outline color="primary" @click.stop="onNoveltyButtonClick">
-          새로워! {{effect.novelty}}
+          참신 {{effect.novelty}}
+        </v-btn>
+        <v-btn flat small outline color="primary" @click.stop="onEmpathyButtonClick">
+          공감 {{effect.empathy}}
         </v-btn>
         <v-btn flat small outline color="error" @click.stop="onEmpathyButtonClick">
-          공감해! {{effect.empathy}}
+          의심 {{effect.empathy}}
         </v-btn>
         <pre>  </pre>
 
@@ -105,7 +108,10 @@
 .effect-card__textbox {
   text-align: left !important;
 }
-
+.v-btn--small {
+  min-width: 70px;
+  padding: 0 !important;
+}
 </style>
 
 <script>

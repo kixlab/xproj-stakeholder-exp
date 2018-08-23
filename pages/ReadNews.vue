@@ -9,8 +9,9 @@
       </v-card>
     </v-flex>
     <v-flex xs12>
+      <strong>아래 버튼을 눌러</strong> 기사를 읽은 뒤, 여기로 돌아와주세요.<br><br>
       각 기사를 <strong style="color:red;">1분 이상</strong> 읽어야 다음으로 넘어갈 수 있습니다.<br>
-      1분이 지나면 버튼이 <strong style="color:green;">초록색</strong>으로 바뀝니다.
+      1분이 지나면 버튼이 <strong style="color:green;">초록색</strong>으로 바뀝니다.<br><br>
     </v-flex>
 
     <v-flex xs12>

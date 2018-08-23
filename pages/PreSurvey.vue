@@ -34,7 +34,7 @@
     <v-flex xs12>
       <v-divider/>
       <br>
-      설문을 완료했을 때 제시되는 코드를 아래 칸에 적어주세요.
+      설문을 완료했을 때 제시되는 코드를<br>아래 칸에 적어주세요.
       <v-text-field 
         v-model="code"
         label="코드"
