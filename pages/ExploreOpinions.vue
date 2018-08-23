@@ -100,7 +100,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
     </v-flex>
   </v-layout>
 </template>

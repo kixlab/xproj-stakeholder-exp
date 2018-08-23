@@ -2,7 +2,7 @@
 <v-layout>
   <navigation-drawer :drawer="drawer" @emitterdrawer="test"></navigation-drawer>
 
-  <v-toolbar dense color="indigo" @click.native="onOpenDialog" dark fixed app>
+  <v-toolbar dense color="indigo" @click.native="onOpenDialog" dark fixed app clipped-left>
     <v-toolbar-side-icon ripple @click.stop="drawer = !drawer"></v-toolbar-side-icon>
     <v-toolbar-title>
       <div style="cursor: pointer;">

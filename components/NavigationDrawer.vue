@@ -105,13 +105,13 @@
 
         <v-card-actions>
           <v-btn
-            color="red"
+            color="primary"
             flat outline ripple
             @click="dialog=false"
           > 돌아가기 </v-btn>
           <v-spacer></v-spacer>
           <v-btn
-            color="primary"
+            color="red"
             flat outline ripple
             @click="giveUp"
           >
@@ -146,6 +146,18 @@
       </v-list-tile>  
     </v-list>
   </template>
+  <v-spacer></v-spacer>
+  <v-list>
+    <v-list-tile @click="drawerFlag = false">
+    <v-list-tile-action>
+      <v-icon>cross</v-icon>
+    </v-list-tile-action>
+
+    <v-list-tile-content>
+      <v-list-tile-title>닫기</v-list-tile-title>
+    </v-list-tile-content>
+  </v-list-tile>  
+  </v-list>
 </v-navigation-drawer>
 </template>
 
