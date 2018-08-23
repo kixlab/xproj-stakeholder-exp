@@ -132,7 +132,7 @@ export default {
           fourth_answer: this.fourth_answer,
           fifth_answer: this.fifth_answer
         })
-        this.$store.dispatch('incrementUserStep')
+        // this.$store.dispatch('incrementUserStep')
         console.log(this.user.step)
         this.$router.push('/ShowPolicies')
       }

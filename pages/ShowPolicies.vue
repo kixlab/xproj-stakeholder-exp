@@ -44,6 +44,14 @@
 <script>
 import setTokenMixin from '~/mixins/setToken.js'
 export default {
+  beforeRouteEnter (to, from, next) {
+    next((vm) => {
+      if (from.path === '/MiniSurvey') {
+        vm.$store.dispatch('incrementUserStep')
+        console.log(1)
+      }
+    })
+  },
   // List of policies fetched from here
   mixins: [setTokenMixin],
   fetch: async function ({app, store}) {

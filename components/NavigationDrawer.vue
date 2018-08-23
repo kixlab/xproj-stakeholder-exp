@@ -59,13 +59,6 @@
           <span v-else style="color:red;">{{stakeholders_seen}} / {{stakeholders_seen_min}}</span>
         </v-list-tile-action>
       </v-list-tile>
-      <v-list-tile>
-        <v-list-tile-title>(영향 읽기) 영향 수</v-list-tile-title>
-        <v-list-tile-action>
-          <span v-if="effects_seen>=effects_seen_min" style="color:blue;">{{effects_seen}} / {{effects_seen_min}}</span>
-          <span v-else style="color:red;">{{effects_seen}} / {{effects_seen_min}}</span>
-        </v-list-tile-action>
-      </v-list-tile>
     </v-list-group>
   </v-list>
 
