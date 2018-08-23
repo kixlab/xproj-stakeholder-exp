@@ -14,14 +14,14 @@
         </a>
       </v-card-text>
       <v-card-actions>
-        <v-btn flat small outline color="primary" @click.stop="onNoveltyButtonClick">
-          참신 {{effect.novelty}}
+        <v-btn small :depressed="isNoveltyVoted" :flat="!isNoveltyVoted" color="primary" @click.stop="onNoveltyButtonClick">
+          참신 {{effect.novelty.length}}
         </v-btn>
-        <v-btn flat small outline color="primary" @click.stop="onEmpathyButtonClick">
-          공감 {{effect.empathy}}
+        <v-btn small :depressed="isEmpathyVoted" :flat="!isEmpathyVoted" color="primary" @click.stop="onEmpathyButtonClick">
+          공감 {{effect.empathy.length}}
         </v-btn>
-        <v-btn flat small outline color="error" @click.stop="onEmpathyButtonClick">
-          의심 {{effect.empathy}}
+        <v-btn small :flat="!isFishyVoted" :depressed="isFishyVoted" color="error" @click.stop="onFishyButtonClick">
+          의심 {{effect.fishy.length}}
         </v-btn>
         <pre>  </pre>
 
@@ -141,6 +141,15 @@ export default {
       } else {
         return this.effect.description
       }
+    },
+    isNoveltyVoted: function () {
+      return this.effect.novelty.includes(this.$store.state.user.pk)
+    },
+    isEmpathyVoted: function () {
+      return this.effect.empathy.includes(this.$store.state.user.pk)
+    },
+    isFishyVoted: function () {
+      return this.effect.fishy.includes(this.$store.state.user.pk)
     }
   },
   methods: {
@@ -166,7 +175,7 @@ export default {
     onNoveltyButtonClick: async function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
-        eventAction: 'UpvoteNovelty',
+        eventAction: this.isNoveltyVoted ? 'CancelUpvoteNovelty' : 'UpvoteNovelty',
         eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
         eventValue: 0
       })
@@ -177,6 +186,13 @@ export default {
         this.$store.commit('incrementNoveltyCount', {
           effect: this.effect.id
         })
+      } catch (err) {
+        if (err.response.status === 409) {
+          this.$store.commit('decreaseNoveltyCount', {
+            effect: this.effect.id
+          })
+        }
+      } finally {
         const result = await this.$axios.$get('/api/effects/', {
           params: {
             policy: this.$store.state.policyIdx,
@@ -184,14 +200,12 @@ export default {
           }
         })
         this.$store.commit('setEffects', result.results)
-      } catch (err) {
-        console.log(err)
       }
     },
     onEmpathyButtonClick: async function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
-        eventAction: 'UpvoteEmpathy',
+        eventAction: this.isEmpathyVoted ? 'CancelUpvoteEmpathy' : 'UpvoteEmpathy',
         eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
         eventValue: 0
       })
@@ -202,6 +216,13 @@ export default {
         this.$store.commit('incrementEmpathyCount', {
           effect: this.effect.id
         })
+      } catch (err) {
+        if (err.response.code === 409) {
+          this.$store.commit('decreaseEmpathyCount', {
+            effect: this.effect.id
+          })
+        }
+      } finally {
         const result = await this.$axios.$get('/api/effects/', {
           params: {
             policy: this.$store.state.policyIdx,
@@ -209,10 +230,38 @@ export default {
           }
         })
         this.$store.commit('setEffects', result.results)
-      } catch (err) {
-        console.log(err)
       }
       // this.$emit('empathy-button-click')
+    },
+    onFishyButtonClick: async function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: this.isFishyVoted ? 'CancelUpvoteFishy' : 'UpvoteFishy',
+        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+        eventValue: 0
+      })
+      try {
+        await this.$axios.$post('/api/fishy/', {
+          effect: this.effect.id
+        })
+        this.$store.commit('incrementFishyCount', {
+          effect: this.effect.id
+        })
+      } catch (err) {
+        if (err.response.code === 409) {
+          this.$store.commit('decreaseFishyCount', {
+            effect: this.effect.id
+          })
+        }
+      } finally {
+        const result = await this.$axios.$get('/api/effects/', {
+          params: {
+            policy: this.$store.state.policyIdx,
+            stakeholder_group: this.$store.getters.randomStakeholderGroup.id
+          }
+        })
+        this.$store.commit('setEffects', result.results)
+      }
     },
     reportEffect: async function () {
       this.dialog = false
