@@ -149,7 +149,7 @@ export default {
       } else if (this.userStep === 2) {
         return 1 + (this.userGroup % 2) !== policyID
       } else {
-        return true
+        return false
       }
     },
     postSurvey: function () {
