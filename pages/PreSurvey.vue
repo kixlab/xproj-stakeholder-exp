@@ -1,12 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <v-toolbar dense color="indigo" dark fixed app>
-      <v-toolbar-title style="margin: 0 auto;">
-        <!-- The line must be ended with a single space -->
-        <small> 사용 전 설문 </small>
-        <v-icon dark>tag_faces</v-icon>
-      </v-toolbar-title>
-    </v-toolbar>
+    <general-toolbar :pagename="'사용 전 설문'"/>
         
     <v-flex xs12>
       <v-card color="grey lighten-4">
@@ -44,8 +38,13 @@
   </v-layout>
 </template>
 <script>
+import GeneralToolbar from '~/components/GeneralToolbar.vue'
+
 export default {
   // TODO: fetch policy list
+  components: {
+    GeneralToolbar
+  },
   computed: {
     experimentCondition: function () {
       return this.$store.getters.experimentCondition

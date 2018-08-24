@@ -59,13 +59,6 @@
           <span v-else style="color:red;">{{stakeholders_seen}} / {{stakeholders_seen_min}}</span>
         </v-list-tile-action>
       </v-list-tile>
-      <v-list-tile>
-        <v-list-tile-title>(영향 읽기) 영향 수</v-list-tile-title>
-        <v-list-tile-action>
-          <span v-if="effects_seen>=effects_seen_min" style="color:blue;">{{effects_seen}} / {{effects_seen_min}}</span>
-          <span v-else style="color:red;">{{effects_seen}} / {{effects_seen_min}}</span>
-        </v-list-tile-action>
-      </v-list-tile>
     </v-list-group>
   </v-list>
 
@@ -88,7 +81,7 @@
 
       <v-card>
         <v-card-title
-          class="headline grey lighten-2"
+          class="headline grey lighten-2 warning"
           color="red"
           primary-title
         > 주의
@@ -133,6 +126,9 @@
   </v-list-tile>  
   </v-list>
   </template>
+
+
+
   <template v-else>
     <v-list class="pt-0" dense>
       <v-list-tile @click="tutorial">
@@ -146,15 +142,50 @@
       </v-list-tile>  
     </v-list>
   </template>
-  <v-spacer></v-spacer>
-  <v-list>
-    <v-list-tile @click="drawerFlag = false">
+
+
+  <v-list class="pt-0" dense>
+  <v-list-tile @click="drawerFlag = false">
     <v-list-tile-action>
-      <v-icon>cross</v-icon>
+      <v-icon>info</v-icon>
+    </v-list-tile-action>
+    
+    <v-list-tile-content>
+    <v-dialog
+      v-model="dialog2"
+      width="500"
+      full-width
+    >
+      <v-list-tile-title slot="activator">연락처</v-list-tile-title>
+        <v-card>
+          <v-card-title class="headline grey lighten-2" primary-title>
+            About
+          </v-card-title>
+          <v-card-text>
+            사용하시면서 불편하신 점이나 궁금하신 점이 있다면, <a href="#">xproject@kixlab.org</a>로 연락주세요.
+
+            본 연구는 한국연구재단의 “소셜컴퓨팅 기술을 활용한 국가청렴도 개선” 과제의 일환입니다.
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" flat @click.native="dialog2 = false">
+              닫기
+            </v-btn>
+          </v-card-actions>
+      </v-card>
+    </v-dialog>
+    </v-list-tile-content>
+  </v-list-tile>  
+  <v-flex><br></v-flex>
+
+  <v-list-tile @click="drawerFlag = false">
+    <v-list-tile-action>
+      <v-icon>keyboard_arrow_left</v-icon>
     </v-list-tile-action>
 
     <v-list-tile-content>
-      <v-list-tile-title>닫기</v-list-tile-title>
+      <v-list-tile-title><strong>닫기</strong></v-list-tile-title>
     </v-list-tile-content>
   </v-list-tile>  
   </v-list>
@@ -162,7 +193,7 @@
 </template>
 
 <style scoped>
-.grey.lighten-2 {
+.warning {
   background-color: pink !important;
 }
 </style>
@@ -187,7 +218,11 @@ export default {
       }
     },
     step: function () {
-      return this.$store.state.user.step
+      var userstep = this.$store.state.user.step
+      if (userstep === 0) {
+        return 0
+      }
+      return userstep - 1
     },
     stakeholders_answered: function () {
       return this.$store.state.userPolicy.stakeholders_answered
@@ -278,7 +313,8 @@ export default {
   },
   data: function () {
     return {
-      dialog: false
+      dialog: false,
+      dialog2: false
     }
   }
 }

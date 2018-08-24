@@ -1,14 +1,6 @@
 <template>
   <v-layout row wrap justify-center>
-    <v-toolbar dense color="indigo" dark fixed app>
-      <v-toolbar-title style="margin: 0 auto;">
-
-        <!-- The line must be ended with a single space -->
-        <small> 중간 설문 </small>
-        <v-icon dark>tag_faces</v-icon>
-
-      </v-toolbar-title>
-    </v-toolbar>
+    <general-toolbar :pagename="'중간 설문'"/>
     <v-flex xs12>
       <h2>{{step}}번째 정책은 잘 보셨나요?</h2>
       아래 설문을 완료한 뒤 다음으로 넘어가주세요.<br>
@@ -91,8 +83,12 @@
 </style>
 <script>
 import setTokenMixin from '~/mixins/setToken.js'
+import GeneralToolbar from '~/components/GeneralToolbar.vue'
 
 export default {
+  components: {
+    GeneralToolbar
+  },
   methods: {
     goback () {
       this.$ga.event({
@@ -121,8 +117,6 @@ export default {
           fourth_answer: this.fourth_answer,
           fifth_answer: this.fifth_answer
         })
-        this.$store.dispatch('incrementUserStep')
-        console.log(this.user.step)
         this.$router.push('/ShowPolicies')
       }
     }

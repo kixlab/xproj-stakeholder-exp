@@ -19,7 +19,7 @@
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" flat @click.prevent="onCloseAboutClick">
+            <v-btn color="primary" flat @click="onCloseAboutClick">
               닫기
             </v-btn>
           </v-card-actions>
@@ -47,6 +47,7 @@ export default {
       this.dialog = true
     },
     onCloseAboutClick: function () {
+      console.log(this.dialog)
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'CloseAbout',
@@ -54,6 +55,7 @@ export default {
         eventValue: 0
       })
       this.dialog = false
+      console.log(this.dialog)
     }
   }
 }
