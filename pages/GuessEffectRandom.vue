@@ -32,18 +32,18 @@
       <div>
         <p class="body-1 prompt question">방금 쓰신 내용은 그 사람에게 긍정적인가요? 부정적인가요? </p>
         <v-btn 
-        :outline="predictedEffect.isBenefit !== 0" 
-        :dark="predictedEffect.isBenefit == 0"
-        color="primary"
-        class="binarybtn"
-        @click="predictedEffect.isBenefit=0">
-        긍정적 </v-btn>
-        <v-btn 
         :outline="predictedEffect.isBenefit !== 1" 
         :dark="predictedEffect.isBenefit == 1"
+        color="primary"
+        class="binarybtn"
+        @click="predictedEffect.isBenefit=1">
+        긍정적 </v-btn>
+        <v-btn 
+        :outline="predictedEffect.isBenefit !== 0" 
+        :dark="predictedEffect.isBenefit == 0"
         color="error" 
         class="binarybtn" 
-        @click="predictedEffect.isBenefit=1"> 
+        @click="predictedEffect.isBenefit=0"> 
         부정적 </v-btn>
       </div>
 
