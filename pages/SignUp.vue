@@ -10,59 +10,23 @@
         </div>
       </v-toolbar-title>
     </v-toolbar>
-    <v-alert v-model="alert" type="error" dismissible>
-      {{formattedError}}
-    </v-alert>
-    <v-flex xs12>
-      <br>
-      <v-card flat>
-        <v-form>
-          <v-text-field
-            v-validate="'required|email'"
-            v-model="email"
-            :error-messages="errors.collect('email')"
-            label="이메일"
-            placeholder="abc@example.com"
-            type="email"
-            name="email"
-            required
-          ></v-text-field>   
-          <v-text-field
-            v-validate="'required|min:8'"
-            v-model="password"
-            :error-messages="errors.collect('password')"
-            type="password"
-            label="비밀번호"
-            placeholder="password"
-            name="password"
-            ref="password"
-            required
-            ></v-text-field>
-          <v-text-field
-            v-validate="'required|min:8|confirmed:password'"
-            v-model="password2"
-            :error-messages="errors.collect('password_confirm')"
-            type="password"
-            label="비밀번호 다시 입력"
-            placeholder="password again"
-            data-vv-name="password_confirm"
-            required
-            ></v-text-field>
-        </v-form>
-      </v-card>
-        <v-checkbox v-model="agreement" color="primary" hide-detials @click="showInformedConsent">
-          <span slot="label" @click.stop.prevent="showInformedConsent">본 <a href="#">'인간대상 연구 동의서' 및 '개인정보 제공 및 활용 동의 안내'</a>를 읽었으며, 
-          그 내용에 동의합니다. </span>
-        </v-checkbox>
-        <v-dialog
-          v-model="dialog"
-          absolute
-          max-width="400"
-          persistent
-          >
+
+
+
+    <v-stepper v-model="e1">
+    <v-stepper-header>
+      <v-stepper-step :complete="e1 > 1" step="1">실험 참가 동의</v-stepper-step>
+      <v-divider></v-divider>
+      <v-stepper-step step="2">계정 정보 입력</v-stepper-step>
+    </v-stepper-header>
+
+    <v-stepper-items>
+
+      <v-stepper-content step="1">
+
         <v-card>
           <v-card-title class="headline grey lighten-3">실험 및 보상 지급 안내</v-card-title>
-          <v-card-text>
+          <v-card-text style="text-align: left;">
         <strong style="color:red;"> 아래 내용을 꼼꼼히 읽은 뒤, 문서 제일 끝에서 동의 여부를 선택해주십시오. </strong>
         <br><br>
         <v-divider/>
@@ -128,68 +92,122 @@
         수집된 정보는 참여연구원에 의해서만 열람, 처리되며 참여 보상을 지급하는 용도로만 사용됩니다.<br><br>
           </strong>
           <v-divider/><br>
-          <strong style="color:red;">위 인간대상 연구 동의서와 개인정보 제공 및 활용 동의 안내에 모두 동의하십니까?</strong>
+          <v-checkbox v-model="agreement" color="primary" hide-detials>
+            <span slot="label" style="color: black;"> <font size="2">
+              위 '인간대상 연구 동의서' 및 '개인정보 제공 및 활용 동의 안내'를 읽었으며, 그 내용에 동의합니다.
+            </font></span>
+          </v-checkbox>
           </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-btn
-              class="white--text"
-              color="error"
-              @click="disagreeInformedConsent"
-            >
-              동의하지 않음
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-              class="white--text"
-              color="primary"
-              @click="agreeInformedConsent"
-            >
-              동의
-            </v-btn>
-          </v-card-actions>
         </v-card>
-      </v-dialog>
 
-      <v-btn @click="onRegisterClick" block ripple color="primary"> 회원가입 후 시작 </v-btn>
-      <v-dialog
-        v-model="dialog2"
-        absolute
-        max-width="400"
-        temporary
-        >
-      <v-card>
-        <v-card-title class="headline red lighten-3">주의</v-card-title>
-        <v-card-text>
-          <strong style="color: cornflowerblue; text-decoration:underline;">인간대상 연구 동의서</strong>에 동의하지 않을 경우, 설문조사가 생략되어
-          실험 참가 보상이 지급되지 않으며, <strong style="color: red;">시스템 사용 도중 결정을 번복할 수 없습니다.</strong> <br>
-          (그러나 동의한 사람은 시스템 사용 도중 동의를 철회할 수 있습니다.)<br><br>
-          보상없이 이 시스템을 이용하여 정책을 이해하고 싶으신 분은 계속 하셔도 좋습니다.<br><br>
-          <h2 style="text-align:center;"> 계속 하시겠습니까? </h2>
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-btn
-            class="white--text"
-            color="error"
-            @click="onGoBackClick"
-          >
-            돌아가기
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn
-            class="white--text"
-            color="primary"
-            @click="onContinueClick"
-          >
-            시작하기
-          </v-btn>
-        </v-card-actions>
+        <v-btn flat @click="onCancelClick" color="red">취소</v-btn>
+        <v-btn @click="onNextClick" ripple color="primary"> 계정 정보 입력 </v-btn>
+        
+      </v-stepper-content>
+
+      <v-stepper-content step="2">
+      <v-flex xs12 id="accountinfo">
+      <v-alert v-model="alert" type="error" dismissible>
+        {{formattedError}}
+      </v-alert>
+      <p><strong>계정 정보를 입력해주세요.</strong></p>
+      <v-card flat>
+        <v-form>
+          <v-text-field
+            v-validate="'required|email'"
+            v-model="email"
+            :error-messages="errors.collect('email')"
+            label="이메일"
+            placeholder="abc@example.com"
+            type="email"
+            name="email"
+            required
+          ></v-text-field>   
+          <v-text-field
+            v-validate="'required|min:8'"
+            v-model="password"
+            :error-messages="errors.collect('password')"
+            type="password"
+            label="비밀번호"
+            placeholder="password"
+            name="password"
+            ref="password"
+            required
+            ></v-text-field>
+          <v-text-field
+            v-validate="'required|min:8|confirmed:password'"
+            v-model="password2"
+            :error-messages="errors.collect('password_confirm')"
+            type="password"
+            label="비밀번호 다시 입력"
+            placeholder="password again"
+            data-vv-name="password_confirm"
+            required
+            ></v-text-field>
+        </v-form>
       </v-card>
-    </v-dialog>
-  </v-flex>
-</v-layout>
+      </v-flex>
+        <v-btn flat @click="e1=1">뒤로</v-btn>
+        <v-btn
+          color="primary"
+          @click="onRegisterClick"
+        >
+          완료
+        </v-btn>
+      </v-stepper-content>
+    </v-stepper-items>
+    </v-stepper>
+
+
+    <v-dialog
+      v-model="dialog"
+      absolute
+      max-width="400"
+      temporary
+      >
+    <v-card>
+      <v-card-title class="headline red lighten-3">주의</v-card-title>
+      <v-card-text>
+        <strong style="color: cornflowerblue; text-decoration:underline;">인간대상 연구 동의서</strong>에 동의하지 않을 경우, 설문조사가 생략되어
+        실험 참가 보상이 지급되지 않으며, <strong style="color: red;">시스템 사용 도중 결정을 번복할 수 없습니다.</strong> <br>
+        (그러나 동의한 사람은 시스템 사용 도중 동의를 철회할 수 있습니다.)<br><br>
+        보상없이 이 시스템을 이용하여 정책을 이해하고 싶으신 분은 계속 하셔도 좋습니다.<br><br>
+        <h2 style="text-align:center;"> 계속 하시겠습니까? </h2>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-btn
+          class="white--text"
+          color="error"
+          @click="onGoBackClick"
+        >
+          돌아가기
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn
+          class="white--text"
+          color="primary"
+          @click="onContinueClick"
+        >
+          계속
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+
+
+  </v-layout>
 </template>
+
+<style scoped>
+.v-stepper {
+  width: 100%
+}
+.v-stepper__content {
+  padding: 0;
+}
+</style>
 
 <script>
 export default {
@@ -199,8 +217,8 @@ export default {
       password: '',
       password2: '',
       dialog: false,
-      dialog2: false,
       agreement: false,
+      e1: 1,
       dictionary: {
         attributes: {
           email: '이메일 ',
@@ -232,9 +250,21 @@ export default {
 
   methods: {
     // error as {"password1":["비밀번호가 너무 일상적인 단어입니다.","비밀번호가 전부 숫자로 되어 있습니다."]}
+    async onNextClick () {
+      /* Event should be added */
+      if (!this.agreement) {
+        this.dialog = true
+      } else {
+        this.e1 = 2
+      }
+    },
+    onCancelClick () {
+      /* Event should be added */
+      this.$router.push('/')
+    },
     async onRegisterClick () {
       const result = await this.$validator.validateAll()
-      if (result && this.agreement) {
+      if (result) {
         this.$axios.setToken(null)
         try {
           const res = await this.$axios.$post('/api/auth/signup/', {
@@ -266,20 +296,9 @@ export default {
           this.alert = true
           this.error = error.response.data
         }
-      } else if (result && !this.agreement) {
-        this.dialog2 = true
       }
     },
-    showInformedConsent: function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'ShowInformedConsent',
-        eventLabel: this.email,
-        eventValue: 0
-      })
-      this.dialog = true
-    },
-    agreeInformedConsent: function () {
+    /*     agreeInformedConsent: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'AgreeInformedConsent',
@@ -298,7 +317,7 @@ export default {
       })
       this.agreement = false
       this.dialog = false
-    },
+    }, */
     onGoBackClick: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
@@ -306,41 +325,12 @@ export default {
         eventLabel: this.email,
         eventValue: 0
       })
-      this.dialog2 = false
+      this.dialog = false
     },
     async onContinueClick () {
-      this.$axios.setToken(null)
-      this.dialog2 = false
-      try {
-        const res = await this.$axios.$post('/api/auth/signup/', {
-          username: this.email,
-          email: this.email,
-          password1: this.password,
-          password2: this.password2
-        })
-        this.$axios.setToken(res.key, 'Token')
-        this.$store.commit('setUserToken', res.key)
-        this.$ga.set({
-          userId: this.email
-        })
-        this.$ga.event({
-          eventCategory: this.$router.currentRoute.path,
-          eventAction: 'RegisterAsNonParticipant',
-          eventLabel: this.email,
-          eventValue: 0
-        })
-        const user = await this.$axios.$put('/api/auth/user/', {
-          username: this.email,
-          is_participant: this.agreement,
-          step: 1,
-          presurvey_done: false
-        })
-        this.$store.commit('setUser', user)
-        this.$router.push('/Tutorial')
-      } catch (error) {
-        this.alert = true
-        this.error = error.response.data
-      }
+      /* Event should be added */
+      this.dialog = false
+      this.e1 = 2
     }
   }
 }

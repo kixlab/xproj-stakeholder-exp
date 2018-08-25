@@ -1,3 +1,5 @@
+/* This page must be renovated for collecting initial seed. */
+
 <template>
   <v-layout row wrap justify-center>
     <promise-pane :policy="policy"></promise-pane>

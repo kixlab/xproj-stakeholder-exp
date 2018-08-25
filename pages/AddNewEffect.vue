@@ -1,3 +1,5 @@
+/* This page musn't be used */
+
 <template>
   <v-layout row wrap justify-center>
     <promise-pane :policy="policy"></promise-pane>
