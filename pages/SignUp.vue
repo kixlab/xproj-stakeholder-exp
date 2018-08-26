@@ -250,11 +250,17 @@ export default {
 
   methods: {
     // error as {"password1":["비밀번호가 너무 일상적인 단어입니다.","비밀번호가 전부 숫자로 되어 있습니다."]}
-    async onNextClick () {
+    onNextClick () {
       /* Event should be added */
       if (!this.agreement) {
         this.dialog = true
       } else {
+        this.$ga.event({
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'AgreeInformedConsent',
+          eventLabel: this.email,
+          eventValue: 0
+        })
         this.e1 = 2
       }
     },
@@ -327,8 +333,14 @@ export default {
       })
       this.dialog = false
     },
-    async onContinueClick () {
+    onContinueClick () {
       /* Event should be added */
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'ProceedAsNonParticipant',
+        eventLabel: this.email,
+        eventValue: 0
+      })
       this.dialog = false
       this.e1 = 2
     }

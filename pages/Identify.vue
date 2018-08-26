@@ -41,12 +41,13 @@ import setTokenMixin from '~/mixins/setToken.js'
 export default {
   // Stakeholders will be fetched from here.
   fetch: async function ({app, store, params}) {
-    let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
-      params: {
-        policy: store.state.policyIdx
-      }
-    })
-    store.commit('setStakeholderGroups', stakeholderGroups.results)
+    // let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
+    //   params: {
+    //     policy: store.state.policyIdx
+    //   }
+    // })
+    // store.commit('setStakeholderGroups', stakeholderGroups.results)
+    store.dispatch('setTags')
   },
   mixins: [setTokenMixin],
   components: {

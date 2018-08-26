@@ -15,10 +15,23 @@
         </div>
 
       <v-combobox
+        v-model="myEffect.tags"
+        :items="tags"
+        item-text="name"
+        item-value="name"
+        label="선택해주세요"
+        multiple
+        chips>
+
+      </v-combobox>
+
+      <!-- <v-combobox
         v-model="model"
         :filter="filter"
         :hide-no-data="!search"
-        :items="items"
+        :items="tags"
+        item-text="name"
+        item-value="name"
         :search-input.sync="search"
         hide-selected
         label="태그를 검색하세요"
@@ -93,7 +106,7 @@
             </v-btn>
           </v-list-tile-action>
         </template>
-      </v-combobox>
+      </v-combobox> -->
 
 
 
@@ -109,7 +122,7 @@
 
 
 
-        <template v-if="myEffect.stakeholder_group == -1">
+        <!-- <template v-if="myEffect.stakeholder_group == -1">
           <v-text-field
             v-validate="'required'"
             v-model="myEffect.stakeholder_custom"            
@@ -117,12 +130,12 @@
             name="stakeholder_custom"            
             placeholder="그럼 직접 적어주세요!">
           </v-text-field>
-        </template>
+        </template> -->
 
         <template v-if="myEffect.stakeholder_group > 0 || myEffect.stakeholder_custom != ''">
-          <p class="body-1 prompt">
+          <!-- <p class="body-1 prompt">
           <strong>{{findStakeholderName(myEffect.stakeholder_group)}}</strong>(이)셨군요!<br>
-          </p>
+          </p> -->
           <p class="question">
           혹시 본인에 대해 조금만 더 자세히 설명해주시겠어요? 예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
           장소, 직장, 연령 등을 고려하여 더 구체적으로 적어주세요.
@@ -134,21 +147,16 @@
           name="stakeholder_detail" />
 
         <p class="body-1 prompt question">
-          <strong>{{findStakeholderName(myEffect.stakeholder_group)}}</strong>(으)로서 이 정책이 실현된다면 어떤 영향을 받으시나요?
+          <strong>{{myEffect.stakeholder_detail}}</strong>(으)로서 이 정책이 실현된다면 어떤 영향을 받으시나요?
         </p>
         
         <v-textarea box auto-grow v-model="myEffect.description"/>
 
         <div>
           <p class="body-1 prompt question">이 영향은 나에게 긍정적인가요? 부정적인가요? </p>
-          <template v-if="myEffect.isBenefit==1">
-            <v-btn dark color="primary" class="binarybtn"> 긍정적 </v-btn>
-            <v-btn outline color="error" class="binarybtn" @click="myEffect.isBenefit=0"> 부정적 </v-btn>
-          </template>
-          <template v-else>
-            <v-btn outline color="primary" class="binarybtn" @click="myEffect.isBenefit=1"> 긍정적 </v-btn>
-            <v-btn dark color="error" class="binarybtn"> 부정적 </v-btn>
-          </template>
+            <v-btn :outline="myEffect.isBenefit !== 1" :dark="myEffect.isBenefit === 1" color="primary" class="binarybtn" @click="myEffect.isBenefit=1"> 긍정적 </v-btn>
+            <v-btn :outline="myEffect.isBenefit !== 0" :dark="myEffect.isBenefit === 0" color="error" class="binarybtn" @click="myEffect.isBenefit=0"> 부정적 </v-btn>
+
         </div>
         </template>
         
@@ -187,10 +195,13 @@ export default {
     allFilled: function () {
       if (this.myEffect.stakeholder_group === -1) {
         return (this.myEffect.description !== '' && this.myEffect.isBenefit !== -1 &&
-        this.myEffect.stakeholder_detail !== '' && this.myEffect.stakeholder_custom !== '')
+        this.myEffect.stakeholder_detail !== '')
       }
       return (this.myEffect.description !== '' && this.myEffect.isBenefit !== -1 &&
-      this.myEffect.stakeholder_detail !== '' && this.myEffect.stakeholder_group !== 0)
+      this.myEffect.stakeholder_detail !== '')
+    },
+    tags: function () {
+      return this.$store.state.tags
     }
   },
   data: function () {
@@ -199,8 +210,8 @@ export default {
       myEffect: {
         isBenefit: -1,
         stakeholder_detail: '',
-        stakeholder_group: 0,
-        stakeholder_custom: '',
+        stakeholder_group: 1, // TODO: remove
+        tags: [],
         description: '',
         empathy: 0,
         novelty: 0,
@@ -219,53 +230,52 @@ export default {
         { text: 'Bar' }
       ],
       menu: false,
-      model: [],
       x: 0,
       search: null,
       y: 0
     }
   },
-  watch: {
-    model (val, prev) {
-      if (val.length === prev.length) return
+  // watch: {
+  //   select (val, prev) {
+  //     if (val.length === prev.length) return
 
-      this.model = val.map(v => {
-        if (typeof v === 'string') {
-          v = {
-            text: v
-          }
-          this.items.push(v)
-        }
+  //     this.select = val.map(v => {
+  //       if (typeof v === 'string') {
+  //         v = {
+  //           text: v
+  //         }
+  //         this.items.push(v)
+  //       }
 
-        return v
-      })
-    }
-  },
+  //       return v
+  //     })
+  //   }
+  // },
   mounted () {
     this.$validator.localize('ko', this.dictionary)
   },
   methods: {
-    edit (index, item) {
-      if (!this.editing) {
-        this.editing = item
-        this.index = index
-      } else {
-        this.editing = null
-        this.index = -1
-      }
-    },
-    filter (item, queryText, itemText) {
-      if (item.header) return false
+    // edit (index, item) {
+    //   if (!this.editing) {
+    //     this.editing = item
+    //     this.index = index
+    //   } else {
+    //     this.editing = null
+    //     this.index = -1
+    //   }
+    // },
+    // filter (item, queryText, itemText) {
+    //   if (item.header) return false
 
-      const hasValue = val => val != null ? val : ''
+    //   const hasValue = val => val != null ? val : ''
 
-      const text = hasValue(itemText)
-      const query = hasValue(queryText)
+    //   const text = hasValue(itemText)
+    //   const query = hasValue(queryText)
 
-      return text.toString()
-        .toLowerCase()
-        .indexOf(query.toString().toLowerCase()) > -1
-    },
+    //   return text.toString()
+    //     .toLowerCase()
+    //     .indexOf(query.toString().toLowerCase()) > -1
+    // },
     addNewStakeholder: async function () {
       if (this.stakeholder_custom && this.stakeholder_custom.length > 0) {
         const newStakeholder = await this.$axios.$post('/api/stakeholdergroups/', {
@@ -290,19 +300,7 @@ export default {
           eventValue: 0
         })
         this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
-        this.$router.push('/GuessEffectRandom')
-      }
-    },
-    findStakeholderName: function (id) {
-      if (id === 0) {
-        return ''
-      } else if (id === -1) {
-        return this.myEffect.stakeholder_custom
-      }
-      for (let sg of this.stakeholderGroups) {
-        if (sg.id === id) {
-          return sg.name
-        }
+        this.$router.push('/GuessEffect')
       }
     }
   }

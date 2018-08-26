@@ -236,7 +236,11 @@ export const actions = {
     }
   },
   async setTags (context) {
-    const tags = await this.$axios.$get('/api/effect/tag_list/')
+    const tags = await this.$axios.$get('/api/effects/tag_list/', {
+      params: {
+        policy: context.state.policyIdx
+      }
+    })
     context.commit('setTags', tags)
   }
 }
