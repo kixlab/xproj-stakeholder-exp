@@ -77,7 +77,7 @@ export default {
     allFilled: function () {
       return (this.predictedEffect.source !== '' && this.predictedEffect.description !== '' &&
       this.predictedEffect.stakeholder_detail !== '' && this.predictedEffect.isBenefit !== -1 &&
-      this.predictedEffect.stakeholder_group !== 0)
+      this.selectedTags.length >= 2)
     },
     randomEffect: function () {
       return this.$store.state.randomEffect
