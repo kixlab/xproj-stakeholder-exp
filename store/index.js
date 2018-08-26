@@ -19,7 +19,6 @@ export const state = () => ({
   ],
   userPolicy: {
   },
-  predictedEffects: [],
   effects: [],
   myEffect: {},
   stakeholderGroupIdx: 0,
@@ -45,12 +44,6 @@ export const mutations = {
   },
   setPolicyIdx (state, payload) {
     state.policyIdx = payload.policyIdx
-  },
-  setPredictedEffects (state, payload) {
-    state.predictedEffects = payload
-  },
-  setMyEffect (state, payload) {
-    state.myEffect = payload
   },
   setEffects (state, payload) {
     state.effects = payload
