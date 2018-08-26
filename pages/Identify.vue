@@ -78,8 +78,6 @@ export default {
         identity: '',
         detail: ''
       }
-      // TODO: Do we need it?
-      // ANS : No, it will be removed. The model in vuex will be replaced instead.
     }
   }
 }

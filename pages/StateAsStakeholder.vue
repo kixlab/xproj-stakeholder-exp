@@ -14,10 +14,100 @@
         </p>
         </div>
 
-        <v-radio-group hide-details v-model="myEffect.stakeholder_group">
-          <v-radio v-for="sg in stakeholderGroups" :key="sg.name" :label="sg.name" :value="sg.id"></v-radio>
-          <v-radio label='기타' :value='-1'></v-radio>
-        </v-radio-group>
+      <v-combobox
+        v-model="model"
+        :filter="filter"
+        :hide-no-data="!search"
+        :items="items"
+        :search-input.sync="search"
+        hide-selected
+        label="태그를 검색하세요"
+        multiple
+        small-chips
+        solo
+      >
+        <template slot="no-data">
+          <v-list-tile>
+            <span class="subheading">새로 만들기</span>
+            <v-chip
+              color="blue lighten-3"
+              label
+              small
+            >
+              {{ search }}
+            </v-chip>
+          </v-list-tile>
+        </template>
+        <template
+          v-if="item === Object(item)"
+          slot="selection"
+          slot-scope="{ item, parent, selected }"
+        >
+          <v-chip
+            color="blue lighten-3"
+            :selected="selected"
+            label
+            small
+          >
+            <span class="pr-2">
+              {{ item.text }}
+            </span>
+            <v-icon
+              small
+              @click="parent.selectItem(item)"
+            >close</v-icon>
+          </v-chip>
+        </template>
+        <template
+          slot="item"
+          slot-scope="{ index, item, parent }"
+        >
+          <v-list-tile-content>
+            <v-text-field
+              v-if="editing === item"
+              v-model="editing.text"
+              autofocus
+              flat
+              background-color="transparent"
+              hide-details
+              solo
+              @keyup.enter="edit(index, item)"
+            ></v-text-field>
+            <v-chip
+              v-else
+              :color="`blue lighten-3`"
+              dark
+              label
+              small
+            >
+              {{ item.text }}
+            </v-chip>
+          </v-list-tile-content>
+          <v-spacer></v-spacer>
+          <v-list-tile-action @click.stop>
+            <v-btn
+              icon
+              @click.stop.prevent="edit(index, item)"
+            >
+              <v-icon>{{ editing !== item ? 'edit' : 'check' }}</v-icon>
+            </v-btn>
+          </v-list-tile-action>
+        </template>
+      </v-combobox>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <template v-if="myEffect.stakeholder_group == -1">
           <v-text-field
@@ -117,18 +207,65 @@ export default {
         source: 'stakeholder'
       },
       etc: '',
-      dictionary: {
-        attributes: {
-          asx: '이 '
-          // custom attributes
+
+      activator: null,
+      attach: null,
+      colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
+      editing: null,
+      index: -1,
+      items: [
+        { header: '태그를 선택하거나 새로 만들어주세요' },
+        { text: 'Foo' },
+        { text: 'Bar' }
+      ],
+      menu: false,
+      model: [],
+      x: 0,
+      search: null,
+      y: 0
+    }
+  },
+  watch: {
+    model (val, prev) {
+      if (val.length === prev.length) return
+
+      this.model = val.map(v => {
+        if (typeof v === 'string') {
+          v = {
+            text: v
+          }
+          this.items.push(v)
         }
-      }
+
+        return v
+      })
     }
   },
   mounted () {
     this.$validator.localize('ko', this.dictionary)
   },
   methods: {
+    edit (index, item) {
+      if (!this.editing) {
+        this.editing = item
+        this.index = index
+      } else {
+        this.editing = null
+        this.index = -1
+      }
+    },
+    filter (item, queryText, itemText) {
+      if (item.header) return false
+
+      const hasValue = val => val != null ? val : ''
+
+      const text = hasValue(itemText)
+      const query = hasValue(queryText)
+
+      return text.toString()
+        .toLowerCase()
+        .indexOf(query.toString().toLowerCase()) > -1
+    },
     addNewStakeholder: async function () {
       if (this.stakeholder_custom && this.stakeholder_custom.length > 0) {
         const newStakeholder = await this.$axios.$post('/api/stakeholdergroups/', {
