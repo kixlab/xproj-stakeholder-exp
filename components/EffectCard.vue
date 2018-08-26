@@ -195,7 +195,7 @@ export default {
       } finally {
         const result = await this.$axios.$get('/api/effects/', {
           params: {
-            policy: this.$store.state.policyIdx,
+            policy: this.$store.state.policyId,
             stakeholder_group: this.$store.getters.randomStakeholderGroup.id
           }
         })
@@ -225,7 +225,7 @@ export default {
       } finally {
         const result = await this.$axios.$get('/api/effects/', {
           params: {
-            policy: this.$store.state.policyIdx,
+            policy: this.$store.state.policyId,
             stakeholder_group: this.$store.getters.randomStakeholderGroup.id
           }
         })
@@ -256,7 +256,7 @@ export default {
       } finally {
         const result = await this.$axios.$get('/api/effects/', {
           params: {
-            policy: this.$store.state.policyIdx,
+            policy: this.$store.state.policyId,
             stakeholder_group: this.$store.getters.randomStakeholderGroup.id
           }
         })

@@ -296,7 +296,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'GiveUp',
-        eventLabel: `${this.$store.state.policyIdx}`,
+        eventLabel: `${this.$store.state.policyId}`,
         eventValue: 0
       })
       this.$router.push('/')
@@ -305,7 +305,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'SeeTutorial',
-        eventLabel: `${this.$store.state.policyIdx}`,
+        eventLabel: `${this.$store.state.policyId}`,
         eventValue: 0
       })
       this.$router.push('/Tutorial')

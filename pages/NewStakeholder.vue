@@ -15,12 +15,34 @@
         저희에게만 살짝 두 단계로 알려주세요!
         예를 들어, 그 사람이 '선생님'이라면 [대분류: '공무원', 소분류: '선생님']처럼 두 단계로 나누어 써주세요.
       </p>
-      <v-text-field
+      <!-- <v-text-field
       v-validate="'required'"
       v-model="stakeholder_custom"
       :error-messages="errors.collect('email')"       
       name="stakeholder_custom"
-      placeholder="대분류"/>
+      placeholder="대분류"/> -->
+      <v-combobox
+        v-model="selectedTags"
+        :items="tags"
+        item-text="name"
+        item-value="name"
+        label="선택해주세요"
+        :search-input.sync="search"
+        multiple
+        chips>
+        <template slot="no-data">
+          <v-list-tile>
+            <v-list-tile-content>
+              <v-chip color="blue lighten-3" label small>{{search}}</v-chip> 새로 만드시려면 엔터 키를 눌러주세요.
+            </v-list-tile-content>
+          </v-list-tile>
+        </template>
+        <template slot="item" slot-scope="{index, item, parent}">
+          <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
+          <v-spacer></v-spacer>
+          {{item.refs}}개
+        </template>
+      </v-combobox>
 
       <v-text-field
       v-validate="'required'"
@@ -80,11 +102,8 @@ export default {
     policy: function () {
       return this.$store.state.policy
     },
-    randomStakeholderGroup: function () {
-      return this.$store.getters.randomStakeholderGroup
-    },
-    stakeholderGroups: function () {
-      return this.$store.state.stakeholderGroups
+    tags: function () {
+      return this.$store.state.tags
     },
     userPolicy: function () {
       return this.$store.state.userPolicy
@@ -110,13 +129,14 @@ export default {
       if (!result) {
         return
       }
-      const newStakeholder = await this.$axios.$post('/api/stakeholdergroups/', {
-        policy: this.$store.state.policyIdx,
-        is_visible: false,
-        name: this.stakeholder_custom
-      })
-      this.predictedEffect.policy = this.$store.state.policyIdx
-      this.predictedEffect.stakeholder_group = newStakeholder.id
+      // const newStakeholder = await this.$axios.$post('/api/stakeholdergroups/', {
+      //   policy: this.$store.state.policyId,
+      //   is_visible: false,
+      //   name: this.stakeholder_custom
+      // })
+      this.predictedEffect.policy = this.$store.state.policyId
+      this.predictedEffect.tags = this.selectedTags.map((x) => { return x.name })
+      // this.predictedEffect.stakeholder_group = newStakeholder.id
       await this.$axios.$post('/api/effects/', this.predictedEffect)
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
@@ -125,16 +145,6 @@ export default {
         eventValue: 0
       })
       this.$router.push('/SelectStakeholder')
-    },
-    findStakeholderName: function (id) {
-      if (id === 0) {
-        return ''
-      }
-      for (let sg of this.stakeholderGroups) {
-        if (sg.id === id) {
-          return sg.name
-        }
-      }
     }
   },
   data: function () {
@@ -145,9 +155,11 @@ export default {
         stakeholder_detail: '',
         stakeholder_group: 0,
         description: '',
-        source: ''
+        source: '',
+        tags: []
       },
-      dialog: false
+      dialog: false,
+      selectedTags: []
     }
   }
 }

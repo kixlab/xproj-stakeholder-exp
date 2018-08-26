@@ -15,14 +15,27 @@
         </div>
 
       <v-combobox
-        v-model="myEffect.tags"
+        v-model="selectedTags"
         :items="tags"
         item-text="name"
         item-value="name"
         label="선택해주세요"
+        :search-input.sync="search"
         multiple
         chips>
 
+        <template slot="no-data">
+          <v-list-tile>
+            <v-list-tile-content>
+              <v-chip color="blue lighten-3" label small>{{search}}</v-chip> 새로 만드시려면 엔터 키를 눌러주세요.
+            </v-list-tile-content>
+          </v-list-tile>
+        </template>
+        <template slot="item" slot-scope="{index, item, parent}">
+          <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
+          <v-spacer></v-spacer>
+          {{item.refs}}개
+        </template>
       </v-combobox>
 
       <!-- <v-combobox
@@ -176,7 +189,7 @@ export default {
   // asyncData: async function ({app, store}) {
   //   let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
   //     params: {
-  //       policy: store.state.policyIdx
+  //       policy: store.state.policyId
   //     }
   //   })
   //   return {stakeholderGroups: stakeholderGroups.results}
@@ -187,7 +200,7 @@ export default {
   mixins: [setTokenMixin],
   computed: {
     policy: function () {
-      return this.$store.state.policies[this.$store.state.policyIdx - 1]
+      return this.$store.state.policies[this.$store.state.policyId - 1]
     },
     stakeholderGroups: function () {
       return this.$store.state.stakeholderGroups
@@ -218,7 +231,7 @@ export default {
         source: 'stakeholder'
       },
       etc: '',
-
+      selectedTags: [],
       activator: null,
       attach: null,
       colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
@@ -255,6 +268,34 @@ export default {
     this.$validator.localize('ko', this.dictionary)
   },
   methods: {
+    // addNewStakeholder: async function () {
+    //   if (this.stakeholder_custom && this.stakeholder_custom.length > 0) {
+    //     const newStakeholder = await this.$axios.$post('/api/stakeholdergroups/', {
+    //       policy: this.$store.state.policyId,
+    //       is_visible: false,
+    //       name: this.myEffect.stakeholder_custom
+    //     })
+    //     this.myEffect.stakeholder_group = newStakeholder.id
+    //   }
+    // },
+    addEffect: async function () {
+      const result = await this.$validator.validateAll()
+      this.myEffect.tags = this.selectedTags.map((x) => { return x.name })
+      if (result) {
+        // await this.addNewStakeholder()
+        this.myEffect.policy = this.$store.state.policyId
+        this.$store.commit('setMyEffect', this.myEffect)
+        this.$axios.$post('/api/effects/', this.myEffect)
+        this.$ga.event({
+          eventCategory: '/StateAsStakeholder',
+          eventAction: 'AddEffect',
+          eventLabel: this.myEffect.stakeholder_detail,
+          eventValue: 0
+        })
+        this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
+        this.$router.push('/GuessEffectRandom')
+      }
+    }
     // edit (index, item) {
     //   if (!this.editing) {
     //     this.editing = item
@@ -276,33 +317,6 @@ export default {
     //     .toLowerCase()
     //     .indexOf(query.toString().toLowerCase()) > -1
     // },
-    addNewStakeholder: async function () {
-      if (this.stakeholder_custom && this.stakeholder_custom.length > 0) {
-        const newStakeholder = await this.$axios.$post('/api/stakeholdergroups/', {
-          policy: this.$store.state.policyIdx,
-          is_visible: false,
-          name: this.myEffect.stakeholder_custom
-        })
-        this.myEffect.stakeholder_group = newStakeholder.id
-      }
-    },
-    addEffect: async function () {
-      const result = await this.$validator.validateAll()
-      if (result) {
-        await this.addNewStakeholder()
-        this.myEffect.policy = this.$store.state.policyIdx
-        this.$store.commit('setMyEffect', this.myEffect)
-        this.$axios.$post('/api/effects/', this.myEffect)
-        this.$ga.event({
-          eventCategory: '/StateAsStakeholder',
-          eventAction: 'AddEffect',
-          eventLabel: this.myEffect.stakeholder_detail,
-          eventValue: 0
-        })
-        this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
-        this.$router.push('/GuessEffect')
-      }
-    }
   }
 }
 </script>

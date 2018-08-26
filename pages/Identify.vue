@@ -43,7 +43,7 @@ export default {
   fetch: async function ({app, store, params}) {
     // let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
     //   params: {
-    //     policy: store.state.policyIdx
+    //     policy: store.state.policyId
     //   }
     // })
     // store.commit('setStakeholderGroups', stakeholderGroups.results)

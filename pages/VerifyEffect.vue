@@ -3,7 +3,9 @@
     <promise-pane :policy="policy"></promise-pane>
     <v-flex xs12>
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{randomStakeholderGroup.name}}</strong>에게<br>
+        <v-chip v-for="tag in randomEffect.tags" :key="tag">{{tag}}</v-chip> <br>
+        <br>
+        이 정책이 <strong class="red--text">{{randomEffect.stakeholder_detail}}</strong>에게<br>
         끼치는 영향을 보여드릴게요!
       </p>
 
@@ -95,10 +97,10 @@ import setTokenMixin from '~/mixins/setToken.js'
 export default {
   // Verify the guessed effect
   fetch: async function ({app, store}) {
-    let effects = await app.$axios.$get('/api/effects/', {
+    const effects = await app.$axios.$get('/api/effects/', {
       params: {
-        policy: store.state.policyIdx,
-        stakeholder_group: store.getters.randomStakeholderGroup.id
+        policy: store.state.policyId,
+        tag: store.state.randomEffect.tags
         // get_stakeholder_names: true
       }
     })
@@ -107,18 +109,18 @@ export default {
   },
   mixins: [setTokenMixin],
   computed: {
-    randomStakeholderGroup: function () {
-      return this.$store.getters.randomStakeholderGroup
-    },
     effects: function () {
       return this.$store.state.effects
     },
     policy: function () {
-      return this.$store.state.policies[this.$store.state.policyIdx - 1]
+      return this.$store.state.policies[this.$store.state.policyId - 1]
     },
     answer_left: function () {
       // console.log(this.$store.state.userPolicy)
       return 3 - this.$store.state.userPolicy.stakeholders_answered
+    },
+    randomEffect: function () {
+      return this.$store.state.randomEffect
     }
   },
   components: {
@@ -128,9 +130,9 @@ export default {
   methods: {
     onExploreOpinionsClick: function () {
       this.$ga.event({
-        eventCategory: '/VerifyEffect',
+        eventCategory: this.$router.currentRoute.path,
         eventAction: 'ToExploreOpinions',
-        eventLabel: this.randomStakeholderGroup.name,
+        eventLabel: this.randomEffect.id,
         eventValue: 0
       })
       this.$router.push('/SelectStakeholder')
@@ -138,12 +140,12 @@ export default {
     },
     onPredictMoreClick: function () {
       this.$ga.event({
-        eventCategory: '/VerifyEffect',
+        eventCategory: this.$router.currentRoute.path,
         eventAction: 'ToPredictMore',
-        eventLabel: this.randomStakeholderGroup.name,
+        eventLabel: this.randomEffect.id,
         eventValue: 0
       })
-      this.$router.push('/GuessEffect')
+      this.$router.push('/GuessEffectRandom')
       this.dialog = false
     }
   },

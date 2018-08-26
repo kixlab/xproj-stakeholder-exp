@@ -101,7 +101,7 @@ export default {
         eventLabel: policy.title,
         eventValue: 0
       })
-      this.$store.commit('setPolicyIdx', {policyIdx: policy.id})
+      this.$store.commit('setPolicyId', {policyId: policy.id})
       this.$store.commit('setPolicy', policy)
       if (this.$store.state.userToken && (this.$store.state.user.step < 3)) {
         // const userpolicy = await this.$axios.$get('/api/userpolicy/', {
@@ -149,7 +149,7 @@ export default {
       } else if (this.userStep === 2) {
         return 1 + (this.userGroup % 2) !== policyID
       } else {
-        return true
+        return false
       }
     },
     postSurvey: function () {
