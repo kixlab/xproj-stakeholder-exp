@@ -32,7 +32,8 @@ export const state = () => ({
     is_participant: true
   },
   selectedStakeholder: '',
-  isLookingAround: false
+  isLookingAround: false,
+  tags: []
 })
 
 export const mutations = {
@@ -143,6 +144,9 @@ export const mutations = {
     })
     const idx = effect.novelty.indexOf(state.user.pk)
     effect.novelty.splice(idx, 1)
+  },
+  setTags (state, payload) {
+    state.tags = payload
   }
 }
 
@@ -230,5 +234,9 @@ export const actions = {
         presurvey_done: user.presurvey_done
       })
     }
+  },
+  async setTags (context) {
+    const tags = await this.$axios.$get('/api/effect/tag_list/')
+    context.commit('setTags', tags)
   }
 }
