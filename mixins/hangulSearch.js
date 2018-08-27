@@ -66,7 +66,7 @@ export default {
         } else if ((prev === true) && !cur.name) {
           if (cur.length <= 2) {
             return '태그 길이가 너무 짧습니다.'
-          } else if (cur.length > 7) {
+          } else if (cur.length > 10) {
             return '태그 길이가 너무 깁니다.'
           } else {
             return true

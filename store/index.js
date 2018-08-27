@@ -19,7 +19,7 @@ export const state = () => ({
   randomEffect: {},
   usedEffect: [],
   selectedTag: null,
-  browsedTag: [],
+  browsedTags: [],
   explorationDone: false
 })
 
@@ -125,15 +125,18 @@ export const mutations = {
     state.usedEffect.push(effectId)
   },
   setSelectedTag (state, tag) {
-    if (state.browsedTag.indexOf(tag) === -1) {
-      state.browsedTag.push(tag)
+    if (state.browsedTags.indexOf(tag) === -1) {
+      state.browsedTags.push(tag)
     }
     state.selectedTag = tag
   },
   addBrowsedTag (state, tag) {
-    if (state.browsedTag.indexOf(tag) === -1) {
-      state.browsedTag.push(tag)
+    if (state.browsedTags.indexOf(tag) === -1) {
+      state.browsedTags.push(tag)
     }
+  },
+  clearBrowsedTags (state) {
+    state.browsedTags = []
   }
 }
 
@@ -245,8 +248,9 @@ export const actions = {
     context.commit('addUsedEffect', randomEffect.id)
     context.commit('setRandomEffect', randomEffect)
   },
-  async addBrowsedTag (context, tags) {
+  async addBrowsedTags (context, tags) {
     tags.forEach((tag) => { context.commit('addBrowsedTag', tag) })
+    console.log(context.state.browsedTags.length)
     context.dispatch('setUserPolicyEffectsSeen', context.state.browsedTags.length)
     // TODO: put this on DB
   },

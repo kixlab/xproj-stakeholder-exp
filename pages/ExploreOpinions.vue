@@ -169,7 +169,7 @@ export default {
       effects: effects.results
     }
   },
-  mounted: function () {
+  created: function () {
     this.onInputDebounced = _.debounce(this.onInput, 1000)
     // if(this.$store.state.selectedTag){
     //   this.onInput([this.$store.state.selectedTag])
@@ -297,13 +297,13 @@ export default {
         eventLabel: this.selectedTags,
         eventValue: 0
       })
+      this.$store.dispatch('addBrowsedTags', this.selectedTags)
       const effects = await this.$axios.$get('/api/effects/', {
         params: {
           policy: this.policy.id,
           tag: this.selectedTags
         }
       })
-      this.$store.dispatch('addBrowsedTags', ev)
       // this.$store.dispatch('incrementUserPolicyEffectsSeen')
       this.effects = effects.results
       this.count = effects.count

@@ -15,7 +15,7 @@
         의 입장에서 생각해주세요!
       </p>
       <br>
-      <p class="question">
+      <!-- <p class="question">
       여러분은 <strong>{{randomEffect.stakeholder_detail}}</strong>(이)가 주인공인 소설을 쓰고 있습니다.
       여러분이 정한 주인공을 머릿 속에서 <strong>더욱 자세히 상상</strong>해보세요!
       예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
@@ -23,7 +23,7 @@
       이제 여러분만의 주인공을 간단히 설명해주시겠어요?
       </p>
       <v-text-field v-model="predictedEffect.stakeholder_detail" placeholder="여기에 설명해주세요!" />
-      
+       -->
       <p class="question">그럼 그 사람은 이 정책으로 어떤 영향을 받게 될까요?</p>
       <v-textarea box auto-grow v-model="predictedEffect.description"/>
 
@@ -75,9 +75,7 @@ export default {
       return this.$store.state.userPolicy
     },
     allFilled: function () {
-      return (this.predictedEffect.source !== '' && this.predictedEffect.description !== '' &&
-      this.predictedEffect.stakeholder_detail !== '' && this.predictedEffect.isBenefit !== -1 &&
-      this.selectedTags.length >= 2)
+      return (this.predictedEffect.source !== '' && this.predictedEffect.description !== '' && this.predictedEffect.isBenefit !== -1)
     },
     randomEffect: function () {
       return this.$store.state.randomEffect
@@ -88,6 +86,7 @@ export default {
       this.predictedEffect.policy = this.$store.state.policyId
       this.predictedEffect.stakeholder_group = 1
       this.predictedEffect.tags = this.randomEffect.tags
+
       this.$axios.$post('/api/effects/', this.predictedEffect)
       // TODO: record user activity
       this.$ga.event({
@@ -104,8 +103,8 @@ export default {
     return {
       predictedEffect: {
         isBenefit: -1,
-        stakeholder_detail: '',
-        stakeholder_group: '0',
+        stakeholder_detail: '밍',
+        stakeholder_group: 1,
         description: '',
         source: ''
       }

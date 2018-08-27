@@ -219,12 +219,7 @@ export default {
       return this.$store.state.policy
     },
     allFilled: function () {
-      if (this.myEffect.stakeholder_group === -1) {
-        return (this.myEffect.description !== '' && this.myEffect.isBenefit !== -1 &&
-        this.myEffect.stakeholder_detail !== '')
-      }
-      return (this.myEffect.description !== '' && this.myEffect.isBenefit !== -1 &&
-      this.myEffect.stakeholder_detail !== '' && this.selectedTags.length >= 2)
+      return (this.myEffect.description !== '' && this.myEffect.isBenefit !== -1 && this.selectedTags.length >= 2)
     },
     tags: function () {
       return this.$store.state.tags

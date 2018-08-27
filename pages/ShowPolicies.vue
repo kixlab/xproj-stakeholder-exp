@@ -130,6 +130,7 @@ export default {
         } else {
           this.$store.commit('setUserPolicy', this.userpolicies[upIdx])
         }
+        this.$store.commit('clearBrowsedTags')
         if (!this.$store.state.user.is_participant) {
           this.$router.push('/Identify')
         } else if (this.$store.state.user.is_participant && (this.$store.state.user.step < 3)) {

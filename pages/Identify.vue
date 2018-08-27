@@ -47,7 +47,7 @@ export default {
     //   }
     // })
     // store.commit('setStakeholderGroups', stakeholderGroups.results)
-    // store.dispatch('setTags')
+    store.dispatch('setTags')
   },
   mixins: [setTokenMixin],
   components: {
