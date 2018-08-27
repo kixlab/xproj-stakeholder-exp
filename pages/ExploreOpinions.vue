@@ -3,7 +3,10 @@
     <promise-pane :policy="policy" />
     <v-flex xs12>
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{selectedTags}}</strong>에게<br>
+        이 정책이 
+        <!-- <strong class="red--text">{{selectedTags}}</strong> -->
+        <v-chip v-for="tag in selectedTags" :key="tag">{{tag}}</v-chip>
+        에게<br>
         끼칠 수 있는 영향을 보여드릴게요!
         <!--TODO: Disclaimer -->
       </p>
@@ -56,13 +59,13 @@
           :length="pagenum"/>
       </v-flex>
       
-      <v-btn 
+      <!-- <v-btn 
         v-if = "active_button"
         color = "success"
         @click="onNextButtonClick"
         block ripple>
         다른 이해당사자의 목소리도 살펴보세요!
-      </v-btn>
+      </v-btn> -->
       <v-btn
         :disabled="!$store.state.userToken"
         color="success"
@@ -167,6 +170,7 @@ export default {
   },
   mounted: function () {
     this.onInputDebounced = _.debounce(this.onInput, 1000)
+    this.onInput([this.$store.state.selectedTag])
   },
   mixins: [setTokenMixin, hangulSearchMixin],
   components: {
@@ -215,7 +219,7 @@ export default {
   methods: {
     onNextButtonClick: function () {
       this.$ga.event({
-        eventCategory: '/ExploreOpinions',
+        eventCategory: this.$router.currentRoute.path,
         eventAction: 'SeeMoreEffects',
         eventLabel: this.stakeholderName,
         eventValue: 0
@@ -224,7 +228,7 @@ export default {
     },
     onEndButtonClick: function () {
       this.$ga.event({
-        eventCategory: '/ExploreOpinions',
+        eventCategory: this.$router.currentRoute.path,
         eventAction: 'ClickEndButton',
         eventLabel: this.stakeholderName,
         eventValue: 0
@@ -237,12 +241,12 @@ export default {
     },
     onPostNewEffectButtonClick: function () {
       this.$ga.event({
-        eventCategory: '/ExploreOpinions',
-        eventAction: 'AddNewEffect',
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'AddNewStakeholder',
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
-      this.$router.push('/AddNewEffect')
+      this.$router.push('/NewStakeholder')
     },
     onNoveltyButtonClick: function (effect) {
 
@@ -281,6 +285,12 @@ export default {
     },
     onInput: async function (ev) {
       this.selectedTags = ev
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'SearchTags',
+        eventLabel: this.selectedTags,
+        eventValue: 0
+      })
       const effects = await this.$axios.$get('/api/effects/', {
         params: {
           policy: this.policy.id,
@@ -292,6 +302,12 @@ export default {
       this.page = 1
     },
     onPageChange: async function (newPage) {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'PageChange',
+        eventLabel: `${this.newPage} / ${this.pagenum}`,
+        eventValue: 0
+      })
       const effects = await this.$axios.$get('/api/effects/', {
         params: {
           policy: this.policy.id,

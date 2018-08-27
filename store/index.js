@@ -17,7 +17,8 @@ export const state = () => ({
   isLookingAround: false,
   tags: [],
   randomEffect: {},
-  usedEffect: []
+  usedEffect: [],
+  selectedTag: null
 })
 
 export const mutations = {
@@ -120,6 +121,9 @@ export const mutations = {
   },
   addUsedEffect (state, effectId) {
     state.usedEffect.push(effectId)
+  },
+  setSelectedTag (state, tag) {
+    state.selectedTag = tag
   }
 }
 

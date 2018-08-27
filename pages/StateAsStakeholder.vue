@@ -25,6 +25,8 @@
         multiple
         hide-selected
         chips
+        validate-on-blur
+        v-validate="'required|max:10|min:2'"
         @input="onInput">
 
         <template slot="no-data">
@@ -333,6 +335,15 @@ export default {
       })
       // 출처: http://bemeal2.tistory.com/67 [취생몽사]
       return newSearchString
+    },
+    validateInput: function (str) {
+      if (str.length <= 2) {
+        return '태그 길이가 너무 짧습니다.'
+      } else if (str.length > 7) {
+        return '태그 길이가 너무 깁니다.'
+      } else {
+        return true
+      }
     },
     onInput (ev) {
       console.log(ev)
