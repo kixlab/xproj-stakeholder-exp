@@ -53,6 +53,26 @@ export default {
       return text.toString()
         .toLowerCase()
         .indexOf(query.toString().toLowerCase()) > -1
+    },
+    validateInput: function (input) {
+      if (input.length < 2) {
+        return '태그의 숫자가 너무 적습니다'
+      }
+      return input.reduce((prev, cur) => {
+        if (prev !== true) {
+          return prev
+        } else if ((prev === true) && cur.name) {
+          return true
+        } else if ((prev === true) && !cur.name) {
+          if (cur.length <= 2) {
+            return '태그 길이가 너무 짧습니다.'
+          } else if (cur.length > 7) {
+            return '태그 길이가 너무 깁니다.'
+          } else {
+            return true
+          }
+        }
+      }, true)
     }
   }
 }

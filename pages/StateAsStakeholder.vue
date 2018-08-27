@@ -25,8 +25,9 @@
         multiple
         hide-selected
         chips
+        :rules="[validateInput]"
+        textarea
         validate-on-blur
-        v-validate="'required|max:10|min:2'"
         @input="onInput">
 
         <template slot="no-data">
@@ -159,7 +160,7 @@
           <!-- <p class="body-1 prompt">
           <strong>{{findStakeholderName(myEffect.stakeholder_group)}}</strong>(이)셨군요!<br>
           </p> -->
-          <p class="question">
+          <!-- <p class="question">
           혹시 본인에 대해 조금만 더 자세히 설명해주시겠어요? 예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
           장소, 직장, 연령 등을 고려하여 더 구체적으로 적어주세요.
           </p>
@@ -167,10 +168,13 @@
           v-validate="'required'"
           v-model="myEffect.stakeholder_detail"
           :error-messages="errors.collect('asx')"       
-          name="stakeholder_detail" />
+          name="stakeholder_detail" /> -->
 
         <p class="body-1 prompt question">
-          <strong>{{myEffect.stakeholder_detail}}</strong>(으)로서 이 정책이 실현된다면 어떤 영향을 받으시나요?
+          <v-chip v-for="tag in selectedTags" :key="tag">
+            {{tag}}
+          </v-chip>
+          (으)로서 이 정책이 실현된다면 어떤 영향을 받으시나요?
         </p>
         
         <v-textarea box auto-grow v-model="myEffect.description"/>
@@ -193,7 +197,7 @@
   </v-layout>
 </template>
 <script>
-import _ from 'lodash'
+// import _ from 'lodash'
 import PromisePane from '~/components/PromisePane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
 import hangulSearchMixin from '~/mixins/hangulSearch.js'
@@ -281,7 +285,7 @@ export default {
   // },
   mounted () {
     this.$validator.localize('ko', this.dictionary)
-    this.debouncedNumToHangul = _.debounce(this.numToHangul, 500)
+    // this.debouncedNumToHangul = _.debounce(this.numToHangul, 500)
   },
   methods: {
     // addNewStakeholder: async function () {
@@ -295,6 +299,9 @@ export default {
     //   }
     // },
     numToHangul: function (search) {
+      if (search.name) {
+        return search.name
+      }
       const arrNumberWord = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구']
       // 10,  100,  100 자리수 한글 표시
       const arrDigitWord = ['', '십', '백', '천']
@@ -335,15 +342,6 @@ export default {
       })
       // 출처: http://bemeal2.tistory.com/67 [취생몽사]
       return newSearchString
-    },
-    validateInput: function (str) {
-      if (str.length <= 2) {
-        return '태그 길이가 너무 짧습니다.'
-      } else if (str.length > 7) {
-        return '태그 길이가 너무 깁니다.'
-      } else {
-        return true
-      }
     },
     onInput (ev) {
       console.log(ev)

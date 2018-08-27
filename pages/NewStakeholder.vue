@@ -33,14 +33,21 @@
     <v-flex xs8>
       새로운 이해당사자를 설명해주세요.
       <v-combobox
-        v-model="selectedTags"
+        :value="selectedTags"
         :items="tags"
-        item-text="name"
-        item-value="name"
+        :item-text="'name'"
+        :item-value="'name'"
         :search-input.sync="search"
+        :filter="filter"
         multiple
-        chips>
-                <!-- label="새로운 이해당사자를 설명해주세요." -->
+        hide-selected
+        chips
+        validate-on-blur
+        v-validate="'required|max:10|min:2'"
+        :allow-overflow="false"
+        textarea
+        :rules="[validateInput]"
+        @input="onInput">
 
         <template slot="no-data">
           <v-list-tile>
@@ -49,10 +56,16 @@
             </v-list-tile-content>
           </v-list-tile>
         </template>
-        <template slot="item" slot-scope="{index, item, parent}">
+        <template slot="item" slot-scope="{ index, item, parent }">
           <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
           <v-spacer></v-spacer>
           {{item.refs}}개
+        </template>
+        <template slot="selection" slot-scope="{ item, parent, selected }">
+          <v-chip :selected="selected" label small>
+            <span class="pr-2"> {{item.name ? item.name : item}} </span>
+            <v-icon small @click="parent.selectItem(item)">close</v-icon>
+          </v-chip>
         </template>
       </v-combobox>
 
@@ -181,9 +194,8 @@ export default {
       return this.$store.state.userPolicy
     },
     allFilled: function () {
-      return (this.stakeholder_custom !== '' && this.predictedEffect.description !== '' &&
-      this.predictedEffect.stakeholder_detail !== '' && this.predictedEffect.isBenefit !== -1 &&
-      this.predictedEffect.source !== '')
+      return (this.selectedTags.length >= 2 && this.predictedEffect.description !== '' &&
+      this.predictedEffect.isBenefit !== -1 && this.predictedEffect.source !== '')
     }
   },
   methods: {
@@ -206,8 +218,10 @@ export default {
       //   is_visible: false,
       //   name: this.stakeholder_custom
       // })
+      this.predictedEffect.stakeholder_group = 1
       this.predictedEffect.policy = this.$store.state.policyId
-      this.predictedEffect.tags = this.selectedTags.map((x) => { return x.name })
+      this.predictedEffect.tags = this.selectedTags.map((x) => { return x.name ? x.name : x })
+      this.predictedEffect.stakeholder_detail = this.selectedTags[0]
       // this.predictedEffect.stakeholder_group = newStakeholder.id
       await this.$axios.$post('/api/effects/', this.predictedEffect)
       this.$ga.event({
@@ -224,7 +238,7 @@ export default {
       stakeholder_custom: '',
       predictedEffect: {
         isBenefit: 0,
-        stakeholder_detail: '',
+        stakeholder_detail: ' ',
         stakeholder_group: 0,
         description: '',
         source: '',

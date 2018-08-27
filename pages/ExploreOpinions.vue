@@ -157,7 +157,8 @@ export default {
     const effects = await app.$axios.$get('/api/effects/', {
       params: {
         policy: store.state.policyId,
-        page_size: 5
+        page_size: 5,
+        'tag[]': store.state.selectedTag
       }
     })
     // store.commit('setEffects', effects.results)
@@ -170,7 +171,10 @@ export default {
   },
   mounted: function () {
     this.onInputDebounced = _.debounce(this.onInput, 1000)
-    this.onInput([this.$store.state.selectedTag])
+    // if(this.$store.state.selectedTag){
+    //   this.onInput([this.$store.state.selectedTag])
+    // }
+    this.selectedTags.push(this.$store.state.selectedTag)
   },
   mixins: [setTokenMixin, hangulSearchMixin],
   components: {
