@@ -89,7 +89,7 @@ export default {
           return '/MiniSurvey'
         case 3:
         case 4:
-          return '/SelectStakeholder'
+          return '/TagOverview'
         case 5:
         case 0:
         case -1:

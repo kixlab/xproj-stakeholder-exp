@@ -5,11 +5,16 @@
     <v-flex xs12>
       <h1>수고 많으셨습니다!</h1>
       이제 마지막입니다.
+      <br>
       사용 후 설문조사를 완료하시면 7,500원 상당의 기프티콘을 드립니다.
-    </v-flex>
-    <strong style="color:red;"> (주의) 이 설문에 참여하셔야 보상을 받을 수 있습니다. </strong>
-    <v-btn block color="primary" @click="onSurveyLinkClick">설문조사 하러 가기</v-btn>
+      <br>
+      <br>
+      <strong style="color:red;"> (주의) 이 설문에 참여하셔야 보상을 받을 수 있습니다. </strong>
 
+      <v-btn block color="primary" @click="onSurveyLinkClick">설문조사 하러 가기</v-btn>
+
+    </v-flex>
+    
     <v-flex xs12 v-if="isSurveyClicked">
       <v-divider/>
       <br>

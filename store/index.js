@@ -1,27 +1,11 @@
-// import { isContext } from 'vm'
-function shuffle (a) {
-  let j, x, i
-  for (i = a.length - 1; i > 0; i--) {
-    j = Math.floor(Math.random() * (i + 1))
-    x = a[i]
-    a[i] = a[j]
-    a[j] = x
-  }
-  return a
-}
-
 export const state = () => ({
   sidebar: false,
-  policyIdx: 1,
+  policyId: 1,
   policies: [
-  ],
-  stakeholderGroups: [
   ],
   userPolicy: {
   },
   effects: [],
-  myEffect: {},
-  stakeholderGroupIdx: 0,
   userToken: null,
   user: {
     email: 'abcdef@kaist.ac.kr',
@@ -30,9 +14,13 @@ export const state = () => ({
     step: 1,
     is_participant: true
   },
-  selectedStakeholder: '',
   isLookingAround: false,
-  tags: []
+  tags: [],
+  randomEffect: {},
+  usedEffect: [],
+  selectedTag: null,
+  browsedTags: [],
+  explorationDone: false
 })
 
 export const mutations = {
@@ -42,22 +30,11 @@ export const mutations = {
   setPolicy (state, payload) {
     state.policy = payload
   },
-  setPolicyIdx (state, payload) {
-    state.policyIdx = payload.policyIdx
+  setPolicyId (state, payload) {
+    state.policyId = payload.policyId
   },
   setEffects (state, payload) {
     state.effects = payload
-  },
-  setStakeholderGroups (state, payload) {
-    state.stakeholderGroups = shuffle(payload)
-  },
-  setRandomStakeholderGroup (state) {
-    let stakeholderLength = state.stakeholderGroups.length
-    let randomNumber = Math.floor(Math.random() * stakeholderLength)
-    state.stakeholderGroupIdx = state.stakeholderGroups[randomNumber].id
-  },
-  setStakeholderGroupIdx (state, idx) {
-    state.stakeholderGroupIdx = idx
   },
   setUserToken (state, payload) {
     state.isLookingAround = false
@@ -140,18 +117,34 @@ export const mutations = {
   },
   setTags (state, payload) {
     state.tags = payload
+  },
+  setRandomEffect (state, randomEffect) {
+    state.randomEffect = randomEffect
+  },
+  addUsedEffect (state, effectId) {
+    state.usedEffect.push(effectId)
+  },
+  setSelectedTag (state, tag) {
+    if (state.browsedTags.indexOf(tag) === -1) {
+      state.browsedTags.push(tag)
+    }
+    state.selectedTag = tag
+  },
+  addBrowsedTag (state, tag) {
+    if (state.browsedTags.indexOf(tag) === -1) {
+      state.browsedTags.push(tag)
+    }
+  },
+  clearBrowsedTags (state) {
+    state.browsedTags = []
   }
 }
 
 export const getters = {
-  randomStakeholderGroup (state) {
-    return state.stakeholderGroups.find((sg) => {
-      return sg.id === state.stakeholderGroupIdx
-    })
-  },
   experimentCondition (state) {
     // return ((state.user.pk % 4) + 3) % 6
-    return state.user.pk % 6
+    // return state.user.pk % 6
+    return 0
   },
   isLookingAround (state) {
     return !state.userToken
@@ -204,6 +197,15 @@ export const actions = {
       await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
     }
   },
+  async setUserPolicyEffectsSeen (context, num) {
+    if (context.state.userToken) {
+      const userpolicyId = context.state.userPolicy.id
+      const userPolicy = Object.assign({}, context.state.userPolicy)
+      userPolicy.effects_seen = num
+      context.commit('setUserPolicy', userPolicy)
+      await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    }
+  },
   async incrementUserStep (context) {
     context.commit('setNextstep')
     if (context.state.userToken) {
@@ -231,9 +233,30 @@ export const actions = {
   async setTags (context) {
     const tags = await this.$axios.$get('/api/effects/tag_list/', {
       params: {
-        policy: context.state.policyIdx
+        policy: context.state.policyId
       }
     })
     context.commit('setTags', tags)
+  },
+  async fetchRandomEffect (context) {
+    const randomEffect = await this.$axios.$get('/api/effects/random/', {
+      params: {
+        policy: context.state.policyId,
+        exclude: context.state.usedEffect
+      }
+    })
+    context.commit('addUsedEffect', randomEffect.id)
+    context.commit('setRandomEffect', randomEffect)
+  },
+  async addBrowsedTags (context, tags) {
+    tags.forEach((tag) => { context.commit('addBrowsedTag', tag) })
+    console.log(context.state.browsedTags.length)
+    context.dispatch('setUserPolicyEffectsSeen', context.state.browsedTags.length)
+    // TODO: put this on DB
+  },
+  async startExploration (context) {
+    setTimeout(() => {
+      context.explorationDone = true
+    }, 120000)
   }
 }

@@ -53,10 +53,10 @@
         </v-list-tile-action>
       </v-list-tile>
       <v-list-tile>
-        <v-list-tile-title>(영향 읽기) 이해당사자 수</v-list-tile-title>
+        <v-list-tile-title>(영향 읽기) 태그 수</v-list-tile-title>
         <v-list-tile-action>
-          <span v-if="stakeholders_seen>=stakeholders_seen_min" style="color:blue;">{{stakeholders_seen}} / {{stakeholders_seen_min}}</span>
-          <span v-else style="color:red;">{{stakeholders_seen}} / {{stakeholders_seen_min}}</span>
+          <span v-if="effects_seen>=effects_seen_min" style="color:blue;">{{effects_seen}} / {{effects_seen_min}}</span>
+          <span v-else style="color:red;">{{effects_seen}} / {{effects_seen_min}}</span>
         </v-list-tile-action>
       </v-list-tile>
     </v-list-group>
@@ -296,7 +296,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'GiveUp',
-        eventLabel: `${this.$store.state.policyIdx}`,
+        eventLabel: `${this.$store.state.policyId}`,
         eventValue: 0
       })
       this.$router.push('/')
@@ -305,7 +305,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'SeeTutorial',
-        eventLabel: `${this.$store.state.policyIdx}`,
+        eventLabel: `${this.$store.state.policyId}`,
         eventValue: 0
       })
       this.$router.push('/Tutorial')

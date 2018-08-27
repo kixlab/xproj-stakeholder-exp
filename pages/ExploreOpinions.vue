@@ -12,94 +12,48 @@
 
       <p class="body-1">
         * <strong class="red--text">거짓 정보</strong>를 바탕으로 한 내용은 신고해주세요!
+        <!-- <strong class="red--text">{{selectedTags}}</strong> -->
         <!--TODO: Disclaimer -->
       </p>
+
       <v-divider/>
       <v-flex xs12 row wrap>
         <v-expansion-panel popout>
           <v-expansion-panel-content>
             <div slot="header">정렬/필터</div>
             <v-card>
-            <v-combobox
-              v-model="model"
-              :filter="filter"
-              :hide-no-data="!search"
-              :items="items"
+            <v-autocomplete
+              :value="selectedTags"
+              :items="tags"
+              item-text="name"
+              item-value="name"
+              label="선택해주세요"
               :search-input.sync="search"
-              hide-selected
-              label="태그를 검색하세요"
+              :filter="filter"
               multiple
-              small-chips
-              solo
-            >
+              hide-selected
+              chips
+              @input="onInputDebounced">
+
               <template slot="no-data">
                 <v-list-tile>
-                  <span class="subheading">새로 만들기</span>
-                  <v-chip
-                    color="blue lighten-3"
-                    label
-                    small
-                  >
-                    {{ search }}
-                  </v-chip>
+                  <v-list-tile-content>
+                    입력하신 태그가 없습니다.
+                  </v-list-tile-content>
                 </v-list-tile>
               </template>
-              <template
-                v-if="item === Object(item)"
-                slot="selection"
-                slot-scope="{ item, parent, selected }"
-              >
-                <v-chip
-                  color="blue lighten-3"
-                  :selected="selected"
-                  label
-                  small
-                >
-                  <span class="pr-2">
-                    {{ item.text }}
-                  </span>
-                  <v-icon
-                    small
-                    @click="parent.selectItem(item)"
-                  >close</v-icon>
+              <template slot="item" slot-scope="{ index, item, parent }">
+                <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
+                <v-spacer></v-spacer>
+                {{item.refs}}개
+              </template>
+              <template slot="selection" slot-scope="{ item, parent, selected }">
+                <v-chip :selected="selected" label small>
+                  <span class="pr-2"> {{item.name}} </span>
+                  <v-icon small @click="parent.selectItem(item)">close</v-icon>
                 </v-chip>
               </template>
-              <template
-                slot="item"
-                slot-scope="{ index, item, parent }"
-              >
-                <v-list-tile-content>
-                  <v-text-field
-                    v-if="editing === item"
-                    v-model="editing.text"
-                    autofocus
-                    flat
-                    background-color="transparent"
-                    hide-details
-                    solo
-                    @keyup.enter="edit(index, item)"
-                  ></v-text-field>
-                  <v-chip
-                    v-else
-                    :color="`blue lighten-3`"
-                    dark
-                    label
-                    small
-                  >
-                    {{ item.text }}
-                  </v-chip>
-                </v-list-tile-content>
-                <v-spacer></v-spacer>
-                <v-list-tile-action @click.stop>
-                  <v-btn
-                    icon
-                    @click.stop.prevent="edit(index, item)"
-                  >
-                    <v-icon>{{ editing !== item ? 'edit' : 'check' }}</v-icon>
-                  </v-btn>
-                </v-list-tile-action>
-              </template>
-            </v-combobox>    
+            </v-autocomplete>   
 
 
 
@@ -113,18 +67,21 @@
 
       </v-flex>
       <v-flex xs12 sm6 offset-sm3>
-        <v-flex v-for="i in cardnum(page)" :key="i">
+        <!-- <v-flex v-for="i in cardnum(page)" :key="i"> -->
           <effect-card
-            :effect="effects[i+5*(page-1)-1]"
+            v-for="effect in effects"
+            :key="effect.id"
+            :effect="effect"
             @empathy-button-click="onEmpathyButtonClick(effect)"
             @novelty-button-click="onNoveltyButtonClick(effect)"/>
-        </v-flex>
+        <!-- </v-flex> -->
         <v-pagination
-          v-model="page"
+          :value="page"
+          @input="onPageChange"
           :length="pagenum"/>
       </v-flex>
       
-<!--       <v-btn 
+      <!-- <v-btn 
         v-if = "active_button"
         color = "success"
         @click="onNextButtonClick"
@@ -169,8 +126,8 @@
         <v-card-text>
           현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
           <strong>3개 그룹</strong>의 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
-          <template v-if="stakeholder_left!=0">
-          귀하는 <strong><font size="4">{{stakeholder_left}}개 그룹을</font></strong> 더 살펴보셔야 합니다.<br>
+          <template v-if="effect_left!=0">
+          귀하는 <strong><font size="4">{{effect_left}}개 태그를</font></strong> 더 살펴보셔야 합니다.<br>
           아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
           <br><br>
           <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
@@ -207,18 +164,48 @@
     </v-flex>
   </v-layout>
 </template>
+<style>
+.v-expansion-panel__body {
+  padding: 10px !important;
+}
+</style>
 <script>
 import EffectCard from '~/components/EffectCard.vue'
 import PromisePane from '~/components/PromisePane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
+import hangulSearchMixin from '~/mixins/hangulSearch.js'
+import _ from 'lodash'
 export default {
-  fetch: async function ({app, store}) {
-    if (store.state.userToken) {
-      app.$axios.setToken(store.state.userToken, 'Token')
+  asyncData: async function ({app, store}) {
+    // if (store.state.userToken) {
+    //   app.$axios.setToken(store.state.userToken, 'Token')
+    // }
+    // store.dispatch('incrementUserPolicyStakeholdersSeen')
+    const effects = await app.$axios.$get('/api/effects/', {
+      params: {
+        policy: store.state.policyId,
+        page_size: 5,
+        'tag[]': store.state.selectedTag
+      }
+    })
+    // store.commit('setEffects', effects.results)
+    return {
+      prevPage: effects.prev,
+      nextPage: effects.next,
+      count: effects.count,
+      effects: effects.results
     }
-    store.dispatch('incrementUserPolicyStakeholdersSeen')
   },
-  mixins: [setTokenMixin],
+  created: function () {
+    this.onInputDebounced = _.debounce(this.onInput, 1000)
+    // if(this.$store.state.selectedTag){
+    //   this.onInput([this.$store.state.selectedTag])
+    // }
+    if (this.$store.state.selectedTag) {
+      this.selectedTags.push(this.$store.state.selectedTag)
+    }
+  },
+  mixins: [setTokenMixin, hangulSearchMixin],
   components: {
     EffectCard,
     PromisePane
@@ -227,13 +214,9 @@ export default {
     policy: function () {
       return this.$store.state.policy
     },
-    effects: function () {
-      console.log(this.$store.state.effects[0])
-      return this.$store.state.effects
-    },
-    stakeholderName: function () {
-      return this.$store.getters.randomStakeholderGroup.name
-    },
+    // effects: function () {
+    //   return this.$store.state.effects
+    // },
     stakeholder_left: function () {
       if (this.$store.state.userPolicy.stakeholders_seen > 3) {
         return 0
@@ -247,7 +230,10 @@ export default {
       return 9 - this.$store.state.userPolicy.effects_seen
     },
     pagenum: function () {
-      return Math.ceil(this.effects.length / 5)
+      return Math.ceil(this.count / 5)
+    },
+    tags: function () {
+      return this.$store.state.tags
     }
   },
   data: function () {
@@ -259,40 +245,32 @@ export default {
       good_show: true,
       bad_show: true,
       activator: null,
-      attach: null,
-      colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
-      editing: null,
       index: -1,
-      items: [
-        { header: 'Select an option or create one' },
-        {
-          text: 'Foo'
-        },
-        {
-          text: 'Bar'
-        }
-      ],
       nonce: 1,
       menu: false,
       model: [],
       x: 0,
       search: null,
-      y: 0
+      y: 0,
+      selectedTags: []
+      // count: 0,
+      // prevPage: '',
+      // nextPage: ''
     }
   },
   methods: {
     onNextButtonClick: function () {
       this.$ga.event({
-        eventCategory: '/ExploreOpinions',
+        eventCategory: this.$router.currentRoute.path,
         eventAction: 'SeeMoreEffects',
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
-      this.$router.push('/SelectStakeholder')
+      this.$router.push('/TagOverview')
     },
     onEndButtonClick: function () {
       this.$ga.event({
-        eventCategory: '/ExploreOpinions',
+        eventCategory: this.$router.currentRoute.path,
         eventAction: 'ClickEndButton',
         eventLabel: this.stakeholderName,
         eventValue: 0
@@ -305,12 +283,12 @@ export default {
     },
     onPostNewEffectButtonClick: function () {
       this.$ga.event({
-        eventCategory: '/ExploreOpinions',
-        eventAction: 'AddNewEffect',
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'AddNewStakeholder',
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
-      this.$router.push('/AddNewEffect')
+      this.$router.push('/NewStakeholder')
     },
     onNoveltyButtonClick: function (effect) {
 
@@ -347,15 +325,6 @@ export default {
         return 5
       }
     },
-    edit (index, item) {
-      if (!this.editing) {
-        this.editing = item
-        this.index = index
-      } else {
-        this.editing = null
-        this.index = -1
-      }
-    },
     filter (item, queryText, itemText) {
       if (item.header) return false
 
@@ -367,6 +336,43 @@ export default {
       return text.toString()
         .toLowerCase()
         .indexOf(query.toString().toLowerCase()) > -1
+    },
+    onInput: async function (ev) {
+      this.selectedTags = ev
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'SearchTags',
+        eventLabel: this.selectedTags,
+        eventValue: 0
+      })
+      this.$store.dispatch('addBrowsedTags', this.selectedTags)
+      const effects = await this.$axios.$get('/api/effects/', {
+        params: {
+          policy: this.policy.id,
+          tag: this.selectedTags
+        }
+      })
+      // this.$store.dispatch('incrementUserPolicyEffectsSeen')
+      this.effects = effects.results
+      this.count = effects.count
+      this.page = 1
+    },
+    onPageChange: async function (newPage) {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'PageChange',
+        eventLabel: `${this.newPage} / ${this.pagenum}`,
+        eventValue: 0
+      })
+      const effects = await this.$axios.$get('/api/effects/', {
+        params: {
+          policy: this.policy.id,
+          tag: this.selectedTags,
+          page: newPage
+        }
+      })
+      this.effects = effects.results
+      this.page = newPage
     }
   },
   watch: {
@@ -377,24 +383,6 @@ export default {
       setTimeout(() => (this[l] = false), 3000)
 
       this.loader = null
-    },
-    model (val, prev) {
-      if (val.length === prev.length) return
-
-      this.model = val.map(v => {
-        if (typeof v === 'string') {
-          v = {
-            text: v,
-            color: this.colors[this.nonce - 1]
-          }
-
-          this.items.push(v)
-
-          this.nonce++
-        }
-
-        return v
-      })
     }
   }
 }

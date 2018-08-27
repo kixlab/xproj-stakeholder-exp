@@ -58,7 +58,8 @@ module.exports = {
 
   build: {
     vendor: [
-      '~/plugins/vuetify.js'
+      '~/plugins/vuetify.js',
+      'lodash'
     ],
     extractCSS: true,
     /*

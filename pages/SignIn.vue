@@ -11,7 +11,7 @@
       </v-toolbar-title>
     </v-toolbar>
     <v-alert type="error" v-model="error" dismissible>
-      로그인에 실패했습니다. 
+      이메일과 비밀번호를 다시 한 번 확인해주세요. 
     </v-alert>
     <v-flex xs12>
       참여해주셔서 고맙습니다.<br>

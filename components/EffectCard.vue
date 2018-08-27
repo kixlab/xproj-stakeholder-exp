@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="card__effect">
     <v-card>
       <v-card-title>
         <h3 style="text-align:left; color:blue;" v-for="tag in effect.tags" :key="tag">
@@ -132,7 +132,7 @@ export default {
     source: String,
     effect: {
       validator: function (value) {
-        return ('stakeholder_group' in value) && ('stakeholder_detail' in value) && ('description' in value)
+        return ('tags' in value) && ('description' in value)
       }
     }
   },
@@ -197,7 +197,7 @@ export default {
       } finally {
         const result = await this.$axios.$get('/api/effects/', {
           params: {
-            policy: this.$store.state.policyIdx,
+            policy: this.$store.state.policyId,
             stakeholder_group: this.$store.getters.randomStakeholderGroup.id
           }
         })
@@ -227,7 +227,7 @@ export default {
       } finally {
         const result = await this.$axios.$get('/api/effects/', {
           params: {
-            policy: this.$store.state.policyIdx,
+            policy: this.$store.state.policyId,
             stakeholder_group: this.$store.getters.randomStakeholderGroup.id
           }
         })
@@ -258,7 +258,7 @@ export default {
       } finally {
         const result = await this.$axios.$get('/api/effects/', {
           params: {
-            policy: this.$store.state.policyIdx,
+            policy: this.$store.state.policyId,
             stakeholder_group: this.$store.getters.randomStakeholderGroup.id
           }
         })
@@ -283,5 +283,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+.card__effect {
+  margin-bottom: 0.5em;
+}
+</style>
 
 

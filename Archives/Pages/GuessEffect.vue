@@ -106,13 +106,7 @@ export default {
   mixins: [setTokenMixin],
   computed: {
     policy: function () {
-      return this.$store.state.policies[this.$store.state.policyIdx - 1]
-    },
-    randomStakeholderGroup: function () {
-      return this.$store.getters.randomStakeholderGroup
-    },
-    stakeholderGroups: function () {
-      return this.$store.state.stakeholderGroups
+      return this.$store.state.policies[this.$store.state.policyId - 1]
     },
     userPolicy: function () {
       return this.$store.state.userPolicy
@@ -145,7 +139,7 @@ export default {
       /* this.$validator.validateAll().then((result) => {
         if (result) { */
       this.$store.commit('setStakeholderGroupIdx', this.predictedEffect.stakeholder_group)
-      this.predictedEffect.policy = this.$store.state.policyIdx
+      this.predictedEffect.policy = this.$store.state.policyId
       this.$axios.$post('/api/effects/', this.predictedEffect)
       // TODO: record user activity
       this.$ga.event({

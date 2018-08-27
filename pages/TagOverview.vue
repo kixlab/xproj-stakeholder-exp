@@ -10,18 +10,12 @@
       </v-card>
       &nbsp;
       <p class="body-1 prompt"> 아래 버튼을 누르면 이해당사자들이 받는 영향을<br>확인할 수 있습니다. </p>
-
-      <v-layout row wrap>
-        <stakeholder-overview-item v-for="sg in stakeholderGroups" :key="sg.id" :stakeholder="sg" @stakeholder-item-click="onStakeholderItemClick(sg)"></stakeholder-overview-item>
-        <v-flex d-flex xs6>
-          <v-card color="blue lighten-4" ripple @click.native="onNewStakeholderGroupClick" v-if="!isLookingAround">
-            <v-card-text>
-              <span class="link">혹시 여기 없는 이해당사자를 알고 계시나요?</span>
-            </v-card-text>
-          </v-card>
-        </v-flex>          
-      </v-layout>
-      <v-btn v-if="!$store.state.userToken" color="primary" dark ripple block @click="onShowPolicyListClick">
+      <tag-overview-item v-for="tag in tags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
+      </tag-overview-item>
+      <v-btn color="primary" dark ripple block @click="onNewStakeholderClick">
+        새로운 영향 남기기
+      </v-btn>
+            <v-btn v-if="!$store.state.userToken" color="primary" dark ripple block @click="onShowPolicyListClick">
         다른 정책 보기
       </v-btn>
       <v-dialog
@@ -50,8 +44,8 @@
           <v-card-text>
             현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
             <strong>3개 그룹</strong>의 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
-            <template v-if="stakeholder_left!=0">
-            귀하는 <strong><font size="4">{{stakeholder_left}}개 그룹을</font></strong> 더 살펴보셔야 합니다.<br>
+            <template v-if="effect_left!=0">
+            귀하는 <strong><font size="4">{{effects_left}}개 그룹을</font></strong> 더 살펴보셔야 합니다.<br>
             아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
             <br><br>
             <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
@@ -85,50 +79,43 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-
     </v-flex>
   </v-layout>
 </template>
 <script>
 import PromisePane from '~/components/PromisePane.vue'
-import StakeholderOverviewItem from '~/components/StakeholderOverviewItem.vue'
+import TagOverviewItem from '~/components/TagOverviewItem.vue'
 export default {
   fetch: async function ({app, store, params}) {
-    let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
-      params: {
-        policy: store.state.policyId
-      }
-    })
-    store.commit('setStakeholderGroups', stakeholderGroups.results)
+    store.dispatch('setTags')
   },
   components: {
     PromisePane,
-    StakeholderOverviewItem
+    TagOverviewItem
   },
   computed: {
     policy: function () {
       return this.$store.state.policy
     },
-    effect: function () {
-      return this.$store.state.effect
+    tags: function () {
+      return this.$store.state.tags
     },
-    stakeholderGroups: function () {
-      return this.$store.state.stakeholderGroups
-    },
-    isLookingAround: function () {
-      return this.$store.getters.isLookingAround
-    },
-    stakeholder_left: function () {
-      if (this.$store.state.userPolicy.stakeholders_seen > 3) {
-        return 0
-      }
-      return 3 - this.$store.state.userPolicy.stakeholders_seen
-    },
-    effect_left: function () {
+    // stakeholder_left: function () {
+    //   if (this.$store.state.userPolicy.stakeholders_seen > 3) {
+    //     return 0
+    //   }
+    //   return 3 - this.$store.state.userPolicy.stakeholders_seen
+    // },
+    effects_left: function () {
       if (this.$store.state.userPolicy.effects_seen > 9) {
         return 0
       }
       return 9 - this.$store.state.userPolicy.effects_seen
+    },
+    maxValue: function () {
+      const t = this.tags.map((tag) => { return tag.refs })
+      console.log(t)
+      return Math.max(...t)
     }
   },
   data: function () {
@@ -138,31 +125,23 @@ export default {
     }
   },
   methods: {
-    onNewStakeholderGroupClick: function () {
+    onNewStakeholderClick: function () {
       this.$ga.event({
-        eventCategory: '/SelectStakeholder',
-        eventAction: 'NewStakeholderGroup',
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'NewStakeholder',
         eventLabel: this.policy.title,
         eventValue: 0
       })
       this.$router.push('/NewStakeholder')
     },
-    onStakeholderItemClick: async function (sg) {
-      const effects = await this.$axios.$get('/api/effects/', {
-        params: {
-          policy: this.policy.id,
-          stakeholder_group: sg.id,
-          get_stakeholder_names: true
-        }
-      })
-      this.$store.commit('setEffects', effects.results)
+    onTagClick: async function (tag) {
       this.$ga.event({
-        eventCategory: '/SelectStakeholder',
+        eventCategory: this.$router.currentRoute.path,
         eventAction: 'ShowStakeholderGroupEffects',
-        eventLabel: `${this.policy.title} / ${sg.name}`,
+        eventLabel: `${this.policy.title}`,
         eventValue: 0
       })
-      this.$store.commit('setStakeholderGroupIdx', sg.id)
+      this.$store.commit('setSelectedTag', tag)
       this.$router.push('/ExploreOpinions')
     },
     onShowPolicyListClick: function () {

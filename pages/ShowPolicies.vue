@@ -101,9 +101,9 @@ export default {
         eventLabel: policy.title,
         eventValue: 0
       })
-      this.$store.commit('setPolicyIdx', {policyIdx: policy.id})
+      this.$store.commit('setPolicyId', {policyId: policy.id})
       this.$store.commit('setPolicy', policy)
-      if (this.$store.state.userToken && (this.$store.state.user.step < 3)) {
+      if (this.$store.state.userToken) {
         // const userpolicy = await this.$axios.$get('/api/userpolicy/', {
         //   params: {
         //     user: this.$store.state.user.pk,
@@ -130,13 +130,16 @@ export default {
         } else {
           this.$store.commit('setUserPolicy', this.userpolicies[upIdx])
         }
+        this.$store.commit('clearBrowsedTags')
         if (!this.$store.state.user.is_participant) {
           this.$router.push('/Identify')
-        } else {
+        } else if (this.$store.state.user.is_participant && (this.$store.state.user.step < 3)) {
           this.$router.push('/ReadNews')
+        } else if (this.$store.state.user.is_participant && (this.$store.state.user.step >= 3)) {
+          this.$router.push('/TagOverview')
         }
       } else {
-        this.$router.push('/SelectStakeholder')
+        this.$router.push('/TagOverview')
       }
     },
     selectPolicy: function (policyID) {
@@ -149,7 +152,7 @@ export default {
       } else if (this.userStep === 2) {
         return 1 + (this.userGroup % 2) !== policyID
       } else {
-        return true
+        return false
       }
     },
     postSurvey: function () {
