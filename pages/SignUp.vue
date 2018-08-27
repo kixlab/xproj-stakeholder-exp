@@ -266,7 +266,7 @@ export default {
     },
     onCancelClick () {
       /* Event should be added */
-      this.$router.push('/')
+      this.$router.push('/SignIn')
     },
     async onRegisterClick () {
       const result = await this.$validator.validateAll()

@@ -2,12 +2,116 @@
   <v-layout row wrap justify-center>
     <promise-pane :policy="policy" />
     <v-flex xs12>
+      <v-card color="grey lighten-4">
+        <v-card-text>
+        이 정책은 우리 사회에 어떤 영향을 끼칠까요?<br>
+        이 정책의 이해당사자들은 어떤 영향을 받을까요?
+        </v-card-text>
+      </v-card>
+      &nbsp;
+
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{stakeholderName}}</strong>에게<br>
-        끼칠 수 있는 영향을 보여드릴게요!
+        * <strong class="red--text">거짓 정보</strong>를 바탕으로 한 내용은 신고해주세요!
         <!--TODO: Disclaimer -->
       </p>
       <v-divider/>
+      <v-flex xs12 row wrap>
+        <v-expansion-panel popout>
+          <v-expansion-panel-content>
+            <div slot="header">정렬/필터</div>
+            <v-card>
+            <v-combobox
+              v-model="model"
+              :filter="filter"
+              :hide-no-data="!search"
+              :items="items"
+              :search-input.sync="search"
+              hide-selected
+              label="태그를 검색하세요"
+              multiple
+              small-chips
+              solo
+            >
+              <template slot="no-data">
+                <v-list-tile>
+                  <span class="subheading">새로 만들기</span>
+                  <v-chip
+                    color="blue lighten-3"
+                    label
+                    small
+                  >
+                    {{ search }}
+                  </v-chip>
+                </v-list-tile>
+              </template>
+              <template
+                v-if="item === Object(item)"
+                slot="selection"
+                slot-scope="{ item, parent, selected }"
+              >
+                <v-chip
+                  color="blue lighten-3"
+                  :selected="selected"
+                  label
+                  small
+                >
+                  <span class="pr-2">
+                    {{ item.text }}
+                  </span>
+                  <v-icon
+                    small
+                    @click="parent.selectItem(item)"
+                  >close</v-icon>
+                </v-chip>
+              </template>
+              <template
+                slot="item"
+                slot-scope="{ index, item, parent }"
+              >
+                <v-list-tile-content>
+                  <v-text-field
+                    v-if="editing === item"
+                    v-model="editing.text"
+                    autofocus
+                    flat
+                    background-color="transparent"
+                    hide-details
+                    solo
+                    @keyup.enter="edit(index, item)"
+                  ></v-text-field>
+                  <v-chip
+                    v-else
+                    :color="`blue lighten-3`"
+                    dark
+                    label
+                    small
+                  >
+                    {{ item.text }}
+                  </v-chip>
+                </v-list-tile-content>
+                <v-spacer></v-spacer>
+                <v-list-tile-action @click.stop>
+                  <v-btn
+                    icon
+                    @click.stop.prevent="edit(index, item)"
+                  >
+                    <v-icon>{{ editing !== item ? 'edit' : 'check' }}</v-icon>
+                  </v-btn>
+                </v-list-tile-action>
+              </template>
+            </v-combobox>    
+
+
+
+            <v-radio-group row hide-details>
+              <v-checkbox label="좋아요" v-model="good_show" hide-details></v-checkbox>
+              <v-checkbox label="싫어요" v-model="bad_show" hide-details></v-checkbox>
+            </v-radio-group>
+          </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+
+      </v-flex>
       <v-flex xs12 sm6 offset-sm3>
         <v-flex v-for="i in cardnum(page)" :key="i">
           <effect-card
@@ -20,13 +124,13 @@
           :length="pagenum"/>
       </v-flex>
       
-      <v-btn 
+<!--       <v-btn 
         v-if = "active_button"
         color = "success"
         @click="onNextButtonClick"
         block ripple>
         다른 이해당사자의 목소리도 살펴보세요!
-      </v-btn>
+      </v-btn> -->
       <v-btn
         :disabled="!$store.state.userToken"
         color="success"
@@ -151,7 +255,29 @@ export default {
       opinionTexts: false,
       active_button: true,
       dialog: false,
-      page: 1
+      page: 1,
+      good_show: true,
+      bad_show: true,
+      activator: null,
+      attach: null,
+      colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
+      editing: null,
+      index: -1,
+      items: [
+        { header: 'Select an option or create one' },
+        {
+          text: 'Foo'
+        },
+        {
+          text: 'Bar'
+        }
+      ],
+      nonce: 1,
+      menu: false,
+      model: [],
+      x: 0,
+      search: null,
+      y: 0
     }
   },
   methods: {
@@ -220,6 +346,27 @@ export default {
       } else {
         return 5
       }
+    },
+    edit (index, item) {
+      if (!this.editing) {
+        this.editing = item
+        this.index = index
+      } else {
+        this.editing = null
+        this.index = -1
+      }
+    },
+    filter (item, queryText, itemText) {
+      if (item.header) return false
+
+      const hasValue = val => val != null ? val : ''
+
+      const text = hasValue(itemText)
+      const query = hasValue(queryText)
+
+      return text.toString()
+        .toLowerCase()
+        .indexOf(query.toString().toLowerCase()) > -1
     }
   },
   watch: {
@@ -230,6 +377,24 @@ export default {
       setTimeout(() => (this[l] = false), 3000)
 
       this.loader = null
+    },
+    model (val, prev) {
+      if (val.length === prev.length) return
+
+      this.model = val.map(v => {
+        if (typeof v === 'string') {
+          v = {
+            text: v,
+            color: this.colors[this.nonce - 1]
+          }
+
+          this.items.push(v)
+
+          this.nonce++
+        }
+
+        return v
+      })
     }
   }
 }

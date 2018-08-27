@@ -19,9 +19,9 @@
         :items="tags"
         item-text="name"
         item-value="name"
-        label="선택해주세요"
+        label="태그를 입력해주세요"
         multiple
-        chips>
+        small-chips>
 
       </v-combobox>
 
@@ -136,7 +136,7 @@
           <!-- <p class="body-1 prompt">
           <strong>{{findStakeholderName(myEffect.stakeholder_group)}}</strong>(이)셨군요!<br>
           </p> -->
-          <p class="question">
+<!--           <p class="question">
           혹시 본인에 대해 조금만 더 자세히 설명해주시겠어요? 예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
           장소, 직장, 연령 등을 고려하여 더 구체적으로 적어주세요.
           </p>
@@ -144,7 +144,7 @@
           v-validate="'required'"
           v-model="myEffect.stakeholder_detail"
           :error-messages="errors.collect('asx')"       
-          name="stakeholder_detail" />
+          name="stakeholder_detail" /> -->
 
         <p class="body-1 prompt question">
           <strong>{{myEffect.stakeholder_detail}}</strong>(으)로서 이 정책이 실현된다면 어떤 영향을 받으시나요?
