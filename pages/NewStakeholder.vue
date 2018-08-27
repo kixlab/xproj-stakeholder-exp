@@ -194,7 +194,7 @@ export default {
         eventLabel: `${this.policy.title}`,
         eventValue: 0
       })
-      this.$router.push('/SelectStakeholder')
+      this.$router.push('/TagOverview')
     },
     onAddNewStakeholderButtonClick: async function () {
       const result = await this.$validator.validateAll()
@@ -216,7 +216,7 @@ export default {
         eventLabel: ``,
         eventValue: 0
       })
-      this.$router.push('/SelectStakeholder')
+      this.$router.push('/TagOverview')
     }
   },
   data: function () {

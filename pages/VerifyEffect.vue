@@ -135,7 +135,7 @@ export default {
         eventLabel: this.randomEffect.id,
         eventValue: 0
       })
-      this.$router.push('/SelectStakeholder')
+      this.$router.push('/TagOverview')
       this.dialog = false
     },
     onPredictMoreClick: function () {

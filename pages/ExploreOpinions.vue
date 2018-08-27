@@ -224,7 +224,7 @@ export default {
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
-      this.$router.push('/SelectStakeholder')
+      this.$router.push('/TagOverview')
     },
     onEndButtonClick: function () {
       this.$ga.event({
