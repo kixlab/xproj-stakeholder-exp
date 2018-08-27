@@ -33,7 +33,7 @@
         <template slot="no-data">
           <v-list-tile>
             <v-list-tile-content>
-              <v-chip color="blue lighten-3" label small>{{search}}</v-chip> 새로 만드시려면 엔터 키를 눌러주세요.
+              <v-chip color="blue lighten-3" label small>{{hangulSearch}}</v-chip> 새로 만드시려면 엔터 키를 눌러주세요.
             </v-list-tile-content>
           </v-list-tile>
         </template>
@@ -93,11 +93,12 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
+import hangulSearchMixin from '~/mixins/hangulSearch.js'
 export default {
   components: {
     PromisePane
   },
-  mixins: [setTokenMixin],
+  mixins: [setTokenMixin, hangulSearchMixin],
   computed: {
     policy: function () {
       return this.$store.state.policy
