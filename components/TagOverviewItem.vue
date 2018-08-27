@@ -1,10 +1,14 @@
 <template>
-  <div>
-    <v-card ripple @click.capture="onTagClick">
+  <v-flex xs12 class="card__tag">
+    <v-card tile ripple @click.capture="onTagClick">
       <v-card-title>
-        <h3 style="text-align:left;">{{tag.name}}</h3>
+        <h3 style="text-align:left;">
+          <span class="card__tag__title">
+            {{tag.name}}
+          </span>
+        </h3>
         <v-spacer/>
-        {{tag.refs}}회
+        <span class="card__tag__title">{{tag.refs}}회</span>
       </v-card-title>
       <v-card-text>
         <v-progress-linear
@@ -36,7 +40,7 @@
         </v-btn>
       </v-card-actions> -->
     </v-card>
-  </div>
+  </v-flex>
 </template>
 
 <script>
@@ -67,6 +71,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.card__tag {
+  margin-bottom: 0.5em;
+}
 
+.card__tag__title {
+  cursor: pointer;
+}
 </style>

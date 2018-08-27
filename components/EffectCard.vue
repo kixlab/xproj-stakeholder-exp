@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="card__effect">
     <v-card>
       <v-card-title>
         <!-- <h3 style="text-align:left;"> -->
@@ -283,5 +283,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+.card__effect {
+  margin-bottom: 0.5em;
+}
+</style>
 
 

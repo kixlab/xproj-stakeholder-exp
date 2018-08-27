@@ -18,7 +18,9 @@ export const state = () => ({
   tags: [],
   randomEffect: {},
   usedEffect: [],
-  selectedTag: null
+  selectedTag: null,
+  browsedTag: [],
+  explorationDone: false
 })
 
 export const mutations = {
@@ -123,14 +125,23 @@ export const mutations = {
     state.usedEffect.push(effectId)
   },
   setSelectedTag (state, tag) {
+    if (state.browsedTag.indexOf(tag) === -1) {
+      state.browsedTag.push(tag)
+    }
     state.selectedTag = tag
+  },
+  addBrowsedTag (state, tag) {
+    if (state.browsedTag.indexOf(tag) === -1) {
+      state.browsedTag.push(tag)
+    }
   }
 }
 
 export const getters = {
   experimentCondition (state) {
     // return ((state.user.pk % 4) + 3) % 6
-    return state.user.pk % 6
+    // return state.user.pk % 6
+    return 0
   },
   isLookingAround (state) {
     return !state.userToken
@@ -183,6 +194,15 @@ export const actions = {
       await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
     }
   },
+  async setUserPolicyEffectsSeen (context, num) {
+    if (context.state.userToken) {
+      const userpolicyId = context.state.userPolicy.id
+      const userPolicy = Object.assign({}, context.state.userPolicy)
+      userPolicy.effects_seen = num
+      context.commit('setUserPolicy', userPolicy)
+      await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    }
+  },
   async incrementUserStep (context) {
     context.commit('setNextstep')
     if (context.state.userToken) {
@@ -224,5 +244,15 @@ export const actions = {
     })
     context.commit('addUsedEffect', randomEffect.id)
     context.commit('setRandomEffect', randomEffect)
+  },
+  async addBrowsedTag (context, tags) {
+    tags.forEach((tag) => { context.commit('addBrowsedTag', tag) })
+    context.dispatch('setUserPolicyEffectsSeen', context.state.browsedTags.length)
+    // TODO: put this on DB
+  },
+  async startExploration (context) {
+    setTimeout(() => {
+      context.explorationDone = true
+    }, 120000)
   }
 }

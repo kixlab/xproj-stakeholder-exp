@@ -104,8 +104,8 @@
         <v-card-text>
           현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
           <strong>3개 그룹</strong>의 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
-          <template v-if="stakeholder_left!=0">
-          귀하는 <strong><font size="4">{{stakeholder_left}}개 그룹을</font></strong> 더 살펴보셔야 합니다.<br>
+          <template v-if="effect_left!=0">
+          귀하는 <strong><font size="4">{{effect_left}}개 태그를</font></strong> 더 살펴보셔야 합니다.<br>
           아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
           <br><br>
           <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
@@ -174,7 +174,9 @@ export default {
     // if(this.$store.state.selectedTag){
     //   this.onInput([this.$store.state.selectedTag])
     // }
-    this.selectedTags.push(this.$store.state.selectedTag)
+    if (this.$store.state.selectedTag) {
+      this.selectedTags.push(this.$store.state.selectedTag)
+    }
   },
   mixins: [setTokenMixin, hangulSearchMixin],
   components: {
@@ -301,6 +303,8 @@ export default {
           tag: this.selectedTags
         }
       })
+      this.$store.dispatch('addBrowsedTags', ev)
+      // this.$store.dispatch('incrementUserPolicyEffectsSeen')
       this.effects = effects.results
       this.count = effects.count
       this.page = 1

@@ -103,7 +103,7 @@ export default {
       })
       this.$store.commit('setPolicyId', {policyId: policy.id})
       this.$store.commit('setPolicy', policy)
-      if (this.$store.state.userToken && (this.$store.state.user.step < 3)) {
+      if (this.$store.state.userToken) {
         // const userpolicy = await this.$axios.$get('/api/userpolicy/', {
         //   params: {
         //     user: this.$store.state.user.pk,
@@ -132,8 +132,10 @@ export default {
         }
         if (!this.$store.state.user.is_participant) {
           this.$router.push('/Identify')
-        } else {
+        } else if (this.$store.state.user.is_participant && (this.$store.state.user.step < 3)) {
           this.$router.push('/ReadNews')
+        } else if (this.$store.state.user.is_participant && (this.$store.state.user.step >= 3)) {
+          this.$router.push('/TagOverview')
         }
       } else {
         this.$router.push('/TagOverview')
