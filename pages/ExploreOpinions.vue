@@ -3,20 +3,56 @@
     <promise-pane :policy="policy" />
     <v-flex xs12>
       <p class="body-1">
-        이 정책이 <strong class="red--text">{{stakeholderName}}</strong>에게<br>
+        이 정책이 <strong class="red--text">{{selectedTags}}</strong>에게<br>
         끼칠 수 있는 영향을 보여드릴게요!
         <!--TODO: Disclaimer -->
       </p>
+      <v-autocomplete
+        :value="selectedTags"
+        :items="tags"
+        item-text="name"
+        item-value="name"
+        label="선택해주세요"
+        :search-input.sync="search"
+        :filter="filter"
+        multiple
+        hide-selected
+        chips
+        @input="onInputDebounced">
+
+        <template slot="no-data">
+          <v-list-tile>
+            <v-list-tile-content>
+              입력하신 태그가 없습니다.
+            </v-list-tile-content>
+          </v-list-tile>
+        </template>
+        <template slot="item" slot-scope="{ index, item, parent }">
+          <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
+          <v-spacer></v-spacer>
+          {{item.refs}}개
+        </template>
+        <template slot="selection" slot-scope="{ item, parent, selected }">
+          <v-chip :selected="selected" label small>
+            <span class="pr-2"> {{item.name}} </span>
+            <v-icon small @click="parent.selectItem(item)">close</v-icon>
+          </v-chip>
+        </template>
+      </v-autocomplete>
+
       <v-divider/>
       <v-flex xs12 sm6 offset-sm3>
-        <v-flex v-for="i in cardnum(page)" :key="i">
+        <!-- <v-flex v-for="i in cardnum(page)" :key="i"> -->
           <effect-card
-            :effect="effects[i+5*(page-1)-1]"
+            v-for="effect in effects"
+            :key="effect.id"
+            :effect="effect"
             @empathy-button-click="onEmpathyButtonClick(effect)"
             @novelty-button-click="onNoveltyButtonClick(effect)"/>
-        </v-flex>
+        <!-- </v-flex> -->
         <v-pagination
-          v-model="page"
+          :value="page"
+          @input="onPageChange"
           :length="pagenum"/>
       </v-flex>
       
@@ -107,14 +143,32 @@
 import EffectCard from '~/components/EffectCard.vue'
 import PromisePane from '~/components/PromisePane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
+import hangulSearchMixin from '~/mixins/hangulSearch.js'
+import _ from 'lodash'
 export default {
-  fetch: async function ({app, store}) {
-    if (store.state.userToken) {
-      app.$axios.setToken(store.state.userToken, 'Token')
+  asyncData: async function ({app, store}) {
+    // if (store.state.userToken) {
+    //   app.$axios.setToken(store.state.userToken, 'Token')
+    // }
+    // store.dispatch('incrementUserPolicyStakeholdersSeen')
+    const effects = await app.$axios.$get('/api/effects/', {
+      params: {
+        policy: store.state.policyId,
+        page_size: 5
+      }
+    })
+    // store.commit('setEffects', effects.results)
+    return {
+      prevPage: effects.prev,
+      nextPage: effects.next,
+      count: effects.count,
+      effects: effects.results
     }
-    store.dispatch('incrementUserPolicyStakeholdersSeen')
   },
-  mixins: [setTokenMixin],
+  mounted: function () {
+    this.onInputDebounced = _.debounce(this.onInput, 1000)
+  },
+  mixins: [setTokenMixin, hangulSearchMixin],
   components: {
     EffectCard,
     PromisePane
@@ -123,13 +177,9 @@ export default {
     policy: function () {
       return this.$store.state.policy
     },
-    effects: function () {
-      console.log(this.$store.state.effects[0])
-      return this.$store.state.effects
-    },
-    stakeholderName: function () {
-      return this.$store.getters.randomStakeholderGroup.name
-    },
+    // effects: function () {
+    //   return this.$store.state.effects
+    // },
     stakeholder_left: function () {
       if (this.$store.state.userPolicy.stakeholders_seen > 3) {
         return 0
@@ -143,7 +193,10 @@ export default {
       return 9 - this.$store.state.userPolicy.effects_seen
     },
     pagenum: function () {
-      return Math.ceil(this.effects.length / 5)
+      return Math.ceil(this.count / 5)
+    },
+    tags: function () {
+      return this.$store.state.tags
     }
   },
   data: function () {
@@ -151,7 +204,12 @@ export default {
       opinionTexts: false,
       active_button: true,
       dialog: false,
-      page: 1
+      page: 1,
+      selectedTags: [],
+      search: ''
+      // count: 0,
+      // prevPage: '',
+      // nextPage: ''
     }
   },
   methods: {
@@ -220,6 +278,29 @@ export default {
       } else {
         return 5
       }
+    },
+    onInput: async function (ev) {
+      this.selectedTags = ev
+      const effects = await this.$axios.$get('/api/effects/', {
+        params: {
+          policy: this.policy.id,
+          tag: this.selectedTags
+        }
+      })
+      this.effects = effects.results
+      this.count = effects.count
+      this.page = 1
+    },
+    onPageChange: async function (newPage) {
+      const effects = await this.$axios.$get('/api/effects/', {
+        params: {
+          policy: this.policy.id,
+          tag: this.selectedTags,
+          page: newPage
+        }
+      })
+      this.effects = effects.results
+      this.page = newPage
     }
   },
   watch: {

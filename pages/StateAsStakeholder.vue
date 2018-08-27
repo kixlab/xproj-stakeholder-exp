@@ -23,6 +23,7 @@
         :search-input.sync="search"
         :filter="filter"
         multiple
+        hide-selected
         chips
         @input="onInput">
 
@@ -33,10 +34,16 @@
             </v-list-tile-content>
           </v-list-tile>
         </template>
-        <template slot="item" slot-scope="{index, item, parent}">
+        <template slot="item" slot-scope="{ index, item, parent }">
           <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
           <v-spacer></v-spacer>
           {{item.refs}}개
+        </template>
+        <template slot="selection" slot-scope="{ item, parent, selected }">
+          <v-chip :selected="selected" label small>
+            <span class="pr-2"> {{item}} </span>
+            <v-icon small @click="parent.selectItem(item)">close</v-icon>
+          </v-chip>
         </template>
       </v-combobox>
       <!-- <v-combobox
@@ -333,11 +340,10 @@ export default {
     },
     addEffect: async function () {
       const result = await this.$validator.validateAll()
-      this.myEffect.tags = this.selectedTags.map((x) => { return x.name })
+      this.myEffect.tags = this.selectedTags
       if (result) {
         // await this.addNewStakeholder()
         this.myEffect.policy = this.$store.state.policyId
-        this.$store.commit('setMyEffect', this.myEffect)
         this.$axios.$post('/api/effects/', this.myEffect)
         this.$ga.event({
           eventCategory: '/StateAsStakeholder',
