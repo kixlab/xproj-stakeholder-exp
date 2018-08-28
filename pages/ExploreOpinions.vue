@@ -303,7 +303,7 @@ export default {
       page: 1,
       selectedTags: [],
       search: '',
-      effectFilter: []
+      effectFilter: [0, 1]
       // count: 0,
       // prevPage: '',
       // nextPage: ''
