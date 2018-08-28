@@ -4,7 +4,8 @@
     <v-flex xs12>
       <v-form>
         <div>
-        빈칸에 들어갈 가장 알맞은 단어를 선택해주세요.<br>
+        빈칸에 들어갈 가장 알맞은 단어를 태그로 입력해주세요.<br>
+        최소 <strong style="color:red;">2개</strong>의 태그를 사용하셔야 합니다.<br>
         <p class="body-1 prompt">
           <v-flex xs12>
             <v-card color="grey lighten-4">
@@ -19,7 +20,7 @@
         :items="tags"
         item-text="name"
         item-value="name"
-        label="선택해주세요"
+        label="입력해주세요"
         :search-input.sync="search"
         :filter="filter"
         multiple
@@ -33,7 +34,7 @@
         <template slot="no-data">
           <v-list-tile>
             <v-list-tile-content>
-              <v-chip color="blue lighten-3" label small>{{hangulSearch}}</v-chip> 새로 만드시려면 엔터 키를 눌러주세요.
+              <v-chip color="blue lighten-3" label small>{{hangulSearch}}</v-chip> 엔터키를 누르면 추가됩니다.
             </v-list-tile-content>
           </v-list-tile>
         </template>
@@ -49,126 +50,8 @@
           </v-chip>
         </template>
       </v-combobox>
-      <!-- <v-combobox
-        v-model="model"
-        :filter="filter"
-        :hide-no-data="!search"
-        :items="tags"
-        item-text="name"
-        item-value="name"
-        :search-input.sync="search"
-        hide-selected
-        label="태그를 검색하세요"
-        multiple
-        small-chips
-        solo
-      >
-        <template slot="no-data">
-          <v-list-tile>
-            <span class="subheading">새로 만들기</span>
-            <v-chip
-              color="blue lighten-3"
-              label
-              small
-            >
-              {{ search }}
-            </v-chip>
-          </v-list-tile>
-        </template>
-        <template
-          v-if="item === Object(item)"
-          slot="selection"
-          slot-scope="{ item, parent, selected }"
-        >
-          <v-chip
-            color="blue lighten-3"
-            :selected="selected"
-            label
-            small
-          >
-            <span class="pr-2">
-              {{ item.text }}
-            </span>
-            <v-icon
-              small
-              @click="parent.selectItem(item)"
-            >close</v-icon>
-          </v-chip>
-        </template>
-        <template
-          slot="item"
-          slot-scope="{ index, item, parent }"
-        >
-          <v-list-tile-content>
-            <v-text-field
-              v-if="editing === item"
-              v-model="editing.text"
-              autofocus
-              flat
-              background-color="transparent"
-              hide-details
-              solo
-              @keyup.enter="edit(index, item)"
-            ></v-text-field>
-            <v-chip
-              v-else
-              :color="`blue lighten-3`"
-              dark
-              label
-              small
-            >
-              {{ item.text }}
-            </v-chip>
-          </v-list-tile-content>
-          <v-spacer></v-spacer>
-          <v-list-tile-action @click.stop>
-            <v-btn
-              icon
-              @click.stop.prevent="edit(index, item)"
-            >
-              <v-icon>{{ editing !== item ? 'edit' : 'check' }}</v-icon>
-            </v-btn>
-          </v-list-tile-action>
-        </template>
-      </v-combobox> -->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- <template v-if="myEffect.stakeholder_group == -1">
-          <v-text-field
-            v-validate="'required'"
-            v-model="myEffect.stakeholder_custom"            
-            :error-messages="errors.collect('asx')"
-            name="stakeholder_custom"            
-            placeholder="그럼 직접 적어주세요!">
-          </v-text-field>
-        </template> -->
-
-        <template v-if="myEffect.stakeholder_group > 0 || myEffect.stakeholder_custom != ''">
-          <!-- <p class="body-1 prompt">
-          <strong>{{findStakeholderName(myEffect.stakeholder_group)}}</strong>(이)셨군요!<br>
-          </p> -->
-          <!-- <p class="question">
-          혹시 본인에 대해 조금만 더 자세히 설명해주시겠어요? 예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
-          장소, 직장, 연령 등을 고려하여 더 구체적으로 적어주세요.
-          </p>
-          <v-text-field
-          v-validate="'required'"
-          v-model="myEffect.stakeholder_detail"
-          :error-messages="errors.collect('asx')"       
-          name="stakeholder_detail" /> -->
+        <template v-if="selectedTags.length >= 2">
 
         <p class="body-1 prompt question">
           <v-chip v-for="tag in selectedTags" :key="tag">
@@ -242,14 +125,8 @@ export default {
       selectedTags: [],
       activator: null,
       attach: null,
-      colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
       editing: null,
       index: -1,
-      items: [
-        { header: '태그를 선택하거나 새로 만들어주세요' },
-        { text: 'Foo' },
-        { text: 'Bar' }
-      ],
       menu: false,
       x: 0,
       search: null,
@@ -257,42 +134,10 @@ export default {
       // hangulSearch: ''
     }
   },
-  // watch: {
-  //   search (val, prev) {
-  //     this.hangulSearch = this.numToHangul(this.search)
-  //   }
-  // },
-  // watch: {
-  //   select (val, prev) {
-  //     if (val.length === prev.length) return
-
-  //     this.select = val.map(v => {
-  //       if (typeof v === 'string') {
-  //         v = {
-  //           text: v
-  //         }
-  //         this.items.push(v)
-  //       }
-
-  //       return v
-  //     })
-  //   }
-  // },
   mounted () {
     this.$validator.localize('ko', this.dictionary)
-    // this.debouncedNumToHangul = _.debounce(this.numToHangul, 500)
   },
   methods: {
-    // addNewStakeholder: async function () {
-    //   if (this.stakeholder_custom && this.stakeholder_custom.length > 0) {
-    //     const newStakeholder = await this.$axios.$post('/api/stakeholdergroups/', {
-    //       policy: this.$store.state.policyId,
-    //       is_visible: false,
-    //       name: this.myEffect.stakeholder_custom
-    //     })
-    //     this.myEffect.stakeholder_group = newStakeholder.id
-    //   }
-    // },
     numToHangul: function (search) {
       if (search.name) {
         return search.name
@@ -359,15 +204,6 @@ export default {
         this.$router.push('/GuessEffectRandom')
       }
     }
-    // edit (index, item) {
-    //   if (!this.editing) {
-    //     this.editing = item
-    //     this.index = index
-    //   } else {
-    //     this.editing = null
-    //     this.index = -1
-    //   }
-    // },
   }
 }
 </script>

@@ -2,8 +2,16 @@
   <v-layout row wrap justify-center>
     <promise-pane :policy="policy" />
     <v-flex xs12>
+      <v-card color="grey lighten-4">
+        <v-card-text>
+        이 정책은 우리 사회에 어떤 영향을 끼칠까요?<br>
+        이 정책의 이해당사자들은 어떤 영향을 받을까요?
+        </v-card-text>
+      </v-card>
+      &nbsp;
+
       <p class="body-1">
-        이 정책이 
+        * <strong class="red--text">거짓 정보</strong>를 바탕으로 한 내용은 신고해주세요!
         <!-- <strong class="red--text">{{selectedTags}}</strong> -->
         <v-chip v-for="tag in selectedTags" :key="tag">{{tag}}</v-chip>
         에게<br>
@@ -55,6 +63,55 @@
         </v-card-title>
       </v-card>
       <v-divider/>
+      <v-flex xs12 row wrap>
+        <v-expansion-panel popout>
+          <v-expansion-panel-content>
+            <div slot="header">정렬/필터</div>
+            <v-card>
+            <v-autocomplete
+              :value="selectedTags"
+              :items="tags"
+              item-text="name"
+              item-value="name"
+              label="선택해주세요"
+              :search-input.sync="search"
+              :filter="filter"
+              multiple
+              hide-selected
+              chips
+              @input="onInputDebounced">
+
+              <template slot="no-data">
+                <v-list-tile>
+                  <v-list-tile-content>
+                    입력하신 태그가 없습니다.
+                  </v-list-tile-content>
+                </v-list-tile>
+              </template>
+              <template slot="item" slot-scope="{ index, item, parent }">
+                <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
+                <v-spacer></v-spacer>
+                {{item.refs}}개
+              </template>
+              <template slot="selection" slot-scope="{ item, parent, selected }">
+                <v-chip :selected="selected" label small>
+                  <span class="pr-2"> {{item.name}} </span>
+                  <v-icon small @click="parent.selectItem(item)">close</v-icon>
+                </v-chip>
+              </template>
+            </v-autocomplete>   
+
+
+
+            <v-radio-group row hide-details>
+              <v-checkbox label="좋아요" v-model="good_show" hide-details></v-checkbox>
+              <v-checkbox label="싫어요" v-model="bad_show" hide-details></v-checkbox>
+            </v-radio-group>
+          </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+
+      </v-flex>
       <v-flex xs12 sm6 offset-sm3>
         <!-- <v-flex v-for="i in cardnum(page)" :key="i"> -->
           <effect-card
@@ -153,6 +210,11 @@
     </v-flex>
   </v-layout>
 </template>
+<style>
+.v-expansion-panel__body {
+  padding: 10px !important;
+}
+</style>
 <script>
 import EffectCard from '~/components/EffectCard.vue'
 import PromisePane from '~/components/PromisePane.vue'
@@ -312,6 +374,18 @@ export default {
       } else {
         return 5
       }
+    },
+    filter (item, queryText, itemText) {
+      if (item.header) return false
+
+      const hasValue = val => val != null ? val : ''
+
+      const text = hasValue(itemText)
+      const query = hasValue(queryText)
+
+      return text.toString()
+        .toLowerCase()
+        .indexOf(query.toString().toLowerCase()) > -1
     },
     onInput: async function (ev) {
       this.selectedTags = ev

@@ -2,9 +2,9 @@
   <div class="card__effect">
     <v-card>
       <v-card-title>
-        <!-- <h3 style="text-align:left;"> -->
-          <v-chip label v-for="tag in effect.tags" :key="tag">{{tag}}</v-chip>
-        <!-- </h3> -->
+        <h3 style="text-align:left; color:blue;" v-for="tag in effect.tags" :key="tag">
+          #{{tag}}&nbsp;
+        </h3>
         <v-spacer/>
         <v-icon :color="effect.isBenefit ? 'primary' : 'error'">
           {{effect.isBenefit ? 'sentiment_very_satisfied' : 'sentiment_very_dissatisfied'}}

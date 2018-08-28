@@ -22,8 +22,7 @@
       <!-- <p class="body-1 prompt head">
         <v-chip v-for="tag in randomEffect.tags" :key="tag">{{tag}}</v-chip><br>
         <br>
-        <strong>{{randomEffect.stakeholder_detail}}</strong>
-        의 입장에서 생각해주세요!
+        <strong>이 분의 입장에서 생각해주세요.</strong>
       </p>
       <br> -->
       <!-- <p class="question">
@@ -36,11 +35,11 @@
       <v-text-field v-model="predictedEffect.stakeholder_detail" placeholder="여기에 설명해주세요!" />
        -->
     <v-flex xs12>
-      <p class="question">그럼 그 사람은 이 정책으로 어떤 영향을 받게 될까요?</p>
+      <p class="question">이 정책으로 어떤 영향을 받게 될까요?</p>
       <v-textarea box auto-grow v-model="predictedEffect.description"/>
 
       <div>
-        <p class="body-1 prompt question">방금 쓰신 내용은 그 사람에게 긍정적인가요? 부정적인가요? </p>
+        <p class="body-1 prompt question">방금 쓰신 내용은 이 분에게 긍정적인가요? 부정적인가요? </p>
         <v-btn 
         :outline="predictedEffect.isBenefit !== 1" 
         :dark="predictedEffect.isBenefit == 1"
