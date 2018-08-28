@@ -18,9 +18,7 @@
       <span style="text-align:left;"><strong> 첫 번째 기사 </strong></span>
       <v-divider/>
       <v-btn 
-        color="success"
-        :dark="read1==true"
-        :flat="read1==false"
+        :color="read2 ? 'success' : 'black'"
         :outline="read1==false"
         @click="openFirstArticle"
         block ripple large v-html="article_title_cut(policy.article1_title)"></v-btn>
@@ -30,9 +28,7 @@
       <span style="text-align:left;"><strong> 두 번째 기사 </strong></span>
       <v-divider/>
       <v-btn 
-        color="success"
-        :dark="read2==true"
-        :flat="read2==false"
+        :color="read2 ? 'success' : 'black'"
         :outline="read2==false"
         @click="openSecondArticle"
         block ripple large v-html="article_title_cut(policy.article2_title)"></v-btn>
@@ -41,7 +37,7 @@
 
     <v-flex xs12 row wrap>
     <template v-if="!(read1&&read2)">
-      <strong style="color:red;">기사를 모두 1분 이상 읽으셔야 다음으로 넘어가실 수 있습니다.</strong>
+      <strong style="color:red;">두 기사를 각각 1분 이상 읽으셔야 다음으로 넘어가실 수 있습니다.</strong>
     </template>
     <br>
     <v-btn block :disabled="!(read1 && read2)" color="primary" @click="onClickComplete">다음</v-btn>

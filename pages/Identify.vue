@@ -7,6 +7,7 @@
         <v-icon>arrow_drop_up</v-icon>
         <strong>상단 탭</strong>을 누르면 자세한 설명을 읽을 수 있습니다.
         <br><br>
+        <!--TODO: Prompt to make users think they should talk about themselves-->
         내 생각과 <strong style="color:red">가장 가까운</strong> 단어를 써서 빈칸을 채워주세요.<br>
         </div>
         <v-spacer></v-spacer>

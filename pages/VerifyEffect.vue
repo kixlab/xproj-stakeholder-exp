@@ -50,8 +50,8 @@
           </v-card-title>
 
           <v-card-text>
-            현재 '정책의 영향 추론' 단계에서는 실험자가
-            추론을 최소 3번 해야 보상을 받을 수 있습니다. <br><br>
+            현재 '정책의 영향 추론' 단계에서는 실험자가 다른 사람의 입장에서 정책의 영향을
+            최소 3번 추론해야 보상을 받을 수 있습니다. <br><br>
             <template v-if="answer_left>0">
             귀하는 <strong><font size="4">{{answer_left}}번</font></strong> 남으셨습니다.<br>
             아래 <strong style="color:red;"> 추론하기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
@@ -64,7 +64,7 @@
             귀하는 조건을 모두 충족하셨습니다.<br>
             <strong style="color:blue;"> 다음으로 </strong> 넘어가주세요.<br><br>
 
-            그런데, 혹시 더 해보시고 싶으시면 <strong style="color:red;">추론하기</strong>를 누르셔도 좋습니다. :)
+            그런데, 혹시 더 해보시고 싶으시면 <strong style="color:red;">영향 추론하기</strong>를 누르셔도 좋습니다. :)
             </template>          
           </v-card-text>
 
@@ -75,7 +75,7 @@
               color="red"
               flat outline ripple
               @click="onPredictMoreClick"
-            > 추론하기 </v-btn>
+            > 영향 추론하기 </v-btn>
             <v-spacer></v-spacer>
             <v-btn
               color="primary"

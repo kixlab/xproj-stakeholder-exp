@@ -6,7 +6,7 @@
     <v-toolbar-side-icon ripple @click.stop="drawer = !drawer"></v-toolbar-side-icon>
     <v-toolbar-title style="margin: 0 auto;">
       <small> {{pagename}} </small>
-      <v-icon dark>tag_faces</v-icon>
+      <!-- <v-icon dark>tag_faces</v-icon> -->
     </v-toolbar-title>
     
   </v-toolbar>

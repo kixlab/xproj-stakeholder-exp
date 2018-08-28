@@ -4,16 +4,30 @@
     <v-flex xs12>
       이 정책으로 인해 영향을 받으시는군요! 어떤 영향을 받으시는지 조금만 더 설명해주세요.
       <v-form>
-        <div>
-        빈칸에 들어갈 가장 알맞은 단어를 태그로 입력해주세요.<br>
-        최소 <strong style="color:red;">2개</strong>의 태그를 사용하셔야 합니다.<br>
-        <p class="body-1 prompt">
-          <v-flex xs12>
-            <v-card color="grey lighten-4">
-              <v-card-text>나는 _______(으)로서 이 정책의 영향을 받는다.</v-card-text>
-            </v-card>
-          </v-flex>
+
+        <p class="question">
+          먼저, 본인에 대해 조금만 더 자세히 설명해주시겠어요? 예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
+          장소, 직장, 연령 등을 고려하여 구체적으로 적어주세요.
         </p>
+        <v-text-field
+          v-validate="'required'"
+          v-model="myEffect.stakeholder_detail"
+          :error-messages="errors.collect('asx')"       
+          name="stakeholder_detail" />
+
+        <div>
+          <p class="question">
+          쓰신 내용 중, 이 정책과 연관된 태그를 모두 적어주세요.<br>
+          예) 임플란트 전문 치과의사시라면, "의료인", "치과의사", "임플란트 전문 치과의사", 처럼 큰 분류부터 세부적인 집단까지 적어주시면 됩니다. <br>
+          최소 <strong style="color:red;">2개</strong>의 태그를 사용해주세요.<br>
+          </p>
+          <!-- <p class="body-1 prompt">
+            <v-flex xs12>
+              <v-card color="grey lighten-4">
+                <v-card-text>나는 _______(으)로서 이 정책의 영향을 받는다.</v-card-text>
+              </v-card>
+            </v-flex>
+          </p> -->
         </div>
 
       <v-combobox
@@ -21,7 +35,7 @@
         :items="tags"
         item-text="name"
         item-value="name"
-        label="입력해주세요"
+        label="적어주세요"
         :search-input.sync="search"
         :filter="filter"
         multiple
@@ -55,9 +69,10 @@
         <template v-if="selectedTags.length >= 2">
 
         <p class="body-1 prompt question">
-          <v-chip v-for="tag in selectedTags" :key="tag">
+          <!-- <v-chip v-for="tag in selectedTags" :key="tag">
             {{tag}}
-          </v-chip>
+          </v-chip> -->
+          {{myEffect.stakeholder_detail}}
           (으)로서 이 정책이 실현된다면 어떤 영향을 받으시나요?
         </p>
         

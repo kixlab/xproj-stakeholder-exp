@@ -12,7 +12,7 @@
       </v-card-title>
       <v-card-text class="effect-card__textbox">
         <a @click="onShowDescriptionButtonClick">
-          <span class="effect-card__text">{{show ? effect.description : shortDescription}}</span>
+          <span class="effect-card__text">{{expanded || show ? effect.description : shortDescription}}</span>
         </a>
       </v-card-text>
       <v-card-actions>
@@ -74,7 +74,7 @@
           </v-card>
         </v-dialog>
         <v-spacer></v-spacer>
-        <v-btn icon @click="onShowDescriptionButtonClick" v-if="effect.description.length > 40">
+        <v-btn icon @click="onShowDescriptionButtonClick" v-if="!expanded || effect.description.length > 40">
           <v-icon>{{ show ? 'expand_less' : 'expand_more' }}</v-icon>
         </v-btn>
       </v-card-actions>
@@ -96,26 +96,6 @@
   </div>
 </template>
 
-<style scoped>
-.v-card__text {
-  text-align: left !important;
-  padding-bottom: 0;
-}
-.v-card__title {
-  padding-bottom: 0;
-}
-.effect-card__text {
-  color: black;
-}
-.effect-card__textbox {
-  text-align: left !important;
-}
-.v-btn--small {
-  min-width: 70px;
-  padding: 0 !important;
-}
-</style>
-
 <script>
 import setTokenMixin from '~/mixins/setToken.js'
 export default {
@@ -134,7 +114,8 @@ export default {
       validator: function (value) {
         return ('tags' in value) && ('description' in value)
       }
-    }
+    },
+    expanded: Boolean
   },
   computed: {
     shortDescription: function () {
@@ -175,95 +156,97 @@ export default {
       this.show = !this.show
     },
     onNoveltyButtonClick: async function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: this.isNoveltyVoted ? 'CancelUpvoteNovelty' : 'UpvoteNovelty',
-        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
-        eventValue: 0
-      })
-      try {
-        await this.$axios.$post('/api/novelty/', {
-          effect: this.effect.id
-        })
-        this.$store.commit('incrementNoveltyCount', {
-          effect: this.effect.id
-        })
-      } catch (err) {
-        if (err.response.status === 409) {
-          this.$store.commit('decreaseNoveltyCount', {
-            effect: this.effect.id
-          })
-        }
-      } finally {
-        const result = await this.$axios.$get('/api/effects/', {
-          params: {
-            policy: this.$store.state.policyId,
-            stakeholder_group: this.$store.getters.randomStakeholderGroup.id
-          }
-        })
-        this.$store.commit('setEffects', result.results)
-      }
+      // this.$ga.event({
+      //   eventCategory: this.$router.currentRoute.path,
+      //   eventAction: this.isNoveltyVoted ? 'CancelUpvoteNovelty' : 'UpvoteNovelty',
+      //   eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+      //   eventValue: 0
+      // })
+      // try {
+      //   await this.$axios.$post('/api/novelty/', {
+      //     effect: this.effect.id
+      //   })
+      //   this.$store.commit('incrementNoveltyCount', {
+      //     effect: this.effect.id
+      //   })
+      // } catch (err) {
+      //   if (err.response.status === 409) {
+      //     this.$store.commit('decreaseNoveltyCount', {
+      //       effect: this.effect.id
+      //     })
+      //   }
+      // } finally {
+      //   const result = await this.$axios.$get('/api/effects/', {
+      //     params: {
+      //       policy: this.$store.state.policyId,
+      //       stakeholder_group: this.$store.getters.randomStakeholderGroup.id
+      //     }
+      //   })
+      //   this.$store.commit('setEffects', result.results)
+      // },
+      this.$emit('novelty-button-click')
     },
     onEmpathyButtonClick: async function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: this.isEmpathyVoted ? 'CancelUpvoteEmpathy' : 'UpvoteEmpathy',
-        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
-        eventValue: 0
-      })
-      try {
-        await this.$axios.$post('/api/empathy/', {
-          effect: this.effect.id
-        })
-        this.$store.commit('incrementEmpathyCount', {
-          effect: this.effect.id
-        })
-      } catch (err) {
-        if (err.response.code === 409) {
-          this.$store.commit('decreaseEmpathyCount', {
-            effect: this.effect.id
-          })
-        }
-      } finally {
-        const result = await this.$axios.$get('/api/effects/', {
-          params: {
-            policy: this.$store.state.policyId,
-            stakeholder_group: this.$store.getters.randomStakeholderGroup.id
-          }
-        })
-        this.$store.commit('setEffects', result.results)
-      }
-      // this.$emit('empathy-button-click')
+      // this.$ga.event({
+      //   eventCategory: this.$router.currentRoute.path,
+      //   eventAction: this.isEmpathyVoted ? 'CancelUpvoteEmpathy' : 'UpvoteEmpathy',
+      //   eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+      //   eventValue: 0
+      // })
+      // try {
+      //   await this.$axios.$post('/api/empathy/', {
+      //     effect: this.effect.id
+      //   })
+      //   this.$store.commit('incrementEmpathyCount', {
+      //     effect: this.effect.id
+      //   })
+      // } catch (err) {
+      //   if (err.response.code === 409) {
+      //     this.$store.commit('decreaseEmpathyCount', {
+      //       effect: this.effect.id
+      //     })
+      //   }
+      // } finally {
+      //   const result = await this.$axios.$get('/api/effects/', {
+      //     params: {
+      //       policy: this.$store.state.policyId,
+      //       stakeholder_group: this.$store.getters.randomStakeholderGroup.id
+      //     }
+      //   })
+      //   this.$store.commit('setEffects', result.results)
+      // }
+      this.$emit('empathy-button-click', this.effect)
     },
     onFishyButtonClick: async function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: this.isFishyVoted ? 'CancelUpvoteFishy' : 'UpvoteFishy',
-        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
-        eventValue: 0
-      })
-      try {
-        await this.$axios.$post('/api/fishy/', {
-          effect: this.effect.id
-        })
-        this.$store.commit('incrementFishyCount', {
-          effect: this.effect.id
-        })
-      } catch (err) {
-        if (err.response.code === 409) {
-          this.$store.commit('decreaseFishyCount', {
-            effect: this.effect.id
-          })
-        }
-      } finally {
-        const result = await this.$axios.$get('/api/effects/', {
-          params: {
-            policy: this.$store.state.policyId,
-            stakeholder_group: this.$store.getters.randomStakeholderGroup.id
-          }
-        })
-        this.$store.commit('setEffects', result.results)
-      }
+      // this.$ga.event({
+      //   eventCategory: this.$router.currentRoute.path,
+      //   eventAction: this.isFishyVoted ? 'CancelUpvoteFishy' : 'UpvoteFishy',
+      //   eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+      //   eventValue: 0
+      // })
+      // try {
+      //   await this.$axios.$post('/api/fishy/', {
+      //     effect: this.effect.id
+      //   })
+      //   this.$store.commit('incrementFishyCount', {
+      //     effect: this.effect.id
+      //   })
+      // } catch (err) {
+      //   if (err.response.code === 409) {
+      //     this.$store.commit('decreaseFishyCount', {
+      //       effect: this.effect.id
+      //     })
+      //   }
+      // } finally {
+      //   const result = await this.$axios.$get('/api/effects/', {
+      //     params: {
+      //       policy: this.$store.state.policyId,
+      //       stakeholder_group: this.$store.getters.randomStakeholderGroup.id
+      //     }
+      //   })
+      //   this.$store.commit('setEffects', result.results)
+      // }
+      this.$emit('fishy-button-click', this.effect)
     },
     reportEffect: async function () {
       this.dialog = false
@@ -286,6 +269,27 @@ export default {
 <style scoped>
 .card__effect {
   margin-bottom: 0.5em;
+}
+.v-card__text {
+  text-align: left !important;
+  padding-bottom: 0;
+}
+.v-card__title {
+  padding-bottom: 0;
+}
+.effect-card__text {
+  color: black;
+}
+.effect-card__textbox {
+  text-align: left !important;
+}
+.v-btn--small {
+  min-width: 70px;
+  padding: 0 !important;
+}
+
+a {
+  color: black;
 }
 </style>
 

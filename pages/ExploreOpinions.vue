@@ -119,7 +119,8 @@
             :key="effect.id"
             :effect="effect"
             @empathy-button-click="onEmpathyButtonClick(effect)"
-            @novelty-button-click="onNoveltyButtonClick(effect)"/>
+            @novelty-button-click="onNoveltyButtonClick(effect)"
+            @fishy-button-click="onFishyButtonClick(effect)"/>
         <!-- </v-flex> -->
         <v-pagination
           :value="page"
@@ -340,11 +341,107 @@ export default {
       })
       this.$router.push('/NewStakeholder')
     },
-    onNoveltyButtonClick: function (effect) {
+    onNoveltyButtonClick: async function (effect) {
+      const isNoveltyVoted = effect.novelty.includes(this.$store.state.user.pk)
 
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: isNoveltyVoted ? 'CancelUpvoteNovelty' : 'UpvoteNovelty',
+        eventLabel: `${effect.id},${effect.stakeholder_detail}`,
+        eventValue: 0
+      })
+      try {
+        await this.$axios.$post('/api/novelty/', {
+          effect: effect.id
+        })
+        effect.novelty.push(this.$store.state.user.pk)
+      } catch (err) {
+        if (err.response.code === 409) {
+          // this.$store.commit('decreaseNoveltyCount', {
+          //   effect: this.effect.id
+          // })
+          const idx = effect.novelty.indexOf(this.$store.state.user.pk)
+          effect.novelty.splice(idx, 1)
+        }
+      } finally {
+        const result = await this.$axios.$get('/api/effects/', {
+          params: {
+            policy: this.policy.id,
+            tag: this.selectedTags,
+            is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+            page: this.page
+          }
+        })
+        this.effects = result.results
+      }
     },
-    onEmpathyButtonClick: function (effect) {
+    onEmpathyButtonClick: async function (effect) {
+      const isEmpathyVoted = effect.empathy.includes(this.$store.state.user.pk)
 
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: isEmpathyVoted ? 'CancelUpvoteEmpathy' : 'UpvoteEmpathy',
+        eventLabel: `${effect.id},${effect.stakeholder_detail}`,
+        eventValue: 0
+      })
+      try {
+        await this.$axios.$post('/api/empathy/', {
+          effect: effect.id
+        })
+        effect.empathy.push(this.$store.state.user.pk)
+      } catch (err) {
+        if (err.response.code === 409) {
+          // this.$store.commit('decreaseEmpathyCount', {
+          //   effect: this.effect.id
+          // })
+          const idx = effect.empathy.indexOf(this.$store.state.user.pk)
+          effect.empathy.splice(idx, 1)
+        }
+      } finally {
+        const result = await this.$axios.$get('/api/effects/', {
+          params: {
+            policy: this.policy.id,
+            tag: this.selectedTags,
+            is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+            page: this.page
+          }
+        })
+        this.effects = result.results
+      }
+    },
+    onFishyButtonClick: async function (effect) {
+      const isFishyVoted = effect.fishy.includes(this.$store.state.user.pk)
+
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: isFishyVoted ? 'CancelUpvoteFishy' : 'UpvoteFishy',
+        eventLabel: `${effect.id},${effect.stakeholder_detail}`,
+        eventValue: 0
+      })
+      try {
+        await this.$axios.$post('/api/fishy/', {
+          effect: effect.id
+        })
+        effect.fishy.push(this.$store.state.user.pk)
+      } catch (err) {
+        if (err.response.code === 409) {
+          // this.$store.commit('decreaseFishyCount', {
+          //   effect: this.effect.id
+          // })
+          const idx = effect.fishy.indexOf(this.$store.state.user.pk)
+          effect.fishy.splice(idx, 1)
+        }
+      } finally {
+        const result = await this.$axios.$get('/api/effects/', {
+          params: {
+            policy: this.policy.id,
+            tag: this.selectedTags,
+            is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+            page: this.page
+          }
+        })
+        this.effects = result.results
+      }
     },
     onSeeOtherPolicyButtonClick: function () {
       this.$ga.event({
@@ -400,7 +497,7 @@ export default {
         params: {
           policy: this.policy.id,
           tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : ''
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null
         }
       })
       // this.$store.dispatch('incrementUserPolicyEffectsSeen')
@@ -420,7 +517,7 @@ export default {
         params: {
           policy: this.policy.id,
           tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : ''
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null
         }
       })
       this.effects = effects.results
@@ -438,7 +535,7 @@ export default {
         params: {
           policy: this.policy.id,
           tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : '',
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
           page: newPage
         }
       })
