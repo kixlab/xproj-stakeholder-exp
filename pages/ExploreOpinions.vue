@@ -4,123 +4,104 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-        이 정책은 우리 사회에 어떤 영향을 끼칠까요?<br>
-        이 정책의 이해당사자들은 어떤 영향을 받을까요?
+        이 정책이 우리 사회의<br>
+        다양한 사람들에게 끼칠 영향을 확인해보세요.
         </v-card-text>
       </v-card>
+
+      <div id="filterinfo">
+        <template v-if="selectedTags.length === 0"> 지금은 </template>
+        <template v-else>
+          지금은 <strong color='blue'>{{selectedTags.join(', ')}}</strong>들이<br>받을 수 있는 
+        </template>
+        <strong :style="{color: effectColor}">{{effectDirection}}</strong> 영향을 보고 계십니다.
+      </div>
       &nbsp;
-
-      <p class="body-1">
-        * <strong class="red--text">거짓 정보</strong>를 바탕으로 한 내용은 신고해주세요!
-        <!-- <strong class="red--text">{{selectedTags}}</strong> -->
-        <v-chip v-for="tag in selectedTags" :key="tag">{{tag}}</v-chip>
-        에게<br>
-        끼칠 수 있는 {{effectDirection}} 영향을 보여드릴게요!
-        <!--TODO: Disclaimer -->
-      </p>
-      <v-card>
-        <v-card-title>
-          <v-autocomplete
-            :value="selectedTags"
-            :items="tags"
-            item-text="name"
-            item-value="name"
-            label="선택해주세요"
-            :search-input.sync="search"
-            :filter="filter"
-            multiple
-            hide-selected
-            chips
-            @input="onInputDebounced">
-
-            <template slot="no-data">
-              <v-list-tile>
-                <v-list-tile-content>
-                  입력하신 태그가 없습니다.
-                </v-list-tile-content>
-              </v-list-tile>
-            </template>
-            <template slot="item" slot-scope="{ index, item, parent }">
-              <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
-              <v-spacer></v-spacer>
-              {{item.refs}}개
-            </template>
-            <template slot="selection" slot-scope="{ item, parent, selected }">
-              <v-chip :selected="selected" label small>
-                <span class="pr-2"> {{item.name}} </span>
-                <v-icon small @click="parent.selectItem(item)">close</v-icon>
-              </v-chip>
-            </template>
-          </v-autocomplete>
-          <v-layout row wrap>
-            <v-flex xs6>
-              <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="긍정적 영향" :value="1"></v-checkbox>
-            </v-flex>
-            <v-flex xs6>
-              <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="부정적 영향" :value="0"></v-checkbox>
-            </v-flex>
-          </v-layout>
-        </v-card-title>
-      </v-card>
       <v-divider/>
-      <v-flex xs12 row wrap>
-        <v-expansion-panel popout>
-          <v-expansion-panel-content>
-            <div slot="header">정렬/필터</div>
-            <v-card>
-            <v-autocomplete
-              :value="selectedTags"
-              :items="tags"
-              item-text="name"
-              item-value="name"
-              label="선택해주세요"
-              :search-input.sync="search"
-              :filter="filter"
-              multiple
-              hide-selected
-              chips
-              @input="onInputDebounced">
+      <span>
+        <font size="2">* <strong class="red--text">거짓 정보</strong>를 담고 있으면 신고해주세요!</font><br><br>
+      </span>
 
-              <template slot="no-data">
-                <v-list-tile>
-                  <v-list-tile-content>
-                    입력하신 태그가 없습니다.
-                  </v-list-tile-content>
-                </v-list-tile>
-              </template>
-              <template slot="item" slot-scope="{ index, item, parent }">
-                <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
-                <v-spacer></v-spacer>
-                {{item.refs}}개
-              </template>
-              <template slot="selection" slot-scope="{ item, parent, selected }">
-                <v-chip :selected="selected" label small>
-                  <span class="pr-2"> {{item.name}} </span>
-                  <v-icon small @click="parent.selectItem(item)">close</v-icon>
-                </v-chip>
-              </template>
-            </v-autocomplete>   
+        <v-card style="outline:auto;">
+          <v-card-actions>
+            <v-flex xs10 style="text-align:center;">
+              원하는 영향만 모아보실래요?
+            </v-flex>
+            <v-btn icon @click="show = !show">
+              <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+            </v-btn>
+          </v-card-actions>
 
+          <v-slide-y-transition>
+            <v-card-text v-show="show" style="text-align:left;">
+              * 선택한 이해당사자들의 영향을 보여드립니다.
+              <v-autocomplete
+                :value="selectedTags"
+                :items="tags"
+                item-text="name"
+                item-value="name"
+                placeholder="입력해주세요"
+                :search-input.sync="search"
+                :filter="filter"
+                multiple
+                hide-selected
+                chips
+                clearable
+                @input="onInputDebounced">
 
+                <template slot="no-data">
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      입력하신 태그가 없습니다.
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </template>
+                <template slot="item" slot-scope="{ index, item, parent }">
+                  <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
+                  <v-spacer></v-spacer>
+                  {{item.refs}}개
+                </template>
+                <template slot="selection" slot-scope="{ item, parent, selected }">
+                  <v-chip :selected="selected" label small>
+                    <span class="pr-2"> {{item.name}} </span>
+                    <v-icon small @click="parent.selectItem(item)">close</v-icon>
+                  </v-chip>
+                </template>
+              </v-autocomplete>
+              <v-layout row wrap style="text-align:center;">
+                * 원하는 영향만 골라보실 수도 있어요.
+                <v-flex xs6>
+                  <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="긍정적 영향" :value="1" v-model="selectedButton"></v-checkbox>
+                </v-flex>
+                <v-flex xs6>
+                  <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="부정적 영향" :value="0" v-model="selectedButton"></v-checkbox>
+                </v-flex>
+              </v-layout>
+            </v-card-text>
+          </v-slide-y-transition>
+        </v-card>
 
-            <v-radio-group row hide-details>
-              <v-checkbox label="좋아요" v-model="good_show" hide-details></v-checkbox>
-              <v-checkbox label="싫어요" v-model="bad_show" hide-details></v-checkbox>
-            </v-radio-group>
-          </v-card>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-
-      </v-flex>
       <v-flex xs12 sm6 offset-sm3>
-        <!-- <v-flex v-for="i in cardnum(page)" :key="i"> -->
+
+        
+        <template v-if="onLoading">
+          <v-progress-circular
+            :size="70"
+            :width="7"
+            color="purple"
+            indeterminate
+          ></v-progress-circular>
+          <br>
+        </template>
+        <template v-else>
           <effect-card
-            v-for="effect in effects"
-            :key="effect.id"
-            :effect="effect"
-            @empathy-button-click="onEmpathyButtonClick(effect)"
-            @novelty-button-click="onNoveltyButtonClick(effect)"/>
-        <!-- </v-flex> -->
+          v-for="effect in effects"
+          :key="effect.id"
+          :effect="effect"
+          @empathy-button-click="onEmpathyButtonClick(effect)"
+          @novelty-button-click="onNoveltyButtonClick(effect)"/>
+        </template>
+
         <v-pagination
           :value="page"
           @input="onPageChange"
@@ -214,6 +195,13 @@
 .v-expansion-panel__body {
   padding: 10px !important;
 }
+.v-progress-circular.v-progress-circular--indeterminate.purple--text {
+  margin-top: 50px;
+  margin-bottom: 80px;
+}
+#filterinfo {
+  margin-top: 20px;
+}
 </style>
 <script>
 import EffectCard from '~/components/EffectCard.vue'
@@ -292,6 +280,17 @@ export default {
       } else {
         return '모든'
       }
+    },
+    effectColor: function () {
+      if (this.effectFilter.length === 1) {
+        if (this.effectFilter[0] === 0) {
+          return 'red'
+        } else {
+          return 'blue'
+        }
+      } else {
+        return 'black'
+      }
     }
   },
   data: function () {
@@ -302,7 +301,10 @@ export default {
       page: 1,
       selectedTags: [],
       search: '',
-      effectFilter: []
+      effectFilter: [],
+      onLoading: false,
+      show: false,
+      selectedButton: [0, 1]
       // count: 0,
       // prevPage: '',
       // nextPage: ''
@@ -388,6 +390,7 @@ export default {
         .indexOf(query.toString().toLowerCase()) > -1
     },
     onInput: async function (ev) {
+      this.onLoading = true
       this.selectedTags = ev
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
@@ -400,15 +403,17 @@ export default {
         params: {
           policy: this.policy.id,
           tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : ''
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null
         }
       })
       // this.$store.dispatch('incrementUserPolicyEffectsSeen')
       this.effects = effects.results
       this.count = effects.count
       this.page = 1
+      this.onLoading = false
     },
     onEffectFilterChange: async function (ev) {
+      this.onLoading = true
       this.effectFilter = ev
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
@@ -420,14 +425,16 @@ export default {
         params: {
           policy: this.policy.id,
           tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : ''
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null
         }
       })
       this.effects = effects.results
       this.count = effects.count
       this.page = 1
+      this.onLoading = false
     },
     onPageChange: async function (newPage) {
+      this.onLoading = true
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'PageChange',
@@ -438,12 +445,13 @@ export default {
         params: {
           policy: this.policy.id,
           tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : '',
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
           page: newPage
         }
       })
       this.effects = effects.results
       this.page = newPage
+      this.onLoading = false
     }
   },
   watch: {

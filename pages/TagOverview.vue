@@ -4,41 +4,13 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-        이 정책은 우리 사회에 어떤 영향을 끼칠까요?<br>
-        이 정책의 이해당사자들은 어떤 영향을 받을까요?
+        이 정책이 우리 사회의<br>
+        다양한 사람들에게 끼칠 영향을 확인해보세요.
         </v-card-text>
       </v-card>
       &nbsp;
       <p class="body-1 prompt"> 아래 버튼을 누르면 이해당사자들이 받는 영향을<br>확인할 수 있습니다. </p>
-     <v-tabs
-        slot="extension"
-        v-model="tab"
-        color="cyan"
-        grow
-      >
-        <v-tabs-slider color="yellow"></v-tabs-slider>
 
-        <v-tab
-          v-for="n in 3"
-          :key="n"
-        >
-          {{n}}
-        </v-tab>
-      </v-tabs>
-
-      <v-tabs-items v-model="tab">
-        <v-tab-item>
-          1
-        </v-tab-item>
-        <v-tab-item>
-          2
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>아브라카다브라</v-card-text>
-          </v-card>
-        </v-tab-item>
-      </v-tabs-items>
       
       <tag-overview-item v-for="tag in tags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
       </tag-overview-item>
