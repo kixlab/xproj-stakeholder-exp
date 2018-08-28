@@ -438,6 +438,7 @@ export default {
         params: {
           policy: this.policy.id,
           tag: this.selectedTags,
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : '',
           page: newPage
         }
       })
