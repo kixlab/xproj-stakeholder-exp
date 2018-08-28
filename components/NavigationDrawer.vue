@@ -160,7 +160,7 @@
         </v-list-tile>
         <v-list-tile @click="showPolicies">
           <v-list-tile-action>
-            <v-icon>directions</v-icon>
+            <v-icon></v-icon>
           </v-list-tile-action>
 
           <v-list-tile-content>
