@@ -101,7 +101,7 @@ export default {
         eventLabel: policy.title,
         eventValue: 0
       })
-      this.$store.commit('setPolicyId', {policyId: policy.id})
+      // this.$store.commit('setPolicyId', {policyId: policy.id})
       this.$store.commit('setPolicy', policy)
       if (this.$store.state.userToken) {
         // const userpolicy = await this.$axios.$get('/api/userpolicy/', {

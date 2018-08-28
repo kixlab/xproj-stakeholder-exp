@@ -7,42 +7,53 @@
         <!-- <strong class="red--text">{{selectedTags}}</strong> -->
         <v-chip v-for="tag in selectedTags" :key="tag">{{tag}}</v-chip>
         에게<br>
-        끼칠 수 있는 영향을 보여드릴게요!
+        끼칠 수 있는 {{effectDirection}} 영향을 보여드릴게요!
         <!--TODO: Disclaimer -->
       </p>
-      <v-autocomplete
-        :value="selectedTags"
-        :items="tags"
-        item-text="name"
-        item-value="name"
-        label="선택해주세요"
-        :search-input.sync="search"
-        :filter="filter"
-        multiple
-        hide-selected
-        chips
-        @input="onInputDebounced">
+      <v-card>
+        <v-card-title>
+          <v-autocomplete
+            :value="selectedTags"
+            :items="tags"
+            item-text="name"
+            item-value="name"
+            label="선택해주세요"
+            :search-input.sync="search"
+            :filter="filter"
+            multiple
+            hide-selected
+            chips
+            @input="onInputDebounced">
 
-        <template slot="no-data">
-          <v-list-tile>
-            <v-list-tile-content>
-              입력하신 태그가 없습니다.
-            </v-list-tile-content>
-          </v-list-tile>
-        </template>
-        <template slot="item" slot-scope="{ index, item, parent }">
-          <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
-          <v-spacer></v-spacer>
-          {{item.refs}}개
-        </template>
-        <template slot="selection" slot-scope="{ item, parent, selected }">
-          <v-chip :selected="selected" label small>
-            <span class="pr-2"> {{item.name}} </span>
-            <v-icon small @click="parent.selectItem(item)">close</v-icon>
-          </v-chip>
-        </template>
-      </v-autocomplete>
-
+            <template slot="no-data">
+              <v-list-tile>
+                <v-list-tile-content>
+                  입력하신 태그가 없습니다.
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+            <template slot="item" slot-scope="{ index, item, parent }">
+              <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
+              <v-spacer></v-spacer>
+              {{item.refs}}개
+            </template>
+            <template slot="selection" slot-scope="{ item, parent, selected }">
+              <v-chip :selected="selected" label small>
+                <span class="pr-2"> {{item.name}} </span>
+                <v-icon small @click="parent.selectItem(item)">close</v-icon>
+              </v-chip>
+            </template>
+          </v-autocomplete>
+          <v-layout row wrap>
+            <v-flex xs6>
+              <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="긍정적 영향" :value="1"></v-checkbox>
+            </v-flex>
+            <v-flex xs6>
+              <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="부정적 영향" :value="0"></v-checkbox>
+            </v-flex>
+          </v-layout>
+        </v-card-title>
+      </v-card>
       <v-divider/>
       <v-flex xs12 sm6 offset-sm3>
         <!-- <v-flex v-for="i in cardnum(page)" :key="i"> -->
@@ -171,6 +182,7 @@ export default {
   },
   created: function () {
     this.onInputDebounced = _.debounce(this.onInput, 1000)
+    this.onEffectFilterChangeDebounced = _.debounce(this.onEffectFilterChange, 500)
     // if(this.$store.state.selectedTag){
     //   this.onInput([this.$store.state.selectedTag])
     // }
@@ -207,6 +219,17 @@ export default {
     },
     tags: function () {
       return this.$store.state.tags
+    },
+    effectDirection: function () {
+      if (this.effectFilter.length === 1) {
+        if (this.effectFilter[0] === 0) {
+          return '부정적'
+        } else {
+          return '긍정적'
+        }
+      } else {
+        return '모든'
+      }
     }
   },
   data: function () {
@@ -216,7 +239,8 @@ export default {
       dialog: false,
       page: 1,
       selectedTags: [],
-      search: ''
+      search: '',
+      effectFilter: []
       // count: 0,
       // prevPage: '',
       // nextPage: ''
@@ -301,10 +325,30 @@ export default {
       const effects = await this.$axios.$get('/api/effects/', {
         params: {
           policy: this.policy.id,
-          tag: this.selectedTags
+          tag: this.selectedTags,
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : ''
         }
       })
       // this.$store.dispatch('incrementUserPolicyEffectsSeen')
+      this.effects = effects.results
+      this.count = effects.count
+      this.page = 1
+    },
+    onEffectFilterChange: async function (ev) {
+      this.effectFilter = ev
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'EffectFilterChanged',
+        eventLabel: this.selectedTags,
+        eventValue: 0
+      })
+      const effects = await this.$axios.$get('/api/effects/', {
+        params: {
+          policy: this.policy.id,
+          tag: this.selectedTags,
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : ''
+        }
+      })
       this.effects = effects.results
       this.count = effects.count
       this.page = 1
