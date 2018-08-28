@@ -42,10 +42,10 @@
       
       <tag-overview-item v-for="tag in tags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
       </tag-overview-item>
-      <v-btn color="primary" dark ripple block @click="onNewStakeholderClick">
+      <v-btn color="primary" :disabled="!$store.state.userToken" dark ripple block @click="onNewStakeholderClick">
         새로운 영향 남기기
       </v-btn>
-            <v-btn v-if="!$store.state.userToken" color="primary" dark ripple block @click="onShowPolicyListClick">
+      <v-btn v-if="!$store.state.userToken" color="primary" dark ripple block @click="onShowPolicyListClick">
         다른 정책 보기
       </v-btn>
       <v-dialog

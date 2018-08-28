@@ -17,7 +17,7 @@ export const state = () => ({
   isLookingAround: false,
   tags: [],
   randomEffect: {},
-  usedEffect: [],
+  usedEffects: [],
   selectedTag: null,
   browsedTags: [],
   explorationDone: false
@@ -29,10 +29,14 @@ export const mutations = {
   },
   setPolicy (state, payload) {
     state.policy = payload
+    state.policyId = payload.id
+    state.selectedTag = null
+    state.browsedTags = []
+    state.usedEffects = []
   },
-  setPolicyId (state, payload) {
-    state.policyId = payload.policyId
-  },
+  // setPolicyId (state, payload) {
+  //   state.policyId = payload.policyId
+  // },
   setEffects (state, payload) {
     state.effects = payload
   },
@@ -121,8 +125,8 @@ export const mutations = {
   setRandomEffect (state, randomEffect) {
     state.randomEffect = randomEffect
   },
-  addUsedEffect (state, effectId) {
-    state.usedEffect.push(effectId)
+  addUsedEffect (state, effect) {
+    state.usedEffects.push(effect)
   },
   setSelectedTag (state, tag) {
     if (state.browsedTags.indexOf(tag) === -1) {
@@ -134,9 +138,6 @@ export const mutations = {
     if (state.browsedTags.indexOf(tag) === -1) {
       state.browsedTags.push(tag)
     }
-  },
-  clearBrowsedTags (state) {
-    state.browsedTags = []
   }
 }
 
@@ -239,13 +240,14 @@ export const actions = {
     context.commit('setTags', tags)
   },
   async fetchRandomEffect (context) {
+    const usedEffectIds = context.state.usedEffects.map((x) => { return x.id })
     const randomEffect = await this.$axios.$get('/api/effects/random/', {
       params: {
         policy: context.state.policyId,
-        exclude: context.state.usedEffect
+        exclude: usedEffectIds
       }
     })
-    context.commit('addUsedEffect', randomEffect.id)
+    context.commit('addUsedEffect', randomEffect)
     context.commit('setRandomEffect', randomEffect)
   },
   async addBrowsedTags (context, tags) {

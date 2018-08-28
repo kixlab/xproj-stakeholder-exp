@@ -2,6 +2,7 @@
   <v-layout row wrap justify-center>
     <promise-pane :policy="policy" />
     <v-flex xs12>
+      이 정책으로 인해 영향을 받으시는군요! 어떤 영향을 받으시는지 조금만 더 설명해주세요.
       <v-form>
         <div>
         빈칸에 들어갈 가장 알맞은 단어를 태그로 입력해주세요.<br>
