@@ -7,7 +7,7 @@
         <br>
         <!-- 이 정책이 <strong class="red--text">{{randomEffect.stakeholder_detail}}</strong>에게<br>
         끼치는 영향을 보여드릴게요! -->
-        지금까지 추측하신 영향이 맞는지 확인해보세요!
+        지금까지 적어주신 영향을 다른 사람들이 적은 내용과 비교해보세요!
       </p>
 
       <!-- <v-flex xs12 sm6 offset-sm3

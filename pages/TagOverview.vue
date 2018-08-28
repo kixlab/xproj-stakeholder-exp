@@ -4,7 +4,7 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-        이 정책은 우리 사회에 어떤 영향을 끼칠까요?<br>
+        이 정책으로 영향을 받는 사람은 누구일까요?<br>
         이 정책의 이해당사자들은 어떤 영향을 받을까요?
         </v-card-text>
       </v-card>

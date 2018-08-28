@@ -2,7 +2,10 @@
   <v-layout row wrap justify-center>
     <promise-pane :policy="policy" />
     <v-flex xs12>
-      이 정책으로 인해 영향을 받으시는군요! 어떤 영향을 받으시는지 조금만 더 설명해주세요.
+      <p class="body-1 prompt">
+        이 정책으로 인해 영향을 받으시는군요! 
+        <br>어떤 영향을 받으시는지 조금만 더 설명해주세요.
+      </p>
       <v-form>
 
         <p class="question">
@@ -17,9 +20,9 @@
 
         <div>
           <p class="question">
-          쓰신 내용 중, 이 정책과 연관된 태그를 모두 적어주세요.<br>
-          예) 임플란트 전문 치과의사시라면, "의료인", "치과의사", "임플란트 전문 치과의사", 처럼 큰 분류부터 세부적인 집단까지 적어주시면 됩니다. <br>
-          최소 <strong style="color:red;">2개</strong>의 태그를 사용해주세요.<br>
+            쓰신 설명 중, 이 정책과 관련있는 사용자님의 특징을 태그로 달아주세요.<br>
+            예를 들면, "건강보험 보장성 강화" 정책의 영향을 받는 "임플란트 전문 치과의사"이시라면, "의료인", "치과의사", "임플란트 전문 치과의사" 처럼 적어주시면 됩니다. <br>
+            최소 <strong style="color:red;">2개</strong>의 태그를 사용해주세요.<br>
           </p>
           <!-- <p class="body-1 prompt">
             <v-flex xs12>
@@ -35,7 +38,7 @@
         :items="tags"
         item-text="name"
         item-value="name"
-        label="적어주세요"
+        label="태그를 적어주세요"
         :search-input.sync="search"
         :filter="filter"
         multiple
