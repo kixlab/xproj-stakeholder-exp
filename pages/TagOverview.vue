@@ -10,6 +10,36 @@
       </v-card>
       &nbsp;
       <p class="body-1 prompt"> 아래 버튼을 누르면 이해당사자들이 받는 영향을<br>확인할 수 있습니다. </p>
+     <v-tabs
+        slot="extension"
+        v-model="tab"
+        color="cyan"
+        grow
+      >
+        <v-tabs-slider color="yellow"></v-tabs-slider>
+
+        <v-tab
+          v-for="n in 3"
+          :key="n"
+        >
+          {{n}}
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items v-model="tab">
+        <v-tab-item>
+          1
+        </v-tab-item>
+        <v-tab-item>
+          2
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>아브라카다브라</v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs-items>
+      
       <tag-overview-item v-for="tag in tags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
       </tag-overview-item>
       <v-btn color="primary" dark ripple block @click="onNewStakeholderClick">
@@ -100,12 +130,6 @@ export default {
     tags: function () {
       return this.$store.state.tags
     },
-    // stakeholder_left: function () {
-    //   if (this.$store.state.userPolicy.stakeholders_seen > 3) {
-    //     return 0
-    //   }
-    //   return 3 - this.$store.state.userPolicy.stakeholders_seen
-    // },
     effects_left: function () {
       if (this.$store.state.userPolicy.effects_seen > 9) {
         return 0
@@ -121,7 +145,8 @@ export default {
   data: function () {
     return {
       opinionTexts: false,
-      dialog: false
+      dialog: false,
+      tag: null
     }
   },
   methods: {

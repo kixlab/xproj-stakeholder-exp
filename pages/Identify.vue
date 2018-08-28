@@ -61,7 +61,7 @@ export default {
   methods: {
     onNextButtonClick: function () {
       // this.userPolicy.effect_size = parseInt(this.userPolicy.effect_size)
-      const to = this.userPolicy.effect_size >= 3 ? 'StateAsStakeholder' : 'GuessEffectRandom'
+      const to = this.userPolicy.effect_size >= 2 ? 'StateAsStakeholder' : 'GuessEffectRandom'
       this.$ga.event({
         eventCategory: '/Identify',
         eventAction: 'SubmitIdentity',

@@ -99,10 +99,10 @@
           </v-checkbox>
           </v-card-text>
         </v-card>
-
-        <v-btn flat @click="onCancelClick" color="red">취소</v-btn>
+        <v-flex xs12 row wrap>
+        <v-btn flat outline @click="onCancelClick" color="red">취소</v-btn>
         <v-btn @click="onNextClick" ripple color="primary"> 계정 정보 입력 </v-btn>
-        
+        </v-flex>
       </v-stepper-content>
 
       <v-stepper-content step="2">
@@ -147,7 +147,7 @@
         </v-form>
       </v-card>
       </v-flex>
-        <v-btn flat @click="e1=1">뒤로</v-btn>
+        <v-btn flat outline @click="e1=1">뒤로</v-btn>
         <v-btn
           color="primary"
           @click="onRegisterClick"
