@@ -14,7 +14,6 @@ export const state = () => ({
     step: 1,
     is_participant: true
   },
-  isLookingAround: false,
   tags: [],
   randomEffect: {},
   usedEffects: [],
@@ -41,14 +40,10 @@ export const mutations = {
     state.effects = payload
   },
   setUserToken (state, payload) {
-    state.isLookingAround = false
     state.userToken = payload
   },
   setUser (state, payload) {
     state.user = payload
-  },
-  setLookAround (state, payload) {
-    state.isLookingAround = payload
   },
   setUserPolicy (state, payload) {
     state.userPolicy = payload

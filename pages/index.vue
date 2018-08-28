@@ -12,10 +12,10 @@
 
       <v-flex id="contents">
         <div id="title_word">
-          정치에 참여할 기회조차 없었던 당신을 위해<br>
-          "정책의 타입"과 함께<br>
-          정책을 이해하고<br>
-          여러분의 목소리를 사회에 들려주세요!
+          정부 정책은 과연 누구에게, 어떤 영향을 줄까요?<br>
+          "정책 타입"에서<br>
+          정책의 영향에 대해 알아보고<br>
+          정부 정책이 여러분의 삶을 어떻게 바꾸는지 들려주세요!
         </div>
       </v-flex>
 
@@ -79,7 +79,6 @@ export default {
         eventLabel: '',
         eventValue: 0
       })
-      this.$store.commit('setLookAround', true)
       this.$router.push('/ShowPolicies')
     },
     onParticipateButtonClick () {
@@ -89,7 +88,6 @@ export default {
         eventLabel: '',
         eventValue: 0
       })
-      this.$store.commit('setLookAround', false)
       this.$router.push('/SignIn')
     }
   }

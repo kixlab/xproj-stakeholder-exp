@@ -4,12 +4,11 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-          여러분의 목소리를 내는 것은 물론,<br>
-          다양한 사람의 목소리를 한눈에 볼 수 있습니다!
+          영향을 알고 싶으신 정책을 선택해주세요.
         </v-card-text>
       </v-card>
       <v-spacer/><br>
-      원하는 정책을 선택해주세요.<br>
+      <br>
       <template v-if="userGroup>-1">
         <strong style="color: red;"> 실험 중에는 선택된 정책만 보실 수 있습니다. </strong>
       </template>
@@ -20,11 +19,8 @@
         </v-btn>
       </template>
       <br>
-      <template v-if="experimentDone">
-        <v-btn block color="success" @click="postSurvey">사용 후 설문</v-btn>
-      </template>
-      <template v-else>
-        <v-btn block disabled color="primary">사용 후 설문</v-btn>
+      <template>
+        <v-btn block :disabled="!experimentDone" color="primary">사용 후 설문</v-btn>
       </template>
 
     </v-flex>

@@ -12,7 +12,7 @@
       <p class="body-1 prompt"> 아래 버튼을 누르면 이해당사자들이 받는 영향을<br>확인할 수 있습니다. </p>
       <tag-overview-item v-for="tag in tags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
       </tag-overview-item>
-      <v-btn color="primary" :disabled="!$store.state.userToken" dark ripple block @click="onNewStakeholderClick">
+      <v-btn color="primary" :disabled="!$store.state.userToken" ripple block @click="onNewStakeholderClick">
         새로운 영향 남기기
       </v-btn>
       <v-btn v-if="!$store.state.userToken" color="primary" dark ripple block @click="onShowPolicyListClick">
@@ -23,7 +23,7 @@
         v-model="dialog"
         width="500"
         full-width
-      >
+        >
         <v-btn
           slot="activator"
           color="primary"
