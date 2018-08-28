@@ -31,6 +31,7 @@
             multiple
             hide-selected
             chips
+            clearable
             @input="onInputDebounced">
 
             <template slot="no-data">
