@@ -101,9 +101,10 @@
         @click="predictedEffect.isBenefit=1"> 
         부정적 </v-btn>
       </div>
-      
-      <p v-if="!allFilled" style="color:red;">모든 빈칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
-      <v-btn v-if="!allFilled" disabled> 추가하기 </v-btn>
+      <div v-if="!allFilled">
+        <p style="color:red;">모든 빈칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
+        <v-btn disabled> 추가하기 </v-btn>
+      </div>
       <v-btn v-else dark color="primary" @click="onAddNewStakeholderButtonClick">추가하기</v-btn>   
       <v-btn dark color="secondary" @click="goBack">돌아가기</v-btn>
     </v-flex>
