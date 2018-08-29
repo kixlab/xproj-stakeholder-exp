@@ -4,12 +4,14 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-        이 정책으로 영향을 받는 사람은 누구일까요?<br>
-        이 정책의 이해당사자들은 어떤 영향을 받을까요?
+        이 정책이 우리 사회의<br>
+        다양한 사람들에게 끼칠 영향을 확인해보세요.
         </v-card-text>
       </v-card>
       &nbsp;
       <p class="body-1 prompt"> 아래 버튼을 누르면 이해당사자들이 받는 영향을<br>확인할 수 있습니다. </p>
+
+      
       <tag-overview-item v-for="tag in tags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
       </tag-overview-item>
       <v-btn color="primary" :disabled="!$store.state.userToken" ripple block @click="onNewStakeholderClick">
@@ -100,12 +102,6 @@ export default {
     tags: function () {
       return this.$store.state.tags
     },
-    // stakeholder_left: function () {
-    //   if (this.$store.state.userPolicy.stakeholders_seen > 3) {
-    //     return 0
-    //   }
-    //   return 3 - this.$store.state.userPolicy.stakeholders_seen
-    // },
     effects_left: function () {
       if (this.$store.state.userPolicy.effects_seen > 9) {
         return 0
@@ -121,7 +117,8 @@ export default {
   data: function () {
     return {
       opinionTexts: false,
-      dialog: false
+      dialog: false,
+      tag: null
     }
   },
   methods: {

@@ -106,7 +106,7 @@
 
           <v-list-tile-content>
             <v-dialog
-              v-model="dialog"
+              v-model="dropDialog"
               width="500"
               full-width
             >

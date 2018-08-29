@@ -11,7 +11,7 @@
       </v-card>
     </v-flex>
     
-    <v-flex xs8>
+    <v-flex xs12>
       새로운 이해당사자를 설명해주세요.
       <v-combobox
         :value="selectedTags"
@@ -54,7 +54,7 @@
         {{tag.name ? tag.name : tag}}
       </v-chip> -->
     </v-flex>
-    <v-flex xs12>
+    <v-flex xs12 row wrap>
       <p class="question">그럼 그 사람은 이 정책으로 어떤 영향을 받게 될까요?</p>
       <v-textarea box auto-grow v-model="predictedEffect.description"/>
       
@@ -111,88 +111,6 @@
       <v-btn :diasbled="!allFilled" color="primary" @click="onAddNewStakeholderButtonClick">추가하기</v-btn>   
       <v-btn dark color="secondary" @click="goBack">돌아가기</v-btn>
     </v-flex>
-    <!-- <v-flex xs12>
-      <v-card color="grey lighten-4">
-        <v-card-text>
-          새로운 이해당사자를 알려주세요!
-        </v-card-text>
-      </v-card>
-      
-      <p class="body-1 prompt question">
-        정책의 영향을 받지만, 어디에도 속하지 않는 사람이 있었다구요?
-        저희에게만 살짝 두 단계로 알려주세요!
-        예를 들어, 그 사람이 '선생님'이라면 [대분류: '공무원', 소분류: '선생님']처럼 두 단계로 나누어 써주세요.
-      </p>
-      <v-text-field
-      v-validate="'required'"
-      v-model="stakeholder_custom"
-      :error-messages="errors.collect('email')"       
-      name="stakeholder_custom"
-      placeholder="대분류"/>
-      <v-combobox
-        v-model="selectedTags"
-        :items="tags"
-        item-text="name"
-        item-value="name"
-        label="선택해주세요"
-        :search-input.sync="search"
-        multiple
-        chips>
-        <template slot="no-data">
-          <v-list-tile>
-            <v-list-tile-content>
-              <v-chip color="blue lighten-3" label small>{{hangulSearch}}</v-chip> 새로 만드시려면 엔터 키를 눌러주세요.
-            </v-list-tile-content>
-          </v-list-tile>
-        </template>
-        <template slot="item" slot-scope="{index, item, parent}">
-          <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
-          <v-spacer></v-spacer>
-          {{item.refs}}개
-        </template>
-      </v-combobox>
-
-      <v-text-field
-      v-validate="'required'"
-      v-model="predictedEffect.stakeholder_detail"
-      :error-messages="errors.collect('email')"       
-      name="stakeholder_detail"
-      placeholder="소분류" />
-
-      <p class="question">그럼 그 사람은 이 정책으로 어떤 영향을 받게 될까요?</p>
-      <v-textarea box auto-grow v-model="predictedEffect.description"/>
-
-      <div>
-        <p class="body-1 prompt question">이 영향은 그 사람에게 긍정적인가요? 부정적인가요? </p>
-        <v-btn 
-        :outline="predictedEffect.isBenefit !== 0" 
-        :dark="predictedEffect.isBenefit == 0"
-        color="primary"
-        class="binarybtn"
-        @click="predictedEffect.isBenefit=0">
-        긍정적 </v-btn>
-        <v-btn 
-        :outline="predictedEffect.isBenefit !== 1" 
-        :dark="predictedEffect.isBenefit == 1"
-        color="error" 
-        class="binarybtn" 
-        @click="predictedEffect.isBenefit=1"> 
-        부정적 </v-btn>
-      </div>
-
-      <p class="question"> 위 빈칸에 '영향'을 쓰실 때 가장 큰 영향을 끼친 사람/상황 등이 있다면 간단히 적어주세요.<br>(예. 언론기사, 지인 등)</p>
-      <v-text-field
-      v-validate="'required'"
-      v-model="predictedEffect.source"
-      :error-messages="errors.collect('email')"       
-      name="stakeholder_detail"/>
-      <br>
-
-      <p v-if="!allFilled" style="color:red;">모든 빈칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
-      <v-btn v-if="!allFilled" disabled> 추가하기 </v-btn>
-      <v-btn v-else dark color="primary" @click="onAddNewStakeholderButtonClick">추가하기</v-btn>   
-      <v-btn dark color="secondary" @click="goBack">돌아가기</v-btn>
-    </v-flex> -->
   </v-layout>
 </template>
 
@@ -221,6 +139,55 @@ export default {
     }
   },
   methods: {
+    numToHangul: function (search) {
+      if (search.name) {
+        return search.name
+      }
+      const arrNumberWord = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구']
+      // 10,  100,  100 자리수 한글 표시
+      const arrDigitWord = ['', '십', '백', '천']
+      // 만단위 한글 표시
+      const arrManWord = ['', '만', '억', '조']
+      // Copyright 취생몽사(http://bemeal2.tistory.com)
+
+      // 소스는 자유롭게 사용가능합니다. Copyright 는 삭제하지 마세요.
+      const numStrs = search.match(/\d+/g)
+      console.log(numStrs)
+      let newSearchString = search.repeat(1)
+      if (!numStrs) {
+        return search
+      }
+      numStrs.forEach((numStr) => {
+        console.log(numStr)
+        let hanValue = ''
+        let manCount = 0 // 만단위 0이 아닌 금액 카운트.
+        const numLength = numStr.length
+        for (let i = 0; i < numLength; i++) {
+          // 1단위의 문자로 표시.. (0은 제외)
+          let strTextWord = arrNumberWord[numStr.charAt(i)]
+          console.log(strTextWord)
+          // 0이 아닌경우만,  십/백/천 표시
+          if (strTextWord !== '') {
+            manCount++
+            strTextWord += arrDigitWord[(numLength - (i + 1)) % 4]
+          }
+          // 만단위마다 표시 (0인경우에도 만단위는 표시한다)
+          if (manCount !== 0 && (numLength - (i + 1)) % 4 === 0) {
+            manCount = 0
+            strTextWord = strTextWord + arrManWord[(numLength - (i + 1)) / 4]
+          }
+          hanValue += strTextWord
+        }
+
+        newSearchString = newSearchString.replace(numStr, hanValue)
+      })
+      // 출처: http://bemeal2.tistory.com/67 [취생몽사]
+      return newSearchString
+    },
+    onInput (ev) {
+      console.log(ev)
+      this.selectedTags = ev.map(this.numToHangul)
+    },
     goBack: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,

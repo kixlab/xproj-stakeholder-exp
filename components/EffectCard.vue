@@ -2,29 +2,36 @@
   <div class="card__effect">
     <v-card>
       <v-card-title>
-        <h3 style="text-align:left; color:blue;" v-for="tag in effect.tags" :key="tag">
-          #{{tag}}&nbsp;
-        </h3>
-        <v-spacer/>
-        <v-icon :color="effect.isBenefit ? 'primary' : 'error'">
-          {{effect.isBenefit ? 'sentiment_very_satisfied' : 'sentiment_very_dissatisfied'}}
-        </v-icon>
-      </v-card-title>
+        <v-flex xs10 style="text-align: left;">
+          <strong><font size="3">{{effect.stakeholder_detail}}</font></strong>
+        </v-flex>
+        <v-flex xs2>
+          <v-icon :color="effect.isBenefit ? 'primary' : 'error'">
+            {{effect.isBenefit ? 'sentiment_very_satisfied' : 'sentiment_very_dissatisfied'}}
+          </v-icon>
+        </v-flex>
+        <v-flex xs12 style="text-align: left;">
+          <font size="2"><span style="text-align:left; color:blue;" v-for="tag in effect.tags" :key="tag">#{{tag}}&nbsp;&nbsp;</span></font>
+        </v-flex>
+      </v-card-title>      
       <v-card-text class="effect-card__textbox">
         <a @click="onShowDescriptionButtonClick">
           <span class="effect-card__text">{{expanded || show ? effect.description : shortDescription}}</span>
         </a>
       </v-card-text>
       <v-card-actions>
-        <v-btn small :depressed="isNoveltyVoted" :flat="!isNoveltyVoted" color="primary" @click.stop="onNoveltyButtonClick">
-          참신 {{effect.novelty.length}}
+        <v-btn small outline :depressed="isNoveltyVoted" :flat="!isNoveltyVoted" color="primary" @click.stop="onNoveltyButtonClick">
+          참신
         </v-btn>
-        <v-btn small :depressed="isEmpathyVoted" :flat="!isEmpathyVoted" color="primary" @click.stop="onEmpathyButtonClick">
-          공감 {{effect.empathy.length}}
+        &nbsp;{{effect.novelty.length}}
+        <v-btn small outline :depressed="isEmpathyVoted" :flat="!isEmpathyVoted" color="primary" @click.stop="onEmpathyButtonClick">
+          공감
         </v-btn>
-        <v-btn small :flat="!isFishyVoted" :depressed="isFishyVoted" color="error" @click.stop="onFishyButtonClick">
-          의심 {{effect.fishy.length}}
+        &nbsp; {{effect.empathy.length}}
+        <v-btn small outline :depressed="isFishyVoted" :flat="!isFishyVoted" color="error" @click.stop="onFishyButtonClick">
+          의심
         </v-btn>
+        &nbsp; {{effect.fishy.length}}
         <pre>  </pre>
 
         <v-dialog v-model="dialog" width="500">

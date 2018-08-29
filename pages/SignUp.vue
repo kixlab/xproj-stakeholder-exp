@@ -68,100 +68,93 @@
               <v-divider/>
               <br>
               <strong>
-              본인은 이 동의서를 읽고 이해하였으며 본인은 자발적으로 본 연구에 참여함을 확인합니다.<br>
-              <br>
-              또한, 본인은 <br>
-                1. 본인과 연구자 및 KAIST 사이에 본인의 연구 참여결정에 영향을 줄 수 있는 어떠한 관계도 없고, <br>
-                2. 만 20세 이상, 만 64세 이하의 대한민국 국민이며, <br>
-                3. 인지 기능에 문제가 있지 아니함을 확인합니다. <br>
-              <br>
-              <v-divider/>
-              <br>
-              <font size="5">2. 개인정보 제공 및 활용 동의 안내 </font><br>
-              실험 참가자에 대한 참여 보상(기프티콘) 지급을 위해 다음과 같은 정보를 실험 참여 후 설문에서 수집할 예정입니다.
-              아래 항목에 대해 응답하지 않는 경우 실험 보상을 지급받을 수 없습니다.<br><br>
-              
-              - 이름<br>
-              - 생년월일<br>
-              - 성별<br>
-              - 휴대폰번호<br>
-              - 이메일 주소<br>
-              - 거주지 주소 (읍/면/동까지)<br><br>
+                본인은 이 동의서를 읽고 이해하였으며 본인은 자발적으로 본 연구에 참여함을 확인합니다.<br>
+                <br>
+                또한, 본인은 <br>
+                  1. 본인과 연구자 및 KAIST 사이에 본인의 연구 참여결정에 영향을 줄 수 있는 어떠한 관계도 없고, <br>
+                  2. 만 20세 이상, 만 64세 이하의 대한민국 국민이며, <br>
+                  3. 인지 기능에 문제가 있지 아니함을 확인합니다. <br>
+                <br>
+                <v-divider/>
+                <br>
+                <font size="5">2. 개인정보 제공 및 활용 동의 안내 </font><br>
+                실험 참가자에 대한 참여 보상(기프티콘) 지급을 위해 다음과 같은 정보를 실험 참여 후 설문에서 수집할 예정입니다.
+                아래 항목에 대해 응답하지 않는 경우 실험 보상을 지급받을 수 없습니다.<br><br>
+                
+                - 이름<br>
+                - 생년월일<br>
+                - 성별<br>
+                - 휴대폰번호<br>
+                - 이메일 주소<br>
+                - 거주지 주소 (읍/면/동까지)<br><br>
 
-              수집된 정보는 참여연구원에 의해서만 열람, 처리되며 참여 보상을 지급하는 용도로만 사용됩니다.<br><br>
-                </strong>
-                <v-divider/><br>
-                <v-checkbox v-model="agreement" color="primary" hide-detials>
-                  <span slot="label" style="color: black;"> <font size="2">
-                    위 '인간대상 연구 동의서' 및 '개인정보 제공 및 활용 동의 안내'를 읽었으며, 그 내용에 동의합니다.
-                  </font></span>
-                </v-checkbox>
-              </v-card-text>
-            </v-card>
+                수집된 정보는 참여연구원에 의해서만 열람, 처리되며 참여 보상을 지급하는 용도로만 사용됩니다.<br><br>
+              </strong>
+              <v-divider/><br>
+              <v-checkbox v-model="agreement" color="primary" hide-detials>
+                <span slot="label" style="color: black;"> <font size="2">
+                  위 '인간대상 연구 동의서' 및 '개인정보 제공 및 활용 동의 안내'를 읽었으며, 그 내용에 동의합니다.
+                </font></span>
+              </v-checkbox>
+            </v-card-text>
+          </v-card>
+        <v-flex xs12 row wrap>
+        <v-btn flat outline @click="onCancelClick" color="red">취소</v-btn>
+        <v-btn @click="onNextClick" ripple color="primary"> 계정 정보 입력 </v-btn>
+        </v-flex>
+      </v-stepper-content>
 
-          <v-btn flat @click="onCancelClick" color="red">취소</v-btn>
-          <v-btn @click="onNextClick" ripple color="primary"> 계정 정보 입력 </v-btn>
-          
-        </v-stepper-content>
-
-        <v-stepper-content step="2">
-          <v-flex xs12 id="accountinfo">
-            <v-alert v-model="alert" type="error" dismissible>
-              {{formattedError}}
-            </v-alert>
-            <p>
-              <strong>계정 정보를 입력해주세요.</strong>
-            </p>
-            <v-card flat>
-              <v-form>
-                <v-text-field
-                  v-validate="'required|email'"
-                  v-model="email"
-                  :error-messages="errors.collect('email')"
-                  label="이메일"
-                  placeholder="abc@example.com"
-                  type="email"
-                  name="email"
-                  required
-                  >
-                </v-text-field>   
-                <v-text-field
-                  v-validate="'required|min:8'"
-                  v-model="password"
-                  :error-messages="errors.collect('password')"
-                  type="password"
-                  label="비밀번호"
-                  placeholder="password"
-                  name="password"
-                  ref="password"
-                  required
-                  >
-                </v-text-field>
-                <v-text-field
-                  v-validate="'required|min:8|confirmed:password'"
-                  v-model="password2"
-                  :error-messages="errors.collect('password_confirm')"
-                  type="password"
-                  label="비밀번호 다시 입력"
-                  placeholder="password again"
-                  data-vv-name="password_confirm"
-                  required
-                  >
-                </v-text-field>
-              </v-form>
-            </v-card>
-          </v-flex>
-          <v-btn flat @click="e1=1">뒤로</v-btn>
-          <v-btn
-            color="primary"
-            @click="onRegisterClick"
-            >
-            완료
-          </v-btn>
-        </v-stepper-content>
-
-      </v-stepper-items>
-
+      <v-stepper-content step="2">
+      <v-flex xs12 id="accountinfo">
+      <v-alert v-model="alert" type="error" dismissible>
+        {{formattedError}}
+      </v-alert>
+      <p><strong>계정 정보를 입력해주세요.</strong></p>
+      <v-card flat>
+        <v-form>
+          <v-text-field
+            v-validate="'required|email'"
+            v-model="email"
+            :error-messages="errors.collect('email')"
+            label="이메일"
+            placeholder="abc@example.com"
+            type="email"
+            name="email"
+            required
+          ></v-text-field>   
+          <v-text-field
+            v-validate="'required|min:8'"
+            v-model="password"
+            :error-messages="errors.collect('password')"
+            type="password"
+            label="비밀번호"
+            placeholder="password"
+            name="password"
+            ref="password"
+            required
+            ></v-text-field>
+          <v-text-field
+            v-validate="'required|min:8|confirmed:password'"
+            v-model="password2"
+            :error-messages="errors.collect('password_confirm')"
+            type="password"
+            label="비밀번호 다시 입력"
+            placeholder="password again"
+            data-vv-name="password_confirm"
+            required
+            ></v-text-field>
+        </v-form>
+      </v-card>
+      </v-flex>
+        <v-btn flat outline @click="e1=1">뒤로</v-btn>
+        <v-btn
+          color="primary"
+          @click="onRegisterClick"
+        >
+          완료
+        </v-btn>
+      </v-stepper-content>
+    </v-stepper-items>
     </v-stepper>
 
     <v-dialog

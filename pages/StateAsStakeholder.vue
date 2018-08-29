@@ -2,10 +2,13 @@
   <v-layout row wrap justify-center>
     <promise-pane :policy="policy" />
     <v-flex xs12>
-      <p class="body-1 prompt">
-        이 정책으로 인해 영향을 받으시는군요! 
-        <br>어떤 영향을 받으시는지 조금만 더 설명해주세요.
-      </p>
+      <v-card color="grey lighten-4">
+        <v-card-text>
+        이 정책으로 인해 {{effectSize}} 영향을 받으시는군요!<br>
+        어떻게 영향을 받으시는지 자세히 알려주세요.
+        </v-card-text>
+      </v-card>
+      
       <v-form>
 
         <p class="question">
@@ -125,6 +128,20 @@ export default {
     },
     tags: function () {
       return this.$store.state.tags
+    },
+    effectSize: function () {
+      switch (this.$store.state.userPolicy.effect_size) {
+        case 2: {
+          return '조금의'
+        }
+        case 3: {
+          return '적당히'
+        }
+        case 4: {
+          return '많은'
+        }
+      }
+      console.log('ERROR')
     }
   },
   data: function () {
