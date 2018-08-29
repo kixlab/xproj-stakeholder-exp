@@ -121,7 +121,7 @@ export default {
       return this.$store.state.policy
     },
     allFilled: function () {
-      return (this.myEffect.description !== '' && this.myEffect.isBenefit !== -1 && this.selectedTags.length >= 2)
+      return (this.myEffect.description.length >= 10 && this.myEffect.isBenefit !== -1 && this.selectedTags.length >= 2)
     },
     tags: function () {
       return this.$store.state.tags

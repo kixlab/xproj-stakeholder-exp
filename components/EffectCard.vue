@@ -151,7 +151,7 @@ export default {
           eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
           eventValue: 0
         })
-        this.$store.dispatch('incrementUserPolicyEffectsSeen')
+        // this.$store.dispatch('incrementUserPolicyEffectsSeen')
       }
       this.show = !this.show
     },

@@ -28,7 +28,7 @@
           no-action
           sub-group
           value="true"
-        >
+          >
           <v-list-tile slot="activator">
             <v-list-tile-action>
               <v-icon>query_builder</v-icon>
@@ -61,6 +61,36 @@
               <span v-if="effects_seen>=effects_seen_min" style="color:blue;">{{effects_seen}} / {{effects_seen_min}}</span>
               <span v-else style="color:red;">{{effects_seen}} / {{effects_seen_min}}</span>
             </v-list-tile-action>
+          </v-list-tile>
+
+        </v-list-group>
+
+        <v-list-group
+          no-action
+          sub-group
+          value="true"
+          >
+          <v-list-tile slot="activator">
+            <v-list-tile-action>
+              <v-icon>query_builder</v-icon>
+            </v-list-tile-action>
+
+            <v-list-tile-content>
+              <v-list-tile-title>현재 위치</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile :color="currentPath === '/ReadNews' ? 'success' : ''">
+            <v-list-tile-title>정책 연관 기사 읽기</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile :color="(currentPath === '/Identify' || currentPath === '/StateAsStakeholder') ? 'success' : ''">
+            <v-list-tile-title >내가 받은 영향 남기기</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile :color="(currentPath === '/GuessEffectRandom' || currentPath === '/VerifyEffect') ? 'success' : ''">
+            <v-list-tile-title>다른 사람의 영향 상상하기</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile :color="(currentPath === '/TagOverview' || currentPath === '/ExploreOpinions') ? 'success' : ''">
+            <v-list-tile-title>다른 사람의 영향 탐색하기</v-list-tile-title>
           </v-list-tile>
 
         </v-list-group>
@@ -232,6 +262,9 @@
 <script>
 export default {
   computed: {
+    currentPath: function () {
+      return this.$router.currentRoute.path
+    },
     user: function () {
       return this.$store.state.user
     },
