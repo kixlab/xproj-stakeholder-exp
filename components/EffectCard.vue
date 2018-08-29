@@ -21,18 +21,18 @@
       </v-card-text>
       <v-card-actions>
         <v-btn small outline :depressed="isNoveltyVoted" :flat="!isNoveltyVoted" color="primary" @click.stop="onNoveltyButtonClick">
-          참신
+          참신 {{effect.novelty.length}}
+
         </v-btn>
-        &nbsp;{{effect.novelty.length}}
         <v-btn small outline :depressed="isEmpathyVoted" :flat="!isEmpathyVoted" color="primary" @click.stop="onEmpathyButtonClick">
-          공감
+          공감 {{effect.empathy.length}}
+
         </v-btn>
-        &nbsp; {{effect.empathy.length}}
         <v-btn small outline :depressed="isFishyVoted" :flat="!isFishyVoted" color="error" @click.stop="onFishyButtonClick">
-          의심
+          의심 {{effect.fishy.length}}
+
         </v-btn>
-        &nbsp; {{effect.fishy.length}}
-        <pre>  </pre>
+        <v-spacer/>
 
         <v-dialog v-model="dialog" width="500">
           <v-icon slot="activator" color="red lighten-2" ripple>
@@ -81,7 +81,7 @@
           </v-card>
         </v-dialog>
         <v-spacer></v-spacer>
-        <v-btn icon @click="onShowDescriptionButtonClick" v-if="!expanded || effect.description.length > 40">
+        <v-btn icon @click="onShowDescriptionButtonClick" v-if="!expanded && effect.description.length > 40">
           <v-icon>{{ show ? 'expand_less' : 'expand_more' }}</v-icon>
         </v-btn>
       </v-card-actions>

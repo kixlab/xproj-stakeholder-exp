@@ -86,8 +86,18 @@
 
         <div>
           <p class="body-1 prompt question">이 영향은 나에게 긍정적인가요? 부정적인가요? </p>
-            <v-btn :outline="myEffect.isBenefit !== 1" :dark="myEffect.isBenefit === 1" color="primary" class="binarybtn" @click="myEffect.isBenefit=1"> 긍정적 </v-btn>
-            <v-btn :outline="myEffect.isBenefit !== 0" :dark="myEffect.isBenefit === 0" color="error" class="binarybtn" @click="myEffect.isBenefit=0"> 부정적 </v-btn>
+            <v-btn 
+              :outline="myEffect.isBenefit !== 1" 
+              :dark="myEffect.isBenefit === 1" 
+              color="primary" 
+              class="binarybtn"
+              @click="myEffect.isBenefit=1"> 긍정적 </v-btn>
+            <v-btn 
+              :outline="myEffect.isBenefit !== 0" 
+              :dark="myEffect.isBenefit === 0" 
+              color="error" 
+              class="binarybtn" 
+              @click="myEffect.isBenefit=0"> 부정적 </v-btn>
 
         </div>
         </template>

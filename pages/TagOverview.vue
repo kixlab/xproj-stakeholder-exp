@@ -12,7 +12,7 @@
       <p class="body-1 prompt"> 아래 버튼을 누르면 이해당사자들이 받는 영향을<br>확인할 수 있습니다. </p>
 
       
-      <tag-overview-item v-for="tag in tags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
+      <tag-overview-item v-for="tag in filteredTags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
       </tag-overview-item>
       <v-btn color="primary" :disabled="!$store.state.userToken" ripple block @click="onNewStakeholderClick">
         새로운 영향 남기기
@@ -101,6 +101,9 @@ export default {
     },
     tags: function () {
       return this.$store.state.tags
+    },
+    filteredTags: function () {
+      return this.tags.filter((tag) => { return tag.refs >= 3 }).sort((a, b) => { return a.refs > b.refs })
     },
     effects_left: function () {
       if (this.$store.state.userPolicy.effects_seen > 9) {

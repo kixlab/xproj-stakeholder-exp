@@ -222,6 +222,8 @@
                   사용하시면서 불편하신 점이나 궁금하신 점이 있다면, <a href="#">xproject@kixlab.org</a>로 연락주세요.
 
                   본 연구는 한국연구재단의 “소셜컴퓨팅 기술을 활용한 국가청렴도 개선” 과제의 일환입니다.
+
+                  Happy & Sad by AomAm from the Noun Project
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
