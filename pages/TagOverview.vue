@@ -46,7 +46,7 @@
           <v-card-text>
             현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
             <strong>3개 그룹</strong>의 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
-            <template v-if="effect_left!=0">
+            <template v-if="effects_left!=0">
             귀하는 <strong><font size="4">{{effects_left}}개 그룹을</font></strong> 더 살펴보셔야 합니다.<br>
             아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
             <br><br>
@@ -161,7 +161,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'SeeOtherPolicy',
-        eventLabel: `${this.policy.title} / stakeholder_left: ${this.stakeholder_left} / effect_left: ${this.effect_left}`,
+        eventLabel: `${this.policy.title} / effects_left: ${this.effects_left}`,
         eventValue: 0
       })
       this.dialog = true
@@ -170,7 +170,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'GoBackToStakeholderList',
-        eventLabel: `${this.policy.title} / stakeholder_left: ${this.stakeholder_left} / effect_left: ${this.effect_left}`,
+        eventLabel: `${this.policy.title} / effects_left: ${this.effects_left}`,
         eventValue: 0
       })
       this.dialog = false

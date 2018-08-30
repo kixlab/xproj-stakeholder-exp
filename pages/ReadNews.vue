@@ -90,6 +90,8 @@ export default {
         case 5:
         case 0:
         case -1:
+        case 6:
+        case 7:
           return '/Identify'
       }
     },

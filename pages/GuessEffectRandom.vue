@@ -85,8 +85,11 @@ import PromisePane from '~/components/PromisePane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
 
 export default {
-  fetch: function ({app, store}) {
-    store.dispatch('fetchRandomEffect')
+  fetch: async function ({app, store, redirect}) {
+    await store.dispatch('fetchRandomEffect')
+    if (store.state.randomEffect === null) {
+      redirect('/VerifyEffect')
+    }
   },
   mixins: [setTokenMixin],
   components: {

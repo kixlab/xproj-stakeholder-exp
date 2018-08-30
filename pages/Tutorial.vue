@@ -52,6 +52,8 @@
             return '/tutorialB/' + val + '.PNG'
           case 5:
           case 0:
+          case 6:
+          case 7:
             return '/tutorialC/' + val + '.PNG'
           case -1:
             return '/tutorialG/' + val + '.PNG'
@@ -72,6 +74,8 @@
             case 4:
             case 5:
             case 0:
+            case 6:
+            case 7:
               this.$router.push('/PreSurvey')
               break
             case -1:
@@ -104,6 +108,8 @@
             return 8
           case 5:
           case 0:
+          case 6:
+          case 7: // TODO: handle case 6 & 7
             return 9
           case -1:
             return 7

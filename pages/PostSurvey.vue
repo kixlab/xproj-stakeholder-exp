@@ -37,7 +37,7 @@ export default {
         return 'https://goo.gl/forms/AUChMEOC6XjjkRi03'
       } else if (this.userGroup === 3 || this.userGroup === 4) {
         return 'https://goo.gl/forms/DYYPtPoNRdQZJh7v1'
-      } else if (this.userGroup === 5 || this.userGroup === 0 || this.userGroup === 7) {
+      } else if (this.userGroup === 5 || this.userGroup === 0 || this.userGroup === 6 || this.userGroup === 7) {
         return 'https://goo.gl/forms/4aTnnOenpV6Q2VCi1'
       }
     },

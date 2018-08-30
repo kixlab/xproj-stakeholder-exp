@@ -237,14 +237,20 @@ export const actions = {
   },
   async fetchRandomEffect (context) {
     const usedEffectIds = context.state.usedEffects.map((x) => { return x.id })
-    const randomEffect = await this.$axios.$get('/api/effects/random/', {
-      params: {
-        policy: context.state.policyId,
-        exclude: usedEffectIds
+    try {
+      const randomEffect = await this.$axios.$get('/api/effects/random/', {
+        params: {
+          policy: context.state.policyId,
+          exclude: usedEffectIds
+        }
+      })
+      context.commit('addUsedEffect', randomEffect)
+      context.commit('setRandomEffect', randomEffect)
+    } catch (err) {
+      if (err.response.code === 404) {
+        context.commit('setRandomEffect', null)
       }
-    })
-    context.commit('addUsedEffect', randomEffect)
-    context.commit('setRandomEffect', randomEffect)
+    }
   },
   async addBrowsedTags (context, tags) {
     tags.forEach((tag) => { context.commit('addBrowsedTag', tag) })
