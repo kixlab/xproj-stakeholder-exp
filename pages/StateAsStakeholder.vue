@@ -199,7 +199,7 @@ export default {
         case 7:
           return '/GuessEffectRandom'
       }
-    },
+    }
   },
   data: function () {
     return {

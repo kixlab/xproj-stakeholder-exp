@@ -19,6 +19,7 @@ export const state = () => ({
   usedEffects: [],
   selectedTag: null,
   browsedTags: [],
+  guessedTags: [],
   explorationDone: false
 })
 
@@ -32,6 +33,7 @@ export const mutations = {
     state.selectedTag = null
     state.browsedTags = []
     state.usedEffects = []
+    state.guessedTags = []
   },
   // setPolicyId (state, payload) {
   //   state.policyId = payload.policyId
@@ -133,6 +135,9 @@ export const mutations = {
     if (state.browsedTags.indexOf(tag) === -1) {
       state.browsedTags.push(tag)
     }
+  },
+  addGuessedTags (state, tags) {
+    state.GuessedTags.push(tags)
   }
 }
 
@@ -244,6 +249,7 @@ export const actions = {
           exclude: usedEffectIds
         }
       })
+      context.commit('addGuessedTags', randomEffect.tags)
       context.commit('addUsedEffect', randomEffect)
       context.commit('setRandomEffect', randomEffect)
     } catch (err) {
@@ -254,7 +260,7 @@ export const actions = {
   },
   async addBrowsedTags (context, tags) {
     tags.forEach((tag) => { context.commit('addBrowsedTag', tag) })
-    console.log(context.state.browsedTags.length)
+    // console.log(context.state.browsedTags.length)
     context.dispatch('setUserPolicyEffectsSeen', context.state.browsedTags.length)
     // TODO: put this on DB
   },

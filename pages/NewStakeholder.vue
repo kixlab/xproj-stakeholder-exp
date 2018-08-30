@@ -262,6 +262,7 @@ export default {
         eventLabel: ``,
         eventValue: 0
       })
+      this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
       this.$router.push('/TagOverview')
     }
   },

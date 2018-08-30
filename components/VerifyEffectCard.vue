@@ -45,7 +45,8 @@ export default {
       params: {
         policy: this.policy.id,
         tag: this.usedEffect.tags,
-        page_size: 50
+        page_size: 50,
+        is_and: true
       }
     })
     this.effects = effects.results
