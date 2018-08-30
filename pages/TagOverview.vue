@@ -20,7 +20,7 @@
         <v-card style="outline:auto;">
           <v-card-actions>
             <v-flex xs10 style="text-align:center;">
-              여러분이 추론하셨던 태그는...
+              여러분이 추론할 때 보셨던 태그는...
             </v-flex>
             <v-btn icon @click="show = !show">
               <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
@@ -142,14 +142,13 @@ export default {
     },
     maxValue: function () {
       const t = this.tags.map((tag) => { return tag.refs })
-      console.log(t)
+      // console.log(t)
       return Math.max(...t)
     },
     guessedTag: function () {
-      var lst = [['a', 'b'], ['c', 'd']]
+      var lst = this.$store.state.guesssedTags
       var flatLst = [].concat.apply([], lst)
       return flatLst
-      // return this.$store.state.guesssedTags
     }
   },
   data: function () {
