@@ -29,9 +29,13 @@
 
           <v-slide-y-transition>
             <v-card-text v-show="show" style="text-align:left;">
-              <strong style="color:blue;">
-                {{guessedTag.join(',  ')}}
-              </strong>
+              <v-chip 
+                color="primary" 
+                text-color="white"
+                v-for="tag in guessedTag"
+                :key="tag">
+                #{{tag}}
+              </v-chip>
             </v-card-text>
           </v-slide-y-transition>
         </v-card>
@@ -144,8 +148,7 @@ export default {
     guessedTag: function () {
       var lst = [['a', 'b'], ['c', 'd']]
       var flatLst = [].concat.apply([], lst)
-      var poundedLst = flatLst.map(x => '#' + x)
-      return poundedLst
+      return flatLst
       // return this.$store.state.guesssedTags
     }
   },
