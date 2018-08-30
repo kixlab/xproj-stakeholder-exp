@@ -76,23 +76,20 @@
             </v-list-tile-action>
 
             <v-list-tile-content>
-              <v-list-tile-title>현재 위치</v-list-tile-title>
+              <v-list-tile-title>현재 단계</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-
-          <v-list-tile :color="currentPath === '/ReadNews' ? 'success' : ''">
-            <v-list-tile-title>정책 연관 기사 읽기</v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile :color="(currentPath === '/Identify' || currentPath === '/StateAsStakeholder') ? 'success' : ''">
-            <v-list-tile-title >내가 받은 영향 남기기</v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile :color="(currentPath === '/GuessEffectRandom' || currentPath === '/VerifyEffect') ? 'success' : ''">
-            <v-list-tile-title>다른 사람의 영향 상상하기</v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile :color="(currentPath === '/TagOverview' || currentPath === '/ExploreOpinions') ? 'success' : ''">
-            <v-list-tile-title>다른 사람의 영향 탐색하기</v-list-tile-title>
-          </v-list-tile>
-
+        <v-container>
+          <v-layout row wrap>
+            <v-flex xs3 v-for="n in 4" :key="n">
+              <v-card v-if="n<currentStep" dark color="blue"> <pre>{{instr_step[n-1]}}</pre> </v-card>
+              <v-card v-else-if="n===currentStep" id="currentStep_outline"> 
+                <strong style="color:green;"><pre>{{instr_step[n-1]}}</pre></strong> 
+              </v-card>
+              <v-card v-else> <pre>{{instr_step[n-1]}}</pre> </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
         </v-list-group>
       </v-list>
 
@@ -221,9 +218,10 @@
                 <v-card-text>
                   사용하시면서 불편하신 점이나 궁금하신 점이 있다면, <a href="#">xproject@kixlab.org</a>로 연락주세요.
 
-                  본 연구는 한국연구재단의 “소셜컴퓨팅 기술을 활용한 국가청렴도 개선” 과제의 일환입니다.
+                  본 연구는 한국연구재단의 “소셜컴퓨팅 기술을 활용한 국가청렴도 개선” 과제의 일환입니다.<br><br>
 
-                  Happy & Sad by AomAm from the Noun Project
+                  <small>Credit : <br>
+                  Happy & Sad by AomAm from the Noun Project</small>
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
@@ -259,13 +257,37 @@
 .warning {
   background-color: pink !important;
 }
+#currentStep_outline {
+  outline-width: 40px;
+  outline: auto;
+  outline-color: green;
+}
 </style>
 
 <script>
 export default {
   computed: {
-    currentPath: function () {
-      return this.$router.currentRoute.path
+    currentStep: function () {
+      switch (this.$router.currentRoute.path) {
+        case '/ReadNews': {
+          return 1
+        }
+        case '/Identify':
+        case '/StateAsStakeholder': {
+          return 2
+        }
+        case '/GuessEffectRandom':
+        case '/VerifyEffect': {
+          return 3
+        }
+        case '/TagOverview':
+        case '/ExploreOpinions': {
+          return 4
+        }
+        default: {
+          return 0
+        }
+      }
     },
     user: function () {
       return this.$store.state.user
@@ -395,7 +417,8 @@ export default {
   data: function () {
     return {
       dropDialog: false,
-      aboutDialog: false
+      aboutDialog: false,
+      instr_step: ['뉴스\n읽기', '영향\n말하기', '영향\n추론', '영향\n읽기']
     }
   }
 }

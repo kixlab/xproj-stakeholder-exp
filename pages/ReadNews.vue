@@ -37,7 +37,7 @@
 
     <v-flex xs12 row wrap>
     <template v-if="!(read1&&read2)">
-      <strong style="color:red;">두 기사를 각각 1분 이상 읽으셔야 다음으로 넘어가실 수 있습니다.</strong>
+      <strong style="color:red;">두 기사를 각각 1분 이상 읽으셔야<br>다음으로 넘어가실 수 있습니다.</strong>
     </template>
     <br>
     <v-btn block :disabled="!(read1 && read2)" color="primary" @click="onClickComplete">다음</v-btn>

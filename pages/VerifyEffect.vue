@@ -2,20 +2,14 @@
   <v-layout row wrap justify-center>
     <promise-pane :policy="policy"></promise-pane>
     <v-flex xs12>
-      <p class="body-1">
-        <!-- <v-chip v-for="tag in randomEffect.tags" :key="tag">{{tag}}</v-chip> <br> -->
-        <br>
-        <!-- 이 정책이 <strong class="red--text">{{randomEffect.stakeholder_detail}}</strong>에게<br>
-        끼치는 영향을 보여드릴게요! -->
-        지금까지 적어주신 영향을 다른 사람들이 적은 내용과 비교해보세요!
-      </p>
+      <v-card color="grey lighten-4">
+        <v-card-text>
+        지금까지 추론하셨던 내용을<br>
+        실제 이해당사자들이 받게 될 영향과 비교해보세요!
+        </v-card-text>
+      </v-card>
+      &nbsp;
 
-      <!-- <v-flex xs12 sm6 offset-sm3
-        v-for="effect in effects"
-        :key="effect.id">
-        <v-spacer></v-spacer>
-        <effect-card :effect="effect" />
-      </v-flex> -->
       <v-expansion-panel>
         <verify-effect-card v-for="effect in usedEffects" :key="effect.id" :used-effect="effect">
         </verify-effect-card>

@@ -1,6 +1,8 @@
 <template>
   <v-flex xs12 class="card__tag">
     <v-card tile ripple @click.capture="onTagClick">
+      
+      
       <v-card-title>
         <h3 style="text-align:left;">
           <span class="card__tag__title">
@@ -19,26 +21,6 @@
         background-color="red">
         </v-progress-linear>
       </v-card-text>
-      <!-- <v-card-text class="effect-card__textbox">
-        <a @click="onShowDescriptionButtonClick">
-          <span class="effect-card__text">{{show ? effect.description : shortDescription}}</span>
-        </a>
-      </v-card-text> -->
-      <!-- <v-card-actions>
-        <v-btn small :depressed="isNoveltyVoted" :flat="!isNoveltyVoted" color="primary" @click.stop="onNoveltyButtonClick">
-          참신 {{effect.novelty.length}}
-        </v-btn>
-        <v-btn small :depressed="isEmpathyVoted" :flat="!isEmpathyVoted" color="primary" @click.stop="onEmpathyButtonClick">
-          공감 {{effect.empathy.length}}
-        </v-btn>
-        <v-btn small :flat="!isFishyVoted" :depressed="isFishyVoted" color="error" @click.stop="onFishyButtonClick">
-          의심 {{effect.fishy.length}}
-        </v-btn>
-
-        <v-btn icon @click="onShowDescriptionButtonClick" v-if="effect.description.length > 40">
-          <v-icon>{{ show ? 'expand_less' : 'expand_more' }}</v-icon>
-        </v-btn>
-      </v-card-actions> -->
     </v-card>
   </v-flex>
 </template>
@@ -78,5 +60,15 @@ export default {
 
 .card__tag__title {
   cursor: pointer;
+}
+
+.v-card__title {
+  padding-top:10px;
+  padding-bottom: 0px;
+}
+
+.v-card__text {
+  padding-top:0px;
+  padding-bottom: 10px;
 }
 </style>
