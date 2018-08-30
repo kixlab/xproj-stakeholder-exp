@@ -177,7 +177,6 @@ export default {
       return this.$store.state.userPolicy
     },
     allFilled: function () {
-      console.log(this.selectedTags.length)
       return (this.selectedTags.length >= 2 && this.predictedEffect.description.length >= 10 &&
       this.predictedEffect.isBenefit !== -1 && this.predictedEffect.source !== '')
     }
@@ -242,10 +241,6 @@ export default {
       this.$router.push('/TagOverview')
     },
     onAddNewStakeholderButtonClick: async function () {
-      const result = await this.$validator.validateAll()
-      if (!result) {
-        return
-      }
       // const newStakeholder = await this.$axios.$post('/api/stakeholdergroups/', {
       //   policy: this.$store.state.policyId,
       //   is_visible: false,

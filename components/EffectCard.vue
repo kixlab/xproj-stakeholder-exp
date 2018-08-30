@@ -20,15 +20,15 @@
         </a>
       </v-card-text>
       <v-card-actions>
-        <v-btn small outline :depressed="isNoveltyVoted" :flat="!isNoveltyVoted" color="primary" @click.stop="onNoveltyButtonClick">
+        <v-btn small :depressed="isNoveltyVoted" :outline="!isNoveltyVoted" color="primary" @click.stop="onNoveltyButtonClick">
           참신 {{effect.novelty.length}}
 
         </v-btn>
-        <v-btn small outline :depressed="isEmpathyVoted" :flat="!isEmpathyVoted" color="primary" @click.stop="onEmpathyButtonClick">
+        <v-btn small :outline="!isEmpathyVoted" :depressed="isEmpathyVoted" color="primary" @click.stop="onEmpathyButtonClick">
           공감 {{effect.empathy.length}}
 
         </v-btn>
-        <v-btn small outline :depressed="isFishyVoted" :flat="!isFishyVoted" color="error" @click.stop="onFishyButtonClick">
+        <v-btn small :depressed="isFishyVoted" :outline="!isFishyVoted" color="error" @click.stop="onFishyButtonClick">
           의심 {{effect.fishy.length}}
 
         </v-btn>

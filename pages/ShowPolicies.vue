@@ -9,7 +9,7 @@
       </v-card>
       <v-spacer/><br>
       <br>
-      <template v-if="userGroup>-1">
+      <template v-if="userGroup>-1 && this.userStep < 3">
         <strong style="color: red;"> 실험 중에는 선택된 정책만 보실 수 있습니다. </strong>
       </template>
 
@@ -20,7 +20,7 @@
       </template>
       <br>
       <template>
-        <v-btn block :disabled="!experimentDone" color="primary">사용 후 설문</v-btn>
+        <v-btn block :disabled="!experimentDone" color="success" @click="postSurvey">사용 후 설문</v-btn>
       </template>
 
     </v-flex>

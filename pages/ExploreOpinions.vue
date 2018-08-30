@@ -191,7 +191,7 @@
       </v-dialog>
       <v-dialog
         v-else-if="$store.state.userToken && userGroup >=6"
-        v-model="dialog"
+        v-model="seeOtherPolicyDialog"
         width="500"
         full-width
         >
@@ -215,8 +215,8 @@
           <v-card-text>
             현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
             <strong>3개</strong>의 영향을 남겨주셔야 보상을 받을 수 있습니다. <br><br>
-            <template v-if="answer_left>=0">
-              귀하는 <strong><font size="4">{{answer_left}}개 영향을</font></strong> 더 살펴보셔야 합니다.<br>
+            <template v-if="answer_left>0">
+              귀하는 <strong><font size="4">{{answer_left}}개 영향을</font></strong> 더 남겨주셔야 합니다.<br>
               아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
               <br><br>
               <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
@@ -525,7 +525,7 @@ export default {
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
-      this.dialog = true
+      this.seeOtherPolicyDialog = true
     },
     onDialogGoBackButtonClick: function () {
       this.$ga.event({
@@ -534,7 +534,7 @@ export default {
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
-      this.dialog = true
+      this.seeOtherPolicyDialog = true
     },
     cardnum: function (page) {
       if (page === this.pagenum) {

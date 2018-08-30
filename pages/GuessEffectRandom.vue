@@ -22,7 +22,6 @@
       장소, 직장, 연령 등을 고려해서 더 구체적으로요.<br>
       이제 여러분만의 주인공을 간단히 설명해주시겠어요?
       </p>
-      <v-text-field v-model="predictedEffect.stakeholder_detail" placeholder="여기에 설명해주세요!" />
        -->
     <v-flex xs12>
       <p class="question">
@@ -110,15 +109,18 @@ export default {
     },
     randomEffect: function () {
       return this.$store.state.randomEffect
+    },
+    userGroup: function () {
+      return this.$store.getters.userGroup
     }
   },
   methods: {
-    onNextClick: function () {
+    onNextClick: async function () {
       this.predictedEffect.policy = this.$store.state.policyId
       this.predictedEffect.stakeholder_group = 1
       this.predictedEffect.tags = this.randomEffect.tags
 
-      this.$axios.$post('/api/effects/', this.predictedEffect)
+      await this.$axios.$post('/api/effects/', this.predictedEffect)
       // TODO: record user activity
       this.$ga.event({
         eventCategory: '/GuessEffectRandom',

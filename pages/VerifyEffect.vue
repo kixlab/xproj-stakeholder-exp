@@ -49,7 +49,7 @@
             최소 3번 추론해야 보상을 받을 수 있습니다. <br><br>
             <template v-if="answer_left>0">
             귀하는 <strong><font size="4">{{answer_left}}번</font></strong> 남으셨습니다.<br>
-            아래 <strong style="color:red;"> 추론하기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
+            아래 <strong style="color:red;"> 영향 추론하기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
             <br><br>
             <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
             넘어가시면, 포기로 간주되며 보상을 받을 수 없습니다. </strong>
