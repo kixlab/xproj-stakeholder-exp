@@ -79,21 +79,22 @@ export default {
       return this.$store.getters.userGroup
     },
     nextRoute: function () {
-      switch (this.userGroup) {
-        case 1:
-        case 2:
-          // this.$store.commit('setNextstep')
-          return '/MiniSurvey'
-        case 3:
-        case 4:
-          return '/TagOverview'
-        case 5:
-        case 0:
-        case -1:
-        case 6:
-        case 7:
-          return '/Identify'
-      }
+      // switch (this.userGroup) {
+      //   case 1:
+      //   case 2:
+      //     // this.$store.commit('setNextstep')
+      //     return '/MiniSurvey'
+      //   case 3:
+      //   case 4:
+      //     return '/TagOverview'
+      //   case 5:
+      //   case 0:
+      //   case -1:
+      //   case 6:
+      //   case 7:
+      //     return '/Identify'
+      // }
+      return '/Identify'
     },
     policy: function () {
       return this.$store.state.policy

@@ -182,7 +182,24 @@ export default {
         }
       }
       console.log('ERROR')
-    }
+    },
+    nextRoute: function () {
+      switch (this.userGroup) {
+        case 1:
+        case 2:
+          // this.$store.commit('setNextstep')
+          return '/MiniSurvey'
+        case 3:
+        case 4:
+          return '/TagOverview'
+        case 5:
+        case 0:
+        case -1:
+        case 6:
+        case 7:
+          return '/GuessEffectRandom'
+      }
+    },
   },
   data: function () {
     return {
