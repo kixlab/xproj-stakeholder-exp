@@ -274,7 +274,7 @@ export default {
         stakeholder_detail: ' ',
         stakeholder_group: 1,
         description: '',
-        source: ' ',
+        source: 'newstakeholder',
         tags: [],
         confidence: 0
       },

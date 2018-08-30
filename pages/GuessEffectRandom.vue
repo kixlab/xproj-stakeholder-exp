@@ -141,7 +141,7 @@ export default {
         stakeholder_detail: '밍',
         stakeholder_group: 1,
         description: '',
-        source: ' ',
+        source: 'guess',
         confidence: 0
       }
     }
