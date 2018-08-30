@@ -28,10 +28,11 @@
         다른 사람의 입장도 되어 볼래요!
       </v-btn>
       <v-dialog
+        v-if="userGroup >= 0"
         v-model="dialog"
         width="500"
         full-width
-      >
+        >
         <v-btn
           slot="activator"
           color="primary"
@@ -87,6 +88,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-btn v-if="userGroup === -1" color="primary" block ripple @click="onExploreOpinionsClick">
+        끝! 이제 정책 영향을 한눈에 보여주세요!
+      </v-btn>
     </v-flex>
   </v-layout>
 </template>
@@ -128,10 +132,16 @@ export default {
     },
     answer_left: function () {
       // console.log(this.$store.state.userPolicy)
+      if (this.userGroup === 6 || this.userGroup === 7) {
+        return 0
+      }
       return 3 - this.$store.state.userPolicy.stakeholders_answered
     },
     randomEffect: function () {
       return this.$store.state.randomEffect
+    },
+    userGroup: function () {
+      return this.$store.getters.userGroup
     }
   },
   components: {

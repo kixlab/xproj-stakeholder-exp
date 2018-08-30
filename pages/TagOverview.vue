@@ -17,11 +17,11 @@
       <v-btn color="primary" :disabled="!$store.state.userToken" ripple block @click="onNewStakeholderClick">
         새로운 영향 남기기
       </v-btn>
-      <v-btn v-if="!$store.state.userToken" color="primary" dark ripple block @click="onShowPolicyListClick">
+      <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block @click="onShowPolicyListClick">
         다른 정책 보기
       </v-btn>
       <v-dialog
-        v-else
+        v-else-if="$store.state.userToken && userGroup >= 0 && userGroup < 6 "
         v-model="dialog"
         width="500"
         full-width
@@ -81,6 +81,68 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      
+      <v-dialog
+        v-else-if="$store.state.userToken && userGroup >=6"
+        v-model="dialog"
+        width="500"
+        full-width
+        >
+        <v-btn
+          slot="activator"
+          color="primary"
+          dark block ripple
+        >
+          다른 정책 보기
+        </v-btn>
+
+        <v-card>
+          <v-card-title
+            class="headline grey lighten-2"
+            primary-title
+            style="background-color:pink !important;
+            color:red;"
+          > <strong>주의</strong>
+          </v-card-title>
+
+          <v-card-text>
+            현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
+            <strong>3개</strong>의 영향을 남겨주셔야 보상을 받을 수 있습니다. <br><br>
+            <template v-if="answer_left>=0">
+              귀하는 <strong><font size="4">{{answer_left}}개 영향을</font></strong> 더 살펴보셔야 합니다.<br>
+              아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
+              <br><br>
+              <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
+              넘어가시면, 포기로 간주되며 보상을 받을 수 없습니다. </strong>
+            </template>
+
+            <template v-else>
+              귀하는 조건을 모두 충족하셨습니다.<br>
+              <strong style="color:blue;"> 다음으로 </strong> 넘어가주세요.<br><br>
+
+              그런데, 혹시 더 살펴보고 싶으시면 <strong style="color:red;">돌아가기</strong>를 누르셔도 좋습니다. :)
+            </template>          
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-btn
+              color="red"
+              flat outline ripple
+              @click="onDialogGoBackButtonClick"
+            > 돌아가기 </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              flat outline ripple
+              @click="onShowPolicyListClick"
+            >
+              다음으로
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-flex>
   </v-layout>
 </template>
@@ -115,6 +177,17 @@ export default {
       const t = this.tags.map((tag) => { return tag.refs })
       console.log(t)
       return Math.max(...t)
+    },
+    userGroup: function () {
+      return this.$store.getters.userGroup
+    },
+    answer_left: function () {
+      // console.log(this.$store.state.userPolicy)
+      if (this.userGroup === 6 || this.userGroup === 7) {
+        return 3 - this.$store.state.userPolicy.stakeholders_answered
+      } else {
+        return 0
+      }
     }
   },
   data: function () {

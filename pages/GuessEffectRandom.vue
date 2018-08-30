@@ -77,7 +77,8 @@
         tick-size="2"/>
       <p v-if="!allFilled" style="color:red;">모든 빈칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
       <v-btn v-if="!allFilled" disabled block> 다음 </v-btn>
-      <v-btn v-else dark block color="primary" @click="onNextClick">다음</v-btn>    
+      <v-btn v-else dark block color="primary" @click="onNextClick">다음</v-btn>
+      <v-btn v-if="userGroup === -1" dark block color="primary" @click="onPassClick">넘어가기</v-btn>    
     </v-flex>
   </v-layout>
 </template>
@@ -132,6 +133,15 @@ export default {
       } else {
         this.$router.push('/VerifyEffect')
       }
+    },
+    onPassClick: function () {
+      this.$ga.event({
+        eventCategory: '/GuessEffectRandom',
+        eventAction: 'Pass',
+        eventLabel: this.randomEffect.id,
+        eventValue: 0
+      })
+      this.$router.push('/VerifyEffect')
     }
   },
   data: function () {
