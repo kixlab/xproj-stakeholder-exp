@@ -77,15 +77,16 @@
       <p v-if="!allFilled" style="color:red;">모든 빈칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
       <v-btn v-if="!allFilled" disabled block> 다음 </v-btn>
       <v-btn v-else dark block color="primary" @click="onNextClick">다음</v-btn>
-      <v-btn v-if="userGroup === -1" dark block color="primary" @click="onPassClick">넘어가기</v-btn>    
+      <v-btn v-if="userGroup === -1" outline block color="black" @click="onPassClick">넘어가기</v-btn>    
     </v-flex>
+    <loader :value="onLoading"></loader>
   </v-layout>
 </template>
 
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
-
+import Loader from '~/components/Loader.vue'
 export default {
   fetch: async function ({app, store, redirect}) {
     await store.dispatch('fetchRandomEffect')
@@ -95,7 +96,8 @@ export default {
   },
   mixins: [setTokenMixin],
   components: {
-    PromisePane
+    PromisePane,
+    Loader
   },
   computed: {
     policy: function () {
@@ -116,6 +118,7 @@ export default {
   },
   methods: {
     onNextClick: async function () {
+      this.onLoading = true
       this.predictedEffect.policy = this.$store.state.policyId
       this.predictedEffect.stakeholder_group = 1
       this.predictedEffect.tags = this.randomEffect.tags
@@ -135,6 +138,7 @@ export default {
       } else {
         this.$router.push('/VerifyEffect')
       }
+      this.onLoading = false
     },
     onPassClick: function () {
       this.$ga.event({
@@ -155,7 +159,8 @@ export default {
         description: '',
         source: 'guess',
         confidence: 0
-      }
+      },
+      onLoading: false
     }
   }
 }

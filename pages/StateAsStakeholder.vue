@@ -1,6 +1,7 @@
 <template>
   <v-layout row wrap justify-center>
     <promise-pane :policy="policy" />
+    <loader :value="onLoading"></loader>
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
@@ -146,6 +147,7 @@
 import PromisePane from '~/components/PromisePane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
 import hangulSearchMixin from '~/mixins/hangulSearch.js'
+import Loader from '~/components/Loader.vue'
 export default {
   // asyncData: async function ({app, store}) {
   //   let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
@@ -156,7 +158,8 @@ export default {
   //   return {stakeholderGroups: stakeholderGroups.results}
   // },
   components: {
-    PromisePane
+    PromisePane,
+    Loader
   },
   mixins: [setTokenMixin, hangulSearchMixin],
   computed: {
@@ -230,7 +233,8 @@ export default {
       menu: false,
       x: 0,
       search: null,
-      y: 0
+      y: 0,
+      onLoading: false
       // hangulSearch: ''
     }
   },
@@ -288,6 +292,7 @@ export default {
       this.selectedTags = ev.map(this.numToHangul)
     },
     addEffect: async function () {
+      this.onLoading = true
       const result = await this.$validator.validateAll()
       this.myEffect.tags = this.selectedTags
       if (result) {
@@ -303,6 +308,7 @@ export default {
         this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
         this.$router.push('/GuessEffectRandom')
       }
+      this.onLoading = false
     }
   }
 }

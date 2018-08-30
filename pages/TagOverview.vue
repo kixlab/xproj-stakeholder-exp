@@ -196,7 +196,8 @@ export default {
       return this.$store.state.tags
     },
     filteredTags: function () {
-      return this.tags.filter((tag) => { return tag.refs >= 3 }).sort((a, b) => { return a.refs > b.refs })
+      const ft = this.tags.filter((tag) => { return tag.refs >= 3 }).sort((a, b) => { return a.refs > b.refs })
+      return ft.length > 0 ? ft : this.tags
     },
     effects_left: function () {
       if (this.$store.state.userPolicy.effects_seen > 9) {
@@ -206,7 +207,6 @@ export default {
     },
     maxValue: function () {
       const t = this.tags.map((tag) => { return tag.refs })
-      console.log(t)
       return Math.max(...t)
     },
     userGroup: function () {

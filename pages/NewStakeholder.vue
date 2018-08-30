@@ -154,6 +154,7 @@
       <v-btn dark color="secondary" @click="goBack">돌아가기</v-btn>
       <v-btn :disabled="!allFilled" color="primary" @click="onAddNewStakeholderButtonClick">추가하기</v-btn>
     </v-flex>
+    <loader :value="onLoading"></loader>
   </v-layout>
 </template>
 
@@ -161,9 +162,11 @@
 import PromisePane from '~/components/PromisePane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
 import hangulSearchMixin from '~/mixins/hangulSearch.js'
+import Loader from '~/components/Loader.vue'
 export default {
   components: {
-    PromisePane
+    PromisePane,
+    Loader
   },
   mixins: [setTokenMixin, hangulSearchMixin],
   computed: {
@@ -246,6 +249,7 @@ export default {
       //   is_visible: false,
       //   name: this.stakeholder_custom
       // })
+      this.onLoading = true
       this.predictedEffect.stakeholder_group = 1
       this.predictedEffect.policy = this.$store.state.policyId
       this.predictedEffect.tags = this.selectedTags.map((x) => { return x.name ? x.name : x })
@@ -259,6 +263,7 @@ export default {
       })
       this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
       this.$router.push('/TagOverview')
+      this.onLoading = false
     }
   },
   data: function () {
@@ -276,7 +281,8 @@ export default {
       dialog: false,
       selectedTags: [],
       happy: true,
-      search: ''
+      search: '',
+      onLoading: false
     }
   }
 }
