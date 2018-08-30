@@ -95,7 +95,7 @@
               </div>
               <!-- <v-chip v-for="tag in randomEffect.tags" :key="tag">{{tag}}</v-chip> -->
             </v-flex>
-            <v-flex xs8 sm4>
+            <v-flex xs8 sm4 offset-sm2>
               <p class="body-1 prompt question">이 영향은 나에게 긍정적인가요? 부정적인가요? </p>
               <v-btn 
                 :outline="myEffect.isBenefit !== 1" 
@@ -194,7 +194,7 @@ export default {
         tags: [],
         description: '',
         source: 'stakeholder',
-        confidence: -1
+        confidence: 0
       },
       etc: '',
       selectedTags: [],
