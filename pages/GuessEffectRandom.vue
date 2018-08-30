@@ -100,7 +100,7 @@ export default {
       return this.$store.state.userPolicy
     },
     allFilled: function () {
-      return (this.predictedEffect.source !== '' && this.predictedEffect.description.length >= 10 && this.predictedEffect.isBenefit !== -1)
+      return (this.predictedEffect.description.length >= 10 && this.predictedEffect.isBenefit !== -1)
     },
     randomEffect: function () {
       return this.$store.state.randomEffect

@@ -172,6 +172,12 @@ export default {
   min-width: 70px;
   padding: 0 !important;
 }
+.card__effect {
+  outline: auto;
+}
+.v-expansion-panel__body {
+  padding: 5px;
+}
 </style>
 
 

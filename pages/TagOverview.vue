@@ -9,8 +9,33 @@
         </v-card-text>
       </v-card>
       &nbsp;
-      <p class="body-1 prompt"> 아래 버튼을 누르면 이해당사자들이 받는 영향을<br>확인할 수 있습니다. </p>
+      <p class="body-1 prompt"> 
+        <strong>3개 이상 영향이 입력된 이해당사자 태그를<br>오름차순으로 보여드립니다.<br></strong>
+        <v-divider/>
+        <small>* 아래 버튼을 눌러 각 이해당사자들이 받는 영향을 확인해보세요.</small>
+      </p>
 
+
+      <v-flex xs12 sm6 offset-sm3>
+        <v-card style="outline:auto;">
+          <v-card-actions>
+            <v-flex xs10 style="text-align:center;">
+              여러분이 추론하셨던 태그는...
+            </v-flex>
+            <v-btn icon @click="show = !show">
+              <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+            </v-btn>
+          </v-card-actions>
+
+          <v-slide-y-transition>
+            <v-card-text v-show="show" style="text-align:left;">
+              <strong style="color:blue;">
+                {{guessedTag.join(',  ')}}
+              </strong>
+            </v-card-text>
+          </v-slide-y-transition>
+        </v-card>
+      </v-flex>
       
       <tag-overview-item v-for="tag in filteredTags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
       </tag-overview-item>
@@ -115,13 +140,21 @@ export default {
       const t = this.tags.map((tag) => { return tag.refs })
       console.log(t)
       return Math.max(...t)
+    },
+    guessedTag: function () {
+      var lst = [['a', 'b'], ['c', 'd']]
+      var flatLst = [].concat.apply([], lst)
+      var poundedLst = flatLst.map(x => '#' + x)
+      return poundedLst
+      // return this.$store.state.guesssedTags
     }
   },
   data: function () {
     return {
       opinionTexts: false,
       dialog: false,
-      tag: null
+      tag: null,
+      show: false
     }
   },
   methods: {
