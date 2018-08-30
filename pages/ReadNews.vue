@@ -18,7 +18,7 @@
       <span style="text-align:left;"><strong> 첫 번째 기사 </strong></span>
       <v-divider/>
       <v-btn 
-        :color="read2 ? 'success' : 'black'"
+        :color="read1 ? 'success' : 'black'"
         :outline="read1==false"
         @click="openFirstArticle"
         block ripple large v-html="article_title_cut(policy.article1_title)"></v-btn>
@@ -79,19 +79,22 @@ export default {
       return this.$store.getters.userGroup
     },
     nextRoute: function () {
-      switch (this.userGroup) {
-        case 1:
-        case 2:
-          // this.$store.commit('setNextstep')
-          return '/MiniSurvey'
-        case 3:
-        case 4:
-          return '/TagOverview'
-        case 5:
-        case 0:
-        case -1:
-          return '/Identify'
-      }
+      // switch (this.userGroup) {
+      //   case 1:
+      //   case 2:
+      //     // this.$store.commit('setNextstep')
+      //     return '/MiniSurvey'
+      //   case 3:
+      //   case 4:
+      //     return '/TagOverview'
+      //   case 5:
+      //   case 0:
+      //   case -1:
+      //   case 6:
+      //   case 7:
+      //     return '/Identify'
+      // }
+      return '/Identify'
     },
     policy: function () {
       return this.$store.state.policy

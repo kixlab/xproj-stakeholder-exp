@@ -25,8 +25,8 @@
   background-color:rgba(0, 0, 0, 0.8);
 }
 .test {
-/*   background-image: url('https://images.pexels.com/photos/910332/pexels-photo-910332.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
- */  
+/*   background-image: url('https://images.pexels.com/photos/910332/pexels-photo-910332.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260'); */
+  /* background-image: url('/static/asdf.jpg'); */
   background-color: rgb(67, 122, 241);
   background-size: cover;
   background-repeat: no-repeat;

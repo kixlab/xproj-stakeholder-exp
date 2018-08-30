@@ -92,16 +92,22 @@ import setTokenMixin from '~/mixins/setToken.js'
 import VerifyEffectCard from '~/components/VerifyEffectCard.vue'
 export default {
   // Verify the guessed effect
-  fetch: async function ({app, store}) {
-    const effects = await app.$axios.$get('/api/effects/', {
-      params: {
-        policy: store.state.policyId,
-        tag: store.state.randomEffect.tags
-        // get_stakeholder_names: true
-      }
-    })
-    // console.log(effects)
-    store.commit('setEffects', effects.results)
+  // fetch: async function ({app, store}) {
+  //   const effects = await app.$axios.$get('/api/effects/', {
+  //     params: {
+  //       policy: store.state.policyId,
+  //       tag: store.state.randomEffect.tags,
+
+  //       // get_stakeholder_names: true
+  //     }
+  //   })
+  //   // console.log(effects)
+  //   store.commit('setEffects', effects.results)
+  // },
+  fetch: function ({app, store, redirect}) {
+    if (store.state.usedEffects.length === 0) {
+      redirect('/TagOverview')
+    }
   },
   mixins: [setTokenMixin],
   computed: {

@@ -335,6 +335,8 @@ export default {
           return 0
         case 5:
         case 0:
+        case 6:
+        case 7:
           return 3
       }
     },
@@ -356,6 +358,8 @@ export default {
         case 1:
         case 2:
         case -1:
+        case 6:
+        case 7:
           return 0
         case 3:
         case 4:
