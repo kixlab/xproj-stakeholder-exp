@@ -87,11 +87,12 @@
     },
     computed: {
       userGroup: function () {
-        if (!this.$store.state.user.is_participant) {
-          return -1
-        } else {
-          return this.$store.getters.experimentCondition
-        }
+        // if (!this.$store.state.user.is_participant) {
+        //   return -1
+        // } else {
+        //   return this.$store.getters.experimentCondition
+        // }
+        return this.$store.getters.userGroup
       },
       tutorialImg: function () {
         switch (this.userGroup) {

@@ -29,7 +29,7 @@
             <v-flex xs10 style="text-align:center;">
               원하는 영향만 모아보실래요?
             </v-flex>
-            <v-btn icon @click="show = !show">
+            <v-btn icon @click="showFilter">
               <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
             </v-btn>
           </v-card-actions>
@@ -514,7 +514,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'EffectFilterChanged',
-        eventLabel: this.selectedTags,
+        eventLabel: this.effectFilter,
         eventValue: 0
       })
       const effects = await this.$axios.$get('/api/effects/', {
@@ -548,6 +548,24 @@ export default {
       this.effects = effects.results
       this.page = newPage
       this.onLoading = false
+    },
+    showFilter: async function () {
+      if (this.show) {
+        this.$ga.event({
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'HideFilter',
+          eventLabel: ``,
+          eventValue: 0
+        })
+      } else {
+        this.$ga.event({
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'ShowFilter',
+          eventLabel: ``,
+          eventValue: 0
+        })
+      }
+      this.show = !this.show
     }
   },
   watch: {

@@ -149,9 +149,6 @@ export default {
     policy: function () {
       return this.$store.state.policy
     },
-    experimentCondition: function () {
-      return this.$store.getters.experimentCondition
-    },
     step: function () {
       if (this.user.step === 1) {
         return '첫'

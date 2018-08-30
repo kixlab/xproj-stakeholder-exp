@@ -265,7 +265,7 @@ export default {
       })
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
-        eventAction: 'Flag',
+        eventAction: 'AddNewReport',
         eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
         eventValue: 0
       })

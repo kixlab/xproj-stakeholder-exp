@@ -72,14 +72,15 @@ export default {
       return this.$store.state.policies
     },
     userGroup: function () {
-      if (!this.$store.state.userToken || !this.$store.state.user.is_participant) {
-        // console.log(this.$store.state.userToken)
-        // console.log(this.$store.state.user.is_participant)
-        return -1
-      } else {
-        // console.log(this.$store.getters.experimentCondition)
-        return this.$store.getters.experimentCondition
-      }
+      // if (!this.$store.state.userToken || !this.$store.state.user.is_participant) {
+      //   // console.log(this.$store.state.userToken)
+      //   // console.log(this.$store.state.user.is_participant)
+      //   return -1
+      // } else {
+      //   // console.log(this.$store.getters.experimentCondition)
+      //   return this.$store.getters.experimentCondition
+      // }
+      return this.$store.getters.userGroup
     },
     userStep: function () {
       // console.log(this.$store.state.user)
@@ -114,7 +115,7 @@ export default {
             user: this.$store.state.user.pk,
             policy: policy.id,
             effect_size: 0,
-            user_type: this.$store.getters.experimentCondition,
+            user_type: this.$store.getters.userGroup,
             stakeholders_answered: 0,
             stakeholders_seen: 0,
             articles_seen: 0,

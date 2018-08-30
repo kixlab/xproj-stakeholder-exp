@@ -45,11 +45,6 @@ export default {
   components: {
     GeneralToolbar
   },
-  computed: {
-    experimentCondition: function () {
-      return this.$store.getters.experimentCondition
-    }
-  },
   data: function () {
     return {
       isSurveyClicked: false,

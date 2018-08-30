@@ -9,7 +9,7 @@ export const state = () => ({
   userToken: null,
   user: {
     email: 'abcdef@kaist.ac.kr',
-    expr_group: 0,
+    experiment_condition: 0,
     pk: 1,
     step: 1,
     is_participant: true
@@ -137,10 +137,11 @@ export const mutations = {
 }
 
 export const getters = {
-  experimentCondition (state) {
+  userGroup (state) {
     // return ((state.user.pk % 4) + 3) % 6
     // return state.user.pk % 6
-    return 0
+    // return 0
+    return state.user.experiment_condition
   },
   isLookingAround (state) {
     return !state.userToken

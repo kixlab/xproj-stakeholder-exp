@@ -280,11 +280,12 @@ export default {
       return '둘러보는 중'
     },
     userGroup: function () {
-      if (!this.$store.state.user.is_participant) {
-        return -1
-      } else {
-        return this.$store.getters.experimentCondition
-      }
+      // if (!this.$store.state.user.is_participant) {
+      //   return -1
+      // } else {
+      //   return this.$store.getters.experimentCondition
+      // }
+      return this.$store.getters.userGroup
     },
     step: function () {
       const userstep = this.$store.state.user.step

@@ -33,13 +33,14 @@ export default {
   },
   computed: {
     surveyAddr: function () {
-      if (this.$store.getters.experimentCondition === 1 || this.$store.getters.experimentCondition === 2) {
+      if (this.userGroup === 1 || this.$store.userGroup === 2) {
         return 'https://goo.gl/forms/AUChMEOC6XjjkRi03'
-      } else if (this.$store.getters.experimentCondition === 3 || this.$store.getters.experimentCondition === 4) {
+      } else if (this.userGroup === 3 || this.userGroup === 4) {
         return 'https://goo.gl/forms/DYYPtPoNRdQZJh7v1'
-      } else if (this.$store.getters.experimentCondition === 5 || this.$store.getters.experimentCondition === 0) {
+      } else if (this.userGroup === 5 || this.userGroup === 0 || this.userGroup === 7) {
         return 'https://goo.gl/forms/4aTnnOenpV6Q2VCi1'
       }
+    },
     // },
     // answer: function () {
     //   if (this.$store.getters.experimentCondition === 1 || this.$store.getters.experimentCondition === 2) {
@@ -49,6 +50,8 @@ export default {
     //   } else if (this.$store.getters.experimentCondition === 5 || this.$store.getters.experimentCondition === 0) {
     //     return '이명박'
     //   }
+    userGroup: function () {
+      return this.$store.getters.userGroup
     }
   },
   data: function () {

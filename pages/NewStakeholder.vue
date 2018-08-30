@@ -14,7 +14,7 @@
     <v-flex xs12>
       <p class="question">
         먼저, 영향을 받는 사람에 대해 조금만 더 자세히 설명해주시겠어요? 예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
-        장소, 직장, 연령 등을 고려하여 구체적으로 적어주세요.
+        상황, 배경, 직업 등을 고려하여 구체적으로 적어주세요.
       </p>
       <v-text-field
         v-validate="'required'"
@@ -24,9 +24,9 @@
 
       <div>
         <p class="question">
-          위의 답에서, 이 정책과 관련된 사회적 집단을 태그로 달아주세요.
+          이 사람이 속해있는 사회적 집단 중, 이 정책과 관련된 집단은 무엇이 있나요?
           예를 들면, "건강보험 보장성 강화" 정책의 영향을 받는 "임플란트 전문 치과의사"라면, "의료인", "치과의사", "임플란트 전문 치과의사" 처럼 적어주세요. <br>
-          최소 <strong style="color:red;">2개</strong>의 태그를 사용해주세요.<br>
+          최소 <strong style="color:red;">2개</strong>의 태그로 설명해주세요.<br>
         </p>
         <!-- <p class="body-1 prompt">
           <v-flex xs12>
@@ -80,8 +80,7 @@
     <template v-if="selectedTags.length >= 2">
       <v-flex xs12 row wrap>
         <p class="question">
-          여러분이 정한 주인공 <strong>{{predictedEffect.stakeholder_detail}}</strong>에 대해 <strong>더욱 자세히 상상</strong>해보세요!
-          이 정책은 여러분의 주인공의 삶을 어떻게 바꿀까요?
+          이 정책은 <strong>{{predictedEffect.stakeholder_detail}}</strong>의 삶을 어떻게 바꿀까요? <strong>{{predictedEffect.stakeholder_detail}}</strong>의 입장에서 이야기해주세요.
         </p>
         <div class="triangle-obtuse">
           <v-textarea auto-grow v-model="predictedEffect.description"
@@ -131,19 +130,28 @@
         </div>
       </v-flex>
       <v-flex xs12>
-        <p class="question"> 위 빈칸에 '영향'을 쓰실 때 가장 큰 영향을 끼친 사람/상황 등이 있다면 간단히 적어주세요.<br>(예. 언론기사, 지인 등)</p>
+        <!-- <p class="question"> 위 빈칸에 '영향'을 쓰실 때 가장 큰 영향을 끼친 사람/상황 등이 있다면 간단히 적어주세요.<br>(예. 언론기사, 지인 등)</p>
         <v-text-field
         v-validate="'required'"
         v-model="predictedEffect.source"
         :error-messages="errors.collect('email')"       
         name="stakeholder_detail"/>
-        <br>
-
-        <p v-if="!allFilled" style="color:red;">모든 빈칸을 채우면 추가하실 수 있습니다.</p>
-        <v-btn dark color="secondary" @click="goBack">돌아가기</v-btn>
-        <v-btn :disabled="!allFilled" color="primary" @click="onAddNewStakeholderButtonClick">추가하기</v-btn>   
+        <br> -->
+        <p class="body-1 prompt question">이 답에 대해 얼마나 확신하시나요?</p>
+        <v-slider
+          v-model="predictedEffect.confidence"
+          :tick-labels="['매우 확신 없음','','','', '매우 확신함']"
+          :max="4"
+          step="1"
+          ticks="always"
+          tick-size="2"/>   
       </v-flex>
     </template>
+    <v-flex xs12>
+      <p v-if="!allFilled" style="color:red;">모든 빈칸을 채우면 추가하실 수 있습니다.</p>
+      <v-btn dark color="secondary" @click="goBack">돌아가기</v-btn>
+      <v-btn :disabled="!allFilled" color="primary" @click="onAddNewStakeholderButtonClick">추가하기</v-btn>
+    </v-flex>
   </v-layout>
 </template>
 
@@ -264,7 +272,8 @@ export default {
         stakeholder_group: 1,
         description: '',
         source: '',
-        tags: []
+        tags: [],
+        confidence: 0
       },
       dialog: false,
       selectedTags: [],

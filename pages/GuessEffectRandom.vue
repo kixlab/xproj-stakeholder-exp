@@ -27,8 +27,8 @@
     <v-flex xs12>
       <p class="question">
         <!-- 여러분은 (이)가 주인공인 소설을 쓰고 있습니다. -->
-        여러분의 주인공 <strong>{{randomEffect.stakeholder_detail}}</strong>의 입장이 되어보세요!
-        주인공은 과연 이 정책으로 어떤 영향을 받을까요?
+        이 정책은 <strong>{{randomEffect.stakeholder_detail}}</strong>의 삶을 어떻게 바꿀까요? 
+        <strong>{{randomEffect.stakeholder_detail}}</strong>의 입장에서 이야기해주세요.
       </p>
       <div class="triangle-obtuse">
         <v-textarea auto-grow v-model="predictedEffect.description" placeholder="여기에 영향을 적어주세요!"
@@ -63,9 +63,16 @@
       </div>
     </v-flex>
     <v-flex xs12 sm12>
-      <p class="question"> 위 빈칸에 '영향'을 쓰실 때 가장 큰 영향을 끼친 사람/상황 등이 있다면 간단히 적어주세요.<br>(예. 언론기사, 지인 등)</p>
-      <v-text-field placeholder="여기에 설명해주세요!" v-model="predictedEffect.source"/>
-
+      <!-- <p class="question"> 위 빈칸에 '영향'을 쓰실 때 가장 큰 영향을 끼친 사람/상황 등이 있다면 간단히 적어주세요.<br>(예. 언론기사, 지인 등)</p>
+      <v-text-field placeholder="여기에 설명해주세요!" v-model="predictedEffect.source"/> -->
+      <p class="body-1 prompt question">이 답에 대해 얼마나 확신하시나요?</p>
+      <v-slider
+        v-model="predictedEffect.confidence"
+        :tick-labels="['매우 확신 없음','','','', '매우 확신함']"
+        :max="4"
+        step="1"
+        ticks="always"
+        tick-size="2"/>
       <p v-if="!allFilled" style="color:red;">모든 빈칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
       <v-btn v-if="!allFilled" disabled block> 다음 </v-btn>
       <v-btn v-else dark block color="primary" @click="onNextClick">다음</v-btn>    
@@ -129,7 +136,8 @@ export default {
         stakeholder_detail: '밍',
         stakeholder_group: 1,
         description: '',
-        source: ''
+        source: '',
+        confidence: 0
       }
     }
   }

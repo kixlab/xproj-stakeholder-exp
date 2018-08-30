@@ -71,11 +71,12 @@ export default {
     //   return this.$store.state.userPolicy.articles_seen >= 2
     // },
     userGroup: function () {
-      if (!this.$store.state.user.is_participant) {
-        return -1
-      } else {
-        return this.$store.getters.experimentCondition
-      }
+      // if (!this.$store.state.user.is_participant) {
+      //   return -1
+      // } else {
+      //   return this.$store.getters.experimentCondition
+      // }
+      return this.$store.getters.userGroup
     },
     nextRoute: function () {
       switch (this.userGroup) {
