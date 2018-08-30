@@ -18,7 +18,7 @@
       <span style="text-align:left;"><strong> 첫 번째 기사 </strong></span>
       <v-divider/>
       <v-btn 
-        :color="read2 ? 'success' : 'black'"
+        :color="read1 ? 'success' : 'black'"
         :outline="read1==false"
         @click="openFirstArticle"
         block ripple large v-html="article_title_cut(policy.article1_title)"></v-btn>

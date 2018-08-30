@@ -199,6 +199,14 @@ export default {
         case 7:
           return '/GuessEffectRandom'
       }
+    },
+    userGroup: function () {
+      // if (!this.$store.state.user.is_participant) {
+      //   return -1
+      // } else {
+      //   return this.$store.getters.experimentCondition
+      // }
+      return this.$store.getters.userGroup
     }
   },
   data: function () {
@@ -243,20 +251,20 @@ export default {
 
       // 소스는 자유롭게 사용가능합니다. Copyright 는 삭제하지 마세요.
       const numStrs = search.match(/\d+/g)
-      console.log(numStrs)
+      // console.log(numStrs)
       let newSearchString = search.repeat(1)
       if (!numStrs) {
         return search
       }
       numStrs.forEach((numStr) => {
-        console.log(numStr)
+        // console.log(numStr)
         let hanValue = ''
         let manCount = 0 // 만단위 0이 아닌 금액 카운트.
         const numLength = numStr.length
         for (let i = 0; i < numLength; i++) {
           // 1단위의 문자로 표시.. (0은 제외)
           let strTextWord = arrNumberWord[numStr.charAt(i)]
-          console.log(strTextWord)
+          // console.log(strTextWord)
           // 0이 아닌경우만,  십/백/천 표시
           if (strTextWord !== '') {
             manCount++

@@ -137,7 +137,7 @@ export const mutations = {
     }
   },
   addGuessedTags (state, tags) {
-    state.GuessedTags.push(tags)
+    state.guessedTags.push(tags)
   }
 }
 
@@ -253,7 +253,7 @@ export const actions = {
       context.commit('addUsedEffect', randomEffect)
       context.commit('setRandomEffect', randomEffect)
     } catch (err) {
-      if (err.response.code === 404) {
+      if (err.response.status === 404) {
         context.commit('setRandomEffect', null)
       }
     }

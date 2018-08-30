@@ -74,6 +74,14 @@ export default {
         case 7:
           return '/GuessEffectRandom'
       }
+    },
+    userGroup: function () {
+      // if (!this.$store.state.user.is_participant) {
+      //   return -1
+      // } else {
+      //   return this.$store.getters.experimentCondition
+      // }
+      return this.$store.getters.userGroup
     }
   },
   methods: {
