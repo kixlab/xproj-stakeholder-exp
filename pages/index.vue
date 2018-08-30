@@ -64,6 +64,32 @@
 </style>
 <script>
 export default {
+  created: function () {
+    this.$store.replaceState({
+      sidebar: false,
+      policyId: 1,
+      policies: [
+      ],
+      userPolicy: {
+      },
+      effects: [],
+      userToken: null,
+      user: {
+        email: 'abcdef@kaist.ac.kr',
+        experiment_condition: 0,
+        pk: 1,
+        step: 1,
+        is_participant: true
+      },
+      tags: [],
+      randomEffect: {},
+      usedEffects: [],
+      selectedTag: null,
+      browsedTags: [],
+      guessedTags: [],
+      explorationDone: false
+    })
+  },
   layout: 'index',
   data: function () {
     return {

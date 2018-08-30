@@ -33,8 +33,9 @@
                 color="primary" 
                 text-color="white"
                 v-for="tag in guessedTag"
-                :key="tag">
-                #{{tag}}
+                :key="tag"
+                @click="onTagClick(tag)">
+                <span class="link">#{{tag}}</span>
               </v-chip>
             </v-card-text>
           </v-slide-y-transition>
@@ -178,6 +179,7 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 import TagOverviewItem from '~/components/TagOverviewItem.vue'
+import _ from 'lodash'
 export default {
   fetch: async function ({app, store, params}) {
     store.dispatch('setTags')
@@ -219,10 +221,8 @@ export default {
       }
     },
     guessedTag: function () {
-      var lst = [['a', 'b'], ['c', 'd']]
-      var flatLst = [].concat.apply([], lst)
-      return flatLst
-      // return this.$store.state.guesssedTags
+      return _.uniq(_.concat(...this.$store.state.guessedTags))
+      // return [].concat.apply([], this.$store.state.guesssedTags)
     }
   },
   data: function () {
@@ -295,6 +295,7 @@ export default {
 .v-card__title {
   padding-bottom:0 !important;
 }
+
 </style>
 
 
