@@ -33,7 +33,7 @@
         v-model="code"
         label="코드"
       ></v-text-field>
-      <v-btn block color="primary" :disabled="this.code !== this.answer" @click="onClickComplete">완료</v-btn>
+      <v-btn block color="primary" :disabled="this.code.trim() !== this.answer" @click="onClickComplete">완료</v-btn>
     </v-flex>
   </v-layout>
 </template>
@@ -49,7 +49,7 @@ export default {
     return {
       isSurveyClicked: false,
       code: '',
-      answer: 'kixlab'
+      answer: '청바지'
     }
   },
   methods: {

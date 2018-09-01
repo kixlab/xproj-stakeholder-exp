@@ -4,7 +4,8 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-        지금까지 추론하셨던 내용을<br>
+        아래 카드를 눌러서
+        지금까지 생각하셨던 내용을<br>
         실제 이해당사자들이 받게 될 영향과 비교해보세요!
         </v-card-text>
       </v-card>
@@ -161,7 +162,7 @@ export default {
         eventLabel: this.randomEffect.id,
         eventValue: 0
       })
-      this.$router.push('/GuessEffectRandom')
+      this.$router.push('/GuessEffectRandom/0')
       this.dialog = false
     }
   },

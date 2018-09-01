@@ -10,12 +10,24 @@
       <v-card flat colot="transparent">
         <v-card-text>
           나는 이 정책의 내용을 잘 이해하고 있다.
+          <!-- <v-radio-group
+            :value="first_answer"
+            row
+            >
+            <v-radio v-for="n in 7" :key="n" :value="n" :label="n"></v-radio>
+          </v-radio-group> -->
           <v-slider
             v-model="first_answer"
             :tick-labels="numericScales"
+            thumb-label
+            always-dirty
             :max="6"
             step="1"
-            tick-size="2"/>
+            tick-size="2">
+            <template slot="thumb-label" slot-scope="props">
+              <span>{{props.value + 1}}</span>
+            </template>
+          </v-slider>
         </v-card-text>
       </v-card>
       <v-card flat colot="transparent">
@@ -24,9 +36,15 @@
           <v-slider
             v-model="second_answer"
             :tick-labels="numericScales"
+            thumb-label
+            always-dirty
             :max="6"
             step="1"
-            tick-size="2"/>
+            tick-size="2">
+            <template slot="thumb-label" slot-scope="props">
+              <span>{{props.value + 1}}</span>
+            </template>
+          </v-slider>
         </v-card-text>
       </v-card>
       <v-card flat colot="transparent">
@@ -35,9 +53,15 @@
           <v-slider
             v-model="third_answer"
             :tick-labels="numericScales"
+            thumb-label
+            always-dirty
             :max="6"
             step="1"
-            tick-size="2"/>
+            tick-size="2">
+            <template slot="thumb-label" slot-scope="props">
+              <span>{{props.value + 1}}</span>
+            </template>
+          </v-slider>
         </v-card-text>
       </v-card>
       <v-card flat colot="transparent">
@@ -66,9 +90,15 @@
           <v-slider
             v-model="fifth_answer"
             :tick-labels="numericScales"
+            thumb-label
+            always-dirty
             :max="6"
             step="1"
-            tick-size="2"/>
+            tick-size="2">
+            <template slot="thumb-label" slot-scope="props">
+              <span>{{props.value + 1}}</span>
+            </template>
+          </v-slider>
         </v-card-text>
       </v-card>
     </v-flex>
@@ -126,11 +156,11 @@ export default {
     return {
       numericScales: ['1', '2', '3', '4', '5', '6', '7'],
       confidenceScales: ['매우 적음', '', '보통', '', '매우 확신'],
-      first_answer: 3,
-      second_answer: 3,
-      third_answer: 3,
-      fourth_answer: -1,
-      fifth_answer: 3
+      first_answer: 0,
+      second_answer: 0,
+      third_answer: 0,
+      fourth_answer: 0,
+      fifth_answer: 0
     }
   },
   computed: {

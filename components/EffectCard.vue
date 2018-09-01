@@ -3,9 +3,17 @@
     <v-card>
       <v-card-title>
         <v-flex xs10 style="text-align: left;">
+          <template v-if="effect.source === 'guess'">
+            <v-tooltip v-model="showTooltip" top>
+              <v-btn slot="activator" icon @click="onShowTooltipClick">
+                <v-icon color="grey lighten-1">!</v-icon>
+              </v-btn>
+              <span>이해 관계자 본인이 아닌, <br>다른 사람이 추측해서 적은 영향입니다.</span>
+            </v-tooltip> 
+          </template>
           <strong><font size="3">{{effect.stakeholder_detail}}</font></strong>
         </v-flex>
-        <v-flex xs2>
+        <v-flex xs2 style="text-align: right;">
           <v-icon :color="effect.isBenefit ? 'primary' : 'error'">
             {{effect.isBenefit ? 'sentiment_very_satisfied' : 'sentiment_very_dissatisfied'}}
           </v-icon>
@@ -80,7 +88,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-spacer></v-spacer>
+        <v-spacer v-if="!expanded"></v-spacer>
         <v-btn icon @click="onShowDescriptionButtonClick" v-if="!expanded && effect.description.length > 40">
           <v-icon>{{ show ? 'expand_less' : 'expand_more' }}</v-icon>
         </v-btn>
@@ -108,6 +116,7 @@ import setTokenMixin from '~/mixins/setToken.js'
 export default {
   data: () => ({
     show: false,
+    showTooltip: false,
     dialog: false,
     snackbar: false,
     newClicked: false,
@@ -269,6 +278,10 @@ export default {
         eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
         eventValue: 0
       })
+    },
+    onShowTooltipClick: function () {
+      this.showTooltip = true
+      setTimeout(() => { this.showTooltip = false }, 2000)
     }
   }
 }

@@ -82,11 +82,11 @@
         <v-container>
           <v-layout row wrap>
             <v-flex xs3 v-for="n in 4" :key="n">
-              <v-card v-if="n<currentStep" dark color="blue"> <pre>{{instr_step[n-1]}}</pre> </v-card>
+              <v-card v-if="n<currentStep" dark color="blue" v-html="instr_step[n-1]"></v-card>
               <v-card v-else-if="n===currentStep" id="currentStep_outline"> 
-                <strong style="color:green;"><pre>{{instr_step[n-1]}}</pre></strong> 
+                <strong style="color:green;" v-html="instr_step[n-1]"></strong> 
               </v-card>
-              <v-card v-else> <pre>{{instr_step[n-1]}}</pre> </v-card>
+              <v-card v-else v-html="instr_step[n-1]"></v-card>
             </v-flex>
           </v-layout>
         </v-container>
@@ -220,8 +220,6 @@
 
                   본 연구는 한국연구재단의 “소셜컴퓨팅 기술을 활용한 국가청렴도 개선” 과제의 일환입니다.<br><br>
 
-                  <small>Credit : <br>
-                  Happy & Sad by AomAm from the Noun Project</small>
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
@@ -383,16 +381,16 @@ export default {
       switch (this.userGroup) {
         case 1:
         case 2:
-          return ['뉴스\n읽기', '영향\n말하기', ' ', ' ']
+          return ['뉴스<br>읽기', '영향<br>말하기', ' ', ' ']
         case 3:
         case 4:
-          return ['뉴스\n읽기', '영향\n말하기', '영향\n추론', '영향\n읽기']
+          return ['뉴스<br>읽기', '영향<br>말하기', '영향<br>추론', '영향<br>읽기']
         case 6:
         case 7:
-          return ['뉴스\n읽기', '영향\n말하기', '영향\n추론', ' ']
+          return ['뉴스<br>읽기', '영향<br>말하기', '영향<br>추론', ' ']
         case 5:
         case 0:
-          return ['뉴스\n읽기', '영향\n말하기', '영향\n추론', '영향\n읽기']
+          return ['뉴스<br>읽기', '영향<br>말하기', '영향<br>추론', '영향<br>읽기']
         case -1:
           return [' ', ' ', ' ', ' ']
       }

@@ -2,7 +2,7 @@
   <v-expansion-panel-content lazy>
     <div slot="header">
       <!-- <v-chip v-for="tag in usedEffect.tags" :key="tag">{{tag}}</v-chip> -->
-      {{usedEffect.stakeholder_detail}}
+      <span class="primary--text">{{usedEffect.stakeholder_detail}}</span>
     </div>
     <div v-if="effects.length > 0">
       <effect-card v-for="effect in effects" :key="effect.id" :effect="effect" expanded 

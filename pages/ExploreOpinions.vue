@@ -29,8 +29,9 @@
             <v-flex xs10 style="text-align:center;">
               원하는 영향만 모아보실래요?
             </v-flex>
-            <v-btn icon @click="showFilter">
-              <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+            <v-btn outline small color="primary" @click="showFilter">
+              더 보기
+              <!-- <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon> -->
             </v-btn>
           </v-card-actions>
 
@@ -59,13 +60,13 @@
                   </v-list-tile>
                 </template>
                 <template slot="item" slot-scope="{ index, item, parent }">
-                  <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
+                  <v-chip color="blue lighten-3" label small>#{{item.name}}</v-chip>
                   <v-spacer></v-spacer>
                   {{item.refs}}개
                 </template>
                 <template slot="selection" slot-scope="{ item, parent, selected }">
                   <v-chip :selected="selected" label small>
-                    <span class="pr-2"> {{item.name}} </span>
+                    <span class="pr-2"> #{{item.name}} </span>
                     <v-icon small @click="parent.selectItem(item)">close</v-icon>
                   </v-chip>
                 </template>

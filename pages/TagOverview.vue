@@ -10,9 +10,9 @@
       </v-card>
       &nbsp;
       <p class="body-1 prompt"> 
-        <strong>3개 이상 영향이 입력된 이해당사자 태그를<br>오름차순으로 보여드립니다.<br></strong>
+        <strong>3개 이상 영향이 입력된 이해당사자 태그를<br>언급 횟수가 적은 것 부터 보여드립니다.<br></strong>
         <v-divider/>
-        <small>* 아래 버튼을 눌러 각 이해당사자들이 받는 영향을 확인해보세요.</small>
+        <small>* 아래 태그를 눌러 각 이해당사자들이 받는 영향을 확인해보세요.</small>
       </p>
 
 
@@ -20,10 +20,10 @@
         <v-card style="outline:auto;">
           <v-card-actions>
             <v-flex xs10 style="text-align:center;">
-              여러분이 추론할 때 보셨던 태그는...
+              여러분이 생각해보셨던 태그는...
             </v-flex>
-            <v-btn icon @click="show = !show">
-              <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+            <v-btn outline small color="primary" @click="show = !show">
+              더 보기
             </v-btn>
           </v-card-actions>
 
