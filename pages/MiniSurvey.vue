@@ -297,7 +297,7 @@ export default {
       })
       window.open(this.policy.article2_link, '_blank')
       // this.read2 = true
-    },
+    }
   },
   mixins: [setTokenMixin],
   data: function () {
