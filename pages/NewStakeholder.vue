@@ -139,6 +139,7 @@
         :error-messages="errors.collect('email')"       
         name="stakeholder_detail"/>
         <br> -->
+        <v-checkbox label="이 답이 본인 이야기이시라면 체크해주세요." :value="checkbox" @change="onCheckboxClick"></v-checkbox>
         <p class="body-1 prompt question">이 답에 대해 얼마나 확신하시나요?</p>
         <v-slider
           v-model="predictedEffect.confidence"
@@ -230,6 +231,14 @@ export default {
       // 출처: http://bemeal2.tistory.com/67 [취생몽사]
       return newSearchString
     },
+    onCheckboxClick: function (ev) {
+      this.checkbox = ev
+      if (ev) {
+        this.predictedEffect.source = 'stakeholder'
+      } else {
+        this.predictedEffect.source = 'newstakeholder'
+      }
+    },
     onInput (ev) {
       console.log(ev)
       this.selectedTags = ev.map(this.numToHangul)
@@ -283,7 +292,8 @@ export default {
       selectedTags: [],
       happy: true,
       search: '',
-      onLoading: false
+      onLoading: false,
+      checkbox
     }
   }
 }

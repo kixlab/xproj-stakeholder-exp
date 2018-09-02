@@ -66,6 +66,7 @@
     <v-flex xs12 sm12>
       <!-- <p class="question"> 위 빈칸에 '영향'을 쓰실 때 가장 큰 영향을 끼친 사람/상황 등이 있다면 간단히 적어주세요.<br>(예. 언론기사, 지인 등)</p>
       <v-text-field placeholder="여기에 설명해주세요!" v-model="predictedEffect.source"/> -->
+      <v-checkbox label="이 답이 본인 이야기이시라면 체크해주세요." :value="!predictedEffect.is_guess" @change="onCheckboxClick"></v-checkbox>
       <p class="body-1 prompt question">이 답에 대해 얼마나 확신하시나요?</p>
       <v-slider
         v-model="predictedEffect.confidence"
@@ -149,6 +150,14 @@ export default {
         eventValue: 0
       })
       this.$router.push('/VerifyEffect')
+    },
+    onCheckboxClick: function (ev) {
+      this.predictedEffect.is_guess = !ev
+      if (ev) {
+        this.predictedEffect.source = 'stakeholder'
+      } else {
+        this.predictedEffect.source = 'guess'
+      }
     }
   },
   data: function () {

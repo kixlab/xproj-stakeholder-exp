@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 // import setTokenMixin from '~/mixins/setToken.js'
 import EffectCard from '~/components/EffectCard.vue'
 export default {
@@ -49,7 +50,7 @@ export default {
         is_and: true
       }
     })
-    this.effects = effects.results
+    this.effects = _.sortBy(effects.results, ['stakeholder_detail', 'id'])
   },
   methods: {
     onEmpathyButtonClick: async function (effect) {
