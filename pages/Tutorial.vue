@@ -102,10 +102,10 @@
         switch (this.userGroup) {
           case 1:
           case 2:
-            return 7
+            return 6
           case 3:
           case 4:
-            return 9
+            return 8
           case 5:
           case 0:
           case 6:
