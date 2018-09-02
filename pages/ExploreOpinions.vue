@@ -20,9 +20,11 @@
       </div>
       &nbsp;
       <v-divider/>
-      <span>
+      <div style="text-align:left;">
+        <font size="2">* <strong class="red--text">하늘색 카드</strong>는 이해당사자들이 <strong class="red--text">직접</strong> 쓴 내용입니다.</font><br>
+        <font size="2">* <strong class="red--text">흰색 카드</strong>는 이해당사자가 아닌 분들이 <strong class="red--text">생각</strong>한 내용입니다.</font><br>
         <font size="2">* <strong class="red--text">거짓 정보</strong>를 담고 있으면 신고해주세요!</font><br><br>
-      </span>
+      </div>
       <v-flex xs12 sm6 offset-sm3>
         <v-card style="outline:auto;">
           <v-card-actions>
@@ -81,6 +83,8 @@
                   <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="부정적 영향" :value="0"></v-checkbox>
                 </v-flex>
               </v-layout>
+              <v-divider/>
+                <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="이해당사자가 직접 쓴 것만 보기" :value="2"></v-checkbox>
             </v-card-text>
           </v-slide-y-transition>
         </v-card>
