@@ -1,17 +1,9 @@
 <template>
   <div class="card__effect">
-    <v-card>
+    <v-card :color="cardColor">
       <v-card-title>
         <v-flex xs10 style="text-align: left;">
-          <template v-if="effect.source === 'guess'">
-            <v-tooltip v-model="showTooltip" top>
-              <v-btn slot="activator" icon @click="onShowTooltipClick">
-                <v-icon color="grey lighten-1">!</v-icon>
-              </v-btn>
-              <span>이해 관계자 본인이 아닌, <br>다른 사람이 추측해서 적은 영향입니다.</span>
-            </v-tooltip> 
-          </template>
-          <strong><font size="3">{{effect.stakeholder_detail}}</font></strong>
+        <strong><font size="3">{{effect.stakeholder_detail}}</font></strong>
         </v-flex>
         <v-flex xs2 style="text-align: right;">
           <v-icon :color="effect.isBenefit ? 'primary' : 'error'">
@@ -149,6 +141,13 @@ export default {
     },
     isFishyVoted: function () {
       return this.effect.fishy.includes(this.$store.state.user.pk)
+    },
+    cardColor: function () {
+      if (!this.effect.is_guess && this.effect.source !== 'guess') {
+        return 'blue lighten-5'
+      } else {
+        return 'white'
+      }
     }
   },
   methods: {

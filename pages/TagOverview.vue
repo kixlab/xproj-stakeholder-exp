@@ -16,7 +16,7 @@
       </p>
 
 
-      <v-flex xs12 sm6 offset-sm3>
+      <v-flex xs12 sm6 offset-sm3 v-if="guessedTag.length > 0">
         <v-card style="outline:auto;">
           <v-card-actions>
             <v-flex xs10 style="text-align:center;">
@@ -44,7 +44,7 @@
       
       <tag-overview-item v-for="tag in filteredTags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
       </tag-overview-item>
-      <v-btn color="primary" :disabled="!$store.state.userToken" ripple block @click="onNewStakeholderClick">
+      <v-btn color="success" :disabled="!$store.state.userToken" ripple block @click="onNewStakeholderClick">
         새로운 영향 남기기
       </v-btn>
       <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block @click="onShowPolicyListClick">
@@ -75,9 +75,9 @@
 
           <v-card-text>
             현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
-            <strong>3개 그룹</strong>의 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
+            <strong>{{explorationRequired}}개 태그</strong>에서 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
             <template v-if="effects_left!=0">
-            귀하는 <strong><font size="4">{{effects_left}}개 그룹을</font></strong> 더 살펴보셔야 합니다.<br>
+            귀하는 <strong><font size="4">{{effects_left}}개 태그를</font></strong> 더 살펴보셔야 합니다.<br>
             아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
             <br><br>
             <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
@@ -202,6 +202,8 @@ export default {
     effects_left: function () {
       if (this.$store.state.userPolicy.effects_seen > 9) {
         return 0
+      } else if (this.filteredTags.length < 9) {
+        return this.filteredTags.length - this.$store.state.userPolicy.effects_seen
       }
       return 9 - this.$store.state.userPolicy.effects_seen
     },
@@ -223,6 +225,9 @@ export default {
     guessedTag: function () {
       return _.uniq(_.concat(...this.$store.state.guessedTags))
       // return [].concat.apply([], this.$store.state.guesssedTags)
+    },
+    explorationRequired: function () {
+      return this.filteredTags.length >= 9 ? 9 : this.filteredTags.length
     }
   },
   data: function () {

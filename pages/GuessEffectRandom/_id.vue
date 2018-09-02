@@ -155,7 +155,7 @@ export default {
     return {
       predictedEffect: {
         isBenefit: -1,
-        stakeholder_detail: this.randomEffect.stakeholder_detail,
+        stakeholder_detail: this.$store.state.randomEffect.stakeholder_detail,
         stakeholder_group: 1,
         description: '',
         source: 'guess',
