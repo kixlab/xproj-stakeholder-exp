@@ -102,7 +102,125 @@
         </v-card-text>
       </v-card>
     </v-flex>
+
+    <v-flex xs12>
+      다음 세 질문은 이 정책과 관련해 제공된 첫번째 기사에 대한 질문입니다.
+      <v-btn 
+        color="success"
+        @click="openFirstArticle"
+        block ripple large v-html="policy.article1_title"></v-btn>
+      <v-card flat colot="transparent">
+        <v-card-text>
+          나는 첫번째 기사를 이해했다<br>
+          <v-slider
+            v-model="article1_q1"
+            :tick-labels="numericScales"
+            thumb-label
+            always-dirty
+            :max="6"
+            step="1"
+            tick-size="2">
+            <template slot="thumb-label" slot-scope="props">
+              <span>{{props.value + 1}}</span>
+            </template>
+          </v-slider>
+        </v-card-text>
+      </v-card>
+      <v-card flat colot="transparent">
+        <v-card-text>
+          첫번째 기사는 균형잡힌 정보를 제공한다.<br>
+          <v-slider
+            v-model="article1_q2"
+            :tick-labels="numericScales"
+            thumb-label
+            always-dirty
+            :max="6"
+            step="1"
+            tick-size="2">
+            <template slot="thumb-label" slot-scope="props">
+              <span>{{props.value + 1}}</span>
+            </template>
+          </v-slider>
+        </v-card-text>
+      </v-card>
+      <v-card flat colot="transparent">
+        <v-card-text>
+          첫번째 기사의 내용은 내가 정책의 다양한 영향을 이해하는데 도움이 되었다.<br>
+          <v-slider
+            v-model="article1_q3"
+            :tick-labels="numericScales"
+            thumb-label
+            always-dirty
+            :max="6"
+            step="1"
+            tick-size="2">
+            <template slot="thumb-label" slot-scope="props">
+              <span>{{props.value + 1}}</span>
+            </template>
+          </v-slider>
+        </v-card-text>
+      </v-card>
+    </v-flex>
+    <v-flex xs12>
+      다음 세 질문은 이 정책과 관련해 제공된 두번째 기사에 대한 질문입니다.
+      <v-btn 
+        color="success"
+        @click="openSecondArticle"
+        block ripple large v-html="policy.article2_title"></v-btn>
+      <v-card flat colot="transparent">
+        <v-card-text>
+          나는 두번째 기사를 이해했다<br>
+          <v-slider
+            v-model="article2_q1"
+            :tick-labels="numericScales"
+            thumb-label
+            always-dirty
+            :max="6"
+            step="1"
+            tick-size="2">
+            <template slot="thumb-label" slot-scope="props">
+              <span>{{props.value + 1}}</span>
+            </template>
+          </v-slider>
+        </v-card-text>
+      </v-card>
+      <v-card flat colot="transparent">
+        <v-card-text>
+          두번째 기사는 균형잡힌 정보를 제공한다.<br>
+          <v-slider
+            v-model="article2_q2"
+            :tick-labels="numericScales"
+            thumb-label
+            always-dirty
+            :max="6"
+            step="1"
+            tick-size="2">
+            <template slot="thumb-label" slot-scope="props">
+              <span>{{props.value + 1}}</span>
+            </template>
+          </v-slider>
+        </v-card-text>
+      </v-card>
+      <v-card flat colot="transparent">
+        <v-card-text>
+          두번째 기사의 내용은 내가 정책의 다양한 영향을 이해하는데 도움이 되었다.<br>
+          <v-slider
+            v-model="article2_q3"
+            :tick-labels="numericScales"
+            thumb-label
+            always-dirty
+            :max="6"
+            step="1"
+            tick-size="2">
+            <template slot="thumb-label" slot-scope="props">
+              <span>{{props.value + 1}}</span>
+            </template>
+          </v-slider>
+        </v-card-text>
+      </v-card>
+    </v-flex>
     <v-btn block color="primary" @click="nextPolicy">다음</v-btn>
+    <loader :value="onLoading"></loader>
   </v-layout>
 </template>
 <style scoped>
@@ -114,10 +232,12 @@
 <script>
 import setTokenMixin from '~/mixins/setToken.js'
 import GeneralToolbar from '~/components/GeneralToolbar.vue'
+import Loader from '~/components/Loader.vue'
 
 export default {
   components: {
-    GeneralToolbar
+    GeneralToolbar,
+    Loader
   },
   methods: {
     goback () {
@@ -131,13 +251,14 @@ export default {
     },
     async nextPolicy () {
       // console.log(this.fourth_answer)
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'FinishMiniSurvey',
-        eventLabel: `${this.policy.title}`,
-        eventValue: 0
-      })
       if (this.fourth_answer !== -1) {
+        this.onLoading = true
+        this.$ga.event({
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'FinishMiniSurvey',
+          eventLabel: `${this.policy.title}`,
+          eventValue: 0
+        })
         await this.$axios.$post('/api/minisurvey/', {
           user: this.user.id,
           policy: this.policy.id,
@@ -145,11 +266,38 @@ export default {
           second_answer: this.second_answer,
           third_answer: this.third_answer,
           fourth_answer: this.fourth_answer,
-          fifth_answer: this.fifth_answer
+          fifth_answer: this.fifth_answer,
+          article1_q1: this.article1_q1,
+          article1_q2: this.article1_q2,
+          article1_q3: this.article1_q3,
+          article2_q1: this.article2_q1,
+          article2_q2: this.article2_q2,
+          article2_q3: this.article2_q3
         })
+        this.onLoading = false
         this.$router.push('/ShowPolicies')
       }
-    }
+    },
+    openFirstArticle () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenFirstArticle',
+        eventLabel: `${this.policy}`,
+        eventValue: 0
+      })
+      window.open(this.policy.article1_link, '_blank')
+      // this.read1 = true
+    },
+    openSecondArticle () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenSecondArticle',
+        eventLabel: `${this.policy}`,
+        eventValue: 0
+      })
+      window.open(this.policy.article2_link, '_blank')
+      // this.read2 = true
+    },
   },
   mixins: [setTokenMixin],
   data: function () {
@@ -160,7 +308,14 @@ export default {
       second_answer: 0,
       third_answer: 0,
       fourth_answer: 0,
-      fifth_answer: 0
+      fifth_answer: 0,
+      article1_q1: 0,
+      article1_q2: 0,
+      article1_q3: 0,
+      article2_q1: 0,
+      article2_q2: 0,
+      article2_q3: 0,
+      onLoading: false
     }
   },
   computed: {
