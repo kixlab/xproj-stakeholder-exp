@@ -81,6 +81,15 @@
                   <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="부정적 영향" :value="0"></v-checkbox>
                 </v-flex>
               </v-layout>
+              * 추측된 영향을 골라보실 수도 있습니다.
+              <v-layout row wrap>
+                <v-flex xs6>
+                  <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="추측된 영향" :value="true" ></v-checkbox>
+                </v-flex>
+                <v-flex xs6>
+                  <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="직접 응답한 영향" :value="false"></v-checkbox>
+                </v-flex>
+              </v-layout>
             </v-card-text>
           </v-slide-y-transition>
         </v-card>
@@ -298,6 +307,7 @@ export default {
   created: function () {
     this.onInputDebounced = _.debounce(this.onInput, 1000)
     this.onEffectFilterChangeDebounced = _.debounce(this.onEffectFilterChange, 500)
+    this.onGuessFilterChangeDebounced = _.debounce(this.onGuessFilterChange, 500)
     // if(this.$store.state.selectedTag){
     //   this.onInput([this.$store.state.selectedTag])
     // }
@@ -379,7 +389,8 @@ export default {
       search: '',
       effectFilter: [0, 1],
       onLoading: false,
-      show: false
+      show: false,
+      guessFilter: [true, false]
       // count: 0,
       // prevPage: '',
       // nextPage: ''
@@ -445,6 +456,7 @@ export default {
             policy: this.policy.id,
             tag: this.selectedTags,
             is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+            include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
             page: this.page
           }
         })
@@ -479,6 +491,7 @@ export default {
             policy: this.policy.id,
             tag: this.selectedTags,
             is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+            include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
             page: this.page
           }
         })
@@ -513,8 +526,9 @@ export default {
             policy: this.policy.id,
             tag: this.selectedTags,
             is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+            include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
             page: this.page
-          }
+          } 
         })
         this.effects = result.results
       }
@@ -574,7 +588,8 @@ export default {
         params: {
           policy: this.policy.id,
           tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+          include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null
         }
       })
       // this.$store.dispatch('incrementUserPolicyEffectsSeen')
@@ -596,7 +611,30 @@ export default {
         params: {
           policy: this.policy.id,
           tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+          include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null
+        }
+      })
+      this.effects = effects.results
+      this.count = effects.count
+      this.page = 1
+      this.onLoading = false
+    },
+    onGuessFilterChange: async function (ev) {
+      this.onLoading = true
+      this.guessFilter = ev
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'GuessFilterChanged',
+        eventLabel: this.guessFilter,
+        eventValue: 0
+      })
+      const effects = await this.$axios.$get('/api/effects/', {
+        params: {
+          policy: this.policy.id,
+          tag: this.selectedTags,
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+          include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null
         }
       })
       this.effects = effects.results

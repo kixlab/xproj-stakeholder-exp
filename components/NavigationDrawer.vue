@@ -381,16 +381,16 @@ export default {
       switch (this.userGroup) {
         case 1:
         case 2:
-          return ['뉴스<br>읽기', '영향<br>말하기', ' ', ' ']
+          return ['뉴스<br>읽기',  ' ', ' ']
         case 3:
         case 4:
-          return ['뉴스<br>읽기', '영향<br>말하기', '영향<br>추론', '영향<br>읽기']
+          return ['뉴스<br>읽기', '영향<br>추론', '영향<br>읽기']
         case 6:
         case 7:
-          return ['뉴스<br>읽기', '영향<br>말하기', '영향<br>추론', ' ']
+          return ['뉴스<br>읽기', '영향<br>말하기', ' ']
         case 5:
         case 0:
-          return ['뉴스<br>읽기', '영향<br>말하기', '영향<br>추론', '영향<br>읽기']
+          return ['뉴스<br>읽기', '영향<br>말하기', '영향<br>읽기']
         case -1:
           return [' ', ' ', ' ', ' ']
       }

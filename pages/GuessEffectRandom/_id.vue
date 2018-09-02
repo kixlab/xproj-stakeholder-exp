@@ -159,7 +159,8 @@ export default {
         stakeholder_group: 1,
         description: '',
         source: 'guess',
-        confidence: 0
+        confidence: 0,
+        is_guess: true
       },
       onLoading: false
     }
