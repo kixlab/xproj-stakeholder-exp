@@ -233,6 +233,12 @@ export default {
     },
     onCheckboxClick: function (ev) {
       this.checkbox = ev
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: ev ? 'StateAsStakeholder' : 'RevertStateAsStakeholder',
+        eventLabel: this.predictedEffect.stakeholder_detail,
+        eventValue: 0
+      })
       if (ev) {
         this.predictedEffect.source = 'stakeholder'
       } else {
@@ -240,7 +246,12 @@ export default {
       }
     },
     onInput (ev) {
-      console.log(ev)
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'SelectTags',
+        eventLabel: ev,
+        eventValue: 0
+      })
       this.selectedTags = ev.map(this.numToHangul)
     },
     goBack: function () {
@@ -267,7 +278,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'AddNewStakeholder',
-        eventLabel: ``,
+        eventLabel: this.predictedEffect.stakeholder_detail,
         eventValue: 0
       })
       this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')

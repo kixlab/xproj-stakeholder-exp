@@ -153,7 +153,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'ToExploreOpinions',
-        eventLabel: this.randomEffect.id,
+        eventLabel: '',
         eventValue: 0
       })
       this.$router.push('/TagOverview')
@@ -163,7 +163,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'ToPredictMore',
-        eventLabel: this.randomEffect.id,
+        eventLabel: '',
         eventValue: 0
       })
       this.$router.push('/GuessEffectRandom/0')

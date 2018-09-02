@@ -35,7 +35,7 @@
         <v-spacer/>
 
         <v-dialog v-model="dialog" width="500">
-          <v-icon slot="activator" color="red lighten-2" ripple>
+          <v-icon slot="activator" color="red lighten-2" ripple @click="onShowReportDialog">
             report
           </v-icon>
 
@@ -64,7 +64,7 @@
               <v-btn
                 color="primary"
                 flat
-                @click="dialog = false"
+                @click="onCloseReportDialog"
                 ripple
               >
                 돌아가기
@@ -262,6 +262,24 @@ export default {
       //   this.$store.commit('setEffects', result.results)
       // }
       this.$emit('fishy-button-click', this.effect)
+    },
+    onShowReportDialog: function () {
+      this.dialog = true
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenReportDialog',
+        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+        eventValue: 0
+      })
+    },
+    onCloseReportDialog: function () {
+      this.dialog = false
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'CancelReportDialog',
+        eventLabel: `${this.effect.id},${this.effect.stakeholder_detail}`,
+        eventValue: 0
+      })
     },
     reportEffect: async function () {
       this.dialog = false

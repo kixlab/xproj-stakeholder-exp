@@ -130,7 +130,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'SubmitGuess',
-        eventLabel: this.randomEffect.id,
+        eventLabel: this.randomEffect.stakeholder_detail,
         eventValue: 0
       })
       this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
@@ -146,13 +146,19 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'Pass',
-        eventLabel: this.randomEffect.id,
+        eventLabel: this.randomEffect.stakeholder_detail,
         eventValue: 0
       })
       this.$router.push('/VerifyEffect')
     },
     onCheckboxClick: function (ev) {
       this.predictedEffect.is_guess = !ev
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: ev ? 'StateAsStakeholder' : 'RevertStateAsStakeholder',
+        eventLabel: this.randomEffect.stakeholder_detail,
+        eventValue: 0
+      })
       if (ev) {
         this.predictedEffect.source = 'stakeholder'
       } else {

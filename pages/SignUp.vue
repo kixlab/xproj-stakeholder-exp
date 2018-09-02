@@ -146,7 +146,7 @@
         </v-form>
       </v-card>
       </v-flex>
-        <v-btn flat outline @click="e1=1">뒤로</v-btn>
+        <v-btn flat outline @click="onGoBackToPreviousStep">뒤로</v-btn>
         <v-btn
           color="primary"
           @click="onRegisterClick"
@@ -262,6 +262,12 @@ export default {
     },
     onCancelClick () {
       /* Event should be added */
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'CancelRegister',
+        eventLabel: this.email,
+        eventValue: 0
+      })
       this.$router.push('/SignIn')
     },
     async onRegisterClick () {
@@ -328,6 +334,15 @@ export default {
         eventValue: 0
       })
       this.dialog = false
+    },
+    onGoBackToPreviousStep: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'GoBackToInformedConsent',
+        eventLabel: this.email,
+        eventValue: 0
+      })
+      this.e1 = 1
     },
     onContinueClick () {
       /* Event should be added */

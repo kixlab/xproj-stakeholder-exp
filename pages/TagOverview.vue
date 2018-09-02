@@ -22,7 +22,7 @@
             <v-flex xs10 style="text-align:center;">
               여러분이 생각해보셨던 태그는...
             </v-flex>
-            <v-btn outline small color="primary" @click="show = !show">
+            <v-btn outline small color="primary" @click="onSeePredictedTagsClick">
               더 보기
             </v-btn>
           </v-card-actions>
@@ -248,11 +248,20 @@ export default {
       })
       this.$router.push('/NewStakeholder')
     },
+    onSeePredictedTagsClick: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: this.show ? 'HidePredictedTags' : 'ShowPredictedTags',
+        eventLabel: `${this.policy.title} / ${this.guessedTags}`,
+        eventValue: 0
+      })
+      this.show = !this.show
+    },
     onTagClick: async function (tag) {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'ShowStakeholderGroupEffects',
-        eventLabel: `${this.policy.title}`,
+        eventLabel: `${this.policy.title} / ${tag}`,
         eventValue: 0
       })
       this.$store.commit('setSelectedTag', tag)

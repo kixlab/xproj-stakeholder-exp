@@ -3,7 +3,7 @@
   <navigation-drawer :drawer="drawer" @emitterdrawer="closeDrawer"></navigation-drawer>
 
   <v-toolbar dense color="indigo" @click.native="onOpenDialog" dark fixed app clipped-left>
-    <v-toolbar-side-icon ripple @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+    <v-toolbar-side-icon ripple @click.stop="onToggleDrawer"></v-toolbar-side-icon>
     <v-toolbar-title>
       <div style="cursor: pointer;">
         <!-- Length of policy name should be less than 18 Korean syllables -->
@@ -99,7 +99,22 @@ export default {
       this.dialog = false
     },
     closeDrawer: function (val) {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'CloseDrawer',
+        eventLabel: this.policy.title,
+        eventValue: 0
+      })
       this.drawer = val
+    },
+    onToggleDrawer: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: this.drawer ? 'OpenDrawer' : 'CloseDrawer',
+        eventLabel: this.policy.title,
+        eventValue: 0
+      })
+      this.drawer = !this.drawer
     }
   }
 }

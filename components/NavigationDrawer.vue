@@ -96,7 +96,7 @@
       <v-divider/>
       <v-list class="pt-0" dense>
 
-        <v-list-tile @click="dropDialog=true">
+        <v-list-tile @click="onShowDropDialog">
           <v-list-tile-action>
             <v-icon>pan_tool</v-icon>
           </v-list-tile-action>
@@ -130,7 +130,7 @@
                   <v-btn
                     color="primary"
                     flat outline ripple
-                    @click="dropDialog = false"
+                    @click="onCloseDropDialog"
                   > 돌아가기 </v-btn>
                   <v-spacer></v-spacer>
                   <v-btn
@@ -199,7 +199,7 @@
 
 
     <v-list class="pt-0" dense>
-      <v-list-tile @click="aboutDialog = true">
+      <v-list-tile @click="onShowAboutDialog">
         <v-list-tile-action>
           <v-icon>info</v-icon>
         </v-list-tile-action>
@@ -210,7 +210,7 @@
             width="500"
             full-width
             >
-            <v-list-tile-title slot="activator" @click="aboutDialog = true">연락처</v-list-tile-title> <!-- TODO: GA-->
+            <v-list-tile-title slot="activator" @click="onShowAboutDialog">연락처</v-list-tile-title> <!-- TODO: GA-->
               <v-card>
                 <v-card-title class="headline grey lighten-2" primary-title>
                   About
@@ -224,7 +224,7 @@
                 <v-divider></v-divider>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" flat @click.native="aboutDialog = false">
+                  <v-btn color="primary" flat @click.native="onCloseAboutDialog">
                     닫기
                   </v-btn>
                 </v-card-actions>
@@ -402,19 +402,37 @@ export default {
   },
   methods: {
     goHome: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'GoHome',
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
+        eventValue: 0
+      })
       this.$router.push('/')
     },
     showPolicies: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'ToShowPolicies',
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
+        eventValue: 0
+      })
       this.$router.push('/ShowPolicies')
     },
     toLogIn: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'ToLogin',
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
+        eventValue: 0
+      })
       this.$router.push('/SignIn')
     },
     giveUp: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'GiveUp',
-        eventLabel: `${this.$store.state.policyId}`,
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
         eventValue: 0
       })
       this.$store.commit('logout')
@@ -424,10 +442,46 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'SeeTutorial',
-        eventLabel: `${this.$store.state.policyId}`,
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
         eventValue: 0
       })
       this.$router.push('/Tutorial')
+    },
+    onShowDropDialog: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'ShowDropDialog',
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
+        eventValue: 0
+      })
+      this.dropDialog = true
+    },
+    onCloseDropDialog: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'SeeTutorial',
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
+        eventValue: 0
+      })
+      this.dropDialog = false
+    },
+    onShowAboutDialog: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'ShowAboutDialog',
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
+        eventValue: 0
+      })
+      this.aboutDialog = true
+    },
+    onCloseAboutDialog: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'CloseAboutDialog',
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
+        eventValue: 0
+      })
+      this.aboutDialog = false
     }
   },
   data: function () {
