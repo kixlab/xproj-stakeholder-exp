@@ -143,7 +143,7 @@ export default {
       return this.effect.fishy.includes(this.$store.state.user.pk)
     },
     cardColor: function () {
-      if (this.effect.source === 'guess') {
+      if (!this.effect.is_guess && this.effect.source !== 'guess') {
         return 'blue lighten-5'
       } else {
         return 'white'

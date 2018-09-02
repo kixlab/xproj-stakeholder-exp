@@ -3,6 +3,7 @@ export const state = () => ({
   policyId: 1,
   policies: [
   ],
+  policy: {},
   userPolicy: {
   },
   effects: [],

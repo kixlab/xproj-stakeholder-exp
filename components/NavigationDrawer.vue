@@ -81,7 +81,7 @@
           </v-list-tile>
         <v-container>
           <v-layout row wrap>
-            <v-flex xs3 v-for="n in 4" :key="n">
+            <v-flex xs4 v-for="n in 3" :key="n">
               <v-card v-if="n<currentStep" dark color="blue" v-html="instr_step[n-1]"></v-card>
               <v-card v-else-if="n===currentStep" id="currentStep_outline"> 
                 <strong style="color:green;" v-html="instr_step[n-1]"></strong> 
@@ -381,16 +381,16 @@ export default {
       switch (this.userGroup) {
         case 1:
         case 2:
-          return ['뉴스<br>읽기', '영향<br>말하기', ' ', ' ']
+          return ['뉴스<br>읽기', ' ', ' ']
         case 3:
         case 4:
-          return ['뉴스<br>읽기', '영향<br>말하기', '영향<br>추론', '영향<br>읽기']
+          return ['뉴스<br>읽기', ' ', '영향<br>읽기']
         case 6:
         case 7:
-          return ['뉴스<br>읽기', '영향<br>말하기', '영향<br>추론', ' ']
+          return ['뉴스<br>읽기', '영향<br>말하기', ' ']
         case 5:
         case 0:
-          return ['뉴스<br>읽기', '영향<br>말하기', '영향<br>추론', '영향<br>읽기']
+          return ['뉴스<br>읽기', '영향<br>말하기', '영향<br>읽기']
         case -1:
           return [' ', ' ', ' ', ' ']
       }

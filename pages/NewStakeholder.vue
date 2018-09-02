@@ -276,7 +276,8 @@ export default {
         description: '',
         source: 'newstakeholder',
         tags: [],
-        confidence: 0
+        confidence: 0,
+        is_guess: false
       },
       dialog: false,
       selectedTags: [],

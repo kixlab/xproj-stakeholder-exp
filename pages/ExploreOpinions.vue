@@ -31,10 +31,12 @@
             <v-flex xs10 style="text-align:center;">
               원하는 영향만 모아보실래요?
             </v-flex>
-            <v-btn outline small color="primary" @click="showFilter">
-              더 보기
-              <!-- <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon> -->
-            </v-btn>
+            <v-flex xs2>
+              <v-btn outline small color="primary" @click="showFilter">
+                더 보기
+                <!-- <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon> -->
+              </v-btn>
+            </v-flex>
           </v-card-actions>
 
           <v-slide-y-transition>
@@ -83,8 +85,15 @@
                   <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="부정적 영향" :value="0"></v-checkbox>
                 </v-flex>
               </v-layout>
-              <v-divider/>
-                <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="이해당사자가 직접 쓴 것만 보기" :value="2"></v-checkbox>
+              * 추측된 영향을 골라보실 수도 있습니다.
+              <v-layout row wrap>
+                <v-flex xs6>
+                  <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="추측된 영향" :value="1" ></v-checkbox>
+                </v-flex>
+                <v-flex xs6>
+                  <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="이해당사자가 직접 쓴 영향" :value="0"></v-checkbox>
+                </v-flex>
+              </v-layout>
             </v-card-text>
           </v-slide-y-transition>
         </v-card>
@@ -124,8 +133,10 @@
         @click.native="onPostNewEffectButtonClick">
         여러분의 생각도 들려주세요!
       </v-btn>
+      <v-btn outline color="primary" ripple block @click="toTagOverview">
+        태그 목록 보기
+      </v-btn>
       <v-divider/>
-
       <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block @click="onEndButtonClick">
         다른 정책 보기
       </v-btn>
@@ -139,7 +150,7 @@
           slot="activator"
           color="primary"
           dark ripple block
-          @click.native="seeOtherPolicyDialog">
+          @click.native="seeOtherPolicyDialog=true">
           다른 정책 보기
         </v-btn>
 
@@ -155,7 +166,7 @@
 
           <v-card-text>
             현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
-            <strong>9개 태그</strong>의 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
+            <strong>{{explorationRequired}}개 태그</strong>의 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
             <template v-if="effect_left!=0">
               귀하는 <strong><font size="4">{{effect_left}}개 태그를</font></strong> 더 살펴보셔야 합니다.<br>
               아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
@@ -302,6 +313,7 @@ export default {
   created: function () {
     this.onInputDebounced = _.debounce(this.onInput, 1000)
     this.onEffectFilterChangeDebounced = _.debounce(this.onEffectFilterChange, 500)
+    this.onGuessFilterChangeDebounced = _.debounce(this.onGuessFilterChange, 500)
     // if(this.$store.state.selectedTag){
     //   this.onInput([this.$store.state.selectedTag])
     // }
@@ -333,8 +345,17 @@ export default {
     effect_left: function () {
       if (this.$store.state.userPolicy.effects_seen > 9) {
         return 0
+      } else if (this.filteredTags.length < 9) {
+        return this.filteredTags.length - this.$store.state.userPolicy.effects_seen
       }
       return 9 - this.$store.state.userPolicy.effects_seen
+    },
+    filteredTags: function () {
+      const ft = this.tags.filter((tag) => { return tag.refs >= 3 })
+      return ft.length > 0 ? ft : this.tags
+    },
+    explorationRequired: function () {
+      return this.filteredTags.length >= 9 ? 9 : this.filteredTags.length
     },
     answer_left: function () {
       // console.log(this.$store.state.userPolicy)
@@ -383,17 +404,27 @@ export default {
       search: '',
       effectFilter: [0, 1],
       onLoading: false,
-      show: false
+      show: false,
+      guessFilter: [0, 1]
       // count: 0,
       // prevPage: '',
       // nextPage: ''
     }
   },
   methods: {
-    onNextButtonClick: function () {
+    // onNextButtonClick: function () {
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'SeeMoreEffects',
+    //     eventLabel: this.stakeholderName,
+    //     eventValue: 0
+    //   })
+    //   this.$router.push('/TagOverview')
+    // },
+    toTagOverview: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
-        eventAction: 'SeeMoreEffects',
+        eventAction: 'ToTagOverview',
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
@@ -449,6 +480,7 @@ export default {
             policy: this.policy.id,
             tag: this.selectedTags,
             is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+            include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
             page: this.page
           }
         })
@@ -483,6 +515,7 @@ export default {
             policy: this.policy.id,
             tag: this.selectedTags,
             is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+            include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
             page: this.page
           }
         })
@@ -517,6 +550,7 @@ export default {
             policy: this.policy.id,
             tag: this.selectedTags,
             is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+            include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
             page: this.page
           }
         })
@@ -578,7 +612,8 @@ export default {
         params: {
           policy: this.policy.id,
           tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+          include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null
         }
       })
       // this.$store.dispatch('incrementUserPolicyEffectsSeen')
@@ -600,7 +635,30 @@ export default {
         params: {
           policy: this.policy.id,
           tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+          include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null
+        }
+      })
+      this.effects = effects.results
+      this.count = effects.count
+      this.page = 1
+      this.onLoading = false
+    },
+    onGuessFilterChange: async function (ev) {
+      this.onLoading = true
+      this.guessFilter = ev
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'GuessFilterChanged',
+        eventLabel: this.guessFilter,
+        eventValue: 0
+      })
+      const effects = await this.$axios.$get('/api/effects/', {
+        params: {
+          policy: this.policy.id,
+          tag: this.selectedTags,
+          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+          include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
         }
       })
       this.effects = effects.results
