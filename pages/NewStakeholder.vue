@@ -293,7 +293,7 @@ export default {
       happy: true,
       search: '',
       onLoading: false,
-      checkbox
+      checkbox: false
     }
   }
 }
