@@ -108,7 +108,7 @@
       <v-btn 
         color="success"
         @click="openFirstArticle"
-        block ripple large v-html="policy.article1_title"></v-btn>
+        block ripple large>{{policy.article1_title}}</v-btn>
       <v-card flat colot="transparent">
         <v-card-text>
           나는 첫번째 기사를 이해했다<br>
@@ -218,9 +218,9 @@
           </v-slider>
         </v-card-text>
       </v-card>
+      <loader :value="onLoading"></loader>
     </v-flex>
     <v-btn block color="primary" @click="nextPolicy">다음</v-btn>
-    <loader :value="onLoading"></loader>
   </v-layout>
 </template>
 <style scoped>
@@ -274,8 +274,8 @@ export default {
           article2_q2: this.article2_q2,
           article2_q3: this.article2_q3
         })
-        this.onLoading = false
         this.$router.push('/ShowPolicies')
+        this.onLoading = false
       }
     },
     openFirstArticle () {
