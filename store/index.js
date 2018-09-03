@@ -118,7 +118,7 @@ export const mutations = {
     effect.novelty.splice(idx, 1)
   },
   setTags (state, payload) {
-    state.tags = payload
+    state.tags = payload.sort((a, b) => { return a.refs > b.refs })
   },
   setRandomEffect (state, randomEffect) {
     state.randomEffect = randomEffect
