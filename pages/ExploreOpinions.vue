@@ -671,7 +671,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'PageChange',
-        eventLabel: `${this.newPage} / ${this.pagenum}`,
+        eventLabel: `${newPage} / ${this.pagenum}`,
         eventValue: 0
       })
       const effects = await this.$axios.$get('/api/effects/', {

@@ -220,6 +220,9 @@
       </v-card>
       <loader :value="onLoading"></loader>
     </v-flex>
+    <v-flex xs12 v-if="user.step === 2">
+      중간 설문을 마치신 후, 실험 후 설문에도 응답해주세요!
+    </v-flex>
     <v-btn block color="primary" @click="nextPolicy">다음</v-btn>
   </v-layout>
 </template>

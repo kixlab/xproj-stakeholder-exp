@@ -40,7 +40,7 @@ export default {
     onToggleDrawer: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
-        eventAction: this.drawer ? 'OpenDrawer' : 'CloseDrawer',
+        eventAction: this.drawer ? 'CloseDrawer' : 'OpenDrawer',
         eventLabel: this.$store.state.policy.title ? this.$store.state.policy.title : '',
         eventValue: 0
       })
