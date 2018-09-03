@@ -10,10 +10,10 @@ export const state = () => ({
   userToken: null,
   user: {
     email: 'abcdef@kaist.ac.kr',
-    experiment_condition: 0,
+    experiment_condition: -1,
     pk: 1,
     step: 1,
-    is_participant: true
+    is_participant: false
   },
   tags: [],
   randomEffect: {},
@@ -118,7 +118,8 @@ export const mutations = {
     effect.novelty.splice(idx, 1)
   },
   setTags (state, payload) {
-    state.tags = payload.sort((a, b) => { return a.refs > b.refs })
+    state.tags = payload
+    state.tags.sort((a, b) => { return a.refs < b.refs })
   },
   setRandomEffect (state, randomEffect) {
     state.randomEffect = randomEffect

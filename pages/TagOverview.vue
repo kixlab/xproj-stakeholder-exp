@@ -197,7 +197,7 @@ export default {
     },
     filteredTags: function () {
       const ft = this.tags.filter((tag) => { return tag.refs >= 3 }).sort((a, b) => { return a.refs > b.refs })
-      return ft.length > 0 ? ft : this.tags.sort((a, b) => { return a.refs > b.refs })
+      return ft.length > 0 ? ft : [...this.tags].reverse()
     },
     effects_left: function () {
       if (this.$store.state.userPolicy.effects_seen > 9) {
