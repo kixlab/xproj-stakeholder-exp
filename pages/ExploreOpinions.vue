@@ -22,7 +22,7 @@
       <v-divider/>
       <div style="text-align:left;">
         <font size="2">* <strong class="red--text">하늘색 카드</strong>는 이해당사자들이 <strong class="red--text">직접</strong> 쓴 내용입니다.</font><br>
-        <font size="2">* <strong class="red--text">흰색 카드</strong>는 이해당사자가 아닌 분들이 <strong class="red--text">생각</strong>한 내용입니다.</font><br>
+        <font size="2">* <strong class="red--text">흰색 카드</strong>는 이해당사자가 아닌 분들이 <strong class="red--text">추측</strong>한 내용입니다.</font><br>
         <font size="2">* <strong class="red--text">거짓 정보</strong>를 담고 있으면 신고해주세요!</font><br><br>
       </div>
       <v-flex xs12 sm6 offset-sm3>
