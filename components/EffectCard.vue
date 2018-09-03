@@ -2,13 +2,18 @@
   <div class="card__effect">
     <v-card :color="cardColor">
       <v-card-title>
-        <v-flex xs10 style="text-align: left;">
+        <v-flex xs9 style="text-align: left;">
         <strong><font size="3">{{effect.stakeholder_detail}}</font></strong>
         </v-flex>
-        <v-flex xs2 style="text-align: right;">
+        <v-flex xs1 style="text-align: right;">
           <v-icon :color="effect.isBenefit ? 'primary' : 'error'">
             {{effect.isBenefit ? 'sentiment_very_satisfied' : 'sentiment_very_dissatisfied'}}
           </v-icon>
+        </v-flex>
+        <v-flex xs2>
+          <v-chip small dark label :color="effect.source === 'guess' ? 'primary' : 'green'" text-color="white">
+            {{TagWord}}
+          </v-chip>
         </v-flex>
         <v-flex xs12 style="text-align: left;">
           <font size="2"><span style="text-align:left; color:blue;" v-for="tag in effect.tags" :key="tag">#{{tag}}&nbsp;&nbsp;</span></font>
@@ -147,6 +152,13 @@ export default {
         return 'blue lighten-5'
       } else {
         return 'white'
+      }
+    },
+    TagWord: function () {
+      if (this.effect.source === 'guess') {
+        return '직접'
+      } else {
+        return '추측'
       }
     }
   },

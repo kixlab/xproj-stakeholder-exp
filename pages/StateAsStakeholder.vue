@@ -26,15 +26,13 @@
           <p class="question">
             본인이 속해있는 사회적 집단 중, 이 정책과 관련된 집단은 무엇이 있나요?
             예를 들면, "건강보험 보장성 강화" 정책의 영향을 받는 "임플란트 전문 치과의사"라면, "의료인", "치과의사", "임플란트 전문 치과의사" 처럼 적어주세요. <br>
-            최소 <strong style="color:red;">2개</strong>의 태그로 설명해주세요.<br>
+            &nbsp;
+            <ul>
+              <li>최소 <strong style="color:red;">2개</strong>의 태그를 사용하여 설명해주세요.</li>
+              <li>태그는 <strong style="color:red;">사람 또는 집단을 나타내는 말</strong>이어야 합니다. <br>(예. 병원(X), 건강보험(X), 의사(O), 노조(O))</li>
+            </ul>
+            &nbsp;
           </p>
-          <!-- <p class="body-1 prompt">
-            <v-flex xs12>
-              <v-card color="grey lighten-4">
-                <v-card-text>나는 _______(으)로서 이 정책의 영향을 받는다.</v-card-text>
-              </v-card>
-            </v-flex>
-          </p> -->
         </div>
 
         <v-combobox
