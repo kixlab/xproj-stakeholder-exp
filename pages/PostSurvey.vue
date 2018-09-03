@@ -34,11 +34,11 @@ export default {
   computed: {
     surveyAddr: function () {
       if (this.userGroup === 1 || this.$store.userGroup === 2) {
-        return 'https://goo.gl/forms/AUChMEOC6XjjkRi03'
+        return 'https://goo.gl/forms/AUChMEOC6XjjkRi03' //TODO: update
       } else if (this.userGroup === 3 || this.userGroup === 4) {
-        return 'https://goo.gl/forms/DYYPtPoNRdQZJh7v1'
+        return 'https://goo.gl/forms/DYYPtPoNRdQZJh7v1' //TODO: update
       } else if (this.userGroup === 5 || this.userGroup === 0 || this.userGroup === 6 || this.userGroup === 7) {
-        return 'https://goo.gl/forms/4aTnnOenpV6Q2VCi1'
+        return 'https://goo.gl/forms/bexcJ9MjV5EyMer62'
       }
     },
     // },

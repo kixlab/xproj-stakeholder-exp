@@ -72,7 +72,7 @@ export default {
         eventLabel: ``,
         eventValue: 0
       })
-      window.open('https://goo.gl/forms/wDJjIte67eewZW6o1', '_blank')
+      window.open('https://goo.gl/forms/UuNJqFVuYQas6ZJI3', '_blank')
       this.isSurveyClicked = true
     }
   }
