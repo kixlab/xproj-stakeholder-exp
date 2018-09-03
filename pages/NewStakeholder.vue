@@ -246,13 +246,13 @@ export default {
       }
     },
     onInput (ev) {
+      this.selectedTags = ev.map(this.numToHangul)
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'SelectTags',
-        eventLabel: ev,
+        eventLabel: this.selectedTags,
         eventValue: 0
       })
-      this.selectedTags = ev.map(this.numToHangul)
     },
     goBack: function () {
       this.$ga.event({

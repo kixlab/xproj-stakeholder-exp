@@ -289,13 +289,13 @@ export default {
       return newSearchString
     },
     onInput (ev) {
+      this.selectedTags = ev.map(this.numToHangul)
       this.$ga.event({
         eventCategory: '/StateAsStakeholder',
-        eventAction: 'SelectTag',
-        eventLabel: ev,
+        eventAction: 'SelectTags',
+        eventLabel: this.selectedTags,
         eventValue: 0
       })
-      this.selectedTags = ev.map(this.numToHangul)
     },
     addEffect: async function () {
       this.onLoading = true

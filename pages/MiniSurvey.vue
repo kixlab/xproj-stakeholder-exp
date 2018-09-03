@@ -282,7 +282,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'OpenFirstArticle',
-        eventLabel: `${this.policy}`,
+        eventLabel: `${this.policy.title}`,
         eventValue: 0
       })
       window.open(this.policy.article1_link, '_blank')
@@ -292,7 +292,7 @@ export default {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'OpenSecondArticle',
-        eventLabel: `${this.policy}`,
+        eventLabel: `${this.policy.title}`,
         eventValue: 0
       })
       window.open(this.policy.article2_link, '_blank')
