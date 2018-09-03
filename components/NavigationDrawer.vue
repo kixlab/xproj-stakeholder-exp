@@ -216,9 +216,9 @@
                   About
                 </v-card-title>
                 <v-card-text>
-                  사용하시면서 불편하신 점이나 궁금하신 점이 있다면, <a href="#">xproject@kixlab.org</a>로 연락주세요.
-
-                  본 연구는 한국연구재단의 “소셜컴퓨팅 기술을 활용한 국가청렴도 개선” 과제의 일환입니다.<br><br>
+                  사용하시면서 불편하신 점이나 궁금하신 점이 있다면, <a href="mailto:xproject@kixlab.org">xproject@kixlab.org</a>로 연락주세요.
+                  <br>
+                  본 연구는 <a @click="linkToKAISTSoC"> KAIST 전산학부 </a> <a @click="linkToKIXLAB">인터랙션 연구실</a>에서 수행 중인 한국연구재단의 “소셜컴퓨팅 기술을 활용한 국가청렴도 개선” 과제의 일환입니다.<br><br>
 
                 </v-card-text>
                 <v-divider></v-divider>
@@ -482,6 +482,24 @@ export default {
         eventValue: 0
       })
       this.aboutDialog = false
+    },
+    linkToKAISTSoC: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenKAISTSoC',
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
+        eventValue: 0
+      })
+      window.open('http://cs.kaist.ac.kr', '_blank')
+    },
+    linkToKIXLAB: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenKIXLAB',
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
+        eventValue: 0
+      })
+      window.open('https://kixlab.org', '_blank')
     }
   },
   data: function () {

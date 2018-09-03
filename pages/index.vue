@@ -27,6 +27,9 @@
         <v-btn @click="onParticipateButtonClick" color="primary" ripple block large> 실험에 참여하기 </v-btn>
         <v-btn @click="onLookAroundButtonClick" ripple block large outline> 둘러보기 </v-btn>
       </v-flex>
+      <v-flex xs12 style="text-align: right">
+        Presented by <a @click="linkToKIXLAB">KIXLAB @ SoC KAIST</a>
+      </v-flex>
     </div>
   </v-layout>
 </template>
@@ -139,6 +142,24 @@ export default {
         eventValue: 0
       })
       this.$router.push('/SignIn')
+    },
+    linkToKAISTSoC: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenKAISTSoC',
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
+        eventValue: 0
+      })
+      window.open('http://cs.kaist.ac.kr', '_blank')
+    },
+    linkToKIXLAB: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenKIXLAB',
+        eventLabel: (this.$store.state.policy && this.$store.state.policy.title) ? this.$store.state.policy.title : '',
+        eventValue: 0
+      })
+      window.open('https://kixlab.org', '_blank')
     }
   }
 }
