@@ -209,6 +209,24 @@ export const actions = {
       await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
     }
   },
+  async setUserPolicyIdentifyDone (context) {
+    if (context.state.userToken) {
+      const userpolicyId = context.state.userPolicy.id
+      const userPolicy = Object.assign({}, context.state.userPolicy)
+      userPolicy.identify_done = true
+      context.commit('setUserPolicy', userPolicy)
+      await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    }
+  },
+  async setUserPolicyGuessDone (context) {
+    if (context.state.userToken) {
+      const userpolicyId = context.state.userPolicy.id
+      const userPolicy = Object.assign({}, context.state.userPolicy)
+      userPolicy.guess_done = true
+      context.commit('setUserPolicy', userPolicy)
+      await this.$axios.$put(`/api/userpolicy/${userpolicyId}/`, userPolicy)
+    }
+  },
   async incrementUserStep (context) {
     context.commit('setNextstep')
     if (context.state.userToken) {

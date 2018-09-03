@@ -61,7 +61,7 @@
             </v-list-tile>
           </template>
           <template slot="item" slot-scope="{ index, item, parent }">
-            <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
+            <v-chip color="blue lighten-3" label small>#{{item.name}}</v-chip>
             <v-spacer></v-spacer>
             {{item.refs}}개
           </template>
@@ -312,6 +312,7 @@ export default {
           eventValue: 0
         })
         this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
+        this.$store.dispatch('setUserPolicyIdentifyDone')
         this.$router.push(this.nextRoute)
       }
       this.onLoading = false

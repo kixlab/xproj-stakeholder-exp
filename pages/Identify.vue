@@ -41,7 +41,7 @@ import PromisePane from '~/components/PromisePane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
 export default {
   // Stakeholders will be fetched from here.
-  fetch: async function ({app, store, params}) {
+  fetch: async function ({app, store, params, redirect}) {
     // let stakeholderGroups = await app.$axios.$get('/api/stakeholdergroups/', {
     //   params: {
     //     policy: store.state.policyId
@@ -49,6 +49,9 @@ export default {
     // })
     // store.commit('setStakeholderGroups', stakeholderGroups.results)
     store.dispatch('setTags')
+    if (store.state.userPolicy.identify_done) {
+      redirect('/GuessEffectRandom/0')
+    }
   },
   mixins: [setTokenMixin],
   components: {
@@ -96,6 +99,9 @@ export default {
         eventValue: 0
       })
       this.$store.dispatch('setUserPolicyEffectSize', this.userPolicy.effect_size)
+      if (this.userPolicy.effect_size < 2) {
+        this.$store.dispatch('setUserPolicyIdentifyDone')
+      }
       this.$router.push(to)
     }
   },

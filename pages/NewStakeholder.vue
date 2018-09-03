@@ -56,18 +56,18 @@
         <template slot="no-data">
           <v-list-tile>
             <v-list-tile-content>
-              <v-chip color="blue lighten-3" label small>{{hangulSearch}}</v-chip> 새로 만드시려면 엔터 키를 눌러주세요.
+              <v-chip color="blue lighten-3" label small>#{{hangulSearch}}</v-chip> 새로 만드시려면 엔터 키를 눌러주세요.
             </v-list-tile-content>
           </v-list-tile>
         </template>
         <template slot="item" slot-scope="{ index, item, parent }">
-          <v-chip color="blue lighten-3" label small>{{item.name}}</v-chip>
+          <v-chip color="blue lighten-3" label small>#{{item.name}}</v-chip>
           <v-spacer></v-spacer>
           {{item.refs}}개
         </template>
         <template slot="selection" slot-scope="{ item, parent, selected }">
           <v-chip :selected="selected" label small>
-            <span class="pr-2"> {{item.name ? item.name : item}} </span>
+            <span class="pr-2"> #{{item.name ? item.name : item}} </span>
             <v-icon small @click="parent.selectItem(item)">close</v-icon>
           </v-chip>
         </template>

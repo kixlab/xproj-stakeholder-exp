@@ -115,6 +115,7 @@ export default {
   // },
   fetch: function ({app, store, redirect}) {
     if (store.state.usedEffects.length === 0) {
+      this.$store.dispatch('setUserPolicyGuessingDone')
       redirect('/TagOverview')
     }
   },
@@ -157,6 +158,7 @@ export default {
         eventValue: 0
       })
       this.$router.push('/TagOverview')
+      this.$store.dispatch('setUserPolicyGuessingDone')
       this.dialog = false
     },
     onPredictMoreClick: function () {
