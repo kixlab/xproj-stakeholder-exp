@@ -111,7 +111,7 @@
         block ripple large>{{policy.article1_title}}</v-btn>
       <v-card flat colot="transparent">
         <v-card-text>
-          나는 첫번째 기사를 이해했다<br>
+          나는 첫번째 기사를 이해했다.<br>
           <v-slider
             v-model="article1_q1"
             :tick-labels="numericScales"
@@ -169,7 +169,7 @@
         block ripple large v-html="policy.article2_title"></v-btn>
       <v-card flat colot="transparent">
         <v-card-text>
-          나는 두번째 기사를 이해했다<br>
+          나는 두번째 기사를 이해했다.<br>
           <v-slider
             v-model="article2_q1"
             :tick-labels="numericScales"
