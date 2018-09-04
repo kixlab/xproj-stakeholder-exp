@@ -180,6 +180,7 @@
 import PromisePane from '~/components/PromisePane.vue'
 import TagOverviewItem from '~/components/TagOverviewItem.vue'
 import _ from 'lodash'
+import setTokenMixin from '~/mixins/setToken.js'
 export default {
   fetch: async function ({app, store, params}) {
     store.dispatch('setTags')
@@ -188,6 +189,7 @@ export default {
     PromisePane,
     TagOverviewItem
   },
+  mixins: [setTokenMinin],
   computed: {
     policy: function () {
       return this.$store.state.policy
