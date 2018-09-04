@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     surveyAddr: function () {
-      if (this.userGroup === 1 || this.$store.userGroup === 2) {
+      if (this.userGroup === 1 || this.userGroup === 2) {
         return 'https://goo.gl/forms/XCCNqJh8QERTjOjC2'
       } else if (this.userGroup === 3 || this.userGroup === 4) {
         return 'https://goo.gl/forms/qlvAmXMYyx46Pgjp1'
