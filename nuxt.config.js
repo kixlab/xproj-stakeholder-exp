@@ -7,7 +7,7 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'stakeholder opinion exploration' }
+      { hid: 'description', name: 'description', content: '\'정책타입 - 타인의 입장\'에서 다양한 사람의 입장에서 정책의 영향에 생각해보시고, 정책에 대한 여러분의 이야기도 남겨주세요!' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
