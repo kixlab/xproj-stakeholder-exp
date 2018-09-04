@@ -326,6 +326,7 @@ export default {
     // }
     if (this.$store.state.selectedTag) {
       this.selectedTags.push(this.$store.state.selectedTag)
+      this.$store.dispatch('addBrowsedTags', this.$store.state.selectedTag)
     }
   },
   mixins: [setTokenMixin, hangulSearchMixin],
