@@ -121,9 +121,8 @@ export default {
             articles_seen: 0,
             effects_seen: 0
           }
-          this.$axios.$post('/api/userpolicy/', newUP).then((result) => {
-            this.$store.commit('setUserPolicy', result)
-          })
+          const result = await this.$axios.$post('/api/userpolicy/', newUP)
+          this.$store.commit('setUserPolicy', result)
         } else {
           this.$store.commit('setUserPolicy', this.userpolicies[upIdx])
         }
