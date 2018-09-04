@@ -57,6 +57,11 @@
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 export default {
+  fetch: function ({app, store, redirect}) {
+    if (store.state.userPolicy.identify_done) {
+      redirect('Identify')
+    }
+  },
   data: function () {
     return {
       read1: false,
