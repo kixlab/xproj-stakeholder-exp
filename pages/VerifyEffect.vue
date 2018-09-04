@@ -11,8 +11,15 @@
       </v-card>
       &nbsp;
       <div style="text-align:left;">
-        <font size="2">* <strong class="red--text">하늘색 카드</strong>는 이해당사자들이 <strong class="red--text">직접</strong> 쓴 내용입니다.</font><br>
-        <font size="2">* <strong class="red--text">흰색 카드</strong>는 이해당사자가 아닌 분들이 <strong class="red--text">생각</strong>한 내용입니다.</font><br>
+        <font size="2">* 
+          <v-chip small label color="primary" text-color="white">
+            직접
+          </v-chip>
+          은 이해당사자들이 <strong class="red--text">직접</strong> 쓴 내용입니다.</font><br>
+        <font size="2">* 
+          <v-chip small label color="green" text-color="white">
+            추측
+          </v-chip>은 이해당사자가 아닌 분들이 <strong class="red--text">추측</strong>한 내용입니다.</font><br>
         <font size="2">* <strong class="red--text">거짓 정보</strong>를 담고 있으면 신고해주세요!</font><br><br>
       </div>
       <v-expansion-panel>
@@ -115,7 +122,7 @@ export default {
   // },
   fetch: function ({app, store, redirect}) {
     if (store.state.usedEffects.length === 0) {
-      this.$store.dispatch('setUserPolicyGuessingDone')
+      store.dispatch('setUserPolicyGuessingDone')
       redirect('/TagOverview')
     }
   },

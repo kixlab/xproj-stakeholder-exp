@@ -11,8 +11,8 @@
           </v-icon>
         </v-flex>
         <v-flex xs2>
-          <v-chip small dark label :color="effect.source === 'guess' ? 'primary' : 'green'" text-color="white">
-            {{TagWord}}
+          <v-chip small label :color="effect.source !== 'guess' ? 'primary' : 'green'" text-color="white">
+            {{tagWord}}
           </v-chip>
         </v-flex>
         <v-flex xs12 style="text-align: left;">
@@ -148,17 +148,18 @@ export default {
       return this.effect.fishy.includes(this.$store.state.user.pk)
     },
     cardColor: function () {
-      if (!this.effect.is_guess && this.effect.source !== 'guess') {
-        return 'blue lighten-5'
-      } else {
-        return 'white'
-      }
+      // if (!this.effect.is_guess && this.effect.source !== 'guess') {
+      //   return 'blue lighten-5'
+      // } else {
+      //   return 'white'
+      // }
+      return 'white'
     },
-    TagWord: function () {
+    tagWord: function () {
       if (this.effect.source === 'guess') {
-        return '직접'
-      } else {
         return '추측'
+      } else {
+        return '직접'
       }
     }
   },
