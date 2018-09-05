@@ -156,7 +156,8 @@
       </v-flex>
     </template>
     <v-flex xs12>
-      <p v-if="!allFilled" style="color:red;">모든 빈칸을 채우면 추가하실 수 있습니다.</p>
+      <p v-if="!allFilled" style="color:red;">모든 빈 칸을 채우면 추가하실 수 있습니다.</p>
+      <p v-if="err" style="color: red;">모든 빈 칸을 채우셨는지, 인터넷이 연결되어 있는지 확인해주시고, 잠시 뒤 다시 시도해주세요. </p>
       <v-btn dark color="secondary" @click="goBack">돌아가기</v-btn>
       <v-btn :disabled="!allFilled" color="primary" @click="onAddNewStakeholderButtonClick">추가하기</v-btn>
     </v-flex>
@@ -274,21 +275,34 @@ export default {
       //   is_visible: false,
       //   name: this.stakeholder_custom
       // })
+      this.err = false
       this.onLoading = true
       this.predictedEffect.stakeholder_group = 1
       this.predictedEffect.policy = this.$store.state.policyId
       this.predictedEffect.tags = this.selectedTags.map((x) => { return x.name ? x.name : x })
       // this.predictedEffect.stakeholder_group = newStakeholder.id
-      await this.$axios.$post('/api/effects/', this.predictedEffect)
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'AddNewStakeholder',
-        eventLabel: this.predictedEffect.stakeholder_detail,
-        eventValue: 0
-      })
-      this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
-      this.$router.push('/TagOverview')
-      this.onLoading = false
+      try {
+        await this.$axios.$post('/api/effects/', this.predictedEffect)
+        this.$ga.event({
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'AddNewStakeholder',
+          eventLabel: this.predictedEffect.stakeholder_detail,
+          eventValue: 0
+        })
+        this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
+        this.$router.push('/TagOverview')
+      } catch (e) {
+        this.err = e
+        this.$ga.event({
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'AddNewStakeholderError',
+          eventLabel: e,
+          eventValue: 0
+        })
+        console.log(e)
+      } finally {
+        this.onLoading = false
+      }
     }
   },
   data: function () {
@@ -304,6 +318,7 @@ export default {
         confidence: 0,
         is_guess: false
       },
+      err: false,
       dialog: false,
       selectedTags: [],
       happy: true,

@@ -43,6 +43,13 @@
           <v-btn @click="register" ripple> 회원가입 </v-btn>
         </v-form>
       </v-card>
+      <br>
+      <div v-if="isMobile">
+        <p style="text-align: left;">
+          혹시 카카오톡이나 페이스북 등 앱을 통해 들어오셨다면, 아래 그림을 따라 다른 브라우저로 접속해주세요!
+        </p>
+        <img src="noinapp.png" width="100%" />
+      </div>
     </v-flex>
   </v-layout>
 </template>
@@ -67,7 +74,22 @@ export default {
   mounted () {
     this.$validator.localize('ko', this.dictionary)
   },
-
+  computed: {
+    isMobile: function () {
+      if (navigator.userAgent.match(/Android/i) ||
+      navigator.userAgent.match(/webOS/i) ||
+      navigator.userAgent.match(/iPhone/i) ||
+      navigator.userAgent.match(/iPad/i) ||
+      navigator.userAgent.match(/iPod/i) ||
+      navigator.userAgent.match(/BlackBerry/i) ||
+      navigator.userAgent.match(/Windows Phone/i)
+      ) {
+        return true
+      } else {
+        return false
+      }
+    }
+  },
   methods: {
     async onLoginClick () {
       const result = await this.$validator.validateAll()

@@ -4,13 +4,16 @@
       
       
       <v-card-title>
-        <h3 style="text-align:left;">
+        <v-flex xs10>
+        <h3 style="text-align: left;">
           <span class="card__tag__title">
             {{tag.name}}
           </span>
         </h3>
-        <v-spacer/>
-        <span class="card__tag__title">{{tag.refs}}회</span>
+        </v-flex>
+        <v-flex xs2>
+          <span class="card__tag__title">{{tag.refs}}회</span>
+        </v-flex>
       </v-card-title>
       <v-card-text>
         <v-progress-linear

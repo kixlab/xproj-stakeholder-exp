@@ -24,6 +24,11 @@
         block ripple large v-html="article_title_cut(policy.article1_title)"></v-btn>
       <br>
     </v-flex>
+    <v-flex xs12 v-if="article1Show">
+      <!-- <iframe style="width: 90vw; height: 100vh;" :src="policy.article1_link"></iframe>
+      <v-btn block large @click="article1Show = false"></v-btn> -->
+      {{policy.article1_content}}
+    </v-flex>
     <v-flex xs12>
       <span style="text-align:left;"><strong> 두 번째 기사 </strong></span>
       <v-divider/>
@@ -76,9 +81,10 @@ export default {
       intervalHandle: 0,
       // readCounter1: 0,
       // readCounter2: 0,
-      curTime: 0
+      curTime: 0,
       // read1: false,
-      // read2: false
+      // read2: false,
+      article1Show: false
     }
   },
   computed: {
@@ -152,6 +158,7 @@ export default {
         eventLabel: `${this.policy.title}`,
         eventValue: 0
       })
+      this.article1Show = true
       window.open(this.policy.article1_link, '_blank')
       if (!this.read1) {
         // setTimeout(() => {

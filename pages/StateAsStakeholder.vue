@@ -133,7 +133,8 @@
         
         <br>
         
-      <p v-if="!allFilled" style="color:red;">모든 빈칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
+      <p v-if="!allFilled" style="color:red;">모든 빈 칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
+      <p v-if="err" style="color: red;">모든 빈 칸을 채우셨는지, 인터넷이 연결되어 있는지 확인해주시고, 잠시 뒤 다시 시도해주세요. </p>
       <v-btn v-if="!allFilled" disabled block> 다음 </v-btn>
       <v-btn v-else dark block color="primary" @click="addEffect">다음</v-btn>    
       </v-form>
@@ -233,7 +234,8 @@ export default {
       x: 0,
       search: null,
       y: 0,
-      onLoading: false
+      onLoading: false,
+      err: false
       // hangulSearch: ''
     }
   },
@@ -296,6 +298,7 @@ export default {
       })
     },
     addEffect: async function () {
+      this.err = false
       this.onLoading = true
       const result = await this.$validator.validateAll()
       this.myEffect.tags = this.selectedTags
@@ -303,15 +306,26 @@ export default {
         // await this.addNewStakeholder()
         this.myEffect.policy = this.$store.state.policyId
         this.$axios.$post('/api/effects/', this.myEffect)
-        this.$ga.event({
-          eventCategory: '/StateAsStakeholder',
-          eventAction: 'AddEffect',
-          eventLabel: this.myEffect.stakeholder_detail,
-          eventValue: 0
-        })
-        this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
-        this.$store.dispatch('setUserPolicyIdentifyDone')
-        this.$router.push(this.nextRoute)
+        try {
+          this.$ga.event({
+            eventCategory: '/StateAsStakeholder',
+            eventAction: 'AddEffect',
+            eventLabel: this.myEffect.stakeholder_detail,
+            eventValue: 0
+          })
+          this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
+          this.$store.dispatch('setUserPolicyIdentifyDone')
+        } catch (e) {
+          this.$ga.event({
+            eventCategory: '/StateAsStakeholder',
+            eventAction: 'AddEffectError',
+            eventLabel: e,
+            eventValue: 0
+          })
+          console.log(e)
+        } finally {
+          this.$router.push(this.nextRoute)
+        }
       }
       this.onLoading = false
     }

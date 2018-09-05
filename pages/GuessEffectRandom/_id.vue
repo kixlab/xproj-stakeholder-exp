@@ -76,6 +76,7 @@
         ticks="always"
         tick-size="2"/>
       <p v-if="!allFilled" style="color:red;">모든 빈칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
+      <p v-if="err" style="color: red;">모든 빈 칸을 채우셨는지, 인터넷이 연결되어 있는지 확인해주시고, 잠시 뒤 다시 시도해주세요. </p>
       <v-btn v-if="!allFilled" disabled block> 다음 </v-btn>
       <v-btn v-else dark block color="primary" @click="onNextClick">다음</v-btn>
       <v-btn v-if="userGroup === -1" outline block color="black" @click="onPassClick">넘어가기</v-btn>    
@@ -120,27 +121,33 @@ export default {
   },
   methods: {
     onNextClick: async function () {
+      this.err = false
       this.onLoading = true
       this.predictedEffect.policy = this.$store.state.policyId
       this.predictedEffect.stakeholder_group = 1
       this.predictedEffect.tags = this.randomEffect.tags
-
-      await this.$axios.$post('/api/effects/', this.predictedEffect)
-      // TODO: record user activity
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'SubmitGuess',
-        eventLabel: this.randomEffect.stakeholder_detail,
-        eventValue: 0
-      })
-      this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
-      // this.$router.push('/VerifyEffect')
-      if (this.userPolicy.stakeholders_answered < 3) {
-        this.$router.push(`/GuessEffectRandom/${this.userPolicy.stakeholders_answered}`)
-      } else {
-        this.$router.push('/VerifyEffect')
+      try {
+        await this.$axios.$post('/api/effects/', this.predictedEffect)
+        // TODO: record user activity
+        this.$ga.event({
+          eventCategory: this.$router.currentRoute.path,
+          eventAction: 'SubmitGuess',
+          eventLabel: this.randomEffect.stakeholder_detail,
+          eventValue: 0
+        })
+        this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
+        // this.$router.push('/VerifyEffect')
+        if (this.userPolicy.stakeholders_answered < 3) {
+          this.$router.push(`/GuessEffectRandom/${this.userPolicy.stakeholders_answered}`)
+        } else {
+          this.$router.push('/VerifyEffect')
+        }
+      } catch (e) {
+        this.err = e
+        console.log(e)
+      } finally {
+        this.onLoading = false
       }
-      this.onLoading = false
     },
     onPassClick: function () {
       this.$ga.event({
@@ -177,6 +184,7 @@ export default {
         confidence: 0,
         is_guess: true
       },
+      err: false,
       onLoading: false
     }
   }
