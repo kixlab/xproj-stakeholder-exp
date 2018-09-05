@@ -24,7 +24,7 @@
 
       <div>
         <p class="question">
-          말씀하신 사람이 속해있는 사회적 집단 중, 이 정책과 관련된 집단은 무엇이 있나요?
+          말씀하신 사람이 속해있는 사회 집단 중, 이 정책과 관련된 집단은 무엇이 있나요?
           예를 들면, "건강보험 보장성 강화" 정책의 영향을 받는 "임플란트 전문 치과의사"라면, "의료인", "치과의사", "임플란트 전문 치과의사" 처럼 적어주세요. <br>
           &nbsp;
           <ul>
@@ -82,7 +82,7 @@
         {{tag.name ? tag.name : tag}}
       </v-chip> -->
     </v-flex>
-    <template v-if="selectedTags.length >= 2">
+    <template v-if="selectedTags.length >= 2 && predictedEffect.stakeholder_detail">
       <v-flex xs12 row wrap>
         <p class="question">
           이 정책은 <strong>{{predictedEffect.stakeholder_detail}}</strong>의 삶을 어떻게 바꿀까요? <strong>{{predictedEffect.stakeholder_detail}}</strong>의 입장에서 이야기해주세요.
@@ -296,7 +296,7 @@ export default {
       stakeholder_custom: '',
       predictedEffect: {
         isBenefit: -1,
-        stakeholder_detail: ' ',
+        stakeholder_detail: '',
         stakeholder_group: 1,
         description: '',
         source: 'newstakeholder',

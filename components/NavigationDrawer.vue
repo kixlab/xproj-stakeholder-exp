@@ -164,11 +164,11 @@
       <v-list class="pt-0" dense>
         <v-list-tile @click="toLogIn">
           <v-list-tile-action>
-            <v-icon>key</v-icon>
+            <v-icon>input</v-icon>
           </v-list-tile-action>
 
           <v-list-tile-content>
-            <v-list-tile-title>로그인 하러가기</v-list-tile-title>
+            <v-list-tile-title>로그인 하러 가기</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -187,7 +187,7 @@
         </v-list-tile>
         <v-list-tile @click="showPolicies">
           <v-list-tile-action>
-            <v-icon></v-icon>
+            <v-icon>list</v-icon>
           </v-list-tile-action>
 
           <v-list-tile-content>
