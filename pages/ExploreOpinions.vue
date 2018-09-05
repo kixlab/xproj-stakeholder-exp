@@ -326,6 +326,12 @@ export default {
     // }
     if (this.$store.state.selectedTag) {
       this.selectedTags.push(this.$store.state.selectedTag)
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'SearchTags',
+        eventLabel: this.selectedTags,
+        eventValue: 0
+      })
       this.$store.dispatch('addBrowsedTags', [this.$store.state.selectedTag])
     }
   },

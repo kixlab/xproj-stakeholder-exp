@@ -189,7 +189,7 @@ export default {
     PromisePane,
     TagOverviewItem
   },
-  mixins: [setTokenMinin],
+  mixins: [setTokenMixin],
   computed: {
     policy: function () {
       return this.$store.state.policy
