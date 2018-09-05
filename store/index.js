@@ -21,7 +21,9 @@ export const state = () => ({
   selectedTag: null,
   browsedTags: [],
   guessedTags: [],
-  explorationDone: false
+  explorationDone: false,
+  readCounter1: 0,
+  readCounter2: 0
 })
 
 export const mutations = {
@@ -140,6 +142,12 @@ export const mutations = {
   },
   addGuessedTags (state, tags) {
     state.guessedTags.push(tags)
+  },
+  setReadCounter1 (state, t) {
+    state.readCounter1 = t
+  },
+  setReadCounter2 (state, t) {
+    state.readCounter2 = t
   }
 }
 

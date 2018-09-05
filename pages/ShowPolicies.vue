@@ -130,6 +130,8 @@ export default {
         if (!this.$store.state.user.is_participant) {
           this.$router.push('/Identify')
         } else if (this.$store.state.user.is_participant && (this.$store.state.user.step < 3)) {
+          this.$store.commit('setReadCounter1', 0)
+          this.$store.commit('setReadCounter2', 0)
           this.$router.push('/ReadNews')
         } else if (this.$store.state.user.is_participant && (this.$store.state.user.step >= 3)) {
           this.$router.push('/TagOverview')

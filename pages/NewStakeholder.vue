@@ -186,7 +186,7 @@ export default {
       return this.$store.state.userPolicy
     },
     allFilled: function () {
-      return (this.selectedTags.length >= 2 && this.predictedEffect.description.length >= 10 &&
+      return (this.predictedEffect.stakeholder_detail.length >= 2 && this.selectedTags.length >= 2 && this.predictedEffect.description.length >= 10 &&
       this.predictedEffect.isBenefit !== -1 && this.predictedEffect.source !== '')
     }
   },

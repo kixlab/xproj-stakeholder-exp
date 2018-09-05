@@ -24,7 +24,7 @@
 
         <div>
           <p class="question">
-            본인이 속해있는 사회적 집단 중, 이 정책과 관련된 집단은 무엇이 있나요?
+            본인이 속해있는 사회 집단 중, 이 정책과 관련된 집단은 무엇이 있나요?
             예를 들면, "건강보험 보장성 강화" 정책의 영향을 받는 "임플란트 전문 치과의사"라면, "의료인", "치과의사", "임플란트 전문 치과의사" 처럼 적어주세요. <br>
             &nbsp;
             <ul>
@@ -165,7 +165,7 @@ export default {
       return this.$store.state.policy
     },
     allFilled: function () {
-      return (this.myEffect.description.length >= 10 && this.myEffect.isBenefit !== -1 && this.selectedTags.length >= 2)
+      return (this.myEffect.stakeholder_detail.length >= 2 && this.myEffect.description.length >= 10 && this.myEffect.isBenefit !== -1 && this.selectedTags.length >= 2)
     },
     tags: function () {
       return this.$store.state.tags

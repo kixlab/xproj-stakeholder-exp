@@ -62,19 +62,46 @@ export default {
       redirect('/Identify')
     }
   },
+  created: function () {
+    this.curTime = Date.now()
+    this.intervalHandle = window.setInterval(() => {
+      this.curTime = Date.now()
+    }, 5000)
+  },
+  beforeDestroy: function () {
+    window.clearInterval(this.intervalHandle)
+  },
   data: function () {
     return {
-      read1: false,
-      read2: false
+      intervalHandle: 0,
+      // readCounter1: 0,
+      // readCounter2: 0,
+      curTime: 0
+      // read1: false,
+      // read2: false
     }
   },
   computed: {
-    // read1: function () {
-    //   return this.$store.state.userPolicy.articles_seen >= 1
-    // },
-    // read2: function () {
-    //   return this.$store.state.userPolicy.articles_seen >= 2
-    // },
+    readCounter1: function () {
+      return this.$store.state.readCounter1
+    },
+    readCounter2: function () {
+      return this.$store.state.readCounter2
+    },
+    read1: function () {
+      if (this.readCounter1 === 0) {
+        return false
+      } else {
+        return (this.curTime - this.readCounter1 >= 60000)
+      }
+    },
+    read2: function () {
+      if (this.readCounter2 === 0) {
+        return false
+      } else {
+        return (this.curTime - this.readCounter2 >= 60000)
+      }
+    },
     userGroup: function () {
       // if (!this.$store.state.user.is_participant) {
       //   return -1
@@ -127,10 +154,11 @@ export default {
       })
       window.open(this.policy.article1_link, '_blank')
       if (!this.read1) {
-        setTimeout(() => {
-          this.$store.dispatch('incrementUserPolicyArticlesSeen')
-          this.read1 = true
-        }, 60000)
+        // setTimeout(() => {
+        this.$store.commit('setReadCounter1', Date.now())
+        this.$store.dispatch('incrementUserPolicyArticlesSeen')
+        // this.read1 = true
+        // }, 60000)
       }
       // this.read1 = true
     },
@@ -143,10 +171,11 @@ export default {
       })
       window.open(this.policy.article2_link, '_blank')
       if (!this.read2) {
-        setTimeout(() => {
-          this.$store.dispatch('incrementUserPolicyArticlesSeen')
-          this.read2 = true
-        }, 60000)
+        // setTimeout(() => {
+        this.$store.commit('setReadCounter2', Date.now())
+        this.$store.dispatch('incrementUserPolicyArticlesSeen')
+        // this.read1 = true
+        // }, 60000)
       }
       // this.read2 = true
     },

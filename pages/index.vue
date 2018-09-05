@@ -114,7 +114,9 @@ export default {
       selectedTag: null,
       browsedTags: [],
       guessedTags: [],
-      explorationDone: false
+      explorationDone: false,
+      readCounter1: 0,
+      readCounter2: 0
     })
   },
   layout: 'index',
