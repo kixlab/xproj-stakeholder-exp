@@ -494,7 +494,7 @@ export default {
             policy: this.policy.id,
             tag: this.selectedTags,
             is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-            include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+            include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
             page: this.page
           }
         })
@@ -529,7 +529,7 @@ export default {
             policy: this.policy.id,
             tag: this.selectedTags,
             is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-            include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+            include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
             page: this.page
           }
         })
@@ -564,7 +564,7 @@ export default {
             policy: this.policy.id,
             tag: this.selectedTags,
             is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-            include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+            include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
             page: this.page
           }
         })
@@ -627,7 +627,7 @@ export default {
           policy: this.policy.id,
           tag: this.selectedTags,
           is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-          include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null
+          include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
         }
       })
       // this.$store.dispatch('incrementUserPolicyEffectsSeen')
@@ -650,7 +650,7 @@ export default {
           policy: this.policy.id,
           tag: this.selectedTags,
           is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-          include_guess: this.effectFilter.length === 1 ? this.effectFilter[0] : null
+          include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
         }
       })
       this.effects = effects.results
@@ -693,6 +693,7 @@ export default {
           policy: this.policy.id,
           tag: this.selectedTags,
           is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+          include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
           page: newPage
         }
       })
