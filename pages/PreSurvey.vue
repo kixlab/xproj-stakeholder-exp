@@ -55,6 +55,9 @@ export default {
   methods: {
     onClickComplete: function () {
       if (this.code === this.answer) {
+        this.$ga.set({
+          userId: this.$store.state.user.email
+        })
         this.$ga.event({
           eventCategory: this.$router.currentRoute.path,
           eventAction: 'FinishPreSurvey',
