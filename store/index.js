@@ -121,7 +121,6 @@ export const mutations = {
   },
   setTags (state, payload) {
     state.tags = payload
-    state.tags.sort((a, b) => { return a.refs < b.refs })
   },
   setRandomEffect (state, randomEffect) {
     state.randomEffect = randomEffect
@@ -264,6 +263,15 @@ export const actions = {
     const tags = await this.$axios.$get('/api/effects/tag_list/', {
       params: {
         policy: context.state.policyId
+      }
+    })
+    tags.sort((a, b) => {
+      if (a.refs < b.refs) {
+        return 1
+      } else if (a.refs > b.refs) {
+        return -1
+      } else {
+        return 0
       }
     })
     context.commit('setTags', tags)
