@@ -4,15 +4,15 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-        이 정책이 우리 사회의<br>
-        다양한 사람들에게 끼칠 영향을 확인해보세요.
+        How does this policy<br>
+        affect the citizens in our society?
         </v-card-text>
       </v-card>
       &nbsp;
       <p class="body-1 prompt"> 
-        <strong>3개 이상 영향이 입력된 이해당사자 태그를<br>언급 횟수가 적은 것 부터 보여드립니다.<br></strong>
+        <strong>The stakeholder tags with more than three effects<br>are listen in ascending order.<br></strong>
         <v-divider/>
-        <small>* 아래 태그를 눌러 각 이해당사자들이 받는 영향을 확인해보세요.</small>
+        <small>* Click the tags below and Check how stakeholders are affected.</small>
       </p>
 
 
@@ -20,17 +20,19 @@
         <v-card style="outline:auto;">
           <v-card-actions>
             <v-flex xs10 style="text-align:center;">
-              여러분이 생각해보셨던 태그는...
+              The tags you guessed are...
             </v-flex>
-            <v-btn outline small color="primary" @click="onSeePredictedTagsClick">
-              더 보기
+            <v-btn outline small color="primary"
+             @click="onSeePredictedTagsClick"
+             style="text-transform: none !important">
+              Show
             </v-btn>
           </v-card-actions>
 
           <v-slide-y-transition>
             <v-card-text v-show="show" style="text-align:left;">
               <v-chip 
-                color="primary" 
+                color="primary"
                 text-color="white"
                 v-for="tag in guessedTag"
                 :key="tag"
@@ -44,11 +46,18 @@
       
       <tag-overview-item v-for="tag in filteredTags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
       </tag-overview-item>
-      <v-btn color="success" :disabled="!$store.state.userToken" ripple block @click="onNewStakeholderClick">
-        새로운 영향 남기기
+      <v-btn color="success" 
+      :disabled="!$store.state.userToken" ripple block 
+      @click="onNewStakeholderClick"
+      style="text-transform: none !important"
+      >
+        Leave new effect
       </v-btn>
-      <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block @click="onShowPolicyListClick">
-        다른 정책 보기
+      <v-btn v-if="!$store.state.userToken || userGroup === -1" 
+      color="primary" dark ripple block 
+      @click="onShowPolicyListClick"
+      style="text-transform: none !important">
+        Move to the other policy
       </v-btn>
       <v-dialog
         v-else-if="$store.state.userToken && userGroup >= 0 && userGroup < 6 "
@@ -60,8 +69,9 @@
           slot="activator"
           color="primary"
           dark ripple block
-          @click.native="onShowDialogButtonClick">
-          다른 정책 보기
+          @click.native="onShowDialogButtonClick"
+          style="text-transform: none !important">
+          Move to the other policy
         </v-btn>
 
         <v-card>

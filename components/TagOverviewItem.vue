@@ -4,15 +4,15 @@
       
       
       <v-card-title>
-        <v-flex xs10>
+        <v-flex xs9>
         <h3 style="text-align: left;">
           <span class="card__tag__title">
             {{tag.name}}
           </span>
         </h3>
         </v-flex>
-        <v-flex xs2>
-          <span class="card__tag__title">{{tag.refs}}회</span>
+        <v-flex xs3>
+          <span class="card__tag__title">{{tag.refs}} times</span>
         </v-flex>
       </v-card-title>
       <v-card-text>

@@ -4,34 +4,21 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-          다른 사람의 입장에서<br>정책을 이해해보세요!
+          Put yourself in other's shoes,<br>
+          and understand the policy.
         </v-card-text>
       </v-card>
     </v-flex>
 
-      <!-- <p class="body-1 prompt head">
-        <v-chip v-for="tag in randomEffect.tags" :key="tag">{{tag}}</v-chip><br>
-        <br>
-        <strong>이 분의 입장에서 생각해주세요.</strong>
-      </p>
-      <br> -->
-      <!-- <p class="question">
-      여러분은 <strong>{{randomEffect.stakeholder_detail}}</strong>(이)가 주인공인 소설을 쓰고 있습니다.
-      여러분이 정한 주인공을 머릿 속에서 <strong>더욱 자세히 상상</strong>해보세요!
-      예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
-      장소, 직장, 연령 등을 고려해서 더 구체적으로요.<br>
-      이제 여러분만의 주인공을 간단히 설명해주시겠어요?
-      </p>
-       -->
     <v-flex xs12>
       <p class="question">
         <!-- 여러분은 (이)가 주인공인 소설을 쓰고 있습니다. -->
-        이 정책은 <strong>{{randomEffect.stakeholder_detail}}</strong>의 삶을 어떻게 바꿀까요? 
-        <strong>{{randomEffect.stakeholder_detail}}</strong>의 입장에서 이야기해주세요.
+        How does this policy change <strong>{{randomEffect.stakeholder_detail}}</strong>'s life?
+        Please explain it from the <strong>{{randomEffect.stakeholder_detail}}</strong>'s point of view.
       </p>
       <div class="triangle-obtuse">
-        <v-textarea auto-grow v-model="predictedEffect.description" placeholder="여기에 영향을 적어주세요!"
-          :rules="[(input) => { return input.length >= 10 ? true : '영향을 조금 더 자세히 써주세요!'}]"/>
+        <v-textarea auto-grow v-model="predictedEffect.description" placeholder="Write here!"
+          :rules="[(input) => { return input.length >= 10 ? true : 'Please explain in more detail'}]"/>
       </div>
     </v-flex>
     <v-layout row wrap>
@@ -45,41 +32,41 @@
       </v-flex>
       <v-flex xs8 sm4 offset-sm2>
         <div>
-          <p class="body-1 prompt question">방금 쓰신 영향은 이 분에게 긍정적인가요? 부정적인가요? </p>
+          <p class="body-1 prompt question">How does the answer you just wrote affect him/her?</p>
           <v-btn 
           :outline="predictedEffect.isBenefit !== 1" 
           :dark="predictedEffect.isBenefit == 1"
           color="primary"
           class="binarybtn"
           @click="predictedEffect.isBenefit=1">
-          긍정적 </v-btn>
+          Positive </v-btn>
           <v-btn 
           :outline="predictedEffect.isBenefit !== 0" 
           :dark="predictedEffect.isBenefit == 0"
           color="error" 
           class="binarybtn" 
           @click="predictedEffect.isBenefit=0"> 
-          부정적 </v-btn>
+          Negative </v-btn>
         </div>
       </v-flex>
     </v-layout>
     <v-flex xs12 sm12>
       <!-- <p class="question"> 위 빈칸에 '영향'을 쓰실 때 가장 큰 영향을 끼친 사람/상황 등이 있다면 간단히 적어주세요.<br>(예. 언론기사, 지인 등)</p>
       <v-text-field placeholder="여기에 설명해주세요!" v-model="predictedEffect.source"/> -->
-      <v-checkbox label="이 답이 본인 이야기이시라면 체크해주세요." :value="!predictedEffect.is_guess" @change="onCheckboxClick"></v-checkbox>
-      <p class="body-1 prompt question">이 답에 대해 얼마나 확신하시나요?</p>
+      <v-checkbox label="Check if the answer is your story." :value="!predictedEffect.is_guess" @change="onCheckboxClick"></v-checkbox>
+      <p class="body-1 prompt question">How confident are you with this answer?</p>
       <v-slider
         v-model="predictedEffect.confidence"
-        :tick-labels="['매우 확신 없음','','','', '매우 확신함']"
+        :tick-labels="['Not confident at all','','','', 'Strongly confident']"
         :max="4"
         step="1"
         ticks="always"
         tick-size="2"/>
-      <p v-if="!allFilled" style="color:red;">모든 빈칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
-      <p v-if="err" style="color: red;">모든 빈 칸을 채우셨는지, 인터넷이 연결되어 있는지 확인해주시고, 잠시 뒤 다시 시도해주세요. </p>
-      <v-btn v-if="!allFilled" disabled block> 다음 </v-btn>
-      <v-btn v-else dark block color="primary" @click="onNextClick">다음</v-btn>
-      <v-btn v-if="userGroup === -1" outline block color="black" @click="onPassClick">넘어가기</v-btn>    
+      <p v-if="!allFilled" style="color:red;">You can go next after filling up all the blanks.</p>
+      <p v-if="err" style="color: red;">Did you fill up all the blanks? Is internet connected? If so, please try again later. </p>
+      <v-btn v-if="!allFilled" disabled block> NEXT </v-btn>
+      <v-btn v-else dark block color="primary" @click="onNextClick">NEXT</v-btn>
+      <v-btn v-if="userGroup === -1" outline block color="black" @click="onPassClick">NEXT</v-btn>    
     </v-flex>
     <loader :value="onLoading"></loader>
   </v-layout>

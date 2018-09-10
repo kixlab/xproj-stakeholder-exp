@@ -2,7 +2,7 @@
   <div class="card__effect">
     <v-card :color="cardColor">
       <v-card-title>
-        <v-flex xs9 style="text-align: left;">
+        <v-flex xs8 style="text-align: left;">
         <strong><font size="3">{{effect.stakeholder_detail}}</font></strong>
         </v-flex>
         <v-flex xs1 style="text-align: right;">
@@ -10,7 +10,7 @@
             {{effect.isBenefit ? 'sentiment_very_satisfied' : 'sentiment_very_dissatisfied'}}
           </v-icon>
         </v-flex>
-        <v-flex xs2>
+        <v-flex xs3>
           <v-chip small label :color="effect.source !== 'guess' ? 'primary' : 'green'" text-color="white">
             {{tagWord}}
           </v-chip>
@@ -25,16 +25,31 @@
         </a>
       </v-card-text>
       <v-card-actions>
-        <v-btn small :depressed="isNoveltyVoted" :outline="!isNoveltyVoted" color="primary" @click.stop="onNoveltyButtonClick">
-          참신 {{effect.novelty.length}}
+        <v-btn small 
+        :depressed="isNoveltyVoted" 
+        :outline="!isNoveltyVoted" 
+        color="primary" 
+        @click.stop="onNoveltyButtonClick"
+        style="text-transform: none !important">
+          Novel {{effect.novelty.length}}
 
         </v-btn>
-        <v-btn small :outline="!isEmpathyVoted" :depressed="isEmpathyVoted" color="primary" @click.stop="onEmpathyButtonClick">
-          공감 {{effect.empathy.length}}
+        <v-btn small 
+        :outline="!isEmpathyVoted" 
+        :depressed="isEmpathyVoted" 
+        color="primary" 
+        @click.stop="onEmpathyButtonClick"
+        style="text-transform: none !important">
+          Agree {{effect.empathy.length}}
 
         </v-btn>
-        <v-btn small :depressed="isFishyVoted" :outline="!isFishyVoted" color="error" @click.stop="onFishyButtonClick">
-          의심 {{effect.fishy.length}}
+        <v-btn small 
+        :depressed="isFishyVoted" 
+        :outline="!isFishyVoted" 
+        color="error" 
+        @click.stop="onFishyButtonClick"
+        style="text-transform: none !important">
+          Doubt {{effect.fishy.length}}
 
         </v-btn>
         <v-spacer/>
@@ -50,14 +65,14 @@
               primary-title
             >
             <div class="dialog">
-              신고하기
+              Report
             </div>
             </v-card-title>
 
             <v-card-text>
               <div class="dialog">
-              신고 사유를 간단히 적어주세요.<br>
-              (욕설, 모욕, 성희롱 등 기타 부적절한 언행)
+              Please briefly state the reason for the report.<br>
+              (Fake-based, Abuse, Insult, Sexual harassment, etc.)
               <v-textarea box v-model="reportReason"/>
               </div>
             </v-card-text>
@@ -72,7 +87,7 @@
                 @click="onCloseReportDialog"
                 ripple
               >
-                돌아가기
+                BACK
               </v-btn>
               <v-btn
                 color="error"
@@ -80,7 +95,7 @@
                 @click="reportEffect"
                 ripple
               >
-                신고하기
+                REPORT
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -96,13 +111,13 @@
       bottom
       :timeout="3000"
     >
-      접수되었습니다.
+      Successfully received your report.
       <v-btn
         color="pink"
         flat
         @click="snackbar = false"
       >
-        닫기
+        close
       </v-btn>
     </v-snackbar>
   </div>
@@ -157,9 +172,9 @@ export default {
     },
     tagWord: function () {
       if (this.effect.source === 'guess') {
-        return '추측'
+        return 'Guess'
       } else {
-        return '직접'
+        return 'Direct'
       }
     }
   },

@@ -5,16 +5,18 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-        이 정책으로 인해 {{effectSize}} 영향을 받으시는군요!<br>
-        어떤 영향을 받으시는지 자세히 알려주세요.
+        You say, you're {{effectSize}} affected by this policy.<br>
+        Tell us how it affects your life.
         </v-card-text>
       </v-card>
       
       <v-form>
 
         <p class="question">
-          먼저, 본인에 대해 조금만 더 자세히 설명해주세요. 예를 들면, <strong>'치과의사'</strong>보다는 <strong>'임플란트 전문 치과의사'</strong>처럼 
-          상황, 배경, 직업 등을 고려하여 구체적으로 적어주세요.
+          <br>
+          We wanna know more about you.
+          Could you tell us about yourself regarding the current status, background, and occupation, etc.
+          For example, "high school teacher, as well as a mother of two daughters" would be better than "teacher".
         </p>
         <v-text-field
           v-validate="'required'"
@@ -24,12 +26,13 @@
 
         <div>
           <p class="question">
-            본인이 속해있는 사회 집단 중, 이 정책과 관련된 집단은 무엇이 있나요?
-            예를 들면, "건강보험 보장성 강화" 정책의 영향을 받는 "임플란트 전문 치과의사"라면, "의료인", "치과의사", "임플란트 전문 치과의사" 처럼 적어주세요. <br>
+            Among your various social identities, which ones are related to this policy?
+            For instance, regarding "Blind Hiring", the answer could be "looking for work", "college student", etc.
             &nbsp;
             <ul>
-              <li>최소 <strong style="color:red;">2개</strong>의 태그를 사용하여 설명해주세요.</li>
-              <li>태그는 <strong style="color:red;">사람 또는 집단을 나타내는 말</strong>이어야 합니다. <br>(예. 병원(X), 건강보험(X), 의사(O), 노조(O))</li>
+              <li>Please mention <strong style="color:red;">two</strong> tags at least.</li>
+              <li>The tags must describe <strong style="color:red;">a person or a social group.</strong><br>
+              (e.g. clinic(X), unemployment insurance(X), doctor(O), labor union(O))</li>
             </ul>
             &nbsp;
           </p>
@@ -40,7 +43,7 @@
           :items="tags"
           item-text="name"
           item-value="name"
-          label="태그를 적어주세요"
+          label="Write tags here"
           :search-input.sync="search"
           :filter="filter"
           multiple
@@ -54,14 +57,14 @@
           <template slot="no-data">
             <v-list-tile>
               <v-list-tile-content>
-                <v-chip color="blue lighten-3" label small>#{{hangulSearch}}</v-chip> 엔터키를 누르면 추가됩니다.
+                <v-chip color="blue lighten-3" label small>#{{hangulSearch}}</v-chip> press Enter to add a tag
               </v-list-tile-content>
             </v-list-tile>
           </template>
           <template slot="item" slot-scope="{ index, item, parent }">
             <v-chip color="blue lighten-3" label small>#{{item.name}}</v-chip>
             <v-spacer></v-spacer>
-            {{item.refs}}개
+            {{item.refs}}
           </template>
           <template slot="selection" slot-scope="{ item, parent, selected }">
             <v-chip :selected="selected" label small>
@@ -77,12 +80,12 @@
               <!-- <v-chip v-for="tag in selectedTags" :key="tag">
                 {{tag}}
               </v-chip> -->
-              {{myEffect.stakeholder_detail}}
-              (으)로서 이 정책이 실현된다면 삶이 어떻게 달라지시나요?
+              How is your life affected as {{myEffect.stakeholder_detail}}
+              by this policy?
             </p>
             <div class="triangle-obtuse">
-              <v-textarea auto-grow v-model="myEffect.description" placeholder="여기에 적어주세요!"
-                :rules="[(input) => { return input.length >= 10 ? true : '영향을 조금 더 자세히 써주세요!'}]"/>
+              <v-textarea auto-grow v-model="myEffect.description" placeholder="Write here!"
+                :rules="[(input) => { return input.length >= 10 ? true : 'Please explain in more detail'}]"/>
             </div>
           </v-flex>
           <v-layout row wrap>
@@ -95,13 +98,14 @@
               <!-- <v-chip v-for="tag in randomEffect.tags" :key="tag">{{tag}}</v-chip> -->
             </v-flex>
             <v-flex xs8 sm4 offset-sm2>
-              <p class="body-1 prompt question">이 영향은 나에게 긍정적인가요? 부정적인가요? </p>
+              <p class="body-1 prompt question">What do you think about this effect?</p>
               <v-btn 
                 :outline="myEffect.isBenefit !== 1" 
                 :dark="myEffect.isBenefit === 1" 
                 color="primary" 
                 class="binarybtn"
-                @click="myEffect.isBenefit=1"> 긍정적 
+                @click="myEffect.isBenefit=1"> 
+                Positive 
               </v-btn>
               <v-btn 
                 :outline="myEffect.isBenefit !== 0" 
@@ -109,7 +113,7 @@
                 color="error" 
                 class="binarybtn" 
                 @click="myEffect.isBenefit=0"> 
-                부정적 
+                Negative 
               </v-btn>
               <!-- <v-slider
                 v-model="myEffect.isBenefit"
@@ -121,10 +125,10 @@
                 tick-size="2"/> -->
             </v-flex>
           </v-layout>
-          <p class="body-1 prompt question">이 답에 대해 얼마나 확신하시나요?</p>
+          <p class="body-1 prompt question">How confident are you with this answer?</p>
           <v-slider
             v-model="myEffect.confidence"
-            :tick-labels="['매우 확신 없음','','','', '매우 확신함']"
+            :tick-labels="['Not confident at all','','','', 'Strongly confident']"
             :max="4"
             step="1"
             ticks="always"
@@ -133,10 +137,10 @@
         
         <br>
         
-      <p v-if="!allFilled" style="color:red;">모든 빈 칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
-      <p v-if="err" style="color: red;">모든 빈 칸을 채우셨는지, 인터넷이 연결되어 있는지 확인해주시고, 잠시 뒤 다시 시도해주세요. </p>
-      <v-btn v-if="!allFilled" disabled block> 다음 </v-btn>
-      <v-btn v-else dark block color="primary" @click="addEffect">다음</v-btn>    
+      <p v-if="!allFilled" style="color:red;">You can go next after filling up all the blanks.</p>
+      <p v-if="err" style="color: red;">Did you fill up all the blanks? Is internet connected? If so, please try again later. </p>
+      <v-btn v-if="!allFilled" disabled block> NEXT </v-btn>
+      <v-btn v-else dark block color="primary" @click="addEffect">NEXT</v-btn>    
       </v-form>
     </v-flex>
   </v-layout>
@@ -174,13 +178,13 @@ export default {
     effectSize: function () {
       switch (this.$store.state.userPolicy.effect_size) {
         case 2: {
-          return '조금의'
+          return 'a little'
         }
         case 3: {
-          return '적당히'
+          return 'somewhat'
         }
         case 4: {
-          return '많은'
+          return 'strongly'
         }
       }
     },

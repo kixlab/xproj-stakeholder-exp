@@ -4,23 +4,23 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-        아래 카드를 눌러서
-        지금까지 생각하셨던 내용을<br>
-        실제 이해당사자들이 받게 될 영향과 비교해보세요!
+        In each card, compare your thought<br>
+        with the effect stakeholders will get.
         </v-card-text>
       </v-card>
       &nbsp;
       <div style="text-align:left;">
         <font size="2">* 
           <v-chip small label color="primary" text-color="white">
-            직접
+            Direct
           </v-chip>
-          은 이해당사자들이 <strong class="red--text">직접</strong> 쓴 내용입니다.</font><br>
+          : the card is written by the <strong class="red--text">stakeholders</strong>.</font><br>
         <font size="2">* 
           <v-chip small label color="green" text-color="white">
-            추측
-          </v-chip>은 이해당사자가 아닌 분들이 <strong class="red--text">추측</strong>한 내용입니다.</font><br>
-        <font size="2">* <strong class="red--text">거짓 정보</strong>를 담고 있으면 신고해주세요!</font><br><br>
+            Guess
+          </v-chip>
+          : the card is filled with what users <strong class="red--text">guessed</strong>.</font><br>
+        <font size="2">* Please report the <strong class="red--text">fake info</strong>!</font><br><br>
       </div>
       <v-expansion-panel>
         <verify-effect-card v-for="effect in usedEffects" :key="effect.id" :used-effect="effect">
@@ -30,8 +30,9 @@
       <v-btn 
         color = "primary"
         @click="onPredictMoreClick"
+        style="text-transform: none !important"
         block ripple>
-        다른 사람의 입장도 되어 볼래요!
+        Wanna guess again from the other's perspective.
       </v-btn>
       <v-dialog
         v-if="userGroup >= 0"
@@ -42,10 +43,12 @@
         <v-btn
           slot="activator"
           color="primary"
+          style="text-transform: none !important"
           dark block ripple
         >
-          끝! 이제 정책 영향을 한눈에 보여주세요!
+          Done! Show me overview of the policy effect.
         </v-btn>
+        
 
         <v-card>
           <v-card-title

@@ -4,57 +4,56 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-        이 정책이 우리 사회의<br>
-        다양한 사람들에게 끼칠 영향을 확인해보세요.
+          How does this policy<br>
+          affect the citizens in our society?
         </v-card-text>
       </v-card>
 
       <div id="filterinfo">
-        <template v-if="selectedTags.length === 0"> 
-          지금은 
+        <strong :style="{color: effectColor}">{{effectDirection}}</strong> effects
+        <template v-if="selectedTags.length != 0"> 
+          that <strong color='blue'>{{selectedTags.join(', ')}}</strong> gets 
         </template>
-        <template v-else>
-          지금은 <strong color='blue'>{{selectedTags.join(', ')}}</strong>들이<br>받을 수 있는 
-        </template>
-        <strong :style="{color: effectColor}">{{effectDirection}}</strong> 영향을 보고 계십니다.
+        are shown.
       </div>
       &nbsp;
       <v-divider/>
       <div style="text-align:left;">
         <font size="2">* 
           <v-chip small label color="primary" text-color="white">
-            직접
+            Direct
           </v-chip>
-          은 이해당사자들이 <strong class="red--text">직접</strong> 쓴 내용입니다.</font><br>
+          : the card is written by the <strong class="red--text">stakeholders</strong>.</font><br>
         <font size="2">* 
           <v-chip small label color="green" text-color="white">
-            추측
-          </v-chip>은 이해당사자가 아닌 분들이 <strong class="red--text">추측</strong>한 내용입니다.</font><br>
-        <font size="2">* <strong class="red--text">거짓 정보</strong>를 담고 있으면 신고해주세요!</font><br><br>
+            Guess
+          </v-chip>
+          : the card is filled with what users <strong class="red--text">guessed</strong>.</font><br>
+        <font size="2">* Please report the <strong class="red--text">fake info</strong>!</font><br><br>
       </div>
       <v-flex xs12 sm6 offset-sm3>
         <v-card style="outline:auto;">
           <v-card-actions>
-            <v-flex xs10 style="text-align:center;">
-              원하는 영향만 모아보실래요?
+            <v-flex xs9 style="text-align:center;">
+              Wanna filter effects?
             </v-flex>
-            <v-flex xs2>
-              <v-btn outline small color="primary" @click="showFilter">
-                더 보기
-                <!-- <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon> -->
+            <v-flex xs3>
+              <v-btn outline small color="primary" @click="showFilter" 
+                style="text-transform: none !important">
+                More
               </v-btn>
             </v-flex>
           </v-card-actions>
 
           <v-slide-y-transition>
             <v-card-text v-show="show" style="text-align:left;">
-              * 선택한 이해당사자들의 영향을 보여드립니다.
+              * Enter the stakeholders whose effects you wanna see.
               <v-autocomplete
                 :value="selectedTags"
                 :items="tags"
                 item-text="name"
                 item-value="name"
-                placeholder="입력해주세요"
+                placeholder="Enter here"
                 :search-input.sync="search"
                 :filter="filter"
                 multiple
@@ -66,14 +65,14 @@
                 <template slot="no-data">
                   <v-list-tile>
                     <v-list-tile-content>
-                      입력하신 태그가 없습니다.
+                      No tags found.
                     </v-list-tile-content>
                   </v-list-tile>
                 </template>
                 <template slot="item" slot-scope="{ index, item, parent }">
                   <v-chip color="blue lighten-3" label small>#{{item.name}}</v-chip>
                   <v-spacer></v-spacer>
-                  {{item.refs}}개
+                  {{item.refs}}
                 </template>
                 <template slot="selection" slot-scope="{ item, parent, selected }">
                   <v-chip :selected="selected" label small>
@@ -83,22 +82,22 @@
                 </template>
               </v-autocomplete>
               <!-- <v-layout row wrap> -->
-              * 원하는 영향만 골라보실 수도 있어요.
+              * Select the effect type.
               <v-layout row wrap>
                 <v-flex xs6>
-                  <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="긍정적 영향" :value="1" ></v-checkbox>
+                  <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="Positive" :value="1" ></v-checkbox>
                 </v-flex>
                 <v-flex xs6>
-                  <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="부정적 영향" :value="0"></v-checkbox>
+                  <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="Negative" :value="0"></v-checkbox>
                 </v-flex>
               </v-layout>
-              * 추측된 영향을 골라보실 수도 있습니다.
+              * Select the effect type.
               <v-layout row wrap>
                 <v-flex xs6>
-                  <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="추측된 영향" :value="1" ></v-checkbox>
+                  <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="Guessed" :value="1" ></v-checkbox>
                 </v-flex>
                 <v-flex xs6>
-                  <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="이해당사자가 직접 쓴 영향" :value="0"></v-checkbox>
+                  <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="Written by stakeholders" :value="0"></v-checkbox>
                 </v-flex>
               </v-layout>
             </v-card-text>
@@ -137,15 +136,18 @@
         :disabled="!$store.state.userToken"
         color="success"
         ripple block
-        @click.native="onPostNewEffectButtonClick">
-        여러분의 생각도 들려주세요!
+        @click.native="onPostNewEffectButtonClick"
+        style="text-transform: none !important">
+        Tell us your story!
       </v-btn>
-      <v-btn outline color="primary" ripple block @click="toTagOverview">
-        태그 목록 보기
+      <v-btn outline color="primary" ripple block @click="toTagOverview"
+      style="text-transform: none !important">
+        Back to the tag list
       </v-btn>
       <v-divider/>
-      <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block @click="onEndButtonClick">
-        다른 정책 보기
+      <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block @click="onEndButtonClick"
+      style="text-transform: none !important">
+        Move to the other policy
       </v-btn>
       <v-dialog
         v-else-if="$store.state.userToken && userGroup >= 0 && userGroup < 6 "
@@ -157,8 +159,9 @@
           slot="activator"
           color="primary"
           dark ripple block
-          @click.native="seeOtherPolicyDialog=true">
-          다른 정책 보기
+          @click.native="seeOtherPolicyDialog=true"
+          style="text-transform: none !important">
+          Move to the other policy
         </v-btn>
 
         <v-card>
@@ -388,12 +391,12 @@ export default {
     effectDirection: function () {
       if (this.effectFilter.length === 1) {
         if (this.effectFilter[0] === 0) {
-          return '부정적'
+          return 'The negative'
         } else {
-          return '긍정적'
+          return 'The positive'
         }
       } else {
-        return '모든'
+        return 'All the'
       }
     },
     effectColor: function () {
