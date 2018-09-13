@@ -35,10 +35,10 @@
       <v-flex xs12 sm6 offset-sm3>
         <v-card style="outline:auto;">
           <v-card-actions>
-            <v-flex xs10 style="text-align:center;">
+            <v-flex xs8 style="text-align:center;">
               원하는 영향만 모아보실래요?
             </v-flex>
-            <v-flex xs2>
+            <v-flex xs4>
               <v-btn outline small color="primary" @click="showFilter">
                 더 보기
                 <!-- <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon> -->
