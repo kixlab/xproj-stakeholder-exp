@@ -143,7 +143,7 @@ export default {
         eventLabel: '',
         eventValue: 0
       })
-      this.$router.push('/SignIn')
+      this.$router.push('/NoticeExperimentFinished')
     },
     linkToKAISTSoC: function () {
       this.$ga.event({
