@@ -58,7 +58,7 @@
               </v-list-tile-content>
             </v-list-tile>
           </template>
-          <template slot="item" slot-scope="{ index, item, parent }">
+          <template slot="item" slot-scope="{ index, item }">
             <v-chip color="blue lighten-3" label small>#{{item.name}}</v-chip>
             <v-spacer></v-spacer>
             {{item.refs}}개
@@ -200,7 +200,7 @@ export default {
       //   case 7:
       //     return '/GuessEffectRandom/0'
       // }
-      return '/GuessEffectRandom/0'
+      return '/TagOverview'
     },
     userGroup: function () {
       // if (!this.$store.state.user.is_participant) {
