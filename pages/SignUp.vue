@@ -213,7 +213,7 @@ export default {
       password2: '',
       dialog: false,
       agreement: false,
-      e1: 1,
+      e1: 2,
       dictionary: {
         attributes: {
           email: '이메일 ',
@@ -248,7 +248,7 @@ export default {
     onNextClick () {
       /* Event should be added */
       if (!this.agreement) {
-        this.dialog = true
+        this.e1 = 2
       } else {
         this.$ga.event({
           eventCategory: this.$router.currentRoute.path,
@@ -293,7 +293,7 @@ export default {
           })
           const user = await this.$axios.$put('/api/auth/user/', {
             username: this.email,
-            is_participant: this.agreement,
+            is_participant: false,
             step: 1,
             presurvey_done: false
           })
