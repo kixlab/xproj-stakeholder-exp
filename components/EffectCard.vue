@@ -15,16 +15,24 @@
             {{tagWord}}
           </v-chip>
         </v-flex>
-        <v-flex xs12 style="text-align: left;">
-          <font size="2"><span style="text-align:left; color:blue;" v-for="tag in effect.tags" :key="tag">#{{tag}}&nbsp;&nbsp;</span></font>
-        </v-flex>
       </v-card-title>      
       <v-card-text class="effect-card__textbox">
-        <a @click="onShowDescriptionButtonClick">
+        <!-- <a @click="onShowDescriptionButtonClick">
           <span class="effect-card__text">{{expanded || show ? effect.description : shortDescription}}</span>
-        </a>
+        </a> -->
+        <span class="effect-card__text"> {{effect.description}} </span>
       </v-card-text>
       <v-card-actions>
+        <v-flex xs10 style="text-align: left;">
+          <font size="2"><span style="text-align:left; color:blue;" v-for="tag in effect.tags" :key="tag">#{{tag}}&nbsp;&nbsp;</span></font>
+        </v-flex>
+        <!-- <v-flex xs2>
+          <v-btn icon @click="onShowDescriptionButtonClick" v-if="!expanded && effect.description.length > 40">
+            <v-icon>{{ show ? 'expand_less' : 'expand_more' }}</v-icon>
+          </v-btn>
+        </v-flex> -->
+      </v-card-actions>
+      <!-- <v-card-actions>
         <v-btn small :depressed="isNoveltyVoted" :outline="!isNoveltyVoted" color="primary" @click.stop="onNoveltyButtonClick">
           참신 {{effect.novelty.length}}
 
@@ -89,9 +97,9 @@
         <v-btn icon @click="onShowDescriptionButtonClick" v-if="!expanded && effect.description.length > 40">
           <v-icon>{{ show ? 'expand_less' : 'expand_more' }}</v-icon>
         </v-btn>
-      </v-card-actions>
+      </v-card-actions> -->
     </v-card>
-    <v-snackbar
+    <!-- <v-snackbar
       v-model="snackbar"
       bottom
       :timeout="3000"
@@ -104,7 +112,7 @@
       >
         닫기
       </v-btn>
-    </v-snackbar>
+    </v-snackbar> -->
   </div>
 </template>
 
@@ -319,6 +327,7 @@ export default {
 <style scoped>
 .card__effect {
   margin-bottom: 0.5em;
+  width: 100%;
 }
 .v-card__text {
   text-align: left !important;

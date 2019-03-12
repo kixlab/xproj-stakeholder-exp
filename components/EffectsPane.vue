@@ -24,18 +24,18 @@
         </v-chip>은 이해당사자가 아닌 분들이 <strong class="red--text">추측</strong>한 내용입니다.</font><br>
       <font size="2">* <strong class="red--text">거짓 정보</strong>를 담고 있으면 신고해주세요!</font><br><br>
     </div> -->
-
+<!-- 
     <v-flex xs12 sm12>
       <v-card style="outline:auto;">
         <v-card-actions>
-          <!-- <v-flex xs8 style="text-align:center;">
+          <v-flex xs8 style="text-align:center;">
             원하는 영향만 모아보실래요?
           </v-flex>
           <v-flex xs4>
             <v-btn outline small color="primary" @click="showFilter">
               더 보기
             </v-btn>
-          </v-flex> -->
+          </v-flex>
           <v-layout row wrap>
             <v-flex xs12 style="text-align:center;">
               원하는 영향만 모아보실래요?
@@ -51,7 +51,7 @@
 
         <v-slide-y-transition>
           <v-card-text v-show="show" style="text-align:left;">
-            <!-- * 선택한 이해당사자들의 영향을 보여드립니다.
+            * 선택한 이해당사자들의 영향을 보여드립니다.
             <v-autocomplete
               :value="selectedTags"
               :items="tags"
@@ -84,9 +84,9 @@
                   <v-icon small @click="parent.selectItem(item)">close</v-icon>
                 </v-chip>
               </template>
-            </v-autocomplete> -->
-            <!-- <v-layout row wrap> -->
-            <!-- * 원하는 영향만 골라보실 수도 있어요.
+            </v-autocomplete>
+            <v-layout row wrap>
+            * 원하는 영향만 골라보실 수도 있어요.
             <v-layout row wrap>
               <v-flex xs6>
                 <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="긍정적 영향" :value="1" ></v-checkbox>
@@ -94,8 +94,8 @@
               <v-flex xs6>
                 <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="부정적 영향" :value="0"></v-checkbox>
               </v-flex>
-            </v-layout> -->
-            <!-- * 추측된 영향을 골라보실 수도 있습니다.
+            </v-layout>
+            * 추측된 영향을 골라보실 수도 있습니다.
             <v-layout row wrap>
               <v-flex xs6>
                 <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="추측된 영향" :value="1" ></v-checkbox>
@@ -103,42 +103,57 @@
               <v-flex xs6>
                 <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="이해당사자가 직접 쓴 영향" :value="0"></v-checkbox>
               </v-flex>
-            </v-layout> -->
+            </v-layout>
           </v-card-text>
         </v-slide-y-transition>
       </v-card>
-    </v-flex>
-    <v-card color="grey lighten-4">
-      <v-card-text>
-        {{keywords}}
-      </v-card-text>
-    </v-card>
-    <v-flex xs12 md12>
-      <template v-if="onLoading">
-        <v-progress-circular
-          :size="70"
-          :width="7"
-          color="purple"
-          indeterminate
-        ></v-progress-circular>
-        <br>
-      </template>
-      <template v-else>
-        <effect-card
-          v-for="effect in effects"
-          :key="effect.id"
-          :effect="effect"
-          @empathy-button-click="onEmpathyButtonClick(effect)"
-          @novelty-button-click="onNoveltyButtonClick(effect)"
-          @fishy-button-click="onFishyButtonClick(effect)"/>
-      </template>
-      <!-- </v-flex> -->
-      <v-pagination
-        :value="page"
-        @input="onPageChange"
-        :length="pagenum"/>
-    </v-flex>
-    
+    </v-flex> -->
+
+    <v-tabs grow>
+      <v-tab href="#tab-1" @click="onTabClick(1)">
+        전체
+      </v-tab>
+      <v-tab href="#tab-2" @click="onTabClick(2)">
+        긍정적 영향
+      </v-tab>
+      <v-tab href="#tab-3" @click="onTabClick(3)">
+        부정적 영향
+      </v-tab>
+      <v-tab-item v-for="i in 3" :key="i" :value="'tab-'+i">
+        <v-card color="grey lighten-4">
+          <v-card-text>
+            {{keywords}}
+          </v-card-text>
+        </v-card>
+        <v-flex xs12 md12>
+          <template v-if="onLoading">
+            <v-layout class="cards__list" align-center justify-center column>
+              <v-progress-circular
+                :size="70"
+                :width="7"
+                color="purple"
+                indeterminate
+              ></v-progress-circular>
+              <br>
+            </v-layout>
+          </template>
+          <template v-else>
+            <v-layout class="cards__list" column align-center justify-center>
+              <v-flex style="overflow: auto">
+                <effect-card
+                  v-for="effect in effects"
+                  :key="effect.id"
+                  :effect="effect"
+                  @empathy-button-click="onEmpathyButtonClick(effect)"
+                  @novelty-button-click="onNoveltyButtonClick(effect)"
+                  @fishy-button-click="onFishyButtonClick(effect)"/>
+              </v-flex>
+            </v-layout>
+          </template>
+
+        </v-flex>
+      </v-tab-item>
+    </v-tabs>
     <!-- <v-btn
       :disabled="!$store.state.userToken"
       color="success"
@@ -166,6 +181,12 @@
 }
 #filterinfo {
   margin-top: 20px;
+}
+.cards__list {
+  height: 60vh;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  width: 100%;
 }
 </style>
 <script>
@@ -302,6 +323,15 @@ export default {
     //   })
     //   this.$router.push('/TagOverview')
     // },
+    onTabClick: function (i) {
+      if (i === 1 && this.effectFilter.length < 2) {
+        this.onEffectFilterChangeDebounced([0, 1])
+      } else if (i === 2 && !(this.effectFilter.length === 1 && this.effectFilter[0] === 1)) {
+        this.onEffectFilterChangeDebounced([1])
+      } else if (i === 3 && !(this.effectFilter.length === 1 && this.effectFilter[0] === 0)) {
+        this.onEffectFilterChangeDebounced([0])
+      }
+    },
     toTagOverview: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
@@ -333,124 +363,10 @@ export default {
       })
       this.$router.push('/NewStakeholder')
     },
-    onNoveltyButtonClick: async function (effect) {
-      const isNoveltyVoted = effect.novelty.includes(this.$store.state.user.pk)
-
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: isNoveltyVoted ? 'CancelUpvoteNovelty' : 'UpvoteNovelty',
-        eventLabel: `${effect.id},${effect.stakeholder_detail}`,
-        eventValue: 0
-      })
-      try {
-        await this.$axios.$post('/api/novelty/', {
-          effect: effect.id
-        })
-        effect.novelty.push(this.$store.state.user.pk)
-      } catch (err) {
-        if (err.response.code === 409) {
-          // this.$store.commit('decreaseNoveltyCount', {
-          //   effect: this.effect.id
-          // })
-          const idx = effect.novelty.indexOf(this.$store.state.user.pk)
-          effect.novelty.splice(idx, 1)
-        }
-      } finally {
-        const result = await this.$axios.$get('/api/effects/', {
-          params: {
-            policy: this.policy.id,
-            tag: this.selectedTags,
-            is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-            include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
-            page: this.page
-          }
-        })
-        this.effects = result.results
-      }
-    },
-    onEmpathyButtonClick: async function (effect) {
-      const isEmpathyVoted = effect.empathy.includes(this.$store.state.user.pk)
-
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: isEmpathyVoted ? 'CancelUpvoteEmpathy' : 'UpvoteEmpathy',
-        eventLabel: `${effect.id},${effect.stakeholder_detail}`,
-        eventValue: 0
-      })
-      try {
-        await this.$axios.$post('/api/empathy/', {
-          effect: effect.id
-        })
-        effect.empathy.push(this.$store.state.user.pk)
-      } catch (err) {
-        if (err.response.code === 409) {
-          // this.$store.commit('decreaseEmpathyCount', {
-          //   effect: this.effect.id
-          // })
-          const idx = effect.empathy.indexOf(this.$store.state.user.pk)
-          effect.empathy.splice(idx, 1)
-        }
-      } finally {
-        const result = await this.$axios.$get('/api/effects/', {
-          params: {
-            policy: this.policy.id,
-            tag: this.selectedTags,
-            is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-            include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
-            page: this.page
-          }
-        })
-        this.effects = result.results
-      }
-    },
-    onFishyButtonClick: async function (effect) {
-      const isFishyVoted = effect.fishy.includes(this.$store.state.user.pk)
-
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: isFishyVoted ? 'CancelUpvoteFishy' : 'UpvoteFishy',
-        eventLabel: `${effect.id},${effect.stakeholder_detail}`,
-        eventValue: 0
-      })
-      try {
-        await this.$axios.$post('/api/fishy/', {
-          effect: effect.id
-        })
-        effect.fishy.push(this.$store.state.user.pk)
-      } catch (err) {
-        if (err.response.code === 409) {
-          // this.$store.commit('decreaseFishyCount', {
-          //   effect: this.effect.id
-          // })
-          const idx = effect.fishy.indexOf(this.$store.state.user.pk)
-          effect.fishy.splice(idx, 1)
-        }
-      } finally {
-        const result = await this.$axios.$get('/api/effects/', {
-          params: {
-            policy: this.policy.id,
-            tag: this.selectedTags,
-            is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-            include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
-            page: this.page
-          }
-        })
-        this.effects = result.results
-      }
-    },
     onSeeOtherPolicyButtonClick: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'SeeOtherPolicy',
-        eventLabel: this.stakeholderName,
-        eventValue: 0
-      })
-      this.seeOtherPolicyDialog = true
-    },
-    onDialogGoBackButtonClick: function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'GoBackToEffects',
         eventLabel: this.stakeholderName,
         eventValue: 0
       })
@@ -520,8 +436,10 @@ export default {
           include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
         }
       })
-      this.effects = effects.results
-      this.count = effects.count
+      this.$store.commit('setEffects', effects.results)
+      this.$store.commit('setKeywords', effects.keywords)
+      // this.effects = effects.results
+      // this.count = effects.count
       this.page = 1
       this.onLoading = false
     },

@@ -275,7 +275,8 @@ export default {
         eventValue: 0
       })
       this.$store.commit('setSelectedTag', tag)
-      this.$router.push('/ExploreOpinions')
+      // this.$router.push('/ExploreOpinions')
+      this.$router.push('/GuessEffectRandom/0')
     },
     onShowPolicyListClick: function () {
       this.$ga.event({

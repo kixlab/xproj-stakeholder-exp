@@ -23,7 +23,8 @@ export const state = () => ({
   guessedTags: [],
   explorationDone: false,
   readCounter1: 0,
-  readCounter2: 0
+  readCounter2: 0,
+  keywords: []
 })
 
 export const mutations = {
@@ -147,6 +148,9 @@ export const mutations = {
   },
   setReadCounter2 (state, t) {
     state.readCounter2 = t
+  },
+  setKeywords (state, payload) {
+    state.keywords = payload
   }
 }
 
@@ -282,7 +286,8 @@ export const actions = {
       const randomEffect = await this.$axios.$get('/api/effects/random/', {
         params: {
           policy: context.state.policyId,
-          exclude: usedEffectIds
+          exclude: usedEffectIds,
+          tag: context.state.selectedTag
         }
       })
       context.commit('addGuessedTags', randomEffect.tags)

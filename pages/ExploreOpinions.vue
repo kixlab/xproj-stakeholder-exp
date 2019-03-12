@@ -163,9 +163,9 @@ import setTokenMixin from '~/mixins/setToken.js'
 import hangulSearchMixin from '~/mixins/hangulSearch.js'
 import TagTree from '~/components/TagTree.vue'
 import EffectsPane from '~/components/EffectsPane.vue'
-import _ from 'lodash'
+// import _ from 'lodash'
 export default {
-  asyncData: async function ({app, store}) {
+  fetch: async function ({ app, store }) {
     // if (store.state.userToken) {
     //   app.$axios.setToken(store.state.userToken, 'Token')
     // }
@@ -176,19 +176,20 @@ export default {
         'tag[]': store.state.selectedTag
       }
     })
-    // store.commit('setEffects', effects.results)
-    return {
-      prevPage: effects.prev,
-      nextPage: effects.next,
-      count: effects.count,
-      effects: effects.results,
-      keywords: effects.keywords
-    }
+    store.commit('setEffects', effects.results)
+    store.commit('setKeywords', effects.keywords)
+    // return {
+    //   prevPage: effects.prev,
+    //   nextPage: effects.next,
+    //   count: effects.count,
+    //   effects: effects.results,
+    //   keywords: effects.keywords
+    // }
   },
   created: function () {
-    this.onInputDebounced = _.debounce(this.onInput, 1000)
-    this.onEffectFilterChangeDebounced = _.debounce(this.onEffectFilterChange, 500)
-    this.onGuessFilterChangeDebounced = _.debounce(this.onGuessFilterChange, 500)
+    // this.onInputDebounced = _.debounce(this.onInput, 1000)
+    // this.onEffectFilterChangeDebounced = _.debounce(this.onEffectFilterChange, 500)
+    // this.onGuessFilterChangeDebounced = _.debounce(this.onGuessFilterChange, 500)
     // if(this.$store.state.selectedTag){
     //   this.onInput([this.$store.state.selectedTag])
     // }
@@ -214,9 +215,12 @@ export default {
     policy: function () {
       return this.$store.state.policy
     },
-    // effects: function () {
-    //   return this.$store.state.effects
-    // },
+    effects: function () {
+      return this.$store.state.effects
+    },
+    keywords: function () {
+      return this.$store.state.keywords
+    },
     userGroup: function () {
       return this.$store.getters.userGroup
     },
@@ -327,120 +331,120 @@ export default {
         this.$router.push('/MiniSurvey')
       }
     },
-    onPostNewEffectButtonClick: function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'AddNewStakeholder',
-        eventLabel: this.stakeholderName,
-        eventValue: 0
-      })
-      this.$router.push('/NewStakeholder')
-    },
-    onNoveltyButtonClick: async function (effect) {
-      const isNoveltyVoted = effect.novelty.includes(this.$store.state.user.pk)
+    // onPostNewEffectButtonClick: function () {
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'AddNewStakeholder',
+    //     eventLabel: this.stakeholderName,
+    //     eventValue: 0
+    //   })
+    //   this.$router.push('/NewStakeholder')
+    // },
+    // onNoveltyButtonClick: async function (effect) {
+    //   const isNoveltyVoted = effect.novelty.includes(this.$store.state.user.pk)
 
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: isNoveltyVoted ? 'CancelUpvoteNovelty' : 'UpvoteNovelty',
-        eventLabel: `${effect.id},${effect.stakeholder_detail}`,
-        eventValue: 0
-      })
-      try {
-        await this.$axios.$post('/api/novelty/', {
-          effect: effect.id
-        })
-        effect.novelty.push(this.$store.state.user.pk)
-      } catch (err) {
-        if (err.response.code === 409) {
-          // this.$store.commit('decreaseNoveltyCount', {
-          //   effect: this.effect.id
-          // })
-          const idx = effect.novelty.indexOf(this.$store.state.user.pk)
-          effect.novelty.splice(idx, 1)
-        }
-      } finally {
-        const result = await this.$axios.$get('/api/effects/', {
-          params: {
-            policy: this.policy.id,
-            tag: this.selectedTags,
-            is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-            include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
-            page: this.page
-          }
-        })
-        this.effects = result.results
-      }
-    },
-    onEmpathyButtonClick: async function (effect) {
-      const isEmpathyVoted = effect.empathy.includes(this.$store.state.user.pk)
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: isNoveltyVoted ? 'CancelUpvoteNovelty' : 'UpvoteNovelty',
+    //     eventLabel: `${effect.id},${effect.stakeholder_detail}`,
+    //     eventValue: 0
+    //   })
+    //   try {
+    //     await this.$axios.$post('/api/novelty/', {
+    //       effect: effect.id
+    //     })
+    //     effect.novelty.push(this.$store.state.user.pk)
+    //   } catch (err) {
+    //     if (err.response.code === 409) {
+    //       // this.$store.commit('decreaseNoveltyCount', {
+    //       //   effect: this.effect.id
+    //       // })
+    //       const idx = effect.novelty.indexOf(this.$store.state.user.pk)
+    //       effect.novelty.splice(idx, 1)
+    //     }
+    //   } finally {
+    //     const result = await this.$axios.$get('/api/effects/', {
+    //       params: {
+    //         policy: this.policy.id,
+    //         tag: this.selectedTags,
+    //         is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+    //         include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
+    //         page: this.page
+    //       }
+    //     })
+    //     this.$store.state.commit('setEffects', result.results)
+    //   }
+    // },
+    // onEmpathyButtonClick: async function (effect) {
+    //   const isEmpathyVoted = effect.empathy.includes(this.$store.state.user.pk)
 
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: isEmpathyVoted ? 'CancelUpvoteEmpathy' : 'UpvoteEmpathy',
-        eventLabel: `${effect.id},${effect.stakeholder_detail}`,
-        eventValue: 0
-      })
-      try {
-        await this.$axios.$post('/api/empathy/', {
-          effect: effect.id
-        })
-        effect.empathy.push(this.$store.state.user.pk)
-      } catch (err) {
-        if (err.response.code === 409) {
-          // this.$store.commit('decreaseEmpathyCount', {
-          //   effect: this.effect.id
-          // })
-          const idx = effect.empathy.indexOf(this.$store.state.user.pk)
-          effect.empathy.splice(idx, 1)
-        }
-      } finally {
-        const result = await this.$axios.$get('/api/effects/', {
-          params: {
-            policy: this.policy.id,
-            tag: this.selectedTags,
-            is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-            include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
-            page: this.page
-          }
-        })
-        this.effects = result.results
-      }
-    },
-    onFishyButtonClick: async function (effect) {
-      const isFishyVoted = effect.fishy.includes(this.$store.state.user.pk)
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: isEmpathyVoted ? 'CancelUpvoteEmpathy' : 'UpvoteEmpathy',
+    //     eventLabel: `${effect.id},${effect.stakeholder_detail}`,
+    //     eventValue: 0
+    //   })
+    //   try {
+    //     await this.$axios.$post('/api/empathy/', {
+    //       effect: effect.id
+    //     })
+    //     effect.empathy.push(this.$store.state.user.pk)
+    //   } catch (err) {
+    //     if (err.response.code === 409) {
+    //       // this.$store.commit('decreaseEmpathyCount', {
+    //       //   effect: this.effect.id
+    //       // })
+    //       const idx = effect.empathy.indexOf(this.$store.state.user.pk)
+    //       effect.empathy.splice(idx, 1)
+    //     }
+    //   } finally {
+    //     const result = await this.$axios.$get('/api/effects/', {
+    //       params: {
+    //         policy: this.policy.id,
+    //         tag: this.selectedTags,
+    //         is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+    //         include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
+    //         page: this.page
+    //       }
+    //     })
+    //     this.$store.state.commit('setEffects', result.results)
+    //   }
+    // },
+    // onFishyButtonClick: async function (effect) {
+    //   const isFishyVoted = effect.fishy.includes(this.$store.state.user.pk)
 
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: isFishyVoted ? 'CancelUpvoteFishy' : 'UpvoteFishy',
-        eventLabel: `${effect.id},${effect.stakeholder_detail}`,
-        eventValue: 0
-      })
-      try {
-        await this.$axios.$post('/api/fishy/', {
-          effect: effect.id
-        })
-        effect.fishy.push(this.$store.state.user.pk)
-      } catch (err) {
-        if (err.response.code === 409) {
-          // this.$store.commit('decreaseFishyCount', {
-          //   effect: this.effect.id
-          // })
-          const idx = effect.fishy.indexOf(this.$store.state.user.pk)
-          effect.fishy.splice(idx, 1)
-        }
-      } finally {
-        const result = await this.$axios.$get('/api/effects/', {
-          params: {
-            policy: this.policy.id,
-            tag: this.selectedTags,
-            is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-            include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
-            page: this.page
-          }
-        })
-        this.effects = result.results
-      }
-    },
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: isFishyVoted ? 'CancelUpvoteFishy' : 'UpvoteFishy',
+    //     eventLabel: `${effect.id},${effect.stakeholder_detail}`,
+    //     eventValue: 0
+    //   })
+    //   try {
+    //     await this.$axios.$post('/api/fishy/', {
+    //       effect: effect.id
+    //     })
+    //     effect.fishy.push(this.$store.state.user.pk)
+    //   } catch (err) {
+    //     if (err.response.code === 409) {
+    //       // this.$store.commit('decreaseFishyCount', {
+    //       //   effect: this.effect.id
+    //       // })
+    //       const idx = effect.fishy.indexOf(this.$store.state.user.pk)
+    //       effect.fishy.splice(idx, 1)
+    //     }
+    //   } finally {
+    //     const result = await this.$axios.$get('/api/effects/', {
+    //       params: {
+    //         policy: this.policy.id,
+    //         tag: this.selectedTags,
+    //         is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+    //         include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
+    //         page: this.page
+    //       }
+    //     })
+    //     this.$store.state.commit('setEffects', result.results)
+    //   }
+    // },
     onSeeOtherPolicyButtonClick: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
@@ -450,26 +454,26 @@ export default {
       })
       this.seeOtherPolicyDialog = true
     },
-    onDialogGoBackButtonClick: function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'GoBackToEffects',
-        eventLabel: this.stakeholderName,
-        eventValue: 0
-      })
-      this.seeOtherPolicyDialog = true
-    },
-    cardnum: function (page) {
-      if (page === this.pagenum) {
-        var rest = this.effects.length % 5
-        if (rest === 0) {
-          return 5
-        }
-        return rest
-      } else {
-        return 5
-      }
-    },
+    // onDialogGoBackButtonClick: function () {
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'GoBackToEffects',
+    //     eventLabel: this.stakeholderName,
+    //     eventValue: 0
+    //   })
+    //   this.seeOtherPolicyDialog = true
+    // },
+    // cardnum: function (page) {
+    //   if (page === this.pagenum) {
+    //     var rest = this.effects.length % 5
+    //     if (rest === 0) {
+    //       return 5
+    //     }
+    //     return rest
+    //   } else {
+    //     return 5
+    //   }
+    // },
     filter (item, queryText, itemText) {
       if (item.header) return false
 
@@ -481,114 +485,114 @@ export default {
       return text.toString()
         .toLowerCase()
         .indexOf(query.toString().toLowerCase()) > -1
-    },
-    onInput: async function (ev) {
-      this.onLoading = true
-      this.selectedTags = ev
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'SearchTags',
-        eventLabel: this.selectedTags,
-        eventValue: 0
-      })
-      this.$store.dispatch('addBrowsedTags', this.selectedTags)
-      const effects = await this.$axios.$get('/api/effects/', {
-        params: {
-          policy: this.policy.id,
-          tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-          include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
-        }
-      })
-      // this.$store.dispatch('incrementUserPolicyEffectsSeen')
-      this.effects = effects.results
-      this.count = effects.count
-      this.page = 1
-      this.onLoading = false
-    },
-    onEffectFilterChange: async function (ev) {
-      this.onLoading = true
-      this.effectFilter = ev
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'EffectFilterChanged',
-        eventLabel: this.effectFilter,
-        eventValue: 0
-      })
-      const effects = await this.$axios.$get('/api/effects/', {
-        params: {
-          policy: this.policy.id,
-          tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-          include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
-        }
-      })
-      this.effects = effects.results
-      this.count = effects.count
-      this.page = 1
-      this.onLoading = false
-    },
-    onGuessFilterChange: async function (ev) {
-      this.onLoading = true
-      this.guessFilter = ev
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'GuessFilterChanged',
-        eventLabel: this.guessFilter,
-        eventValue: 0
-      })
-      const effects = await this.$axios.$get('/api/effects/', {
-        params: {
-          policy: this.policy.id,
-          tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-          include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
-        }
-      })
-      this.effects = effects.results
-      this.count = effects.count
-      this.page = 1
-      this.onLoading = false
-    },
-    onPageChange: async function (newPage) {
-      this.onLoading = true
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'PageChange',
-        eventLabel: `${newPage} / ${this.pagenum}`,
-        eventValue: 0
-      })
-      const effects = await this.$axios.$get('/api/effects/', {
-        params: {
-          policy: this.policy.id,
-          tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-          include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
-          page: newPage
-        }
-      })
-      this.effects = effects.results
-      this.page = newPage
-      this.onLoading = false
-    },
-    showFilter: async function () {
-      if (this.show) {
-        this.$ga.event({
-          eventCategory: this.$router.currentRoute.path,
-          eventAction: 'HideFilter',
-          eventLabel: ``,
-          eventValue: 0
-        })
-      } else {
-        this.$ga.event({
-          eventCategory: this.$router.currentRoute.path,
-          eventAction: 'ShowFilter',
-          eventLabel: ``,
-          eventValue: 0
-        })
-      }
-      this.show = !this.show
     }
+    // onInput: async function (ev) {
+    //   this.onLoading = true
+    //   this.selectedTags = ev
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'SearchTags',
+    //     eventLabel: this.selectedTags,
+    //     eventValue: 0
+    //   })
+    //   this.$store.dispatch('addBrowsedTags', this.selectedTags)
+    //   const effects = await this.$axios.$get('/api/effects/', {
+    //     params: {
+    //       policy: this.policy.id,
+    //       tag: this.selectedTags,
+    //       is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+    //       include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
+    //     }
+    //   })
+    //   // this.$store.dispatch('incrementUserPolicyEffectsSeen')
+    //   this.effects = effects.results
+    //   this.count = effects.count
+    //   this.page = 1
+    //   this.onLoading = false
+    // },
+    // onEffectFilterChange: async function (ev) {
+    //   this.onLoading = true
+    //   this.effectFilter = ev
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'EffectFilterChanged',
+    //     eventLabel: this.effectFilter,
+    //     eventValue: 0
+    //   })
+    //   const effects = await this.$axios.$get('/api/effects/', {
+    //     params: {
+    //       policy: this.policy.id,
+    //       tag: this.selectedTags,
+    //       is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+    //       include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
+    //     }
+    //   })
+    //   this.effects = effects.results
+    //   this.count = effects.count
+    //   this.page = 1
+    //   this.onLoading = false
+    // },
+    // onGuessFilterChange: async function (ev) {
+    //   this.onLoading = true
+    //   this.guessFilter = ev
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'GuessFilterChanged',
+    //     eventLabel: this.guessFilter,
+    //     eventValue: 0
+    //   })
+    //   const effects = await this.$axios.$get('/api/effects/', {
+    //     params: {
+    //       policy: this.policy.id,
+    //       tag: this.selectedTags,
+    //       is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+    //       include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
+    //     }
+    //   })
+    //   this.effects = effects.results
+    //   this.count = effects.count
+    //   this.page = 1
+    //   this.onLoading = false
+    // },
+    // onPageChange: async function (newPage) {
+    //   this.onLoading = true
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'PageChange',
+    //     eventLabel: `${newPage} / ${this.pagenum}`,
+    //     eventValue: 0
+    //   })
+    //   const effects = await this.$axios.$get('/api/effects/', {
+    //     params: {
+    //       policy: this.policy.id,
+    //       tag: this.selectedTags,
+    //       is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+    //       include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
+    //       page: newPage
+    //     }
+    //   })
+    //   this.effects = effects.results
+    //   this.page = newPage
+    //   this.onLoading = false
+    // },
+    // showFilter: async function () {
+    //   if (this.show) {
+    //     this.$ga.event({
+    //       eventCategory: this.$router.currentRoute.path,
+    //       eventAction: 'HideFilter',
+    //       eventLabel: ``,
+    //       eventValue: 0
+    //     })
+    //   } else {
+    //     this.$ga.event({
+    //       eventCategory: this.$router.currentRoute.path,
+    //       eventAction: 'ShowFilter',
+    //       eventLabel: ``,
+    //       eventValue: 0
+    //     })
+    //   }
+    //   this.show = !this.show
+    // }
   },
   watch: {
     loader () {

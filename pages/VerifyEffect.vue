@@ -164,7 +164,7 @@ export default {
         eventLabel: '',
         eventValue: 0
       })
-      this.$router.push('/TagOverview')
+      this.$router.push('/ExploreOpinions')
       this.$store.dispatch('setUserPolicyGuessingDone')
       this.dialog = false
     },
