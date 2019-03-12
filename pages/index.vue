@@ -1,5 +1,6 @@
 <template>
-  <v-layout row wrap justify-center>
+  <v-layout row wrap justify-center align-center>
+    <general-toolbar :pagename="''"/>
     <div>
       <v-flex id="title">
         <div class="title_word">
@@ -12,24 +13,36 @@
       <v-flex xs12 sm6 offset-sm3>
         <img src="bg.gif" class="img" />
       </v-flex>
-      <v-flex id="contents">
+      <v-layout align-center justify-center>
+      <v-flex xs8 id="contents">
         <div class="title_description">
-          <!-- 정부 정책은 과연 누구에게, 어떤 영향을 줄까요?<br>
-          "정책 타입"에서 
-          정책의 영향에 대해 알아보고<br>
-          정부 정책이 여러분의 삶을 어떻게 바꾸는지 들려주세요! -->
           정책이 우리의 삶을 어떻게 바꾸는지 알아보세요!
-
         </div>
       </v-flex>
+      </v-layout>
 
-      <v-flex xs12 id="btn_location">
-        <v-btn @click="onParticipateButtonClick" color="primary" ripple block large> 실험에 참여하기 </v-btn>
-        <v-btn @click="onLookAroundButtonClick" ripple block large outline> 둘러보기 </v-btn>
-      </v-flex>
+      <v-layout align-center justify-space-around row id="btn_location">
+        <v-flex xs4>
+          <v-btn @click="onLookAroundButtonClick" ripple block large outline> 둘러보기 </v-btn>
+        </v-flex>
+        <v-flex xs4>
+          <v-btn @click="onParticipateButtonClick" color="primary" ripple block large> 실험에 참여하기 </v-btn>
+        </v-flex>
+      </v-layout>
+
       <v-flex xs12 style="text-align: right">
         Presented by <a @click="linkToKIXLAB">KIXLAB @ SoC KAIST</a>
       </v-flex>
+      <!--
+      <v-flex xs12 id="btn_location">
+        <v-flex xs6>
+          <v-btn @click="onParticipateButtonClick" color="primary" ripple block large> 실험에 참여하기 </v-btn>
+        </v-flex>
+        <v-flex xs6>
+          <v-btn @click="onLookAroundButtonClick" ripple block large outline> 둘러보기 </v-btn>
+        </v-flex>
+      </v-flex> -->
+
     </div>
   </v-layout>
 </template>
@@ -57,14 +70,15 @@
 } */
 #btn_location {
   position: relative;
-  margin-top: 10%;
+  margin-top: 5%;
 }
+
 #title {
-  margin-top: 20%;
-}
-#contents {
+  margin-top: 5%;
+} 
+/* #contents {
   margin-top: 10%;
-}
+} */
 .title_word font{
   font-family: 'Nanum Pen Script';
 }
@@ -80,16 +94,25 @@
 
 .large_text {
   font-family: 'Nanum Pen Script';
-  font-size: 4em;
+  font-size: 5em;
 }
-/* .title_description {
-  font-family: 'Nanum Pen Script';
-  color: white;
-  background-color: rgba(0,0,0, 0.4);
-} */
+.title_description {
+  /*font-family: 'Nanum Pen Script';*/
+  
+  font-size:20px;
+  text-decoration:a;
+  font-weight:bold;
+  /*color: white;
+  background-color: rgba(102, 102, 102, 0.904);*/
+}
 </style>
 <script>
+import GeneralToolbar from '~/components/GeneralToolbar.vue'
+
 export default {
+  components: {
+    GeneralToolbar
+  },
   created: function () {
     this.$store.replaceState({
       sidebar: false,
@@ -122,6 +145,7 @@ export default {
   layout: 'index',
   data: function () {
     return {
+      drawer: false
 
     }
   },
