@@ -266,9 +266,9 @@ export const actions = {
       }
     })
     tags.sort((a, b) => {
-      if (a.refs < b.refs) {
+      if (a.total_count < b.total_count) {
         return 1
-      } else if (a.refs > b.refs) {
+      } else if (a.total_count > b.total_count) {
         return -1
       } else {
         return 0

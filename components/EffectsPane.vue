@@ -1,148 +1,160 @@
 <template>
-  <v-layout row wrap justify-center>
-    <promise-pane :policy="policy" />
-    <v-layout row>
-      <tag-tree></tag-tree>
-      <effects-pane :effects="effects" :keywords="keywords" :count="count"></effects-pane>      
-    </v-layout>
-    <v-flex xs12 md12>
-      <v-btn outline color="primary" ripple block @click="toTagOverview">
-        태그 목록 보기
-      </v-btn>
-      <v-divider/>
-      <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block @click="onEndButtonClick">
-        다른 정책 보기
-      </v-btn>
-      <!-- <v-dialog
-        v-else-if="$store.state.userToken && userGroup >= 0 && userGroup < 6 "
-        v-model="seeOtherPolicyDialog"
-        width="500"
-        full-width
-        >
-        <v-btn
-          slot="activator"
-          color="primary"
-          dark ripple block
-          @click.native="seeOtherPolicyDialog=true">
-          다른 정책 보기
-        </v-btn>
+  <v-flex xs8>
+    <div id="filterinfo">
+      <template v-if="selectedTags.length === 0"> 
+        지금은 
+      </template>
+      <template v-else>
+        지금은 <strong color='blue'>{{selectedTags.join(', ')}}</strong>들이<br>받을 수 있는 
+      </template>
+      <strong :style="{color: effectColor}">{{effectDirection}}</strong> 영향을 보고 계십니다.
+    </div>
+    &nbsp;
+    <v-divider/>
 
-        <v-card>
-          <v-card-title
-            class="headline grey lighten-2"
-            primary-title
-            style="background-color:pink !important;
-            color:red;"
-            > 
-            <strong>주의</strong>
-          </v-card-title>
+    <!-- <div style="text-align:left;">
+      <font size="2">* 
+        <v-chip small label color="primary" text-color="white">
+          직접
+        </v-chip>
+        은 이해당사자들이 <strong class="red--text">직접</strong> 쓴 내용입니다.</font><br>
+      <font size="2">* 
+        <v-chip small label color="green" text-color="white">
+          추측
+        </v-chip>은 이해당사자가 아닌 분들이 <strong class="red--text">추측</strong>한 내용입니다.</font><br>
+      <font size="2">* <strong class="red--text">거짓 정보</strong>를 담고 있으면 신고해주세요!</font><br><br>
+    </div> -->
 
-          <v-card-text>
-            현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
-            <strong>{{explorationRequired}}개 태그</strong>의 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
-            <template v-if="effect_left!=0">
-              귀하는 <strong><font size="4">{{effect_left}}개 태그를</font></strong> 더 살펴보셔야 합니다.<br>
-              아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
-              <br><br>
-              <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
-              넘어가시면, 포기로 간주되며 보상을 받을 수 없습니다. </strong>
-            </template>
+    <v-flex xs12 sm12>
+      <v-card style="outline:auto;">
+        <v-card-actions>
+          <!-- <v-flex xs8 style="text-align:center;">
+            원하는 영향만 모아보실래요?
+          </v-flex>
+          <v-flex xs4>
+            <v-btn outline small color="primary" @click="showFilter">
+              더 보기
+            </v-btn>
+          </v-flex> -->
+          <v-layout row wrap>
+            <v-flex xs12 style="text-align:center;">
+              원하는 영향만 모아보실래요?
+            </v-flex>
+            <v-flex xs6>
+              <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="긍정적 영향" :value="1" ></v-checkbox>
+            </v-flex>
+            <v-flex xs6>
+              <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="부정적 영향" :value="0"></v-checkbox>
+            </v-flex>
+          </v-layout>
+        </v-card-actions>
 
-            <template v-else>
-              귀하는 조건을 모두 충족하셨습니다.<br>
-              <strong style="color:blue;"> 다음으로 </strong> 넘어가주세요.<br><br>
+        <v-slide-y-transition>
+          <v-card-text v-show="show" style="text-align:left;">
+            <!-- * 선택한 이해당사자들의 영향을 보여드립니다.
+            <v-autocomplete
+              :value="selectedTags"
+              :items="tags"
+              item-text="name"
+              item-value="name"
+              placeholder="입력해주세요"
+              :search-input.sync="search"
+              :filter="filter"
+              multiple
+              hide-selected
+              chips
+              clearable
+              @input="onInputDebounced">
 
-              그런데, 혹시 더 살펴보고 싶으시면 <strong style="color:red;">돌아가기</strong>를 누르셔도 좋습니다. :)
-            </template>          
+              <template slot="no-data">
+                <v-list-tile>
+                  <v-list-tile-content>
+                    입력하신 태그가 없습니다.
+                  </v-list-tile-content>
+                </v-list-tile>
+              </template>
+              <template slot="item" slot-scope="{ index, item, parent }">
+                <v-chip color="blue lighten-3" label small>#{{item.name}}</v-chip>
+                <v-spacer></v-spacer>
+                {{item.total_count}}개
+              </template>
+              <template slot="selection" slot-scope="{ item, parent, selected }">
+                <v-chip :selected="selected" label small>
+                  <span class="pr-2"> #{{item.name}} </span>
+                  <v-icon small @click="parent.selectItem(item)">close</v-icon>
+                </v-chip>
+              </template>
+            </v-autocomplete> -->
+            <!-- <v-layout row wrap> -->
+            <!-- * 원하는 영향만 골라보실 수도 있어요.
+            <v-layout row wrap>
+              <v-flex xs6>
+                <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="긍정적 영향" :value="1" ></v-checkbox>
+              </v-flex>
+              <v-flex xs6>
+                <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="부정적 영향" :value="0"></v-checkbox>
+              </v-flex>
+            </v-layout> -->
+            <!-- * 추측된 영향을 골라보실 수도 있습니다.
+            <v-layout row wrap>
+              <v-flex xs6>
+                <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="추측된 영향" :value="1" ></v-checkbox>
+              </v-flex>
+              <v-flex xs6>
+                <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="이해당사자가 직접 쓴 영향" :value="0"></v-checkbox>
+              </v-flex>
+            </v-layout> -->
           </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-actions>
-            <v-btn
-              color="red"
-              flat outline ripple
-              @click="seeOtherPolicyDialog=false"
-              > 
-              돌아가기 
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              flat outline ripple
-              @click="onEndButtonClick"
-              >
-              다음으로
-            </v-btn>
-          </v-card-actions>
-          
-        </v-card>
-      </v-dialog>
-      <v-dialog
-        v-else-if="$store.state.userToken && userGroup >=6"
-        v-model="seeOtherPolicyDialog"
-        width="500"
-        full-width
-        >
-        <v-btn
-          slot="activator"
-          color="primary"
-          dark block ripple
-        >
-          다른 정책 보기
-        </v-btn>
-
-        <v-card>
-          <v-card-title
-            class="headline grey lighten-2"
-            primary-title
-            style="background-color:pink !important;
-            color:red;"
-          > <strong>주의</strong>
-          </v-card-title>
-
-          <v-card-text>
-            현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
-            <strong>3개</strong>의 영향을 남겨주셔야 보상을 받을 수 있습니다. <br><br>
-            <template v-if="answer_left>0">
-              귀하는 <strong><font size="4">{{answer_left}}개 영향을</font></strong> 더 남겨주셔야 합니다.<br>
-              아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
-              <br><br>
-              <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
-              넘어가시면, 포기로 간주되며 보상을 받을 수 없습니다. </strong>
-            </template>
-
-            <template v-else>
-              귀하는 조건을 모두 충족하셨습니다.<br>
-              <strong style="color:blue;"> 다음으로 </strong> 넘어가주세요.<br><br>
-
-              그런데, 혹시 더 살펴보고 싶으시면 <strong style="color:red;">돌아가기</strong>를 누르셔도 좋습니다. :)
-            </template>          
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-actions>
-            <v-btn
-              color="red"
-              flat outline ripple
-              @click="seeOtherPolicyDialog=false"
-              > 
-              돌아가기 
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              flat outline ripple
-              @click="onEndButtonClick"
-              >
-              다음으로
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog> -->
+        </v-slide-y-transition>
+      </v-card>
     </v-flex>
-  </v-layout>
+    <v-card color="grey lighten-4">
+      <v-card-text>
+        {{keywords}}
+      </v-card-text>
+    </v-card>
+    <v-flex xs12 md12>
+      <template v-if="onLoading">
+        <v-progress-circular
+          :size="70"
+          :width="7"
+          color="purple"
+          indeterminate
+        ></v-progress-circular>
+        <br>
+      </template>
+      <template v-else>
+        <effect-card
+          v-for="effect in effects"
+          :key="effect.id"
+          :effect="effect"
+          @empathy-button-click="onEmpathyButtonClick(effect)"
+          @novelty-button-click="onNoveltyButtonClick(effect)"
+          @fishy-button-click="onFishyButtonClick(effect)"/>
+      </template>
+      <!-- </v-flex> -->
+      <v-pagination
+        :value="page"
+        @input="onPageChange"
+        :length="pagenum"/>
+    </v-flex>
+    
+    <!-- <v-btn
+      :disabled="!$store.state.userToken"
+      color="success"
+      ripple block
+      @click.native="onPostNewEffectButtonClick">
+      여러분의 생각도 들려주세요!
+    </v-btn>
+    <v-btn outline color="primary" ripple block @click="toTagOverview">
+      태그 목록 보기
+    </v-btn>
+    <v-divider/>
+    <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block @click="onEndButtonClick">
+      다른 정책 보기
+    </v-btn> -->
+
+  </v-flex>
 </template>
 <style>
 .v-expansion-panel__body {
@@ -161,30 +173,8 @@ import EffectCard from '~/components/EffectCard.vue'
 import PromisePane from '~/components/PromisePane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
 import hangulSearchMixin from '~/mixins/hangulSearch.js'
-import TagTree from '~/components/TagTree.vue'
-import EffectsPane from '~/components/EffectsPane.vue'
 import _ from 'lodash'
 export default {
-  asyncData: async function ({app, store}) {
-    // if (store.state.userToken) {
-    //   app.$axios.setToken(store.state.userToken, 'Token')
-    // }
-    // store.dispatch('incrementUserPolicyStakeholdersSeen')
-    const effects = await app.$axios.$get('/api/effects/', {
-      params: {
-        policy: store.state.policyId,
-        'tag[]': store.state.selectedTag
-      }
-    })
-    // store.commit('setEffects', effects.results)
-    return {
-      prevPage: effects.prev,
-      nextPage: effects.next,
-      count: effects.count,
-      effects: effects.results,
-      keywords: effects.keywords
-    }
-  },
   created: function () {
     this.onInputDebounced = _.debounce(this.onInput, 1000)
     this.onEffectFilterChangeDebounced = _.debounce(this.onEffectFilterChange, 500)
@@ -206,17 +196,24 @@ export default {
   mixins: [setTokenMixin, hangulSearchMixin],
   components: {
     EffectCard,
-    PromisePane,
-    TagTree,
-    EffectsPane
+    PromisePane
+  },
+  props: {
+    effects: {
+      validator: function (effects) {
+        const f = function (prev, value) {
+          return prev && ('tags' in value) && ('description' in value)
+        }
+        return effects.reduce(f)
+      }
+    },
+    keywords: Array,
+    count: Number
   },
   computed: {
     policy: function () {
       return this.$store.state.policy
     },
-    // effects: function () {
-    //   return this.$store.state.effects
-    // },
     userGroup: function () {
       return this.$store.getters.userGroup
     },
@@ -250,7 +247,7 @@ export default {
       }
     },
     pagenum: function () {
-      return Math.ceil(this.count / 5)
+      return Math.ceil(this.count / 50)
     },
     tags: function () {
       return this.$store.state.tags
