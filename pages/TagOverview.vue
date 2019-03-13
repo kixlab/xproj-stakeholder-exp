@@ -198,10 +198,10 @@ export default {
       return this.$store.state.tags
     },
     filteredTags: function () {
-      const ft = this.tags.filter((tag) => { return tag.refs >= 3 }).sort((a, b) => {
-        if (a.refs > b.refs) {
+      const ft = this.tags.filter((tag) => { return tag.total_count >= 3 }).sort((a, b) => {
+        if (a.total_count > b.total_count) {
           return 1
-        } else if (a.refs < b.refs) {
+        } else if (a.total_count < b.total_count) {
           return -1
         } else {
           return 0
@@ -218,7 +218,7 @@ export default {
       return 9 - this.$store.state.userPolicy.effects_seen
     },
     maxValue: function () {
-      const t = this.tags.map((tag) => { return tag.refs })
+      const t = this.tags.map((tag) => { return tag.total_count })
       return Math.max(...t)
     },
     userGroup: function () {
@@ -275,7 +275,8 @@ export default {
         eventValue: 0
       })
       this.$store.commit('setSelectedTag', tag)
-      this.$router.push('/ExploreOpinions')
+      // this.$router.push('/ExploreOpinions')
+      this.$router.push('/GuessEffectRandom/0')
     },
     onShowPolicyListClick: function () {
       this.$ga.event({

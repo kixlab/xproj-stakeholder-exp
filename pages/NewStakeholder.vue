@@ -68,7 +68,7 @@
         <template slot="item" slot-scope="{ index, item, parent }">
           <v-chip color="blue lighten-3" label small>#{{item.name}}</v-chip>
           <v-spacer></v-spacer>
-          {{item.refs}}개
+          {{item.total_count}}개
         </template>
         <template slot="selection" slot-scope="{ item, parent, selected }">
           <v-chip :selected="selected" label small>

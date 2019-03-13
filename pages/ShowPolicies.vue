@@ -75,18 +75,9 @@ export default {
       return this.$store.state.policies
     },
     userGroup: function () {
-      // if (!this.$store.state.userToken || !this.$store.state.user.is_participant) {
-      //   // console.log(this.$store.state.userToken)
-      //   // console.log(this.$store.state.user.is_participant)
-      //   return -1
-      // } else {
-      //   // console.log(this.$store.getters.experimentCondition)
-      //   return this.$store.getters.experimentCondition
-      // }
       return this.$store.getters.userGroup
     },
     userStep: function () {
-      // console.log(this.$store.state.user)
       return this.$store.state.user.step
     },
     experimentDone: function () {
@@ -94,22 +85,15 @@ export default {
     }
   },
   methods: {
-    onPolicyClick: async function (policy) { // update the policy index in store
+    onPolicyClick: async function (policy) {
       this.$ga.event({
         eventCategory: '/ShowPolicies',
         eventAction: 'SelectPolicy',
         eventLabel: policy.title,
         eventValue: 0
       })
-      // this.$store.commit('setPolicyId', {policyId: policy.id})
       this.$store.commit('setPolicy', policy)
       if (this.$store.state.userToken) {
-        // const userpolicy = await this.$axios.$get('/api/userpolicy/', {
-        //   params: {
-        //     user: this.$store.state.user.pk,
-        //     policy: policy.id
-        //   }
-        // })
         const upIdx = this.userpolicies.findIndex((up) => {
           return up.policy === policy.id
         })
@@ -129,13 +113,13 @@ export default {
         } else {
           this.$store.commit('setUserPolicy', this.userpolicies[upIdx])
         }
-        // this.$store.commit('clearBrowsedTags')
         if (!this.$store.state.user.is_participant) {
-          this.$router.push('/Identify')
+          this.$router.push('/GuessStakeholder')
         } else if (this.$store.state.user.is_participant && (this.$store.state.user.step < 3)) {
           this.$store.commit('setReadCounter1', 0)
           this.$store.commit('setReadCounter2', 0)
-          this.$router.push('/ReadNews')
+          // this.$router.push('/ReadNews')
+          this.$router.push('/GuessStakeholder')
         } else if (this.$store.state.user.is_participant && (this.$store.state.user.step >= 3)) {
           this.$router.push('/TagOverview')
         }
@@ -144,7 +128,6 @@ export default {
       }
     },
     selectPolicy: function (policyID) {
-      // console.log(policyID)
       if (this.userGroup === -1) {
         return false
       }

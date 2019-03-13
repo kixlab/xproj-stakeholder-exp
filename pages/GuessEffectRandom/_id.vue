@@ -8,26 +8,14 @@
         </v-card-text>
       </v-card>
     </v-flex>
-
-      <!-- <p class="body-1 prompt head">
-        <v-chip v-for="tag in randomEffect.tags" :key="tag">{{tag}}</v-chip><br>
-        <br>
-        <strong>이 분의 입장에서 생각해주세요.</strong>
-      </p>
-      <br> -->
-      <!-- <p class="question">
-      여러분은 <strong>{{randomEffect.stakeholder_detail}}</strong>(이)가 주인공인 소설을 쓰고 있습니다.
-      여러분이 정한 주인공을 머릿 속에서 <strong>더욱 자세히 상상</strong>해보세요!
-      예를 들면, <strong>'선생님'</strong>보다는 <strong>'초등학교 5학년 담임선생님'</strong>처럼 
-      장소, 직장, 연령 등을 고려해서 더 구체적으로요.<br>
-      이제 여러분만의 주인공을 간단히 설명해주시겠어요?
-      </p>
-       -->
     <v-flex xs12>
       <p class="question">
         <!-- 여러분은 (이)가 주인공인 소설을 쓰고 있습니다. -->
         이 정책은 <strong>{{randomEffect.stakeholder_detail}}</strong>의 삶을 어떻게 바꿀까요? 
         <strong>{{randomEffect.stakeholder_detail}}</strong>의 입장에서 이야기해주세요.
+        <v-flex xs10 style="text-align: left;">
+          <font size="2"><span style="text-align:left; color:blue;" v-for="tag in randomEffect.tags" :key="tag">#{{tag}}&nbsp;&nbsp;</span></font>
+        </v-flex>
       </p>
       <div class="triangle-obtuse">
         <v-textarea auto-grow v-model="predictedEffect.description" placeholder="여기에 영향을 적어주세요!"
@@ -64,9 +52,7 @@
       </v-flex>
     </v-layout>
     <v-flex xs12 sm12>
-      <!-- <p class="question"> 위 빈칸에 '영향'을 쓰실 때 가장 큰 영향을 끼친 사람/상황 등이 있다면 간단히 적어주세요.<br>(예. 언론기사, 지인 등)</p>
-      <v-text-field placeholder="여기에 설명해주세요!" v-model="predictedEffect.source"/> -->
-      <v-checkbox label="이 답이 본인 이야기이시라면 체크해주세요." :value="!predictedEffect.is_guess" @change="onCheckboxClick"></v-checkbox>
+      <!-- <v-checkbox label="이 답이 본인 이야기이시라면 체크해주세요." :value="!predictedEffect.is_guess" @change="onCheckboxClick"></v-checkbox>
       <p class="body-1 prompt question">이 답에 대해 얼마나 확신하시나요?</p>
       <v-slider
         v-model="predictedEffect.confidence"
@@ -74,7 +60,7 @@
         :max="4"
         step="1"
         ticks="always"
-        tick-size="2"/>
+        tick-size="2"/> -->
       <p v-if="!allFilled" style="color:red;">모든 빈칸을 채워넣어야 다음으로 넘어갈 수 있습니다.</p>
       <p v-if="err" style="color: red;">모든 빈 칸을 채우셨는지, 인터넷이 연결되어 있는지 확인해주시고, 잠시 뒤 다시 시도해주세요. </p>
       <v-btn v-if="!allFilled" disabled block> 다음 </v-btn>

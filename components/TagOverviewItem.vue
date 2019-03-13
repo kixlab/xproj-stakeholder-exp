@@ -12,7 +12,7 @@
         </h3>
         </v-flex>
         <v-flex xs2>
-          <span class="card__tag__title">{{tag.refs}}회</span>
+          <span class="card__tag__title">{{tag.total_count}}회</span>
         </v-flex>
       </v-card-title>
       <v-card-text>
@@ -33,7 +33,7 @@ export default {
   props: {
     tag: {
       validator: function (tag) {
-        return ('name' in tag) && ('refs' in tag)
+        return ('name' in tag) && ('total_count' in tag)
       }
     },
     maxValue: {
@@ -45,7 +45,7 @@ export default {
       return this.tag.positive / this.maxValue * 100
     },
     ref: function () {
-      return this.tag.refs / this.maxValue * 100
+      return this.tag.total_count / this.maxValue * 100
     }
   },
   methods: {
@@ -74,4 +74,5 @@ export default {
   padding-top:0px;
   padding-bottom: 10px;
 }
+
 </style>
