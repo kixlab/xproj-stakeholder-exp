@@ -1,5 +1,5 @@
 <template>
-  <v-flex xs8>
+  <v-flex xs8 sm8>
     <div id="filterinfo">
       <template v-if="selectedTags.length === 0"> 
         지금은 
@@ -109,9 +109,9 @@
       </v-card>
     </v-flex> -->
 
-    <v-tabs grow>
+    <v-tabs grow style="width: 100%;">
       <v-tab href="#tab-1" @click="onTabClick(1)">
-        전체
+        모든 영향
       </v-tab>
       <v-tab href="#tab-2" @click="onTabClick(2)">
         긍정적 영향
@@ -120,20 +120,36 @@
         부정적 영향
       </v-tab>
       <v-tab-item v-for="i in 3" :key="i" :value="'tab-'+i">
-        <v-card color="grey lighten-4">
+        <v-card color="grey lighten-4" style="width: 100%;">
           <v-card-text>
-            {{keywords}}
+            <template v-if="onLoading">
+            <v-layout align-center justify-center column>
+                <v-progress-circular
+                  style="margin-top: 2em; margin-bottom: 2em;"
+                  color="purple"
+                  indeterminate
+                ></v-progress-circular>
+              <br>
+            </v-layout>
+          </template>
+          <template v-else>
+            <span v-for="keyword in keywords" :key="keyword[0]">
+              {{keyword[0]}}
+            </span>
+          </template>
           </v-card-text>
         </v-card>
-        <v-flex xs12 md12>
+        <v-flex width="100%">
           <template v-if="onLoading">
             <v-layout class="cards__list" align-center justify-center column>
-              <v-progress-circular
-                :size="70"
-                :width="7"
-                color="purple"
-                indeterminate
-              ></v-progress-circular>
+              <div style="width: 100%">
+                <v-progress-circular
+                  :size="70"
+                  :width="7"
+                  color="purple"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
               <br>
             </v-layout>
           </template>

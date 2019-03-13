@@ -44,13 +44,13 @@
       
       <tag-overview-item v-for="tag in filteredTags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
       </tag-overview-item>
-      <v-btn color="success" :disabled="!$store.state.userToken" ripple block @click="onNewStakeholderClick">
+      <!-- <v-btn color="success" :disabled="!$store.state.userToken" ripple block @click="onNewStakeholderClick">
         새로운 영향 남기기
-      </v-btn>
+      </v-btn> -->
       <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block @click="onShowPolicyListClick">
         다른 정책 보기
       </v-btn>
-      <v-dialog
+      <!-- <v-dialog
         v-else-if="$store.state.userToken && userGroup >= 0 && userGroup < 6 "
         v-model="dialog"
         width="500"
@@ -172,7 +172,7 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-      </v-dialog>
+      </v-dialog> -->
     </v-flex>
   </v-layout>
 </template>
