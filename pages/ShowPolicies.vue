@@ -13,7 +13,7 @@
         <strong style="color: red;"> 실험 중에는 선택된 정책만 보실 수 있습니다. </strong>
       </template>
 
-      <template v-for="policy in policies_test"> <!-- ontest -->
+      <template v-for="policy in policies"> <!-- ontest -->
         <v-btn :key="policy.id" :disabled="selectPolicy(policy.id)" color="primary" large block @click="onPolicyClick(policy)">
           {{policy.title}}
         </v-btn>
@@ -45,13 +45,11 @@ export default {
   },
   data: function () {
     return {
-      drawer: false,
-      policies_test: [{title: '삶'}] // ontest
+      drawer: false
     }
   },
   // List of policies fetched from here
   mixins: [setTokenMixin],
-  /*
   fetch: async function ({app, store}) {
     const policies = await app.$axios.$get('/api/policies/')
     store.commit('setPolicies', policies.results)
@@ -66,7 +64,6 @@ export default {
       userpolicies: userpolicies.results
     }
   },
-  */
   computed: {
     isLookingAround: function () {
       return this.$store.getters.isLookingAround

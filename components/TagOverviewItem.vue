@@ -1,5 +1,5 @@
 <template>
-  <v-flex xs12 class="card__tag">
+  <v-flex lg3 class="card__tag">
     <v-card tile ripple @click.capture="onTagClick">
       
       
@@ -12,10 +12,11 @@
         </h3>
         </v-flex>
         <v-flex xs2>
-          <span class="card__tag__title">{{tag.refs}}회</span>
+          <span class="card__tag__title">{{tag.total_count}}회</span>
         </v-flex>
       </v-card-title>
       <v-card-text>
+        <v-flex row wrap>
         <v-progress-linear
         v-model="pos"
         :buffer-value="ref"
@@ -23,6 +24,8 @@
         color="blue"
         background-color="red">
         </v-progress-linear>
+        <span>{{tag.negative}}회</span>
+        </v-flex>
       </v-card-text>
     </v-card>
   </v-flex>
@@ -33,7 +36,7 @@ export default {
   props: {
     tag: {
       validator: function (tag) {
-        return ('name' in tag) && ('refs' in tag)
+        return ('name' in tag) && ('total_count' in tag)
       }
     },
     maxValue: {
@@ -45,7 +48,7 @@ export default {
       return this.tag.positive / this.maxValue * 100
     },
     ref: function () {
-      return this.tag.refs / this.maxValue * 100
+      return this.tag.total_count / this.maxValue * 100
     }
   },
   methods: {

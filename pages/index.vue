@@ -1,50 +1,46 @@
 <template>
-  <v-layout row wrap justify-center align-center>
-    <general-toolbar :pagename="''"/>
-    <div>
-      <v-flex id="title">
-        <div class="title_word">
-          <span class="large_text">정책, 타</span>
-          <span class="small_text">인의 </span>
-          <span class="large_text">입</span>
-          <span class="small_text">장</span>
-        </div>
-      </v-flex>
-      <v-flex xs12 sm6 offset-sm3>
-        <img src="bg.gif" class="img" />
-      </v-flex>
-      <v-layout align-center justify-center>
-      <v-flex xs8 id="contents">
-        <div class="title_description">
-          정책이 우리의 삶을 어떻게 바꾸는지 알아보세요!
-        </div>
-      </v-flex>
-      </v-layout>
-
-      <v-layout align-center justify-space-around row id="btn_location">
-        <v-flex xs4>
-          <v-btn @click="onLookAroundButtonClick" ripple block large outline> 둘러보기 </v-btn>
-        </v-flex>
-        <v-flex xs4>
-          <v-btn @click="onParticipateButtonClick" color="primary" ripple block large> 실험에 참여하기 </v-btn>
-        </v-flex>
-      </v-layout>
-
-      <v-flex xs12 style="text-align: right">
-        Presented by <a @click="linkToKIXLAB">KIXLAB @ SoC KAIST</a>
-      </v-flex>
-      <!--
-      <v-flex xs12 id="btn_location">
-        <v-flex xs6>
-          <v-btn @click="onParticipateButtonClick" color="primary" ripple block large> 실험에 참여하기 </v-btn>
-        </v-flex>
-        <v-flex xs6>
-          <v-btn @click="onLookAroundButtonClick" ripple block large outline> 둘러보기 </v-btn>
-        </v-flex>
-      </v-flex> -->
-
-    </div>
+<v-container id="test">
+  <general-toolbar :pagename="''"/>
+  <v-layout>
+    <v-flex lg12 xs12 id="title">
+      <div class="title_word">
+        <span class="large_text">정책, 타</span>
+        <span class="small_text">인의 </span>
+        <span class="large_text">입</span>
+        <span class="small_text">장</span>
+      </div>
+    </v-flex>
   </v-layout>
+  <v-layout row wrap justify-center align-center>
+    <v-flex lg6>
+      <img src="bg.gif" class="img" />
+    </v-flex>
+  </v-layout>
+  <v-layout row wrap align-center justify-center>
+    <v-flex lg8 id="contents">
+      <div class="title_description">
+        정책이 우리의 삶을 어떻게 바꾸는지 알아보세요!<br><br>
+      </div>
+    </v-flex>
+  </v-layout>
+
+  <v-layout align-center justify-center row id="btn_location">
+    <v-flex lg2>
+      <v-btn @click="onLookAroundButtonClick" ripple block large outline> 둘러보기 </v-btn>
+    </v-flex>
+    <v-flex lg1/>
+    <v-flex lg2>
+      <v-btn @click="onParticipateButtonClick" color="primary" ripple block large> 실험에 참여하기 </v-btn>
+    </v-flex>
+  </v-layout>
+
+  <v-layout>
+    <v-flex lg12 id="footer"> 
+      Presented by <a @click="linkToKIXLAB">KIXLAB @ SoC KAIST</a>
+    </v-flex>
+  </v-layout>
+
+</v-container>
 </template>
 <style scoped>
 @import url('https://fonts.googleapis.com/earlyaccess/nanumpenscript.css');
@@ -70,12 +66,24 @@
 } */
 #btn_location {
   position: relative;
-  margin-top: 5%;
+  margin-bottom: 15px;
 }
 
 #title {
-  margin-top: 5%;
+  margin-top: 1%;
 } 
+
+#footer {
+  text-align: right;
+  position: absolute;
+  width:90%;
+  bottom: 0;
+
+}
+
+#test {
+  height:90vh;
+}
 /* #contents {
   margin-top: 10%;
 } */
@@ -84,7 +92,7 @@
 }
 
 .img {
-  width: 100%;
+  width: 75%;
 }
 
 .small_text {
