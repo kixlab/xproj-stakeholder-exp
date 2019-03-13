@@ -109,7 +109,7 @@ export default {
         is_participant: false
       },
       tags: [],
-      randomEffect: {},
+      randomEffects: [],
       usedEffects: [],
       selectedTag: null,
       browsedTags: [],

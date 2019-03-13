@@ -16,7 +16,7 @@ export const state = () => ({
     is_participant: false
   },
   tags: [],
-  randomEffect: {},
+  randomEffects: [],
   usedEffects: [],
   selectedTag: null,
   browsedTags: [],
@@ -123,11 +123,14 @@ export const mutations = {
   setTags (state, payload) {
     state.tags = payload
   },
-  setRandomEffect (state, randomEffect) {
-    state.randomEffect = randomEffect
+  setRandomEffects (state, randomEffects) {
+    state.randomEffects = randomEffects
   },
   addUsedEffect (state, effect) {
     state.usedEffects.push(effect)
+  },
+  addUsedEffects (state, effects) {
+    state.usedEffects.concat(effects)
   },
   setSelectedTag (state, tag) {
     if (state.browsedTags.indexOf(tag) === -1) {
@@ -280,22 +283,23 @@ export const actions = {
     })
     context.commit('setTags', tags)
   },
-  async fetchRandomEffect (context) {
+  async fetchRandomEffects (context) {
     const usedEffectIds = context.state.usedEffects.map((x) => { return x.id })
     try {
-      const randomEffect = await this.$axios.$get('/api/effects/random/', {
+      const randomEffects = await this.$axios.$get('/api/effects/random/', {
         params: {
           policy: context.state.policyId,
           exclude: usedEffectIds,
-          tag: context.state.selectedTag
+          tag: context.state.selectedTag,
+          both: true
         }
       })
-      context.commit('addGuessedTags', randomEffect.tags)
-      context.commit('addUsedEffect', randomEffect)
-      context.commit('setRandomEffect', randomEffect)
+      // context.commit('addGuessedTags', randomEffect.tags)
+      // context.commit('addUsedEffects', randomEffects)
+      context.commit('setRandomEffects', randomEffects)
     } catch (err) {
       if (err.response.status === 404) {
-        context.commit('setRandomEffect', null)
+        context.commit('setRandomEffects', null)
       }
     }
   },

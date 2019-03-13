@@ -144,8 +144,8 @@ export default {
       }
       return 3 - this.$store.state.userPolicy.stakeholders_answered
     },
-    randomEffect: function () {
-      return this.$store.state.randomEffect
+    randomEffects: function () {
+      return this.$store.state.randomEffects
     },
     userGroup: function () {
       return this.$store.getters.userGroup
