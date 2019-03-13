@@ -298,7 +298,7 @@ export default {
             presurvey_done: false
           })
           this.$store.commit('setUser', user)
-          this.$router.push('/Tutorial')
+          this.$router.push('/ShowPolicies')
         } catch (error) {
           this.alert = true
           this.error = error.response.data

@@ -75,10 +75,17 @@ import setTokenMixin from '~/mixins/setToken.js'
 import Loader from '~/components/Loader.vue'
 export default {
   fetch: async function ({app, store, redirect, route}) {
+    if (route.params.id === '0' && store.state.browsedTags.indexOf(store.state.selectedTag) !== -1) {
+      store.commit('clearPredictedEffects')
+      store.commit('clearRandomEffects')
+      redirect('/VerifyEffect')
+    }
     if (route.params.id === '0') {
       await store.dispatch('fetchRandomEffects')
+      store.commit('addBrowsedTag', store.state.selectedTag)
+      store.commit('clearPredictedEffects')
     }
-    if (store.state.randomEffects === null) {
+    if (store.state.randomEffects.length === 0) {
       redirect('/VerifyEffect')
     }
   },
@@ -114,10 +121,11 @@ export default {
       this.onLoading = true
       this.predictedEffect.policy = this.$store.state.policyId
       this.predictedEffect.stakeholder_group = 1
+      this.predictedEffect.stakeholder_detail = this.randomEffect.stakeholder_detail
       this.predictedEffect.tags = this.randomEffect.tags
+      this.$store.commit('addNewPredictedEffect', this.predictedEffect)
       try {
         await this.$axios.$post('/api/effects/', this.predictedEffect)
-        // TODO: record user activity
         this.$ga.event({
           eventCategory: this.$router.currentRoute.path,
           eventAction: 'SubmitGuess',
@@ -126,8 +134,8 @@ export default {
         })
         this.$store.dispatch('incrementUserPolicyStakeholdersAnswered')
         // this.$router.push('/VerifyEffect')
-        if (this.userPolicy.stakeholders_answered < 3) {
-          this.$router.push(`/GuessEffectRandom/${this.userPolicy.stakeholders_answered}`)
+        if (this.id < this.$store.state.randomEffects.length - 1) {
+          this.$router.push(`/GuessEffectRandom/${Number(this.id) + 1}`)
         } else {
           this.$router.push('/VerifyEffect')
         }
@@ -166,10 +174,10 @@ export default {
     return {
       predictedEffect: {
         isBenefit: -1,
-        stakeholder_detail: this.$store.state.randomEffect.stakeholder_detail,
+        stakeholder_detail: '',
         stakeholder_group: 1,
         description: '',
-        source: 'guess',
+        source: 'exp_guess',
         confidence: 0,
         is_guess: true
       },

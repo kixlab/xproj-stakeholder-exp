@@ -3,7 +3,7 @@
     <promise-pane :policy="policy" />
     <v-layout row>
       <tag-tree></tag-tree>
-      <effects-pane :effects="effects" :keywords="keywords" :count="count"></effects-pane>      
+      <effects-pane :effects="effects" :keywords="keywords"></effects-pane>      
     </v-layout>
     <v-flex xs12 md12>
       <v-btn outline color="primary" ripple block @click="toTagOverview">
@@ -173,10 +173,12 @@ export default {
     const effects = await app.$axios.$get('/api/effects/', {
       params: {
         policy: store.state.policyId,
-        'tag[]': store.state.selectedTag
+        'tag[]': store.state.selectedTag,
+        page_size: 100
       }
     })
     store.commit('setEffects', effects.results)
+    // store.commit('setEffectsCount', effects.count)
     store.commit('setKeywords', effects.keywords)
     // return {
     //   prevPage: effects.prev,

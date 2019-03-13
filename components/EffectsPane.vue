@@ -228,8 +228,7 @@ export default {
         return effects.reduce(f)
       }
     },
-    keywords: Array,
-    count: Number
+    keywords: Array
   },
   computed: {
     policy: function () {
