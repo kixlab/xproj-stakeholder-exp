@@ -1,22 +1,22 @@
 <template>
-  <v-flex lg3 class="card__tag">
+  <v-flex lg4 class="card__tag">
     <v-card tile ripple @click.capture="onTagClick">
       
       
       <v-card-title>
-        <v-flex xs10>
+        <v-flex xs9>
         <h3 style="text-align: left;">
           <span class="card__tag__title">
             {{tag.name}}
           </span>
         </h3>
         </v-flex>
-        <v-flex xs2>
-          <span class="card__tag__title">{{tag.total_count}}회</span>
+        <v-flex xs3>
+          <span class="card__tag__title">총 {{tag.total_count}}개</span>
         </v-flex>
       </v-card-title>
       <v-card-text>
-        <v-flex row wrap>
+        <v-flex row wrap> 
         <v-progress-linear
         v-model="pos"
         :buffer-value="ref"
@@ -24,7 +24,10 @@
         color="blue"
         background-color="red">
         </v-progress-linear>
-        <span>{{tag.negative}}회</span>
+        <span style="color:blue;"><strong>찬성 {{tag.positive}}개</strong></span>
+        vs
+        <span style="color:red;"><strong>반대 {{tag.negative}}개</strong></span>
+
         </v-flex>
       </v-card-text>
     </v-card>
@@ -77,5 +80,6 @@ export default {
   padding-top:0px;
   padding-bottom: 10px;
 }
+
 
 </style>
