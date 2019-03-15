@@ -116,7 +116,7 @@ export default {
           this.$store.commit('setReadCounter1', 0)
           this.$store.commit('setReadCounter2', 0)
           // this.$router.push('/ReadNews')
-          this.$router.push('/GuessStakeholder')
+          this.$router.push('/TagOverview')
         } else if (this.$store.state.user.is_participant && (this.$store.state.user.step >= 3)) {
           this.$router.push('/TagOverview')
         }

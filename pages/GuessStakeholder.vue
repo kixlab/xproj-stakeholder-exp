@@ -10,7 +10,7 @@
             <template v-if="tags.length === 0">
               이해관계자를 적어주세요!
             </template>
-            <v-chip v-for="tag in tags" :key="tag">
+            <v-chip v-for="tag in tags" close :key="tag">
               {{tag}}
             </v-chip>
           </v-card-text>

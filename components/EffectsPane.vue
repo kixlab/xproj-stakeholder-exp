@@ -108,7 +108,15 @@
         </v-slide-y-transition>
       </v-card>
     </v-flex> -->
-
+    <v-btn @click="changeSorting('len')">
+      post 길이순
+    </v-btn>
+    <v-btn @click="changeSorting('desc-len')">
+      stakeholder detail 길이순
+    </v-btn>
+    <v-btn @click="changeSorting('tag')">
+      tag 갯수 순
+    </v-btn>
     <v-tabs grow style="width: 100%;">
       <v-tab href="#tab-1" @click="onTabClick(1)">
         모든 영향
@@ -157,7 +165,7 @@
             <v-layout class="cards__list" column align-center justify-center>
               <v-flex style="overflow: auto">
                 <effect-card
-                  v-for="effect in effects"
+                  v-for="effect in sortedEffects"
                   :key="effect.id"
                   :effect="effect"
                   @empathy-button-click="onEmpathyButtonClick(effect)"
@@ -271,6 +279,27 @@ export default {
       const ft = this.tags.filter((tag) => { return tag.total_count >= 3 })
       return ft.length > 0 ? ft : this.tags
     },
+    sortedEffects: function () {
+      let sorter = {}
+      if (this.sortMethod === 'len') {
+        sorter = (a, b) => {
+          return a.description.length > b.description.length ? -1 : 1
+        }
+      } else if (this.sortMethod === 'desc-len') {
+        sorter = (a, b) => {
+          return a.stakeholder_detail.length > b.stakeholder_detail.length ? -1 : 1
+        }
+      } else if (this.sortMethod === 'tags') {
+        sorter = (a, b) => {
+          return a.tags.length > b.tags.length ? -1 : 1
+        }
+      } else {
+        sorter = (a, b) => {
+          return a.id > b.id ? 1 : -1
+        }
+      }
+      return this.effects.slice().sort(sorter)
+    },
     explorationRequired: function () {
       return this.filteredTags.length >= 9 ? 9 : this.filteredTags.length
     },
@@ -322,7 +351,8 @@ export default {
       effectFilter: [0, 1],
       onLoading: false,
       show: false,
-      guessFilter: [0, 1]
+      guessFilter: [0, 1],
+      sortMethod: 'len'
       // count: 0,
       // prevPage: '',
       // nextPage: ''
@@ -338,6 +368,9 @@ export default {
     //   })
     //   this.$router.push('/TagOverview')
     // },
+    changeSorting: function (str) {
+      this.sortMethod = str
+    },
     onTabClick: function (i) {
       if (i === 1 && this.effectFilter.length < 2) {
         this.onEffectFilterChangeDebounced([0, 1])

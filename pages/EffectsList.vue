@@ -3,9 +3,9 @@
     <promise-pane :policy="policy" />
     <effect-card v-for="effect in effects" :key="effect.id" :effect="effect"></effect-card>
     <v-flex xs12 md12>
-      <v-btn outline color="primary" ripple block @click="toTagOverview">
+      <!-- <v-btn outline color="primary" ripple block @click="toTagOverview">
         태그 목록 보기
-      </v-btn>
+      </v-btn> -->
       <v-divider/>
       <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block @click="onEndButtonClick">
         다른 정책 보기
@@ -312,19 +312,19 @@ export default {
     //   })
     //   this.$router.push('/TagOverview')
     // },
-    // onEndButtonClick: function () {
-    //   this.$ga.event({
-    //     eventCategory: this.$router.currentRoute.path,
-    //     eventAction: 'ClickEndButton',
-    //     eventLabel: this.stakeholderName,
-    //     eventValue: 0
-    //   })
-    //   if (!this.$store.state.userToken || !this.$store.state.user.is_participant) {
-    //     this.$router.push('/ShowPolicies')
-    //   } else {
-    //     this.$router.push('/MiniSurvey')
-    //   }
-    // },
+    onEndButtonClick: function () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'ClickEndButton',
+        eventLabel: this.stakeholderName,
+        eventValue: 0
+      })
+      if (!this.$store.state.userToken || !this.$store.state.user.is_participant) {
+        this.$router.push('/ShowPolicies')
+      } else {
+        this.$router.push('/MiniSurvey')
+      }
+    },
     // onPostNewEffectButtonClick: function () {
     //   this.$ga.event({
     //     eventCategory: this.$router.currentRoute.path,
