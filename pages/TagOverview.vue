@@ -1,21 +1,24 @@
 <template>
-  <v-layout row wrap justify-center>
+  <v-container style="padding: 0;">
     <promise-pane :policy="policy"></promise-pane>
-    <v-flex xs12>
-      <v-card color="grey lighten-4">
-        <v-card-text>
-        이 정책이 우리 사회의<br>
-        다양한 사람들에게 끼칠 영향을 확인해보세요.
-        </v-card-text>
-      </v-card>
-      &nbsp;
-      <p class="body-1 prompt"> 
-        <strong>3개 이상 영향이 입력된 이해당사자 태그를<br>언급 횟수가 적은 것 부터 보여드립니다.<br></strong>
-        <v-divider/>
-        <small>* 아래 태그를 눌러 각 이해당사자들이 받는 영향을 확인해보세요.</small>
-      </p>
+    <v-layout justify-center>
+      <v-flex lg8>
+        <v-card color="grey lighten-4">
+          <v-card-text>
+          이 정책이 우리 사회의 다양한 사람들에게 끼칠 영향을 확인해보세요.
+          </v-card-text>
+        </v-card>
+        &nbsp;
+        <p class="body-1 prompt"> 
+          <strong>3개 이상 영향이 입력된 이해당사자 태그를 적게 언급된 것부터 보여드립니다.<br></strong>
+          <v-divider/>
+          <small>* 아래 태그를 눌러 각 이해당사자들이 받는 영향을 확인해보세요.</small>
+        </p>
+      </v-flex>
+    </v-layout>
 
-
+    <!-- In case the user did persepctive taking(guessing). -->
+    <v-layout>
       <v-flex xs12 sm6 offset-sm3 v-if="guessedTag.length > 0">
         <v-card style="outline:auto;">
           <v-card-actions>
@@ -41,153 +44,167 @@
           </v-slide-y-transition>
         </v-card>
       </v-flex>
-      
-      <tag-overview-item v-for="tag in filteredTags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
-      </tag-overview-item>
-      <!-- <v-btn color="success" :disabled="!$store.state.userToken" ripple block @click="onNewStakeholderClick">
-        새로운 영향 남기기
-      </v-btn> -->
-      <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block @click="onShowPolicyListClick">
-        다른 정책 보기
-      </v-btn>
-      <!-- <v-dialog
-        v-else-if="$store.state.userToken && userGroup >= 0 && userGroup < 6 "
-        v-model="dialog"
-        width="500"
-        full-width
-        >
-        <v-btn
-          slot="activator"
-          color="primary"
-          dark ripple block
-          @click.native="onShowDialogButtonClick">
+    </v-layout>
+    
+    <v-layout row wrap>
+      <tree-view :model="tags" category="children" :selection="selection" :onSelect="onSelect" :display="display"/>
+    </v-layout>
+
+    <v-divider/>
+
+    <v-layout align-center justify-center row id="btn_location">
+      <v-flex lg2>
+        <v-btn color="success" :disabled="!$store.state.userToken" ripple block large @click="onNewStakeholderClick">
+          새로운 영향 남기기
+        </v-btn>
+      </v-flex>
+      <v-flex lg1/>
+      <v-flex lg2>
+        <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block large @click="onShowPolicyListClick">
           다른 정책 보기
         </v-btn>
+        <v-dialog
+          v-else-if="$store.state.userToken && userGroup >= 0 && userGroup < 6 "
+          v-model="dialog"
+          width="500"
+          full-width
+          >
+          <v-btn
+            slot="activator"
+            color="primary"
+            dark ripple block
+            @click.native="onShowDialogButtonClick">
+            다른 정책 보기
+          </v-btn>
 
-        <v-card>
-          <v-card-title
-            class="headline grey lighten-2"
-            primary-title
-            style="background-color:pink !important;
-            color:red;"
-          > <strong>주의</strong>
-          </v-card-title>
+          <v-card>
+            <v-card-title
+              class="headline grey lighten-2"
+              primary-title
+              style="background-color:pink !important;
+              color:red;"
+            > <strong>주의</strong>
+            </v-card-title>
 
-          <v-card-text>
-            현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
-            <strong>{{explorationRequired}}개 태그</strong>에서 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
-            <template v-if="effects_left!=0">
-            귀하는 <strong><font size="4">{{effects_left}}개 태그를</font></strong> 더 살펴보셔야 합니다.<br>
-            아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
-            <br><br>
-            <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
-            넘어가시면, 포기로 간주되며 보상을 받을 수 없습니다. </strong>
-            </template>
-
-            <template v-else>
-            귀하는 조건을 모두 충족하셨습니다.<br>
-            <strong style="color:blue;"> 다음으로 </strong> 넘어가주세요.<br><br>
-
-            그런데, 혹시 더 살펴보고 싶으시면 <strong style="color:red;">돌아가기</strong>를 누르셔도 좋습니다. :)
-            </template>          
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-actions>
-            <v-btn
-              color="red"
-              flat outline ripple
-              @click="onDialogGoBackButtonClick"
-            > 돌아가기 </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              flat outline ripple
-              @click="onShowPolicyListClick"
-            >
-              다음으로
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      
-      <v-dialog
-        v-else-if="$store.state.userToken && userGroup >=6"
-        v-model="dialog"
-        width="500"
-        full-width
-        >
-        <v-btn
-          slot="activator"
-          color="primary"
-          dark block ripple
-        >
-          다른 정책 보기
-        </v-btn>
-
-        <v-card>
-          <v-card-title
-            class="headline grey lighten-2"
-            primary-title
-            style="background-color:pink !important;
-            color:red;"
-          > <strong>주의</strong>
-          </v-card-title>
-
-          <v-card-text>
-            현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
-            <strong>3개</strong>의 영향을 남겨주셔야 보상을 받을 수 있습니다. <br><br>
-            <template v-if="answer_left>0">
-              귀하는 <strong><font size="4">{{answer_left}}개 영향을</font></strong> 더 남겨주셔야 합니다.<br>
+            <v-card-text>
+              현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
+              <strong>{{explorationRequired}}개 태그</strong>에서 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
+              <template v-if="effects_left!=0">
+              귀하는 <strong><font size="4">{{effects_left}}개 태그를</font></strong> 더 살펴보셔야 합니다.<br>
               아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
               <br><br>
               <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
               넘어가시면, 포기로 간주되며 보상을 받을 수 없습니다. </strong>
-            </template>
+              </template>
 
-            <template v-else>
+              <template v-else>
               귀하는 조건을 모두 충족하셨습니다.<br>
               <strong style="color:blue;"> 다음으로 </strong> 넘어가주세요.<br><br>
 
               그런데, 혹시 더 살펴보고 싶으시면 <strong style="color:red;">돌아가기</strong>를 누르셔도 좋습니다. :)
-            </template>          
-          </v-card-text>
+              </template>          
+            </v-card-text>
 
-          <v-divider></v-divider>
+            <v-divider></v-divider>
 
-          <v-card-actions>
-            <v-btn
-              color="red"
-              flat outline ripple
-              @click="onDialogGoBackButtonClick"
-            > 돌아가기 </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              flat outline ripple
-              @click="onShowPolicyListClick"
-            >
-              다음으로
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog> -->
-    </v-flex>
-  </v-layout>
+            <v-card-actions>
+              <v-btn
+                color="red"
+                flat outline ripple
+                @click="onDialogGoBackButtonClick"
+              > 돌아가기 </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                flat outline ripple
+                @click="onShowPolicyListClick"
+              >
+                다음으로
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        
+        <v-dialog
+          v-else-if="$store.state.userToken && userGroup >=6"
+          v-model="dialog"
+          width="500"
+          full-width
+          >
+          <v-btn
+            slot="activator"
+            color="primary"
+            dark block ripple
+          >
+            다른 정책 보기
+          </v-btn>
+
+          <v-card>
+            <v-card-title
+              class="headline grey lighten-2"
+              primary-title
+              style="background-color:pink !important;
+              color:red;"
+            > <strong>주의</strong>
+            </v-card-title>
+
+            <v-card-text>
+              현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
+              <strong>3개</strong>의 영향을 남겨주셔야 보상을 받을 수 있습니다. <br><br>
+              <template v-if="answer_left>0">
+                귀하는 <strong><font size="4">{{answer_left}}개 영향을</font></strong> 더 남겨주셔야 합니다.<br>
+                아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
+                <br><br>
+                <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
+                넘어가시면, 포기로 간주되며 보상을 받을 수 없습니다. </strong>
+              </template>
+
+              <template v-else>
+                귀하는 조건을 모두 충족하셨습니다.<br>
+                <strong style="color:blue;"> 다음으로 </strong> 넘어가주세요.<br><br>
+
+                그런데, 혹시 더 살펴보고 싶으시면 <strong style="color:red;">돌아가기</strong>를 누르셔도 좋습니다. :)
+              </template>          
+            </v-card-text>
+
+            <v-divider></v-divider>
+
+            <v-card-actions>
+              <v-btn
+                color="red"
+                flat outline ripple
+                @click="onDialogGoBackButtonClick"
+              > 돌아가기 </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                flat outline ripple
+                @click="onShowPolicyListClick"
+              >
+                다음으로
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 import TagOverviewItem from '~/components/TagOverviewItem.vue'
 import _ from 'lodash'
 import setTokenMixin from '~/mixins/setToken.js'
+import { TreeView } from '@bosket/vue'
+
 export default {
   fetch: async function ({app, store, params}) {
     store.dispatch('setTags')
   },
   components: {
     PromisePane,
-    TagOverviewItem
+    TagOverviewItem,
+    TreeView
   },
   mixins: [setTokenMixin],
   computed: {
@@ -195,6 +212,7 @@ export default {
       return this.$store.state.policy
     },
     tags: function () {
+      console.log(this.$store.state)
       return this.$store.state.tags
     },
     filteredTags: function () {
@@ -245,10 +263,24 @@ export default {
       opinionTexts: false,
       dialog: false,
       tag: null,
-      show: false
+      show: false,
+      model2: [
+        { label: 'Click me, I am a node with two children.',
+          list: [
+            { label: 'I am a childless leaf.' },
+            { label: 'I am a also a childless leaf.' }]},
+        {label: 'I am a childless leaf.'}],
+      selection: []
+
     }
   },
   methods: {
+    onSelect (newSelection) {
+      this.selection = newSelection
+    },
+    display (item) {
+      return <tag-overview-item key={item.name} tag={item} maxValue={this.maxValue}/>
+    },
     onNewStakeholderClick: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
@@ -321,6 +353,28 @@ export default {
   padding-bottom:0 !important;
 }
 
+#btn_location {
+  position: fixed;
+  width: 100%;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-bottom: 15px;
+
+  background-color: rgb(120, 134, 219);
+  z-index: 1;
+}
+.TreeView {
+  width: 100% !important;
+  margin-top: 20px;
+  margin-bottom: 70px;
+}
+</style>
+<style>
+.TreeView ul.depth-1 {
+  padding-left: 80px;
+}
 </style>
 
 

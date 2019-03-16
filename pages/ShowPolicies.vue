@@ -13,7 +13,7 @@
         <strong style="color: red;"> 실험 중에는 선택된 정책만 보실 수 있습니다. </strong>
       </template>
 
-      <template v-for="policy in policies">
+      <template v-for="policy in policies"> <!-- ontest -->
         <v-btn :key="policy.id" :disabled="selectPolicy(policy.id)" color="primary" large block @click="onPolicyClick(policy)">
           {{policy.title}}
         </v-btn>
