@@ -47,13 +47,13 @@
     </v-layout>
     
     <v-layout row wrap>
-      <tag-overview-item v-for="tag in filteredTags" :key="tag.name" :tag="tag" :maxValue="maxValue" @tag-click="onTagClick">
-      </tag-overview-item>
+      <tree-view :model="tags" category="children" :selection="selection" :onSelect="onSelect" :display="display"/>
     </v-layout>
 
     <v-divider/>
 
     <v-layout align-center justify-center row id="btn_location">
+
       <v-flex lg2>
         <v-btn color="success" :disabled="!$store.state.userToken" ripple block large @click="onNewStakeholderClick">
           새로운 영향 남기기
@@ -196,13 +196,16 @@ import PromisePane from '~/components/PromisePane.vue'
 import TagOverviewItem from '~/components/TagOverviewItem.vue'
 import _ from 'lodash'
 import setTokenMixin from '~/mixins/setToken.js'
+import { TreeView } from '@bosket/vue'
+
 export default {
   fetch: async function ({app, store, params}) {
     store.dispatch('setTags')
   },
   components: {
     PromisePane,
-    TagOverviewItem
+    TagOverviewItem,
+    TreeView
   },
   mixins: [setTokenMixin],
   computed: {
@@ -210,6 +213,7 @@ export default {
       return this.$store.state.policy
     },
     tags: function () {
+      console.log(this.$store.state)
       return this.$store.state.tags
     },
     filteredTags: function () {
@@ -260,10 +264,24 @@ export default {
       opinionTexts: false,
       dialog: false,
       tag: null,
-      show: false
+      show: false,
+      model2: [
+        { label: 'Click me, I am a node with two children.',
+          list: [
+            { label: 'I am a childless leaf.' },
+            { label: 'I am a also a childless leaf.' }]},
+        {label: 'I am a childless leaf.'}],
+      selection: []
+
     }
   },
   methods: {
+    onSelect (newSelection) {
+      this.selection = newSelection
+    },
+    display (item) {
+      return <tag-overview-item key={item.name} tag={item} maxValue={this.maxValue}/>
+    },
     onNewStakeholderClick: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
@@ -337,10 +355,27 @@ export default {
 }
 
 #btn_location {
-  position: relative;
-  margin-bottom: 15px;
-}
+  position: fixed;
+  width: 100%;
 
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-bottom: 15px;
+
+  background-color: rgb(120, 134, 219);
+  z-index: 1;
+}
+.TreeView {
+  width: 100% !important;
+  margin-top: 20px;
+  margin-bottom: 70px;
+}
+</style>
+<style>
+.TreeView ul.depth-1 {
+  padding-left: 80px;
+}
 </style>
 
 

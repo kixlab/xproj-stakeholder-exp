@@ -264,11 +264,13 @@ export const actions = {
     }
   },
   async setTags (context) {
-    const tags = await this.$axios.$get('/api/effects/tag_list/', {
+    const tagnroot = await this.$axios.$get('/api/effects/tag_list2/', {
       params: {
         policy: context.state.policyId
       }
     })
+    var tags = tagnroot.children
+    console.log(tags)
     tags.sort((a, b) => {
       if (a.total_count < b.total_count) {
         return 1
