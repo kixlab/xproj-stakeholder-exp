@@ -2,7 +2,7 @@
   <v-container style="padding: 0;">
     <promise-pane :policy="policy"></promise-pane>
     <v-layout justify-center>
-      <v-flex lg8>
+      <v-flex lg8 md8>
         <v-card color="grey lighten-4">
           <v-card-text>
           이 정책이 우리 사회의 다양한 사람들에게 끼칠 영향을 확인해보세요.
@@ -10,7 +10,7 @@
         </v-card>
         &nbsp;
         <p class="body-1 prompt"> 
-          <strong>3개 이상 영향이 입력된 이해당사자 태그를 적게 언급된 것부터 보여드립니다.<br></strong>
+          <strong>(3개 이상 영향이 입력된 )이해당사자 태그를 적게 언급된 것부터 보여드립니다.<br></strong>
           <v-divider/>
           <small>* 아래 태그를 눌러 각 이해당사자들이 받는 영향을 확인해보세요.</small>
         </p>
@@ -47,20 +47,25 @@
     </v-layout>
     
     <v-layout row wrap>
-      <tree-view :model="tags" category="children" :selection="selection" :onSelect="onSelect" :display="display"/>
+      <v-flex xs5>
+        <tag-tree :tags="tags" :maxValue="maxValue" category="children"/>
+      </v-flex>
+      <v-flex xs7>
+        <!--effects-pane :effects="effects" :keywords="keywords" :count="count"/-->
+      </v-flex>
     </v-layout>
 
     <v-divider/>
 
     <v-layout align-center justify-center row id="btn_location">
 
-      <v-flex lg2>
+      <v-flex md2 lg2>
         <v-btn color="success" :disabled="!$store.state.userToken" ripple block large @click="onNewStakeholderClick">
           새로운 영향 남기기
         </v-btn>
       </v-flex>
-      <v-flex lg1/>
-      <v-flex lg2>
+      <v-flex md1 lg1/>
+      <v-flex md2 lg2>
         <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block large @click="onShowPolicyListClick">
           다른 정책 보기
         </v-btn>
@@ -193,10 +198,10 @@
 </template>
 <script>
 import PromisePane from '~/components/PromisePane.vue'
-import TagOverviewItem from '~/components/TagOverviewItem.vue'
+import TagTree from '~/components/TagTree.vue'
+import EffectsPane from '~/components/EffectsPane.vue'
 import _ from 'lodash'
 import setTokenMixin from '~/mixins/setToken.js'
-import { TreeView } from '@bosket/vue'
 
 export default {
   fetch: async function ({app, store, params}) {
@@ -204,16 +209,21 @@ export default {
   },
   components: {
     PromisePane,
-    TagOverviewItem,
-    TreeView
+    TagTree,
+    EffectsPane
   },
   mixins: [setTokenMixin],
   computed: {
     policy: function () {
       return this.$store.state.policy
     },
+    effects: function () {
+      return this.$store.state.effects
+    },
+    keywords: function () {
+      return this.$store.state.keywords
+    },
     tags: function () {
-      console.log(this.$store.state)
       return this.$store.state.tags
     },
     filteredTags: function () {
@@ -265,23 +275,10 @@ export default {
       dialog: false,
       tag: null,
       show: false,
-      model2: [
-        { label: 'Click me, I am a node with two children.',
-          list: [
-            { label: 'I am a childless leaf.' },
-            { label: 'I am a also a childless leaf.' }]},
-        {label: 'I am a childless leaf.'}],
-      selection: []
-
+      count: 0
     }
   },
   methods: {
-    onSelect (newSelection) {
-      this.selection = newSelection
-    },
-    display (item) {
-      return <tag-overview-item key={item.name} tag={item} maxValue={this.maxValue}/>
-    },
     onNewStakeholderClick: function () {
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
@@ -366,16 +363,7 @@ export default {
   background-color: rgb(120, 134, 219);
   z-index: 1;
 }
-.TreeView {
-  width: 100% !important;
-  margin-top: 20px;
-  margin-bottom: 70px;
-}
-</style>
-<style>
-.TreeView ul.depth-1 {
-  padding-left: 80px;
-}
+
 </style>
 
 

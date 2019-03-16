@@ -1,20 +1,14 @@
 <template>
-  <v-flex lg4 class="card__tag">
+  <v-flex xs8 class="card__tag">
     <v-card tile ripple @click.capture="onTagClick">
-      
-      
       <v-card-title>
-        <v-flex xs6>
-        <h3 style="text-align: left;">
-          <span class="card__tag__title">
-            #{{tag.tag}}
-          </span>
-        </h3>
+        <v-flex xs7 style="text-align: left;">
+          <span class="card__tag__title">#{{tag.tag}}</span>
         </v-flex>
-        <v-flex xs6>
-          <span style="color:blue;"><strong>찬성 {{tag.pos_count}}개</strong></span>
-          vs
-          <span style="color:red;"><strong>반대 {{tag.neg_count}}개</strong></span>
+        <v-flex xs5 style="text-align: right;">
+          <span class="blued small"><strong>찬 {{tag.pos_count}}</strong></span>
+          <span class="small"> vs </span>
+          <span class="reded small"><strong>반 {{tag.neg_count}}</strong></span>
           <!--span class="card__tag__title">총 {{tag.total_count}}개</span-->
         </v-flex>
       </v-card-title>
@@ -67,12 +61,26 @@ export default {
 </script>
 
 <style scoped>
+.small {
+ font-size: 9pt;
+}
+
+.blued {
+  color: blue;
+}
+
+.reded {
+  color: red;
+}
+
 .card__tag {
   margin-bottom: 0.5em;
 }
 
 .card__tag__title {
   cursor: pointer;
+  font-size: 11pt;
+  font-weight: bold; 
 }
 
 .v-card__title {
