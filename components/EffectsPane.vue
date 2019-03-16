@@ -12,102 +12,6 @@
     &nbsp;
     <v-divider/>
 
-    <!-- <div style="text-align:left;">
-      <font size="2">* 
-        <v-chip small label color="primary" text-color="white">
-          직접
-        </v-chip>
-        은 이해당사자들이 <strong class="red--text">직접</strong> 쓴 내용입니다.</font><br>
-      <font size="2">* 
-        <v-chip small label color="green" text-color="white">
-          추측
-        </v-chip>은 이해당사자가 아닌 분들이 <strong class="red--text">추측</strong>한 내용입니다.</font><br>
-      <font size="2">* <strong class="red--text">거짓 정보</strong>를 담고 있으면 신고해주세요!</font><br><br>
-    </div> -->
-<!-- 
-    <v-flex xs12 sm12>
-      <v-card style="outline:auto;">
-        <v-card-actions>
-          <v-flex xs8 style="text-align:center;">
-            원하는 영향만 모아보실래요?
-          </v-flex>
-          <v-flex xs4>
-            <v-btn outline small color="primary" @click="showFilter">
-              더 보기
-            </v-btn>
-          </v-flex>
-          <v-layout row wrap>
-            <v-flex xs12 style="text-align:center;">
-              원하는 영향만 모아보실래요?
-            </v-flex>
-            <v-flex xs6>
-              <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="긍정적 영향" :value="1" ></v-checkbox>
-            </v-flex>
-            <v-flex xs6>
-              <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="부정적 영향" :value="0"></v-checkbox>
-            </v-flex>
-          </v-layout>
-        </v-card-actions>
-
-        <v-slide-y-transition>
-          <v-card-text v-show="show" style="text-align:left;">
-            * 선택한 이해당사자들의 영향을 보여드립니다.
-            <v-autocomplete
-              :value="selectedTags"
-              :items="tags"
-              item-text="name"
-              item-value="name"
-              placeholder="입력해주세요"
-              :search-input.sync="search"
-              :filter="filter"
-              multiple
-              hide-selected
-              chips
-              clearable
-              @input="onInputDebounced">
-
-              <template slot="no-data">
-                <v-list-tile>
-                  <v-list-tile-content>
-                    입력하신 태그가 없습니다.
-                  </v-list-tile-content>
-                </v-list-tile>
-              </template>
-              <template slot="item" slot-scope="{ index, item, parent }">
-                <v-chip color="blue lighten-3" label small>#{{item.name}}</v-chip>
-                <v-spacer></v-spacer>
-                {{item.total_count}}개
-              </template>
-              <template slot="selection" slot-scope="{ item, parent, selected }">
-                <v-chip :selected="selected" label small>
-                  <span class="pr-2"> #{{item.name}} </span>
-                  <v-icon small @click="parent.selectItem(item)">close</v-icon>
-                </v-chip>
-              </template>
-            </v-autocomplete>
-            <v-layout row wrap>
-            * 원하는 영향만 골라보실 수도 있어요.
-            <v-layout row wrap>
-              <v-flex xs6>
-                <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="긍정적 영향" :value="1" ></v-checkbox>
-              </v-flex>
-              <v-flex xs6>
-                <v-checkbox :input-value="effectFilter" @change="onEffectFilterChangeDebounced" label="부정적 영향" :value="0"></v-checkbox>
-              </v-flex>
-            </v-layout>
-            * 추측된 영향을 골라보실 수도 있습니다.
-            <v-layout row wrap>
-              <v-flex xs6>
-                <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="추측된 영향" :value="1" ></v-checkbox>
-              </v-flex>
-              <v-flex xs6>
-                <v-checkbox :input-value="guessFilter" @change="onGuessFilterChangeDebounced" label="이해당사자가 직접 쓴 영향" :value="0"></v-checkbox>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
-        </v-slide-y-transition>
-      </v-card>
-    </v-flex> -->
     <v-btn @click="changeSorting('len')">
       post 길이순
     </v-btn>
@@ -117,6 +21,12 @@
     <v-btn @click="changeSorting('tag')">
       tag 갯수 순
     </v-btn>
+    <v-select
+      :value="sort"
+      :items="sortTexts"
+      @change="onSortChangedDebounced"
+      >
+    </v-select>
     <v-tabs grow style="width: 100%;">
       <v-tab href="#tab-1" @click="onTabClick(1)">
         모든 영향
@@ -167,10 +77,7 @@
                 <effect-card
                   v-for="effect in sortedEffects"
                   :key="effect.id"
-                  :effect="effect"
-                  @empathy-button-click="onEmpathyButtonClick(effect)"
-                  @novelty-button-click="onNoveltyButtonClick(effect)"
-                  @fishy-button-click="onFishyButtonClick(effect)"/>
+                  :effect="effect"/>
               </v-flex>
             </v-layout>
           </template>
@@ -178,21 +85,6 @@
         </v-flex>
       </v-tab-item>
     </v-tabs>
-    <!-- <v-btn
-      :disabled="!$store.state.userToken"
-      color="success"
-      ripple block
-      @click.native="onPostNewEffectButtonClick">
-      여러분의 생각도 들려주세요!
-    </v-btn>
-    <v-btn outline color="primary" ripple block @click="toTagOverview">
-      태그 목록 보기
-    </v-btn>
-    <v-divider/>
-    <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block @click="onEndButtonClick">
-      다른 정책 보기
-    </v-btn> -->
-
   </v-flex>
 </template>
 <style>
@@ -223,7 +115,8 @@ export default {
   created: function () {
     this.onInputDebounced = _.debounce(this.onInput, 1000)
     this.onEffectFilterChangeDebounced = _.debounce(this.onEffectFilterChange, 500)
-    this.onGuessFilterChangeDebounced = _.debounce(this.onGuessFilterChange, 500)
+    this.onSortChangedDebounced = _.debounce(this.onSortChanged, 500)
+    // this.onGuessFilterChangeDebounced = _.debounce(this.onGuessFilterChange, 500)
     // if(this.$store.state.selectedTag){
     //   this.onInput([this.$store.state.selectedTag])
     // }
@@ -279,26 +172,36 @@ export default {
       const ft = this.tags.filter((tag) => { return tag.total_count >= 3 })
       return ft.length > 0 ? ft : this.tags
     },
-    sortedEffects: function () {
-      let sorter = {}
-      if (this.sortMethod === 'len') {
-        sorter = (a, b) => {
+    sorter: function () {
+      return [
+        (a, b) => {
           return a.description.length > b.description.length ? -1 : 1
-        }
-      } else if (this.sortMethod === 'desc-len') {
-        sorter = (a, b) => {
+        },
+        (a, b) => {
+          return a.description.length > b.description.length ? 1 : -1
+        },
+        (a, b) => {
           return a.stakeholder_detail.length > b.stakeholder_detail.length ? -1 : 1
-        }
-      } else if (this.sortMethod === 'tags') {
-        sorter = (a, b) => {
+        },
+        (a, b) => {
+          return a.stakeholder_detail.length > b.stakeholder_detail.length ? 1 : -1
+        },
+        (a, b) => {
           return a.tags.length > b.tags.length ? -1 : 1
-        }
-      } else {
-        sorter = (a, b) => {
+        },
+        (a, b) => {
+          return a.tags.length > b.tags.length ? 1 : -1
+        },
+        (a, b) => {
           return a.id > b.id ? 1 : -1
+        },
+        (a, b) => {
+          return a.id > b.id ? -1 : 1
         }
-      }
-      return this.effects.slice().sort(sorter)
+      ][this.sort]
+    },
+    sortedEffects: function () {
+      return this.effects.slice().sort(this.sorter)
     },
     explorationRequired: function () {
       return this.filteredTags.length >= 9 ? 9 : this.filteredTags.length
@@ -352,24 +255,44 @@ export default {
       onLoading: false,
       show: false,
       guessFilter: [0, 1],
-      sortMethod: 'len'
-      // count: 0,
-      // prevPage: '',
-      // nextPage: ''
+      sortTexts: [{
+        text: 'Post len++',
+        value: 0
+      },
+      {
+        text: 'Post len --',
+        value: 1
+      },
+      {
+        text: 'Detail len++',
+        value: 2
+      },
+      {
+        text: 'Detail len--',
+        value: 3
+      },
+      {
+        text: 'Tag count++',
+        value: 4
+      },
+      {
+        text: 'Tag count--',
+        value: 5
+      },
+      {
+        text: 'older',
+        value: 6
+      },
+      {
+        text: 'newer',
+        value: 7
+      }],
+      sort: 0
     }
   },
   methods: {
-    // onNextButtonClick: function () {
-    //   this.$ga.event({
-    //     eventCategory: this.$router.currentRoute.path,
-    //     eventAction: 'SeeMoreEffects',
-    //     eventLabel: this.stakeholderName,
-    //     eventValue: 0
-    //   })
-    //   this.$router.push('/TagOverview')
-    // },
-    changeSorting: function (str) {
-      this.sortMethod = str
+    onSortChanged: function (ev) {
+      this.sort = ev
     },
     onTabClick: function (i) {
       if (i === 1 && this.effectFilter.length < 2) {
