@@ -10,7 +10,7 @@
         </v-card-text>
       </v-card>
       &nbsp;
-      <div style="text-align:left;">
+      <!-- <div style="text-align:left;">
         <font size="2">* 
           <v-chip small label color="primary" text-color="white">
             직접
@@ -21,19 +21,27 @@
             추측
           </v-chip>은 이해당사자가 아닌 분들이 <strong class="red--text">추측</strong>한 내용입니다.</font><br>
         <font size="2">* <strong class="red--text">거짓 정보</strong>를 담고 있으면 신고해주세요!</font><br><br>
-      </div>
-      <v-expansion-panel>
-        <verify-effect-card v-for="effect in usedEffects" :key="effect.id" :used-effect="effect">
-        </verify-effect-card>
-      </v-expansion-panel>
+      </div> -->
+      <!-- <v-expansion-panel> -->
+      <v-layout row wrap>
+        <v-flex xs6>
+          <effect-card v-for="effect in randomEffects" :key="effect.id" :effect="effect">
+          </effect-card>
+        </v-flex>
+        <v-flex xs6>
+          <effect-card v-for="effect in predictedEffects" :key="effect.id" :effect="effect">
+          </effect-card>
+        </v-flex>
+      </v-layout>
+      <!-- </v-expansion-panel> -->
       
-      <v-btn 
+      <!-- <v-btn 
         color = "primary"
         @click="onPredictMoreClick"
         block ripple>
         다른 사람의 입장도 되어 볼래요!
-      </v-btn>
-      <v-dialog
+      </v-btn> -->
+      <!-- <v-dialog
         v-if="userGroup >= 0"
         v-model="dialog"
         width="500"
@@ -93,9 +101,9 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-      </v-dialog>
+      </v-dialog> -->
       <v-btn v-if="userGroup === -1" color="primary" block ripple @click="onExploreOpinionsClick">
-        끝! 이제 정책 영향을 한눈에 보여주세요!
+        끝! 이제 정책 영향을 보여주세요!
       </v-btn>
     </v-flex>
   </v-layout>
@@ -121,9 +129,9 @@ export default {
   //   store.commit('setEffects', effects.results)
   // },
   fetch: function ({app, store, redirect}) {
-    if (store.state.usedEffects.length === 0) {
-      store.dispatch('setUserPolicyGuessingDone')
-      redirect('/TagOverview')
+    if (store.state.predictedEffects.length === 0) {
+      store.dispatch('setUserPolicyGuessDone')
+      redirect('/ExploreOpinions')
     }
   },
   mixins: [setTokenMixin],
@@ -144,8 +152,11 @@ export default {
       }
       return 3 - this.$store.state.userPolicy.stakeholders_answered
     },
-    randomEffect: function () {
-      return this.$store.state.randomEffect
+    randomEffects: function () {
+      return this.$store.state.randomEffects
+    },
+    predictedEffects: function () {
+      return this.$store.state.predictedEffects
     },
     userGroup: function () {
       return this.$store.getters.userGroup

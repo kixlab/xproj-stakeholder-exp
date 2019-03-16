@@ -140,14 +140,15 @@ export default {
         is_participant: false
       },
       tags: [],
-      randomEffect: {},
+      randomEffects: [],
       usedEffects: [],
       selectedTag: null,
       browsedTags: [],
       guessedTags: [],
       explorationDone: false,
       readCounter1: 0,
-      readCounter2: 0
+      readCounter2: 0,
+      predictedEffects: []
     })
   },
   layout: 'index',
@@ -175,7 +176,7 @@ export default {
         eventLabel: '',
         eventValue: 0
       })
-      this.$router.push('/NoticeExperimentFinished')
+      this.$router.push('/SignIn')
     },
     linkToKAISTSoC: function () {
       this.$ga.event({

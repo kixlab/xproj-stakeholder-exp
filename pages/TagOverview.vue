@@ -51,7 +51,7 @@
         <tag-tree :tags="tags" :maxValue="maxValue" category="children"/>
       </v-flex>
       <v-flex xs7>
-        <!--effects-pane :effects="effects" :keywords="keywords" :count="count"/-->
+        <effects-pane :effects="effects" :keywords="keywords" :count="count"/>
       </v-flex>
     </v-layout>
 
@@ -59,13 +59,13 @@
 
     <v-layout align-center justify-center row id="btn_location">
 
-      <v-flex md2 lg2>
+      <v-flex xs2>
         <v-btn color="success" :disabled="!$store.state.userToken" ripple block large @click="onNewStakeholderClick">
           새로운 영향 남기기
         </v-btn>
       </v-flex>
-      <v-flex md1 lg1/>
-      <v-flex md2 lg2>
+      <v-flex xs1/>
+      <v-flex xs2>
         <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block large @click="onShowPolicyListClick">
           다른 정책 보기
         </v-btn>
@@ -205,7 +205,28 @@ import setTokenMixin from '~/mixins/setToken.js'
 
 export default {
   fetch: async function ({app, store, params}) {
+    const effects = await app.$axios.$get('/api/effects/', {
+      params: {
+        policy: store.state.policyId,
+        'tag[]': store.state.selectedTag,
+        page_size: 100
+      }
+    })
+    store.commit('setEffects', effects.results)
+    store.commit('setKeywords', effects.keywords)
     store.dispatch('setTags')
+  },
+  created: function () {
+    if (this.$store.state.selectedTag) {
+      this.selectedTags.push(this.$store.state.selectedTag)
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'SearchTags',
+        eventLabel: this.selectedTags,
+        eventValue: 0
+      })
+      this.$store.dispatch('addBrowsedTags', [this.$store.state.selectedTag])
+    }
   },
   components: {
     PromisePane,
@@ -305,8 +326,8 @@ export default {
         eventValue: 0
       })
       this.$store.commit('setSelectedTag', tag)
-      // this.$router.push('/ExploreOpinions')
-      this.$router.push('/GuessEffectRandom/0')
+      this.$router.push('/ExploreOpinions')
+      // this.$router.push('/GuessEffectRandom/0')
     },
     onShowPolicyListClick: function () {
       this.$ga.event({

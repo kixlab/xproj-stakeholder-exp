@@ -4,7 +4,9 @@
       <!-- <v-chip v-for="tag in usedEffect.tags" :key="tag">{{tag}}</v-chip> -->
       <span class="primary--text">{{usedEffect.stakeholder_detail}}</span>
     </div>
-    <div v-if="effects.length > 0">
+    <effect-card :effect="usedEffect">
+    </effect-card>
+    <!-- <div v-if="effects.length > 0">
       <effect-card v-for="effect in effects" :key="effect.id" :effect="effect" expanded 
       @empathy-button-click="onEmpathyButtonClick"
       @novelty-button-click="onNoveltyButtonClick"
@@ -12,12 +14,12 @@
       >
       </effect-card>
       <v-divider/>
-    </div>
+    </div> -->
   </v-expansion-panel-content>
 </template>
 
 <script>
-import _ from 'lodash'
+// import _ from 'lodash'
 // import setTokenMixin from '~/mixins/setToken.js'
 import EffectCard from '~/components/EffectCard.vue'
 export default {
@@ -40,119 +42,119 @@ export default {
     policy: function () {
       return this.$store.state.policy
     }
-  },
-  mounted: async function () {
-    const effects = await this.$axios.$get('/api/effects/', {
-      params: {
-        policy: this.policy.id,
-        tag: this.usedEffect.tags,
-        page_size: 50,
-        is_and: true
-      }
-    })
-    this.effects = _.sortBy(effects.results, ['stakeholder_detail', 'id'])
-  },
-  methods: {
-    onEmpathyButtonClick: async function (effect) {
-      const isEmpathyVoted = effect.empathy.includes(this.$store.state.user.pk)
-
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: isEmpathyVoted ? 'CancelUpvoteEmpathy' : 'UpvoteEmpathy',
-        eventLabel: `${effect.id},${effect.stakeholder_detail}`,
-        eventValue: 0
-      })
-      try {
-        await this.$axios.$post('/api/empathy/', {
-          effect: effect.id
-        })
-        effect.empathy.push(this.$store.state.user.pk)
-      } catch (err) {
-        if (err.response.code === 409) {
-          // this.$store.commit('decreaseEmpathyCount', {
-          //   effect: this.effect.id
-          // })
-          const idx = effect.empathy.indexOf(this.$store.state.user.pk)
-          effect.empathy.splice(idx, 1)
-        }
-      } finally {
-        const result = await this.$axios.$get('/api/effects/', {
-          params: {
-            policy: this.policy.id,
-            tag: this.usedEffect.tags,
-            page_size: 50
-          }
-        })
-        this.effects = result.results
-      }
-    },
-    onNoveltyButtonClick: async function (effect) {
-      const isNoveltyVoted = effect.novelty.includes(this.$store.state.user.pk)
-
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: isNoveltyVoted ? 'CancelUpvoteNovelty' : 'UpvoteNovelty',
-        eventLabel: `${effect.id},${effect.stakeholder_detail}`,
-        eventValue: 0
-      })
-      try {
-        await this.$axios.$post('/api/novelty/', {
-          effect: effect.id
-        })
-        effect.novelty.push(this.$store.state.user.pk)
-      } catch (err) {
-        if (err.response.code === 409) {
-          // this.$store.commit('decreaseNoveltyCount', {
-          //   effect: this.effect.id
-          // })
-          const idx = effect.novelty.indexOf(this.$store.state.user.pk)
-          effect.novelty.splice(idx, 1)
-        }
-      } finally {
-        const result = await this.$axios.$get('/api/effects/', {
-          params: {
-            policy: this.policy.id,
-            tag: this.usedEffect.tags,
-            page_size: 50
-          }
-        })
-        this.effects = result.results
-      }
-    },
-    onFishyButtonClick: async function (effect) {
-      const isFishyVoted = effect.fishy.includes(this.$store.state.user.pk)
-
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: isFishyVoted ? 'CancelUpvoteFishy' : 'UpvoteFishy',
-        eventLabel: `${effect.id},${effect.stakeholder_detail}`,
-        eventValue: 0
-      })
-      try {
-        await this.$axios.$post('/api/fishy/', {
-          effect: effect.id
-        })
-        effect.fishy.push(this.$store.state.user.pk)
-      } catch (err) {
-        if (err.response.code === 409) {
-          // this.$store.commit('decreaseFishyCount', {
-          //   effect: this.effect.id
-          // })
-          const idx = effect.fishy.indexOf(this.$store.state.user.pk)
-          effect.fishy.splice(idx, 1)
-        }
-      } finally {
-        const result = await this.$axios.$get('/api/effects/', {
-          params: {
-            policy: this.policy.id,
-            tag: this.usedEffect.tags,
-            page_size: 50
-          }
-        })
-        this.effects = result.results
-      }
-    }
   }
+  // mounted: async function () {
+  //   const effects = await this.$axios.$get('/api/effects/', {
+  //     params: {
+  //       policy: this.policy.id,
+  //       tag: this.usedEffect.tags,
+  //       page_size: 50,
+  //       is_and: true
+  //     }
+  //   })
+  //   this.effects = _.sortBy(effects.results, ['stakeholder_detail', 'id'])
+  // },
+  // methods: {
+  //   onEmpathyButtonClick: async function (effect) {
+  //     const isEmpathyVoted = effect.empathy.includes(this.$store.state.user.pk)
+
+  //     this.$ga.event({
+  //       eventCategory: this.$router.currentRoute.path,
+  //       eventAction: isEmpathyVoted ? 'CancelUpvoteEmpathy' : 'UpvoteEmpathy',
+  //       eventLabel: `${effect.id},${effect.stakeholder_detail}`,
+  //       eventValue: 0
+  //     })
+  //     try {
+  //       await this.$axios.$post('/api/empathy/', {
+  //         effect: effect.id
+  //       })
+  //       effect.empathy.push(this.$store.state.user.pk)
+  //     } catch (err) {
+  //       if (err.response.code === 409) {
+  //         // this.$store.commit('decreaseEmpathyCount', {
+  //         //   effect: this.effect.id
+  //         // })
+  //         const idx = effect.empathy.indexOf(this.$store.state.user.pk)
+  //         effect.empathy.splice(idx, 1)
+  //       }
+  //     } finally {
+  //       const result = await this.$axios.$get('/api/effects/', {
+  //         params: {
+  //           policy: this.policy.id,
+  //           tag: this.usedEffect.tags,
+  //           page_size: 50
+  //         }
+  //       })
+  //       this.effects = result.results
+  //     }
+  //   },
+  //   onNoveltyButtonClick: async function (effect) {
+  //     const isNoveltyVoted = effect.novelty.includes(this.$store.state.user.pk)
+
+  //     this.$ga.event({
+  //       eventCategory: this.$router.currentRoute.path,
+  //       eventAction: isNoveltyVoted ? 'CancelUpvoteNovelty' : 'UpvoteNovelty',
+  //       eventLabel: `${effect.id},${effect.stakeholder_detail}`,
+  //       eventValue: 0
+  //     })
+  //     try {
+  //       await this.$axios.$post('/api/novelty/', {
+  //         effect: effect.id
+  //       })
+  //       effect.novelty.push(this.$store.state.user.pk)
+  //     } catch (err) {
+  //       if (err.response.code === 409) {
+  //         // this.$store.commit('decreaseNoveltyCount', {
+  //         //   effect: this.effect.id
+  //         // })
+  //         const idx = effect.novelty.indexOf(this.$store.state.user.pk)
+  //         effect.novelty.splice(idx, 1)
+  //       }
+  //     } finally {
+  //       const result = await this.$axios.$get('/api/effects/', {
+  //         params: {
+  //           policy: this.policy.id,
+  //           tag: this.usedEffect.tags,
+  //           page_size: 50
+  //         }
+  //       })
+  //       this.effects = result.results
+  //     }
+  //   },
+  //   onFishyButtonClick: async function (effect) {
+  //     const isFishyVoted = effect.fishy.includes(this.$store.state.user.pk)
+
+  //     this.$ga.event({
+  //       eventCategory: this.$router.currentRoute.path,
+  //       eventAction: isFishyVoted ? 'CancelUpvoteFishy' : 'UpvoteFishy',
+  //       eventLabel: `${effect.id},${effect.stakeholder_detail}`,
+  //       eventValue: 0
+  //     })
+  //     try {
+  //       await this.$axios.$post('/api/fishy/', {
+  //         effect: effect.id
+  //       })
+  //       effect.fishy.push(this.$store.state.user.pk)
+  //     } catch (err) {
+  //       if (err.response.code === 409) {
+  //         // this.$store.commit('decreaseFishyCount', {
+  //         //   effect: this.effect.id
+  //         // })
+  //         const idx = effect.fishy.indexOf(this.$store.state.user.pk)
+  //         effect.fishy.splice(idx, 1)
+  //       }
+  //     } finally {
+  //       const result = await this.$axios.$get('/api/effects/', {
+  //         params: {
+  //           policy: this.policy.id,
+  //           tag: this.usedEffect.tags,
+  //           page_size: 50
+  //         }
+  //       })
+  //       this.effects = result.results
+  //     }
+  //   }
+  // }
 }
 </script>
 
