@@ -25,7 +25,8 @@ export const state = () => ({
   readCounter1: 0,
   readCounter2: 0,
   keywords: [],
-  predictedEffects: []
+  predictedEffects: [],
+  excludedTag: ''
 })
 
 export const mutations = {
@@ -164,6 +165,9 @@ export const mutations = {
   },
   clearRandomEffects (state) {
     state.randomEffects = []
+  },
+  setExcludedTag (state, excludedTag) {
+    state.excludedTag = excludedTag
   }
 }
 
@@ -326,6 +330,25 @@ export const actions = {
         }
       })
       context.commit('setSelectedTag', tag)
+      context.commit('setEffects', effects.results)
+      context.commit('setKeywords', effects.keywords)
+    } catch (err) {
+
+    }
+  },
+  async updateExcludedTag (context, excludedTag) {
+    try {
+      const effects = await this.$axios.$get('/api/effects/', {
+        params: {
+          policy: context.state.policyId,
+          'tag[]': context.state.selectedTag,
+          'excluded_tag[]': excludedTag,
+          page_size: 100,
+          include_guess: 0
+        }
+      })
+      context.commit('setExcludedTag', excludedTag)
+      // context.commit('setSelectedTag', tag)
       context.commit('setEffects', effects.results)
       context.commit('setKeywords', effects.keywords)
     } catch (err) {
