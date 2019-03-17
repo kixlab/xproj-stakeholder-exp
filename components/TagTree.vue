@@ -42,8 +42,14 @@ export default {
 }
 </script>
 <style>
+ul.depth-0 {
+  list-style-type: none; 
+  padding-left: 0;
+}
 ul.depth-1 {
   padding-left: 60px;
+  list-style-image: url('https://material.io/tools/icons/static/icons/outline-subdirectory_arrow_right-24px.svg');
+
 }
 </style>
 <style scoped>
@@ -52,6 +58,5 @@ ul.depth-1 {
   margin-top: 20px;
   margin-bottom: 70px;
 }
-
 
 </style>

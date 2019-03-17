@@ -55,7 +55,7 @@
       </v-flex>
     </v-layout>
 
-    <v-divider/>
+    <!--v-divider/>
 
     <v-layout align-center justify-center row id="btn_location">
 
@@ -193,7 +193,62 @@
           </v-card>
         </v-dialog>
       </v-flex>
-    </v-layout>
+    </v-layout-->
+    <v-speed-dial
+      v-model="fab"
+      bottom
+      right
+      direction="top"
+      open-on-hover
+    >
+        <v-btn
+          slot="activator"
+          v-model="fab"
+          color="blue darken-2"
+          dark
+          fab
+          large
+        >
+          <v-icon>add</v-icon>
+          <v-icon>close</v-icon>
+        </v-btn>
+
+      <v-tooltip 
+        v-model="show1" 
+        left
+        nudge-left="8"
+        close-delay="0"
+      >
+        <v-btn
+          fab
+          dark
+          color="green"
+          slot="activator"
+        >
+          <v-icon>edit</v-icon>
+        </v-btn>
+        <span>새로운 영향 쓰기</span>
+      </v-tooltip>
+
+      <v-tooltip 
+        v-model="show2" 
+        nudge-left="8"
+        left
+        close-delay="0"
+      >
+        <v-btn
+          fab
+          dark
+          color="red"
+          slot="activator"
+        >
+          <v-icon>arrow_forward</v-icon>
+        </v-btn>
+        <span>다음 정책 보기</span>
+      </v-tooltip>
+
+    </v-speed-dial>
+ 
   </v-container>
 </template>
 <script>
@@ -234,7 +289,22 @@ export default {
     EffectsPane
   },
   mixins: [setTokenMixin],
+  data: function () {
+    return {
+      fab: false,
+      opinionTexts: false,
+      dialog: false,
+      tag: null,
+      show: false,
+      show1: false,
+      show2: false,
+      count: 0
+    }
+  },
   computed: {
+    activeFab: function () {
+      return {}
+    },
     policy: function () {
       return this.$store.state.policy
     },
@@ -288,15 +358,6 @@ export default {
     },
     explorationRequired: function () {
       return this.filteredTags.length >= 9 ? 9 : this.filteredTags.length
-    }
-  },
-  data: function () {
-    return {
-      opinionTexts: false,
-      dialog: false,
-      tag: null,
-      show: false,
-      count: 0
     }
   },
   methods: {
@@ -363,6 +424,12 @@ export default {
   }
 }
 </script>
+<style>
+.v-speed-dial {
+  position: fixed;
+}
+
+</style>
 <style scoped>
 .link {
   cursor: pointer;
@@ -381,7 +448,7 @@ export default {
   bottom: 0;
   padding-bottom: 15px;
 
-  background-color: rgb(120, 134, 219);
+  /* background-color: rgb(120, 134, 219); */
   z-index: 1;
 }
 

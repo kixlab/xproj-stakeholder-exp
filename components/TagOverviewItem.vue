@@ -1,4 +1,5 @@
 <template>
+  <v-layout row wrap>
   <v-flex xs8 class="card__tag">
     <v-card tile ripple @click.capture="onTagClick">
       <v-card-title>
@@ -30,6 +31,15 @@
       </v-card-text>
     </v-card>
   </v-flex>
+  <v-flex xs2>
+    <!--v-btn fab flat dark small color="primary" style="margin:0;">
+      <v-icon>arrow_forward</v-icon>
+    </v-btn-->
+    <v-btn fab flat dark small color="warning" style="margin:0;">
+      <v-icon>expand_more</v-icon>
+    </v-btn>
+  </v-flex>
+  </v-layout>
 </template>
 
 <script>

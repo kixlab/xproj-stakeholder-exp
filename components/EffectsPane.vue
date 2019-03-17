@@ -1,5 +1,5 @@
 <template>
-  <v-flex xs8 sm8>
+  <v-flex xs12>
     <div id="filterinfo">
       <template v-if="selectedTags.length === 0"> 
         지금은 
