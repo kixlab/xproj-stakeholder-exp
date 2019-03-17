@@ -48,7 +48,7 @@
     
     <v-layout row wrap>
       <v-flex xs5>
-        <tag-tree :tags="tags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag"/>
+        <tag-tree :tags="filteredTags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag"/>
       </v-flex>
       <v-flex xs7>
         <effects-pane :effects="effects" :keywords="keywords" :count="count" :onLoading="onLoading" @effect-filter-change="onEffectFilterChanged"/>
@@ -307,16 +307,17 @@ export default {
       return this.$store.state.tags
     },
     filteredTags: function () {
-      const ft = this.tags.filter((tag) => { return tag.total_count >= 3 }).sort((a, b) => {
-        if (a.total_count > b.total_count) {
-          return 1
-        } else if (a.total_count < b.total_count) {
-          return -1
-        } else {
-          return 0
-        }
-      })
-      return ft.length > 0 ? ft : [...this.tags].reverse()
+      const ft = this.tags.filter((tag) => { return tag.total_count >= 3 })
+      // .sort((a, b) => {
+      //   if (a.total_count > b.total_count) {
+      //     return 1
+      //   } else if (a.total_count < b.total_count) {
+      //     return -1
+      //   } else {
+      //     return 0
+      //   }
+      // })
+      return ft.length > 0 ? ft : this.tags // [...this.tags].reverse()
     },
     effects_left: function () {
       if (this.$store.state.userPolicy.effects_seen > 9) {

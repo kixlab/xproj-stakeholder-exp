@@ -16,7 +16,6 @@
     
     <v-dialog
       v-model = "dialog"
-      max-width = "290"
     >
       <v-card>
         <v-card-title

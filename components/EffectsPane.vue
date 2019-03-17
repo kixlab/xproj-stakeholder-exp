@@ -11,33 +11,33 @@
     </div>
     &nbsp;
     <v-divider/>
-
-    <v-btn @click="changeSorting('len')">
-      post 길이순
-    </v-btn>
-    <v-btn @click="changeSorting('desc-len')">
-      stakeholder detail 길이순
-    </v-btn>
-    <v-btn @click="changeSorting('tag')">
-      tag 갯수 순
-    </v-btn>
-    <v-select
-      :value="sort"
-      :items="sortTexts"
-      @change="onSortChangedDebounced"
-      >
-    </v-select>
-    <v-tabs grow style="width: 100%;">
-      <v-tab href="#tab-1" @click="onTabClick(1)">
-        모든 영향
-      </v-tab>
-      <v-tab href="#tab-2" @click="onTabClick(2)">
-        긍정적 영향
-      </v-tab>
-      <v-tab href="#tab-3" @click="onTabClick(3)">
-        부정적 영향
-      </v-tab>
-      <v-tab-item v-for="i in 3" :key="i" :value="'tab-'+i">
+    <template>
+        <v-tabs centered grow v-model="tab">
+          <v-tab v-for="n in 3" :key="n" @click="onTabClick(n)">
+            <span>{{['모든 영향', '긍정적 영향', '부정적 영향'][n-1]}}</span>
+          </v-tab>
+          <!-- <v-tab value="0" @click="onTabClick(1)">
+            모든 영향
+          </v-tab>
+          <v-tab value="1" @click="onTabClick(2)">
+            긍정적 영향
+          </v-tab>
+          <v-tab value="2" @click="onTabClick(3)">
+            부정적 영향
+          </v-tab> -->
+        </v-tabs>
+      </template>
+    <v-toolbar>
+      <v-select
+        :value="sort"
+        :items="sortTexts"
+        color="indigo"
+        @change="onSortChangedDebounced"
+        >
+      </v-select>
+    </v-toolbar>
+    <v-tabs-items v-model="tab">
+      <v-tab-item v-for="i in 3" :key="i">
         <v-card color="grey lighten-4" style="width: 100%;">
           <v-card-text>
             <template v-if="onLoading">
@@ -81,10 +81,9 @@
               </v-flex>
             </v-layout>
           </template>
-
         </v-flex>
       </v-tab-item>
-    </v-tabs>
+    </v-tabs-items>
   </v-flex>
 </template>
 <style>
@@ -259,36 +258,37 @@ export default {
       // onLoading: false,
       show: false,
       guessFilter: [0, 1],
+      tab: 0,
       sortTexts: [{
-        text: 'Post len++',
+        text: '긴 영향부터 보기',
         value: 0
       },
       {
-        text: 'Post len --',
+        text: '짧은 영향부터 보기',
         value: 1
       },
       {
-        text: 'Detail len++',
+        text: '긴 설명부터 보기',
         value: 2
       },
       {
-        text: 'Detail len--',
+        text: '짧은 설명부터 보기',
         value: 3
       },
       {
-        text: 'Tag count++',
+        text: '태그 많은 영향부터 보기',
         value: 4
       },
       {
-        text: 'Tag count--',
+        text: '태그 적은 영향부터 보기',
         value: 5
       },
       {
-        text: 'older',
+        text: '오래된 영향부터 보기',
         value: 6
       },
       {
-        text: 'newer',
+        text: '새로 올라온 영향부터 보기',
         value: 7
       }],
       sort: 0
@@ -299,11 +299,15 @@ export default {
       this.sort = ev
     },
     onTabClick: function (i) {
+      // this.tab = i
       if (i === 1 && this.effectFilter.length < 2) {
+        // this.tab = i
         this.onEffectFilterChangeDebounced([0, 1])
       } else if (i === 2 && !(this.effectFilter.length === 1 && this.effectFilter[0] === 1)) {
+        // this.tab = i
         this.onEffectFilterChangeDebounced([1])
       } else if (i === 3 && !(this.effectFilter.length === 1 && this.effectFilter[0] === 0)) {
+        // this.tab = i
         this.onEffectFilterChangeDebounced([0])
       }
     },
