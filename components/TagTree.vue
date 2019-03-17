@@ -34,6 +34,7 @@ export default {
     onSelect (newSelection) {
       console.log(newSelection)
       this.selection = newSelection
+      this.$emit('update-selected-tag', newSelection[0].tag)
     },
     display (item) {
       return <tag-overview-item key={item.tag} tag={item} maxValue={this.maxValue}/>

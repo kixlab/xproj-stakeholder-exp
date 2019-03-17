@@ -315,6 +315,22 @@ export const actions = {
       }
     }
   },
+  async updateSelectedTag (context, tag) {
+    try {
+      const effects = await this.$axios.$get('/api/effects/', {
+        params: {
+          policy: context.state.policyId,
+          'tag[]': tag,
+          page_size: 100
+        }
+      })
+      context.commit('setSelectedTag', tag)
+      context.commit('setEffects', effects.results)
+      context.commit('setKeywords', effects.keywords)
+    } catch (err) {
+
+    }
+  },
   async addBrowsedTags (context, tags) {
     tags.forEach((tag) => { context.commit('addBrowsedTag', tag) })
     // console.log(context.state.browsedTags.length)
