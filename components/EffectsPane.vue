@@ -14,7 +14,7 @@
     <template>
         <v-tabs centered grow v-model="tab">
           <v-tab v-for="n in 3" :key="n" @click="onTabClick(n)">
-            <span>{{['모든 영향', '긍정적 영향', '부정적 영향'][n-1]}}</span>
+            <span :class="['purple--text', 'blue--text', 'red--text'][n-1]">{{['모든 영향', '긍정적 영향', '부정적 영향'][n-1]}}</span>
           </v-tab>
           <!-- <v-tab value="0" @click="onTabClick(1)">
             모든 영향
@@ -27,7 +27,7 @@
           </v-tab> -->
         </v-tabs>
       </template>
-    <v-toolbar>
+    <v-toolbar :color="['purple lighten-5', 'blue lighten-5', 'red lignten-5'][tab]">
       <v-select
         :value="sort"
         :items="sortTexts"
@@ -38,7 +38,7 @@
     </v-toolbar>
     <v-tabs-items v-model="tab">
       <v-tab-item v-for="i in 3" :key="i">
-        <v-card color="grey lighten-4" style="width: 100%;">
+        <v-card :color="['purple lighten-5', 'blue lighten-5', 'red lignten-5'][tab]" style="width: 100%;">
           <v-card-text>
             <template v-if="onLoading">
             <v-layout align-center justify-center column>
@@ -51,9 +51,16 @@
             </v-layout>
           </template>
           <template v-else>
-            <span v-for="keyword in keywords" :key="keyword[0]">
-              {{keyword[0]}}
-            </span>
+            <template v-if="effectFilter.length === 1">
+              <span v-for="keyword in keywords" :key="keyword[0]" class="subheading">
+                {{keyword[0]}}
+              </span>
+            </template>
+            <template v-else-if="effectFilter.length === 2">
+              <span v-for="keyword in keywords" :key="keyword[0]" class="subheading" :class="getKeywordColor(keyword[2])">
+                {{keyword[0]}}
+              </span>
+            </template>
           </template>
           </v-card-text>
         </v-card>
@@ -73,7 +80,7 @@
           </template>
           <template v-else>
             <v-layout class="cards__list" column align-center justify-center>
-              <v-flex style="overflow: auto">
+              <v-flex style="overflow: auto;">
                 <effect-card
                   v-for="effect in sortedEffects"
                   :key="effect.id"
@@ -297,6 +304,17 @@ export default {
   methods: {
     onSortChanged: function (ev) {
       this.sort = ev
+    },
+    getKeywordColor: function (k) {
+      if (k === 'both') {
+        return 'deep-purple--text'
+      } else if (k === 'pos') {
+        return 'blue--text'
+      } else if (k === 'neg') {
+        return 'red--text'
+      } else {
+        return 'black--text'
+      }
     },
     onTabClick: function (i) {
       // this.tab = i

@@ -9,11 +9,7 @@
           </v-card-text>
         </v-card>
         &nbsp;
-        <p class="body-1 prompt"> 
-          <strong>(3개 이상 영향이 입력된 )이해당사자 태그를 적게 언급된 것부터 보여드립니다.<br></strong>
-          <v-divider/>
-          <small>* 아래 태그를 눌러 각 이해당사자들이 받는 영향을 확인해보세요.</small>
-        </p>
+        
       </v-flex>
     </v-layout>
 
@@ -379,7 +375,7 @@ export default {
           policy: this.policy.id,
           tag: this.selectedTags,
           is_benefit: effectFilter.length === 1 ? effectFilter[0] : null,
-          include_guess: guessFilter.length === 1 ? guessFilter[0] : null
+          include_guess: 0
         }
       })
       this.$store.commit('setEffects', effects.results)

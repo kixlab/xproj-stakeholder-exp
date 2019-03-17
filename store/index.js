@@ -321,7 +321,8 @@ export const actions = {
         params: {
           policy: context.state.policyId,
           'tag[]': tag,
-          page_size: 100
+          page_size: 100,
+          include_guess: 0
         }
       })
       context.commit('setSelectedTag', tag)

@@ -1,7 +1,20 @@
 <template>
-  <v-flex xs12> 
-    <tree-view :model="tags" category="children" :selection="selection" :onSelect="onSelect" :display="display"/>
-  </v-flex>
+<div>
+  <v-layout row>
+    <v-flex xs12>
+    <p class="body-1 prompt"> 
+      <strong>(3개 이상 영향이 입력된 )이해당사자 태그를 적게 언급된 것부터 보여드립니다.<br></strong>
+      <v-divider/>
+      <small>* 아래 태그를 눌러 각 이해당사자들이 받는 영향을 확인해보세요.</small>
+    </p>
+    </v-flex>
+  </v-layout>
+  <v-layout row class="tree">
+    <v-flex xs12 style="overflow: auto;"> 
+      <tree-view :model="tags" category="children" :selection="selection" :onSelect="onSelect" :display="display"/>
+    </v-flex>
+  </v-layout>
+</div>
 </template>
 
 <script>
@@ -60,4 +73,10 @@ ul.depth-1 {
   margin-bottom: 70px;
 }
 
+.tree {
+  height: 80vh;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  width: 100%;
+}
 </style>
