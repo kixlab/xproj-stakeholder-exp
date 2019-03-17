@@ -1,17 +1,62 @@
 <template>
-  <v-flex xs4>
-    <div>
-      Placeholder
-    </div>
+  <v-flex xs12> 
+    <tree-view :model="tags" category="children" :selection="selection" :onSelect="onSelect" :display="display"/>
   </v-flex>
 </template>
 
 <script>
-export default {
+import { TreeView } from '@bosket/vue'
+import TagOverviewItem from '~/components/TagOverviewItem.vue'
 
+export default {
+  props: {
+    tags: {
+      type: Array
+    },
+    maxValue: {
+      type: Number
+    },
+    category: {
+      type: String
+    }
+  },
+  components: {
+    TagOverviewItem,
+    TreeView
+  },
+  data: function () {
+    return {
+      // tag: null,
+      selection: [this.tags[0]]
+    }
+  },
+  methods: {
+    onSelect (newSelection) {
+      console.log(newSelection)
+      this.selection = newSelection
+    },
+    display (item) {
+      return <tag-overview-item key={item.tag} tag={item} maxValue={this.maxValue}/>
+    }
+  }
 }
 </script>
-
 <style>
+ul.depth-0 {
+  list-style-type: none; 
+  padding-left: 0;
+}
+ul.depth-1 {
+  padding-left: 60px;
+  list-style-image: url('https://material.io/tools/icons/static/icons/outline-subdirectory_arrow_right-24px.svg');
+
+}
+</style>
+<style scoped>
+.TreeView {
+  width: 100% !important;
+  margin-top: 20px;
+  margin-bottom: 70px;
+}
 
 </style>
