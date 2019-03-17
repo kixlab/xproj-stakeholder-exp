@@ -1,11 +1,11 @@
 <template>
   <v-flex xs12>
     <div id="filterinfo">
-      <template v-if="selectedTags.length === 0"> 
+      <template v-if="!selectedTag"> 
         지금은 
       </template>
       <template v-else>
-        지금은 <strong color='blue'>{{selectedTags.join(', ')}}</strong>들이<br>받을 수 있는 
+        지금은 <strong :style="{color: 'blue'}">{{selectedTag}}</strong>들이<br>받을 수 있는 
       </template>
       <strong :style="{color: effectColor}">{{effectDirection}}</strong> 영향을 보고 계십니다.
     </div>
@@ -113,7 +113,7 @@ import hangulSearchMixin from '~/mixins/hangulSearch.js'
 import _ from 'lodash'
 export default {
   created: function () {
-    this.onInputDebounced = _.debounce(this.onInput, 1000)
+    // this.onInputDebounced = _.debounce(this.onInput, 1000)
     this.onEffectFilterChangeDebounced = _.debounce(this.onEffectFilterChange, 500)
     this.onSortChangedDebounced = _.debounce(this.onSortChanged, 500)
     // this.onGuessFilterChangeDebounced = _.debounce(this.onGuessFilterChange, 500)
@@ -145,9 +145,13 @@ export default {
         return effects.reduce(f)
       }
     },
-    keywords: Array
+    keywords: Array,
+    onLoading: Boolean
   },
   computed: {
+    selectedTag: function () {
+      return this.$store.state.selectedTag
+    },
     policy: function () {
       return this.$store.state.policy
     },
@@ -252,7 +256,7 @@ export default {
       selectedTags: [],
       search: '',
       effectFilter: [0, 1],
-      onLoading: false,
+      // onLoading: false,
       show: false,
       guessFilter: [0, 1],
       sortTexts: [{
@@ -366,97 +370,77 @@ export default {
         .toLowerCase()
         .indexOf(query.toString().toLowerCase()) > -1
     },
-    onInput: async function (ev) {
-      this.onLoading = true
-      this.selectedTags = ev
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'SearchTags',
-        eventLabel: this.selectedTags,
-        eventValue: 0
-      })
-      this.$store.dispatch('addBrowsedTags', this.selectedTags)
-      const effects = await this.$axios.$get('/api/effects/', {
-        params: {
-          policy: this.policy.id,
-          tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-          include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
-        }
-      })
-      // this.$store.dispatch('incrementUserPolicyEffectsSeen')
-      this.effects = effects.results
-      this.count = effects.count
-      this.page = 1
-      this.onLoading = false
-    },
+    // onInput: async function (ev) {
+    //   this.onLoading = true
+    //   this.selectedTags = ev
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'SearchTags',
+    //     eventLabel: this.selectedTags,
+    //     eventValue: 0
+    //   })
+    //   this.$store.dispatch('addBrowsedTags', this.selectedTags)
+    //   const effects = await this.$axios.$get('/api/effects/', {
+    //     params: {
+    //       policy: this.policy.id,
+    //       tag: this.selectedTags,
+    //       is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+    //       include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
+    //     }
+    //   })
+    //   // this.$store.dispatch('incrementUserPolicyEffectsSeen')
+    //   this.effects = effects.results
+    //   this.count = effects.count
+    //   this.page = 1
+    //   this.onLoading = false
+    // },
     onEffectFilterChange: async function (ev) {
-      this.onLoading = true
       this.effectFilter = ev
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'EffectFilterChanged',
-        eventLabel: this.effectFilter,
-        eventValue: 0
-      })
-      const effects = await this.$axios.$get('/api/effects/', {
-        params: {
-          policy: this.policy.id,
-          tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-          include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
-        }
-      })
-      this.$store.commit('setEffects', effects.results)
-      this.$store.commit('setKeywords', effects.keywords)
-      // this.effects = effects.results
-      // this.count = effects.count
-      this.page = 1
-      this.onLoading = false
+      this.$emit('effect-filter-change', this.effectFilter, this.guessFilter)
     },
-    onGuessFilterChange: async function (ev) {
-      this.onLoading = true
-      this.guessFilter = ev
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'GuessFilterChanged',
-        eventLabel: this.guessFilter,
-        eventValue: 0
-      })
-      const effects = await this.$axios.$get('/api/effects/', {
-        params: {
-          policy: this.policy.id,
-          tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-          include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
-        }
-      })
-      this.effects = effects.results
-      this.count = effects.count
-      this.page = 1
-      this.onLoading = false
-    },
-    onPageChange: async function (newPage) {
-      this.onLoading = true
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'PageChange',
-        eventLabel: `${newPage} / ${this.pagenum}`,
-        eventValue: 0
-      })
-      const effects = await this.$axios.$get('/api/effects/', {
-        params: {
-          policy: this.policy.id,
-          tag: this.selectedTags,
-          is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-          include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
-          page: newPage
-        }
-      })
-      this.effects = effects.results
-      this.page = newPage
-      this.onLoading = false
-    },
+    // onGuessFilterChange: async function (ev) {
+    //   this.onLoading = true
+    //   this.guessFilter = ev
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'GuessFilterChanged',
+    //     eventLabel: this.guessFilter,
+    //     eventValue: 0
+    //   })
+    //   const effects = await this.$axios.$get('/api/effects/', {
+    //     params: {
+    //       policy: this.policy.id,
+    //       tag: this.selectedTags,
+    //       is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+    //       include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
+    //     }
+    //   })
+    //   this.effects = effects.results
+    //   this.count = effects.count
+    //   this.page = 1
+    //   this.onLoading = false
+    // },
+    // onPageChange: async function (newPage) {
+    //   this.onLoading = true
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'PageChange',
+    //     eventLabel: `${newPage} / ${this.pagenum}`,
+    //     eventValue: 0
+    //   })
+    //   const effects = await this.$axios.$get('/api/effects/', {
+    //     params: {
+    //       policy: this.policy.id,
+    //       tag: this.selectedTags,
+    //       is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
+    //       include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
+    //       page: newPage
+    //     }
+    //   })
+    //   this.effects = effects.results
+    //   this.page = newPage
+    //   this.onLoading = false
+    // },
     showFilter: async function () {
       if (this.show) {
         this.$ga.event({

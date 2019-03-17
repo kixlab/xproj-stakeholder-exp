@@ -18,7 +18,7 @@
     </v-layout>
 
     <!-- In case the user did persepctive taking(guessing). -->
-    <v-layout>
+    <!-- <v-layout>
       <v-flex xs12 sm6 offset-sm3 v-if="guessedTag.length > 0">
         <v-card style="outline:auto;">
           <v-card-actions>
@@ -44,14 +44,14 @@
           </v-slide-y-transition>
         </v-card>
       </v-flex>
-    </v-layout>
+    </v-layout> -->
     
     <v-layout row wrap>
       <v-flex xs5>
-        <tag-tree :tags="tags" :maxValue="maxValue" category="children"/>
+        <tag-tree :tags="tags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag"/>
       </v-flex>
       <v-flex xs7>
-        <effects-pane :effects="effects" :keywords="keywords" :count="count"/>
+        <effects-pane :effects="effects" :keywords="keywords" :count="count" :onLoading="onLoading" @effect-filter-change="onEffectFilterChanged"/>
       </v-flex>
     </v-layout>
 
@@ -271,18 +271,6 @@ export default {
     store.commit('setKeywords', effects.keywords)
     store.dispatch('setTags')
   },
-  created: function () {
-    if (this.$store.state.selectedTag) {
-      this.selectedTags.push(this.$store.state.selectedTag)
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'SearchTags',
-        eventLabel: this.selectedTags,
-        eventValue: 0
-      })
-      this.$store.dispatch('addBrowsedTags', [this.$store.state.selectedTag])
-    }
-  },
   components: {
     PromisePane,
     TagTree,
@@ -298,7 +286,8 @@ export default {
       show: false,
       show1: false,
       show2: false,
-      count: 0
+      count: 0,
+      onLoading: false
     }
   },
   computed: {
@@ -369,6 +358,34 @@ export default {
         eventValue: 0
       })
       this.$router.push('/NewStakeholder')
+    },
+    onUpdateSelectedTag: async function (tag) {
+      console.log('aaa')
+      this.onLoading = true
+      await this.$store.dispatch('updateSelectedTag', tag)
+      this.onLoading = false
+    },
+    onEffectFilterChanged: async function (effectFilter, guessFilter) {
+      this.onLoading = true
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'EffectFilterChanged',
+        eventLabel: this.effectFilter,
+        eventValue: 0
+      })
+      const effects = await this.$axios.$get('/api/effects/', {
+        params: {
+          policy: this.policy.id,
+          tag: this.selectedTags,
+          is_benefit: effectFilter.length === 1 ? effectFilter[0] : null,
+          include_guess: guessFilter.length === 1 ? guessFilter[0] : null
+        }
+      })
+      this.$store.commit('setEffects', effects.results)
+      this.$store.commit('setKeywords', effects.keywords)
+      // this.effects = effects.results
+      // this.count = effects.count
+      this.onLoading = false
     },
     onSeePredictedTagsClick: function () {
       this.$ga.event({
