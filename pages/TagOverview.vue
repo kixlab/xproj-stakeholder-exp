@@ -209,7 +209,7 @@
           fab
           large
         >
-          <v-icon>add</v-icon>
+          <span style="font-size: 18pt;">끝</span>
           <v-icon>close</v-icon>
         </v-btn>
 
@@ -427,6 +427,11 @@ export default {
 <style>
 .v-speed-dial {
   position: fixed;
+}
+
+.v-btn--floating .v-btn__content :not(:only-child):last-child, .v-btn--floating .v-btn__content :not(:only-child):first-child {
+  top: initial;
+  left: initial;
 }
 
 </style>
