@@ -127,12 +127,12 @@ export default {
     },
     selectPolicy: function (policyID) {
       if (this.userGroup === -1) {
-        return false
+        return false // non-participants can select whatever they want
       }
       if (this.userStep === 1) {
-        return 2 - (this.userGroup % 2) !== policyID
+        return 2 - (this.userGroup % 2) !== policyID // 0 & 4 will see the second policy first
       } else if (this.userStep === 2) {
-        return 1 + (this.userGroup % 2) !== policyID
+        return 1 + (this.userGroup % 2) !== policyID // 3 & 5 will see the first policy first
       } else {
         return false
       }

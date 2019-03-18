@@ -148,7 +148,9 @@ export default {
       explorationDone: false,
       readCounter1: 0,
       readCounter2: 0,
-      predictedEffects: []
+      predictedEffects: [],
+      excludedTag: '',
+      keywords: []
     })
   },
   layout: 'index',
