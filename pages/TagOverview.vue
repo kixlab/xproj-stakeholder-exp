@@ -44,7 +44,7 @@
     
     <v-layout row wrap>
       <v-flex xs5>
-        <tag-tree :tags="filteredTags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag"/>
+        <tag-tree :tags="filteredTags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag" :onTagLoading="onTagLoading"/>
       </v-flex>
       <v-flex xs7>
         <effects-pane :effects="effects" :keywords="keywords" :count="count" :onLoading="onLoading" @effect-filter-change="onEffectFilterChanged"/>
@@ -265,8 +265,15 @@ export default {
     })
     store.commit('setEffects', effects.results)
     store.commit('setKeywords', effects.keywords)
-    store.dispatch('setTags')
+    // app.onTagLoading = true
+    await store.dispatch('setTags')
+    // app.onTagLoading = false
   },
+  // mounted: async function () {
+  //   this.onTagLoading = true
+  //   await this.$store.dispatch('setTags')
+  //   this.onTagLoading = false
+  // },
   components: {
     PromisePane,
     TagTree,
@@ -283,7 +290,8 @@ export default {
       show1: false,
       show2: false,
       count: 0,
-      onLoading: false
+      onLoading: false,
+      onTagLoading: false
     }
   },
   computed: {

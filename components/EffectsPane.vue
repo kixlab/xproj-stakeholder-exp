@@ -1,6 +1,6 @@
 <template>
   <v-flex xs12>
-    <div id="filterinfo">
+    <!-- <div id="filterinfo">
       <template v-if="!selectedTag"> 
         지금은 
       </template>
@@ -10,7 +10,7 @@
       <strong :style="{color: effectColor}">{{effectDirection}}</strong> 영향을 보고 계십니다.
     </div>
     &nbsp;
-    <v-divider/>
+    <v-divider/> -->
     <template>
         <v-tabs centered grow v-model="tab">
           <v-tab v-for="n in 3" :key="n" @click="onTabClick(n)">
@@ -27,7 +27,7 @@
           </v-tab> -->
         </v-tabs>
       </template>
-    <v-toolbar :color="['purple lighten-5', 'blue lighten-5', 'red lignten-5'][tab]">
+    <v-toolbar :color="['purple lighten-5', 'blue lighten-5', 'red lighten-5'][tab]">
       <v-select
         :value="sort"
         :items="sortTexts"
@@ -38,30 +38,31 @@
     </v-toolbar>
     <v-tabs-items v-model="tab">
       <v-tab-item v-for="i in 3" :key="i">
-        <v-card :color="['purple lighten-5', 'blue lighten-5', 'red lignten-5'][tab]" style="width: 100%;">
+        <v-card :color="['purple lighten-5', 'blue lighten-5', 'red lighten-5'][tab]" style="width: 100%;">
           <v-card-text>
             <template v-if="onLoading">
-            <v-layout align-center justify-center column>
-                <v-progress-circular
-                  style="margin-top: 2em; margin-bottom: 2em;"
-                  color="purple"
-                  indeterminate
-                ></v-progress-circular>
-              <br>
-            </v-layout>
-          </template>
-          <template v-else>
-            <template v-if="effectFilter.length === 1">
-              <span v-for="keyword in keywords" :key="keyword[0]" class="subheading">
-                {{keyword[0]}}
-              </span>
+              <v-layout align-center justify-center column>
+                  <v-progress-circular
+                    style="margin-top: 2em; margin-bottom: 2em;"
+                    color="purple"
+                    indeterminate
+                  ></v-progress-circular>
+                <br>
+              </v-layout>
             </template>
-            <template v-else-if="effectFilter.length === 2">
-              <span v-for="keyword in keywords" :key="keyword[0]" class="subheading" :class="getKeywordColor(keyword[2])">
-                {{keyword[0]}}
-              </span>
+            <template v-else>
+              영향에서 많이 등장한 단어의 목록입니다. <br>
+              <template v-if="effectFilter.length === 1">
+                <!-- <span v-for="keyword in keywords" :key="keyword[0]" class="subheading"> -->
+                  <v-chip v-for="keyword in keywords" :key="keyword[0]" :color="effectFilter[0] === 0 ? 'red' : 'blue'" text-color="white">{{keyword[0]}}</v-chip>
+                <!-- </span> -->
+              </template>
+              <template v-else-if="effectFilter.length === 2">
+                <!-- <span v-for="keyword in keywords" :key="keyword[0]" class="subheading" :class="getKeywordColor(keyword[2])"> -->
+                  <v-chip v-for="keyword in keywords" :key="keyword[0]" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
+                <!-- </span> -->
+              </template>
             </template>
-          </template>
           </v-card-text>
         </v-card>
         <v-flex width="100%">
@@ -307,13 +308,13 @@ export default {
     },
     getKeywordColor: function (k) {
       if (k === 'both') {
-        return 'deep-purple--text'
+        return 'deep-purple'
       } else if (k === 'pos') {
-        return 'blue--text'
+        return 'blue'
       } else if (k === 'neg') {
-        return 'red--text'
+        return 'red'
       } else {
-        return 'black--text'
+        return 'grey'
       }
     },
     onTabClick: function (i) {

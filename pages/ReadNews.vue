@@ -15,6 +15,11 @@
     </v-flex>
 
     <v-flex xs12>
+      기사를 읽기 전, 먼저 정책에 대한 아래의 설명을 읽어주세요.
+      <div style="text-align: left;" v-html="policy.description"></div>
+    </v-flex>
+
+    <v-flex xs12>
       <span style="text-align:left;"><strong> 첫 번째 기사 </strong></span>
       <v-divider/>
       <v-btn 
@@ -39,13 +44,23 @@
         block ripple large v-html="article_title_cut(policy.article2_title)"></v-btn>
       <br>
     </v-flex>
+    <v-flex xs12>
+      <span style="text-align:left;"><strong> 기사를 모두 읽으셨다면, 아래 설문을 작성해주세요. </strong></span>
+      <v-divider/>
+      <v-btn 
+        block
+        color="success"
+        @click="openPreSurvey"
+        ripple>설문하기</v-btn>
+    </v-flex>
 
     <v-flex xs12 row wrap>
-    <template v-if="!(read1&&read2)">
+    <!-- <template v-if="!(read1&&read2)">
       <strong style="color:red;">두 기사를 각각 1분 이상 읽으셔야<br>다음으로 넘어가실 수 있습니다.</strong>
-    </template>
-    <br>
-    <v-btn block :disabled="!(read1 && read2)" color="primary" @click="onClickComplete">다음</v-btn>
+    </template> -->
+    <span style="text-align:left;"><strong> 설문을 모두 마치신 뒤, 아래 버튼을 눌러주세요. </strong></span>
+    <v-btn block color="primary" @click="onClickComplete">다음</v-btn>
+    <!-- <v-btn block :disabled="!(read1 && read2)" color="primary" @click="onClickComplete">다음</v-btn> -->
     </v-flex>
   </v-layout>
 </template>
@@ -61,18 +76,22 @@
 </style>
 <script>
 import PromisePane from '~/components/PromisePane.vue'
+import GoNextMixin from '~/mixins/goNext.js'
 export default {
-  fetch: function ({app, store, redirect}) {
-    if (store.state.userPolicy.identify_done) {
-      redirect('/Identify')
-    }
-  },
+  // fetch: function ({app, store, redirect}) {
+  //   if (store.state.userPolicy.identify_done) {
+  //     redirect('/Identify')
+  //   }
+  // },
   created: function () {
     this.curTime = Date.now()
     this.intervalHandle = window.setInterval(() => {
       this.curTime = Date.now()
     }, 5000)
   },
+  mixins: [
+    GoNextMixin
+  ],
   beforeDestroy: function () {
     window.clearInterval(this.intervalHandle)
   },
@@ -149,7 +168,8 @@ export default {
         eventValue: 0
       })
       this.dialog = false
-      this.$router.push(this.nextRoute)
+      this.goNext()
+      // this.$router.push(this.nextRoute)
     },
     openFirstArticle () {
       this.$ga.event({
@@ -185,6 +205,9 @@ export default {
         // }, 60000)
       }
       // this.read2 = true
+    },
+    openPreSurvey: function () {
+      window.open(this.surveyURLs[`pre${this.policy.id}`], '_blank')
     },
     article_title_cut: function (str) {
       // if (str.length <= 20) {

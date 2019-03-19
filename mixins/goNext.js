@@ -2,6 +2,40 @@ export default {
   computed: {
     userGroup: function () {
       return this.$store.getters.userGroup
+    },
+    surveyURLs: function () {
+      return {
+        'pre1': 'https://naver.com',
+        'pre2': 'https://naver.com',
+        'post1A': 'https://',
+        'post2A': 'https://',
+        'post1BC': 'https://',
+        'post2BC': 'https://'
+      }
+    },
+    preSurveyURLs: function () {
+      if (this.policy.id === 1) {
+        return 'https://naver.com'
+      } else if (this.policy.id === 2) {
+        return 'https://naver.com'
+      }
+    },
+    postSurveyURLs: function () {
+      if (this.policy.id === 1) {
+        switch (this.userGroup) {
+          case 0:
+          case 3:
+          case 4:
+          case 5:
+        }
+      } else if (this.policy.id === 2) {
+        switch (this.userGroup) {
+          case 0:
+          case 3:
+          case 4:
+          case 5:
+        }
+      }
     }
   },
   methods: {

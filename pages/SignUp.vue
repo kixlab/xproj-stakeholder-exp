@@ -293,7 +293,7 @@ export default {
           })
           const user = await this.$axios.$put('/api/auth/user/', {
             username: this.email,
-            is_participant: false,
+            is_participant: true,
             step: 1,
             presurvey_done: false
           })

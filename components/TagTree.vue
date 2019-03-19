@@ -1,26 +1,27 @@
 <template>
-<div>
-  <v-layout row>
-    <v-flex xs12>
-    <p class="body-1 prompt"> 
-      <strong>(3개 이상 영향이 입력된 )이해당사자 태그를 적게 언급된 것부터 보여드립니다.<br></strong>
-      <v-divider/>
-      <small>* 아래 태그를 눌러 각 이해당사자들이 받는 영향을 확인해보세요.</small>
-    </p>
-    </v-flex>
-  </v-layout>
-  <v-layout row class="tree">
-    <v-flex xs12 style="overflow: auto;"> 
-      <tree-view :model="tags" category="children" :selection="selection" :onSelect="onSelect" :display="display"/>
-    </v-flex>
-  </v-layout>
-</div>
+  <div>
+    <loader v-if="onTagLoading"></loader>
+    <!-- <v-layout row>
+      <v-flex xs12>
+      <p class="body-1 prompt"> 
+        <strong>(3개 이상 영향이 입력된 )이해당사자 태그를 적게 언급된 것부터 보여드립니다.<br></strong>
+        <v-divider/>
+        <small>* 아래 태그를 눌러 각 이해당사자들이 받는 영향을 확인해보세요.</small>
+      </p>
+      </v-flex>
+    </v-layout> -->
+    <v-layout row class="tree">
+      <v-flex xs12 style="overflow: auto;"> 
+        <tree-view :model="tags" category="children" :selection="selection" :onSelect="onSelect" :display="display"/>
+      </v-flex>
+    </v-layout>
+  </div>
 </template>
 
 <script>
 import { TreeView } from '@bosket/vue'
 import TagOverviewItem from '~/components/TagOverviewItem.vue'
-
+import Loader from '~/components/Loader.vue'
 export default {
   props: {
     tags: {
@@ -31,11 +32,13 @@ export default {
     },
     category: {
       type: String
-    }
+    },
+    onTagLoading: Boolean
   },
   components: {
     TagOverviewItem,
-    TreeView
+    TreeView,
+    Loader
   },
   data: function () {
     return {
