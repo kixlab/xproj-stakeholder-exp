@@ -1,6 +1,6 @@
 <template>
-  <v-layout row>
-    <v-flex xs12>
+  <v-layout row class="tree">
+    <v-flex xs12 style="overflow: auto;">
       <div class="header">
         <template v-if="onTagLoading">
           태그 목록을 불러오고 있습니다. 조금만 기다려주세요...
