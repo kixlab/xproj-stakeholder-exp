@@ -26,7 +26,11 @@ export const state = () => ({
   readCounter2: 0,
   keywords: [],
   predictedEffects: [],
-  excludedTag: ''
+  excludedTag: '',
+  tagHigh: null,
+  tagHighInfo: {},
+  tagLow: null,
+  tagLowInfo: {}
 })
 
 export const mutations = {
@@ -168,6 +172,18 @@ export const mutations = {
   },
   setExcludedTag (state, excludedTag) {
     state.excludedTag = excludedTag
+  },
+  setTagHigh (state, tagHigh) {
+    state.tagHigh = tagHigh
+  },
+  setTagHighInfo (state, info) {
+    state.tagHighInfo = info
+  },
+  setTagLow (state, tagLow) {
+    state.tagLow = tagLow
+  },
+  setTagLowInfo (state, info) {
+    state.tagLowInfo = info
   }
 }
 
@@ -298,6 +314,10 @@ export const actions = {
       }
     })
     context.commit('setTags', tags)
+    context.commit('setTagHigh', null)
+    context.commit('setTagLow', null)
+    context.commit('setTagHighInfo', null)
+    context.commit('setTagLowInfo', null)
   },
   async fetchRandomEffects (context) {
     const usedEffectIds = context.state.usedEffects.map((x) => { return x.id })
@@ -365,5 +385,84 @@ export const actions = {
     setTimeout(() => {
       context.explorationDone = true
     }, 120000)
+  },
+  async setTagHigh (context, {tag, effectFilter}) {
+    if (tag === null) {
+      try {
+        const effects = await this.$axios.$get('/api/effects/', {
+          params: {
+            policy: context.state.policyId,
+            page_size: 100,
+            include_guess: 0,
+            is_benefit: effectFilter.length === 1 ? effectFilter[0] : null
+          }
+        })
+        context.commit('setTagLowInfo', null)
+        context.commit('setTagLow', null)
+        context.commit('setTagHighInfo', null)
+        context.commit('setTagHigh', null)
+        context.commit('setEffects', effects.results)
+        context.commit('setKeywords', effects.keywords)
+      } catch (err) {
+      }
+    } else {
+      try {
+        const tagHighInfo = await this.$axios.$get('/api/effects/tag_info2/', {
+          params: {
+            policy: context.state.policyId,
+            tag: tag.tag
+          }
+        })
+        const effects = await this.$axios.$get('/api/effects/', {
+          params: {
+            policy: context.state.policyId,
+            'tag[]': tag.tag,
+            page_size: 100,
+            include_guess: 0,
+            is_benefit: effectFilter.length === 1 ? effectFilter[0] : null
+          }
+        })
+        context.commit('setTagLowInfo', null)
+        context.commit('setTagLow', null)
+        context.commit('setTagHighInfo', tagHighInfo)
+        context.commit('setTagHigh', tag)
+        context.commit('setEffects', effects.results)
+        context.commit('setKeywords', effects.keywords)
+      } catch (err) {
+
+      }
+    }
+  },
+  async setTagLow (context, {tag, isOpening, effectFilter}) {
+    if (!isOpening) {
+      await context.dispatch('setTagHigh', {tag: context.state.tagHigh, effectFilter: effectFilter})
+    } else if (isOpening && context.state.tagHigh.tag === tag.tag) {
+    } else {
+      context.commit('setTagLow', null)
+      try {
+        const tagLowInfo = await this.$axios.$get('/api/effects/tag_info3/', {
+          params: {
+            policy: context.state.policyId,
+            tag_high: context.state.tagHigh.tag,
+            tag_low: tag.tag
+          }
+        })
+        const effects = await this.$axios.$get('/api/effects/', {
+          params: {
+            policy: context.state.policyId,
+            tag: [context.state.tagHigh.tag, tag.tag],
+            page_size: 100,
+            include_guess: 0,
+            is_and: 1,
+            is_benefit: effectFilter.length === 1 ? effectFilter[0] : null
+          }
+        })
+        context.commit('setTagLowInfo', tagLowInfo)
+        context.commit('setTagLow', tag)
+        context.commit('setEffects', effects.results)
+        context.commit('setKeywords', effects.keywords)
+      } catch (err) {
+      }
+    }
   }
 }

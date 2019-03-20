@@ -150,7 +150,11 @@ export default {
       readCounter2: 0,
       predictedEffects: [],
       excludedTag: '',
-      keywords: []
+      keywords: [],
+      tagHigh: null,
+      tagLow: null,
+      tagHighInfo: null,
+      tagLowInfo: null
     })
   },
   layout: 'index',

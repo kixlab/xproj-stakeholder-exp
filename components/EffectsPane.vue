@@ -149,11 +149,12 @@ export default {
         const f = function (prev, value) {
           return prev && ('tags' in value) && ('description' in value)
         }
-        return effects.reduce(f)
+        return effects.length === 0 || effects.reduce(f)
       }
     },
     keywords: Array,
-    onLoading: Boolean
+    onLoading: Boolean,
+    effectFilter: Array
   },
   computed: {
     selectedTag: function () {
@@ -262,7 +263,6 @@ export default {
       page: 1,
       selectedTags: [],
       search: '',
-      effectFilter: [0, 1],
       // onLoading: false,
       show: false,
       guessFilter: [0, 1],
@@ -418,8 +418,7 @@ export default {
     //   this.onLoading = false
     // },
     onEffectFilterChange: async function (ev) {
-      this.effectFilter = ev
-      this.$emit('effect-filter-change', this.effectFilter, this.guessFilter)
+      this.$emit('effect-filter-change', ev, this.guessFilter)
     },
     // onGuessFilterChange: async function (ev) {
     //   this.onLoading = true

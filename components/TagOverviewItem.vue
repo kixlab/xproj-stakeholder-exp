@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap>
-  <v-flex xs8 class="card__tag">
+  <v-flex xs12 class="card__tag">
     <v-card tile ripple @click.capture="onTagClick">
       <v-card-title>
         <v-flex xs7 style="text-align: left;">
@@ -14,31 +14,29 @@
         </v-flex>
       </v-card-title>
       <v-card-text>
-        <v-flex row wrap> 
-        <v-progress-linear
-        v-model="pos"
-        :buffer-value="ref"
-        buffer
-        color="blue"
-        background-color="red">
-        </v-progress-linear>
-        <!--
+        <!-- <v-flex row wrap> 
+          <v-progress-linear
+          v-model="pos"
+          :buffer-value="ref"
+          buffer
+          color="blue"
+          background-color="red">
+          </v-progress-linear>
         <span style="color:blue;"><strong>찬성 {{tag.pos_count}}개</strong></span>
         vs
         <span style="color:red;"><strong>반대 {{tag.neg_count}}개</strong></span>
--->
-        </v-flex>
+        </v-flex> -->
       </v-card-text>
     </v-card>
   </v-flex>
-  <v-flex xs2>
-    <!--v-btn fab flat dark small color="primary" style="margin:0;">
+  <!-- <v-flex xs2>
+    <v-btn fab flat dark small color="primary" style="margin:0;">
       <v-icon>arrow_forward</v-icon>
-    </v-btn-->
+    </v-btn>
     <v-btn fab flat dark small color="warning" style="margin:0;">
       <v-icon>expand_more</v-icon>
     </v-btn>
-  </v-flex>
+  </v-flex> -->
   </v-layout>
 </template>
 

@@ -44,10 +44,17 @@
     
     <v-layout row wrap>
       <v-flex xs5>
-        <tag-tree :tags="filteredTags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag" :onTagLoading="onTagLoading"/>
+        <!-- <tag-tree :tags="filteredTags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag" :onTagLoading="onTagLoading"/> -->
+        <tag-pane 
+          :tags="filteredTags" 
+          @tag-high-click="onUpdateSelectedTagHigh" 
+          @tag-low-click="onUpdateSelectedTagLow" 
+          @tag-high-reset="onTagHighReset"
+          :onTagLoading="onTagLoading"
+          :onTagLowLoading="onTagLowLoading"/>
       </v-flex>
       <v-flex xs7>
-        <effects-pane :effects="effects" :keywords="keywords" :count="count" :onLoading="onLoading" @effect-filter-change="onEffectFilterChanged"/>
+        <effects-pane :effects="effects" :keywords="keywords" :count="count" :onLoading="onLoading" @effect-filter-change="onEffectFilterChanged" :effectFilter="effectFilter"/>
       </v-flex>
     </v-layout>
 
@@ -249,9 +256,9 @@
 </template>
 <script>
 import PromisePane from '~/components/PromisePane.vue'
-import TagTree from '~/components/TagTree.vue'
+import TagPane from '~/components/TagPane.vue'
 import EffectsPane from '~/components/EffectsPane.vue'
-import _ from 'lodash'
+// import _ from 'lodash'
 import setTokenMixin from '~/mixins/setToken.js'
 
 export default {
@@ -276,7 +283,7 @@ export default {
   // },
   components: {
     PromisePane,
-    TagTree,
+    TagPane,
     EffectsPane
   },
   mixins: [setTokenMixin],
@@ -291,7 +298,9 @@ export default {
       show2: false,
       count: 0,
       onLoading: false,
-      onTagLoading: false
+      onTagLoading: false,
+      onTagLowLoading: false,
+      effectFilter: [0, 1]
     }
   },
   computed: {
@@ -323,55 +332,77 @@ export default {
       // })
       return ft.length > 0 ? ft : this.tags // [...this.tags].reverse()
     },
-    effects_left: function () {
-      if (this.$store.state.userPolicy.effects_seen > 9) {
-        return 0
-      } else if (this.filteredTags.length < 9) {
-        return this.filteredTags.length - this.$store.state.userPolicy.effects_seen
-      }
-      return 9 - this.$store.state.userPolicy.effects_seen
-    },
-    maxValue: function () {
-      const t = this.tags.map((tag) => { return tag.total_count })
-      return Math.max(...t)
-    },
+    // effects_left: function () {
+    //   if (this.$store.state.userPolicy.effects_seen > 9) {
+    //     return 0
+    //   } else if (this.filteredTags.length < 9) {
+    //     return this.filteredTags.length - this.$store.state.userPolicy.effects_seen
+    //   }
+    //   return 9 - this.$store.state.userPolicy.effects_seen
+    // },
+    // maxValue: function () {
+    //   const t = this.tags.map((tag) => { return tag.total_count })
+    //   return Math.max(...t)
+    // },
     userGroup: function () {
       return this.$store.getters.userGroup
-    },
-    answer_left: function () {
-      // console.log(this.$store.state.userPolicy)
-      if (this.userGroup === 6 || this.userGroup === 7) {
-        return 3 - this.$store.state.userPolicy.stakeholders_answered
-      } else {
-        return 0
-      }
-    },
-    guessedTag: function () {
-      return _.uniq(_.concat(...this.$store.state.guessedTags))
-      // return [].concat.apply([], this.$store.state.guesssedTags)
-    },
-    explorationRequired: function () {
-      return this.filteredTags.length >= 9 ? 9 : this.filteredTags.length
+    // },
+    // answer_left: function () {
+    //   // console.log(this.$store.state.userPolicy)
+    //   if (this.userGroup === 6 || this.userGroup === 7) {
+    //     return 3 - this.$store.state.userPolicy.stakeholders_answered
+    //   } else {
+    //     return 0
+    //   }
+    // },
+    // guessedTag: function () {
+    //   return _.uniq(_.concat(...this.$store.state.guessedTags))
+    //   // return [].concat.apply([], this.$store.state.guesssedTags)
+    // },
+    // explorationRequired: function () {
+    //   return this.filteredTags.length >= 9 ? 9 : this.filteredTags.length
     }
   },
   methods: {
-    onNewStakeholderClick: function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'NewStakeholder',
-        eventLabel: this.policy.title,
-        eventValue: 0
-      })
-      this.$router.push('/NewStakeholder')
+    // onNewStakeholderClick: function () {
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'NewStakeholder',
+    //     eventLabel: this.policy.title,
+    //     eventValue: 0
+    //   })
+    //   this.$router.push('/NewStakeholder')
+    // },
+    onUpdateSelectedTagHigh: async function (tag) {
+      this.onLoading = true
+      this.onTagLoading = true
+      console.log('aaa')
+      await this.$store.dispatch('setTagHigh', {tag: tag, effectFilter: this.effectFilter})
+      this.onLoading = false
+      this.onTagLoading = false
+    },
+    onTagHighReset: async function (tag) {
+      this.onLoading = true
+      this.onTagLoading = true
+      await this.$store.dispatch('setTagHigh', {tag: null, effectFilter: this.effectFilter})
+      this.onLoading = false
+      this.onTagLoading = false
+    },
+    onUpdateSelectedTagLow: async function (tag, $event) {
+      this.onLoading = true
+      this.onTagLowLoading = true
+      await this.$store.dispatch('setTagLow', {tag: tag, isOpening: $event, effectFilter: this.effectFilter})
+      this.onLoading = false
+      this.onTagLowLoading = false
     },
     onUpdateSelectedTag: async function (tag) {
-      console.log('aaa')
       this.onLoading = true
       await this.$store.dispatch('updateSelectedTag', tag)
       this.onLoading = false
     },
     onEffectFilterChanged: async function (effectFilter, guessFilter) {
       this.onLoading = true
+      this.effectFilter = effectFilter
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'EffectFilterChanged',
@@ -392,26 +423,26 @@ export default {
       // this.count = effects.count
       this.onLoading = false
     },
-    onSeePredictedTagsClick: function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: this.show ? 'HidePredictedTags' : 'ShowPredictedTags',
-        eventLabel: `${this.policy.title} / ${this.guessedTags}`,
-        eventValue: 0
-      })
-      this.show = !this.show
-    },
-    onTagClick: async function (tag) {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'ShowStakeholderGroupEffects',
-        eventLabel: `${this.policy.title} / ${tag}`,
-        eventValue: 0
-      })
-      this.$store.commit('setSelectedTag', tag)
-      this.$router.push('/ExploreOpinions')
-      // this.$router.push('/GuessEffectRandom/0')
-    },
+    // onSeePredictedTagsClick: function () {
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: this.show ? 'HidePredictedTags' : 'ShowPredictedTags',
+    //     eventLabel: `${this.policy.title} / ${this.guessedTags}`,
+    //     eventValue: 0
+    //   })
+    //   this.show = !this.show
+    // },
+    // onTagClick: async function (tag) {
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'ShowStakeholderGroupEffects',
+    //     eventLabel: `${this.policy.title} / ${tag}`,
+    //     eventValue: 0
+    //   })
+    //   this.$store.commit('setSelectedTag', tag)
+    //   this.$router.push('/ExploreOpinions')
+    //   // this.$router.push('/GuessEffectRandom/0')
+    // },
     onShowPolicyListClick: function () {
       this.$ga.event({
         eventCategory: '/SelectStakeholder',
@@ -424,24 +455,24 @@ export default {
       } else {
         this.$router.push('/MiniSurvey')
       }
-    },
-    onShowDialogButtonClick: function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'SeeOtherPolicy',
-        eventLabel: `${this.policy.title} / effects_left: ${this.effects_left}`,
-        eventValue: 0
-      })
-      this.dialog = true
-    },
-    onDialogGoBackButtonClick: function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'GoBackToStakeholderList',
-        eventLabel: `${this.policy.title} / effects_left: ${this.effects_left}`,
-        eventValue: 0
-      })
-      this.dialog = false
+    // },
+    // onShowDialogButtonClick: function () {
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'SeeOtherPolicy',
+    //     eventLabel: `${this.policy.title} / effects_left: ${this.effects_left}`,
+    //     eventValue: 0
+    //   })
+    //   this.dialog = true
+    // },
+    // onDialogGoBackButtonClick: function () {
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'GoBackToStakeholderList',
+    //     eventLabel: `${this.policy.title} / effects_left: ${this.effects_left}`,
+    //     eventValue: 0
+    //   })
+    //   this.dialog = false
     }
   }
 }
