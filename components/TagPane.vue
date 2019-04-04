@@ -1,62 +1,118 @@
 <template>
-  <v-layout row class="tree">
-    <v-flex xs12 style="overflow: auto;">
-      <div class="header">
-        <template v-if="onTagLoading">
-          태그 목록을 불러오고 있습니다. 조금만 기다려주세요...
-        </template>
-        <template v-else-if="!tagHigh">
-          선택하신 정책과 관련된 모든 이해 관계자의 목록입니다.
-        </template>
-        <template v-else>
-          <div>
-            <span class="blue--text">#{{tagHigh.tag}}</span>을 선택하셨습니다.
-            <br>
-            가장 유사한 태그는 <a @click="onTagHighLinkClick(tagHighInfo.closest)"><span class="blue--text">#{{tagHighInfo.closest}}</span></a>
-            <br>
-            의견 비율이 다른 태그는 <a @click="onTagHighLinkClick(tagHighInfo.closest)"><span class="blue--text">#{{tagHighInfo.different}}</span></a>
-          </div>
-          <v-btn @click="onTagHighResetClick">Clear</v-btn>
-        </template>
-      </div>
+  <v-layout row wrap>
+    <v-flex xs12 class="header">
       <template v-if="onTagLoading">
-        <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
+        태그 목록을 불러오고 있습니다. 조금만 기다려주세요...
       </template>
-      <!-- <loader v-if="onTagLoading">
-      </loader> -->
       <template v-else-if="!tagHigh">
-        <tag-overview-item v-for="tag in tags" :key="tag.tag" :tag="tag" @tag-click="onTagHighClick(tag)">
-        </tag-overview-item>
+        <span class="subheading">선택하신 정책과 관련된 모든 이해 관계자의 목록입니다.</span>
       </template>
       <template v-else>
-        <v-expansion-panel>
-          <!-- <v-expansion-panel-content>
-
-          </v-expansion-panel-content> -->
-          <v-expansion-panel-content 
-            lazy 
-            v-for="tag in tagHigh.children" 
-            :key="tag.tag" 
-            @input.capture="onTagLowClickDebounced(tag, $event)"
-            :class="expansionPanelColor(tag.tag)">
-            <div slot="header">
-              {{tag.tag}}
-            </div>
+        <v-layout row wrap>
+          <!-- <v-flex xs12>
+            <span class="blue--text">긍정적 영향 {{tagHigh.pos_count}} </span>
+            <v-chip label>#{{tagHigh.tag}}</v-chip>
+            <span class="red--text">{{tagHigh.neg_count}} 부정적 영향 </span>
+            <v-btn icon @click="onTagHighResetClick"><v-icon>close</v-icon></v-btn>
+          </v-flex> -->
+          <!-- <v-flex xs12>
             <v-card>
-              <v-card-text v-if="onTagLowLoading" :class="expansionPanelColor(tag.tag)">
-                <v-progress-circular indeterminate :size="30" :width="5" color="purple"></v-progress-circular>
+              <v-card-title>
+                <span class="title">#{{tagHigh.tag}}</span>
+                <v-spacer/>
+                <v-btn icon style="float: right;" @click="onTagHighResetClick"><v-icon>close</v-icon></v-btn>
+              </v-card-title>
+              <v-card-text>
+                #{{tagHigh.tag}}
               </v-card-text>
-              <v-card-text v-else-if="tagLow !== null" :class="expansionPanelColor(tag.tag)">
-                찬 {{tagLowInfo.pos_count}} vs {{tagLowInfo.neg_count}} 반
-                #{{tagHigh.tag}} #{{tagLow.tag}} 태그와 의견 비율이 다른 태그는
-                <!-- <a @click="onTagLowLinkClick(tagLowInfo.farthest_subgroup[1])"><span class="blue--text"> -->
-                  #{{tagLowInfo.farthest_subgroup[0]}} #{{tagLowInfo.farthest_subgroup[1]}}
-                <!-- </span></a> -->
-              </v-card-text>
+              <v-card-actions>
+                <v-btn color="blue" flat>긍정적 영향 {{tagHigh.pos_count}} </v-btn>
+                <v-btn color="red" flat>부정적 영향 {{tagHigh.neg_count}} </v-btn>
+                <v-spacer />
+                <v-btn icon @click="show = !show">
+                  <v-icon>{{show ? 'remove' : 'add'}}</v-icon>
+                </v-btn>
+              </v-card-actions>
+              <v-slide-y-transition>
+                <v-card-text v-show="show">
+                  <div style="text-align: left;">
+                    <br>
+                    선택하신 집단과 유사한 <a @click="onTagHighLinkClick(tagHighInfo.closest)"><span class="blue--text">#{{tagHighInfo.closest}}</span></a>
+                    <br>
+                    가장 거리가 먼 <a @click="onTagHighLinkClick(tagHighInfo.farthest)"><span class="blue--text">#{{tagHighInfo.farthest}}</span></a>
+                    <br>
+                    의견이 다른 <a @click="onTagHighLinkClick(tagHighInfo.different)"><span class="blue--text">#{{tagHighInfo.different}}</span></a> 
+                    <br>        
+                    집단의 의견도 확인해보세요.
+                  </div>
+                </v-card-text>
+              </v-slide-y-transition>
             </v-card>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
+          </v-flex> -->
+          <!-- <v-flex xs3>
+            <v-btn block @click="onTagHighResetClick" class="clearBtn">다른 집단 보기</v-btn>
+          </v-flex> -->
+          <!-- <v-flex xs12>
+            <div style="text-align: left;">
+              <br>
+              선택하신 집단과 유사한 <a @click="onTagHighLinkClick(tagHighInfo.closest)"><span class="blue--text">#{{tagHighInfo.closest}}</span></a>
+              <br>
+              가장 거리가 먼 <a @click="onTagHighLinkClick(tagHighInfo.farthest)"><span class="blue--text">#{{tagHighInfo.farthest}}</span></a>
+              <br>
+              의견이 다른 <a @click="onTagHighLinkClick(tagHighInfo.different)"><span class="blue--text">#{{tagHighInfo.different}}</span></a> 
+              <br>        
+              집단의 의견도 확인해보세요.
+            </div>
+          </v-flex> -->
+        </v-layout>
+        <span class="subheading"><span class="blue--text">#{{tagHigh.tag}}</span>의 세부 집단도 알아보세요!</span>
       </template>
+    </v-flex>
+    <v-flex xs12>
+      <v-layout column justify-center align-center class="tree">
+        <v-flex style="overflow: auto; width: 100%;">
+          <template v-if="onTagLoading">
+            <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
+          </template>
+          <!-- <loader v-if="onTagLoading">
+          </loader> -->
+          <template v-else-if="!tagHigh">
+            <tag-overview-item v-for="tag in tags" :key="tag.tag" :tag="tag" @tag-click="onTagHighClick(tag)" :cls="expansionPanelColor(tag)">
+            </tag-overview-item>
+          </template>
+          <template v-else>
+            <v-expansion-panel @input.capture="onTagLowClickDebounced($event)">
+              <v-expansion-panel-content 
+                lazy 
+                v-for="tag in tagHigh.children" 
+                :key="tag.tag" :class="expansionPanelColor(tag)">
+                <div slot="header">
+                  {{tag.tag}}
+                  <v-spacer/>
+                  <span class="blue--text">긍정 {{tag.pos_count}}</span> vs <span class="red--text">{{tag.neg_count}} 부정</span>
+                </div>
+                <v-card :class="expansionPanelColor(tag)">
+                  <v-card-text v-if="onTagLowLoading" >
+                    <v-layout align-center justify-center>
+                      <v-progress-circular indeterminate :size="30" :width="5" color="purple"></v-progress-circular>
+                    </v-layout>
+                  </v-card-text>
+                  <template v-else-if="tagLow !== null">
+                    <v-card-text>
+                      <span class="blue--text">#{{tagHigh.tag}} #{{tagLow.tag}}</span> 집단과 다른 의견을 보시려면
+                      <!-- <a @click="onTagLowLinkClick(tagLowInfo.farthest_subgroup[1])"><span class="blue--text"> -->
+                      <span class="blue--text">#{{tagLowInfo.farthest_subgroup[0]}} #{{tagLowInfo.farthest_subgroup[1]}} </span>집단의 의견을 확인해보세요
+                      <br>
+                      <a @click="onTagHighLinkClick(tagLow.tag)"><span class="blue--text">#{{tagLow.tag}}</span> 집단 전체의 의견을 확인해보세요!</a>
+                      <!-- </span></a> -->
+                    </v-card-text>
+                  </template>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </template>
+        </v-flex>
+      </v-layout>
     </v-flex>
   </v-layout>
 </template>
@@ -103,6 +159,11 @@ export default {
   mounted: function () {
     this.onTagLowClickDebounced = _.debounce(this.onTagLowClick, 500)
   },
+  data: function () {
+    return {
+      show: false
+    }
+  },
   methods: {
     onTagHighClick: function (tag) {
       this.$emit('tag-high-click', tag)
@@ -116,8 +177,13 @@ export default {
     onTagHighResetClick: function () {
       this.$emit('tag-high-reset')
     },
-    onTagLowClick: function (tag, $event) {
-      this.$emit('tag-low-click', tag, $event)
+    onTagLowClick: function ($event) {
+      if ($event === null) {
+        this.$emit('tag-low-click', null, false)
+      } else {
+        const tag = this.tagHigh.children[$event]
+        this.$emit('tag-low-click', tag, true)
+      }
     },
     onTagLowLinkClick: function (tagTxt) {
       const tag = this.tagHigh.children.find((t) => {
@@ -125,8 +191,27 @@ export default {
       })
       this.onTagLowClick(tag, true)
     },
-    expansionPanelColor: function (tagTxt) {
-      return tagTxt === this.tagHighInfo.most_pos ? 'blue lighten-5' : (tagTxt === this.tagHighInfo.most_neg ? 'red lighten-5' : '')
+    expansionPanelColor: function (tag) {
+      if (tag.pos_count >= 2 * tag.neg_count) {
+        return 'blue lighten-5'
+      } else if (tag.pos_count * 2 <= tag.neg_count) {
+        return 'red lighten-5'
+      } else {
+        return 'blue-grey lighten-5'
+      }
+      // const tagTxt = tag.tag
+      // return tagTxt === this.tagHighInfo.most_pos ? 'blue lighten-5' : (tagTxt === this.tagHighInfo.most_neg ? 'red lighten-5' : '')
+    },
+    tagColor: function (tag) {
+      if (tag.pos_count >= 2 * tag.neg_count) {
+        return 'blue'
+      } else if (tag.pos_count * 2 <= tag.neg_count) {
+        return 'red'
+      } else {
+        return 'blue-grey'
+      }
+      // const tagTxt = tag.tag
+      // return tagTxt === this.tagHighInfo.most_pos ? 'blue lighten-5' : (tagTxt === this.tagHighInfo.most_neg ? 'red lighten-5' : '')
     }
   }
 }
@@ -135,9 +220,18 @@ export default {
 <style scoped>
 
 .tree {
-  height: 80vh;
+  height: 70vh;
   margin-top: 1vh;
   margin-bottom: 1vh;
   width: 100%;
+}
+/* 
+.header {
+  text-align: left;
+
+} */
+
+.clearBtn {
+  height: 80%;
 }
 </style>

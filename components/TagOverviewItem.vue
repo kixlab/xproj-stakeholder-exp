@@ -1,15 +1,15 @@
 <template>
   <v-layout row wrap>
   <v-flex xs12 class="card__tag">
-    <v-card tile ripple @click.capture="onTagClick">
+    <v-card tile ripple @click.capture="onTagClick" :class="cls">
       <v-card-title>
         <v-flex xs7 style="text-align: left;">
           <span class="card__tag__title">#{{tag.tag}}</span>
         </v-flex>
         <v-flex xs5 style="text-align: right;">
-          <span class="blued small"><strong>찬 {{tag.pos_count}}</strong></span>
-          <span class="small"> vs </span>
-          <span class="reded small"><strong>반 {{tag.neg_count}}</strong></span>
+          <span class="blue--text caption"><strong>찬 {{tag.pos_count}}</strong></span>
+          <span class="caption"> vs </span>
+          <span class="red--text caption"><strong>반 {{tag.neg_count}}</strong></span>
           <!--span class="card__tag__title">총 {{tag.total_count}}개</span-->
         </v-flex>
       </v-card-title>
@@ -50,7 +50,8 @@ export default {
     },
     maxValue: {
       type: Number
-    }
+    },
+    cls: String
   },
   computed: {
     pos: function () {

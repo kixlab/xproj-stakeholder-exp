@@ -299,7 +299,8 @@ export const actions = {
   async setTags (context) {
     const tagnroot = await this.$axios.$get('/api/effects/tag_list2/', {
       params: {
-        policy: context.state.policyId
+        policy: context.state.policyId,
+        include_guess: 0
       }
     })
     var tags = tagnroot.children
@@ -388,6 +389,10 @@ export const actions = {
   },
   async setTagHigh (context, {tag, effectFilter}) {
     if (tag === null) {
+      context.commit('setTagLowInfo', null)
+      context.commit('setTagLow', null)
+      context.commit('setTagHighInfo', null)
+      context.commit('setTagHigh', null)
       try {
         const effects = await this.$axios.$get('/api/effects/', {
           params: {
@@ -397,10 +402,6 @@ export const actions = {
             is_benefit: effectFilter.length === 1 ? effectFilter[0] : null
           }
         })
-        context.commit('setTagLowInfo', null)
-        context.commit('setTagLow', null)
-        context.commit('setTagHighInfo', null)
-        context.commit('setTagHigh', null)
         context.commit('setEffects', effects.results)
         context.commit('setKeywords', effects.keywords)
       } catch (err) {

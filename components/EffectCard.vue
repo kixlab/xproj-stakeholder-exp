@@ -2,7 +2,7 @@
   <div class="card__effect">
     <v-card :color="cardColor">
       <v-card-title>
-        <v-flex xs9 style="text-align: left;">
+        <v-flex xs11 style="text-align: left;">
         <strong><font size="3">{{effect.stakeholder_detail}}</font></strong>
         </v-flex>
         <v-flex xs1 style="text-align: right;">
@@ -10,11 +10,11 @@
             {{effect.isBenefit ? 'sentiment_very_satisfied' : 'sentiment_very_dissatisfied'}}
           </v-icon>
         </v-flex>
-        <v-flex xs2>
+        <!-- <v-flex xs2>
           <v-chip small label :color="effect.source !== 'guess' ? 'primary' : 'green'" text-color="white">
             {{tagWord}}
           </v-chip>
-        </v-flex>
+        </v-flex> -->
       </v-card-title>      
       <v-card-text class="effect-card__textbox">
         <!-- <a @click="onShowDescriptionButtonClick">

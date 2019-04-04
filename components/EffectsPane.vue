@@ -1,33 +1,13 @@
 <template>
   <v-flex xs12>
-    <!-- <div id="filterinfo">
-      <template v-if="!selectedTag"> 
-        지금은 
-      </template>
-      <template v-else>
-        지금은 <strong :style="{color: 'blue'}">{{selectedTag}}</strong>들이<br>받을 수 있는 
-      </template>
-      <strong :style="{color: effectColor}">{{effectDirection}}</strong> 영향을 보고 계십니다.
-    </div>
-    &nbsp;
-    <v-divider/> -->
     <template>
-        <v-tabs centered grow v-model="tab">
+        <v-tabs centered grow :value="tab">
           <v-tab v-for="n in 3" :key="n" @click="onTabClick(n)">
             <span :class="['purple--text', 'blue--text', 'red--text'][n-1]">{{['모든 영향', '긍정적 영향', '부정적 영향'][n-1]}}</span>
           </v-tab>
-          <!-- <v-tab value="0" @click="onTabClick(1)">
-            모든 영향
-          </v-tab>
-          <v-tab value="1" @click="onTabClick(2)">
-            긍정적 영향
-          </v-tab>
-          <v-tab value="2" @click="onTabClick(3)">
-            부정적 영향
-          </v-tab> -->
         </v-tabs>
       </template>
-    <v-toolbar :color="['purple lighten-5', 'blue lighten-5', 'red lighten-5'][tab]">
+    <!-- <v-toolbar>
       <v-select
         :value="sort"
         :items="sortTexts"
@@ -35,10 +15,11 @@
         @change="onSortChangedDebounced"
         >
       </v-select>
-    </v-toolbar>
-    <v-tabs-items v-model="tab">
+    </v-toolbar> -->
+    <v-tabs-items :value="tab">
       <v-tab-item v-for="i in 3" :key="i">
-        <v-card :color="['purple lighten-5', 'blue lighten-5', 'red lighten-5'][tab]" style="width: 100%;">
+        <v-card 
+          style="width: 100%;">
           <v-card-text>
             <template v-if="onLoading">
               <v-layout align-center justify-center column>
@@ -51,45 +32,55 @@
               </v-layout>
             </template>
             <template v-else>
-              영향에서 많이 등장한 단어의 목록입니다. <br>
               <template v-if="effectFilter.length === 1">
-                <!-- <span v-for="keyword in keywords" :key="keyword[0]" class="subheading"> -->
-                  <v-chip v-for="keyword in keywords" :key="keyword[0]" :color="effectFilter[0] === 0 ? 'red' : 'blue'" text-color="white">{{keyword[0]}}</v-chip>
-                <!-- </span> -->
+                <span v-if="tagHigh" class="blue--text">#{{tagHigh.tag}}</span>
+                <span v-else>전체 이해 관계자</span> 중에서도 다음 집단이 {{effectFilter[0] === 0 ? '부정적' : '긍정적'}} 영향을 많이 적었습니다.
+                <br>
+                <v-chip @click="onTagLinkClick(tag)" v-for="tag in closeTags" :key="tag.tag" :color="effectFilter[0] === 0 ? 'red' : 'blue'" text-color="white">#{{tag.tag}}</v-chip>
+                <br>
               </template>
-              <template v-else-if="effectFilter.length === 2">
-                <!-- <span v-for="keyword in keywords" :key="keyword[0]" class="subheading" :class="getKeywordColor(keyword[2])"> -->
+              <template v-if="keywords.length === 0">
+                해당되는 영향이 너무 적어 해당되는 단어를 찾지 못했습니다.
+              </template>
+              <template v-else>
+                <span v-if="effectFilter.length === 2" class="purple--text">모든</span>
+                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 0" class="red--text">부정적</span>
+                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 1" class="blue--text">긍정적</span>
+                 영향을 적은
+                <span v-if="tagLow" class="blue--text">#{{tagHigh.tag}} #{{tagLow.tag}}</span>
+                <span v-else-if="tagHigh" class="blue--text">#{{tagHigh.tag}}</span>
+                <span v-else> 전체 이해 관계자</span>
+                집단이 많이 사용한 단어의 목록입니다. <br>
+                <template>
                   <v-chip v-for="keyword in keywords" :key="keyword[0]" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
-                <!-- </span> -->
+                </template>
               </template>
             </template>
           </v-card-text>
         </v-card>
-        <v-flex width="100%">
-          <template v-if="onLoading">
-            <v-layout class="cards__list" align-center justify-center column>
-              <div style="width: 100%">
-                <v-progress-circular
-                  :size="70"
-                  :width="7"
-                  color="purple"
-                  indeterminate
-                ></v-progress-circular>
-              </div>
-              <br>
-            </v-layout>
-          </template>
-          <template v-else>
-            <v-layout class="cards__list" column align-center justify-center>
-              <v-flex style="overflow: auto;">
-                <effect-card
-                  v-for="effect in sortedEffects"
-                  :key="effect.id"
-                  :effect="effect"/>
-              </v-flex>
-            </v-layout>
-          </template>
-        </v-flex>
+        <template v-if="onLoading">
+          <v-layout class="cards__list" align-center justify-center column>
+            <div style="width: 100%">
+              <v-progress-circular
+                :size="70"
+                :width="7"
+                color="purple"
+                indeterminate
+              ></v-progress-circular>
+            </div>
+            <br>
+          </v-layout>
+        </template>
+        <template v-else>
+          <v-layout class="cards__list" column align-center justify-center>
+            <v-flex style="overflow: auto; width: 100%;">
+              <effect-card
+                v-for="effect in sortedEffects"
+                :key="effect.id"
+                :effect="effect"/>
+            </v-flex>
+          </v-layout>
+        </template>
       </v-tab-item>
     </v-tabs-items>
   </v-flex>
@@ -154,7 +145,9 @@ export default {
     },
     keywords: Array,
     onLoading: Boolean,
-    effectFilter: Array
+    effectFilter: Array,
+    closeTags: Array,
+    tab: Number
   },
   computed: {
     selectedTag: function () {
@@ -166,24 +159,24 @@ export default {
     userGroup: function () {
       return this.$store.getters.userGroup
     },
-    stakeholder_left: function () {
-      if (this.$store.state.userPolicy.stakeholders_seen > 3) {
-        return 0
-      }
-      return 3 - this.$store.state.userPolicy.stakeholders_seen
-    },
-    effect_left: function () {
-      if (this.$store.state.userPolicy.effects_seen > 9) {
-        return 0
-      } else if (this.filteredTags.length < 9) {
-        return this.filteredTags.length - this.$store.state.userPolicy.effects_seen
-      }
-      return 9 - this.$store.state.userPolicy.effects_seen
-    },
-    filteredTags: function () {
-      const ft = this.tags.filter((tag) => { return tag.total_count >= 3 })
-      return ft.length > 0 ? ft : this.tags
-    },
+    // stakeholder_left: function () {
+    //   if (this.$store.state.userPolicy.stakeholders_seen > 3) {
+    //     return 0
+    //   }
+    //   return 3 - this.$store.state.userPolicy.stakeholders_seen
+    // },
+    // effect_left: function () {
+    //   if (this.$store.state.userPolicy.effects_seen > 9) {
+    //     return 0
+    //   } else if (this.filteredTags.length < 9) {
+    //     return this.filteredTags.length - this.$store.state.userPolicy.effects_seen
+    //   }
+    //   return 9 - this.$store.state.userPolicy.effects_seen
+    // },
+    // filteredTags: function () {
+    //   const ft = this.tags.filter((tag) => { return tag.total_count >= 3 })
+    //   return ft.length > 0 ? ft : this.tags
+    // },
     sorter: function () {
       return [
         (a, b) => {
@@ -215,22 +208,28 @@ export default {
     sortedEffects: function () {
       return this.effects.slice().sort(this.sorter)
     },
-    explorationRequired: function () {
-      return this.filteredTags.length >= 9 ? 9 : this.filteredTags.length
-    },
-    answer_left: function () {
-      // console.log(this.$store.state.userPolicy)
-      if (this.userGroup === 6 || this.userGroup === 7) {
-        return 3 - this.$store.state.userPolicy.stakeholders_answered
-      } else {
-        return 0
-      }
-    },
-    pagenum: function () {
-      return Math.ceil(this.count / 50)
-    },
+    // explorationRequired: function () {
+    //   return this.filteredTags.length >= 9 ? 9 : this.filteredTags.length
+    // },
+    // answer_left: function () {
+    //   // console.log(this.$store.state.userPolicy)
+    //   if (this.userGroup === 6 || this.userGroup === 7) {
+    //     return 3 - this.$store.state.userPolicy.stakeholders_answered
+    //   } else {
+    //     return 0
+    //   }
+    // },
+    // pagenum: function () {
+    //   return Math.ceil(this.count / 50)
+    // },
     tags: function () {
       return this.$store.state.tags
+    },
+    tagHigh: function () {
+      return this.$store.state.tagHigh
+    },
+    tagLow: function () {
+      return this.$store.state.tagLow
     },
     effectDirection: function () {
       if (this.effectFilter.length === 1) {
@@ -266,7 +265,7 @@ export default {
       // onLoading: false,
       show: false,
       guessFilter: [0, 1],
-      tab: 0,
+      // tab: 0,
       sortTexts: [{
         text: '긴 영향부터 보기',
         value: 0
@@ -317,81 +316,48 @@ export default {
         return 'grey'
       }
     },
+    onTagHighClick: function (tag) {
+      this.$emit('tag-high-click', tag)
+    },
+    onTagHighLinkClick: function (tagTxt) {
+      const tag = this.tags.find((t) => {
+        return t.tag === tagTxt
+      })
+      this.onTagHighClick(tag)
+    },
+    onTagLinkClick: function (tagTxt) {
+      if (this.tagHigh) {
+        this.onTagLowLinkClick(tagTxt)
+      } else {
+        this.onTagHighLinkClick(tagTxt)
+      }
+    },
+    onTagLowClick: function ($event) {
+      if ($event === null) {
+        this.$emit('tag-low-click', null, false)
+      } else {
+        const tag = this.tagHigh.children[$event]
+        this.$emit('tag-low-click', tag, true)
+      }
+    },
+    onTagLowLinkClick: function (tagTxt) {
+      const tag = this.tagHigh.children.find((t) => {
+        return t.tag === tagTxt
+      })
+      this.$emit('tag-low-click', tag, true)
+    },
     onTabClick: function (i) {
       // this.tab = i
       if (i === 1 && this.effectFilter.length < 2) {
         // this.tab = i
-        this.onEffectFilterChangeDebounced([0, 1])
+        this.onEffectFilterChangeDebounced([0, 1], i)
       } else if (i === 2 && !(this.effectFilter.length === 1 && this.effectFilter[0] === 1)) {
         // this.tab = i
-        this.onEffectFilterChangeDebounced([1])
+        this.onEffectFilterChangeDebounced([1], i)
       } else if (i === 3 && !(this.effectFilter.length === 1 && this.effectFilter[0] === 0)) {
         // this.tab = i
-        this.onEffectFilterChangeDebounced([0])
+        this.onEffectFilterChangeDebounced([0], i)
       }
-    },
-    toTagOverview: function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'ToTagOverview',
-        eventLabel: this.stakeholderName,
-        eventValue: 0
-      })
-      this.$router.push('/TagOverview')
-    },
-    onEndButtonClick: function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'ClickEndButton',
-        eventLabel: this.stakeholderName,
-        eventValue: 0
-      })
-      if (!this.$store.state.userToken || !this.$store.state.user.is_participant) {
-        this.$router.push('/ShowPolicies')
-      } else {
-        this.$router.push('/MiniSurvey')
-      }
-    },
-    onPostNewEffectButtonClick: function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'AddNewStakeholder',
-        eventLabel: this.stakeholderName,
-        eventValue: 0
-      })
-      this.$router.push('/NewStakeholder')
-    },
-    onSeeOtherPolicyButtonClick: function () {
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'SeeOtherPolicy',
-        eventLabel: this.stakeholderName,
-        eventValue: 0
-      })
-      this.seeOtherPolicyDialog = true
-    },
-    cardnum: function (page) {
-      if (page === this.pagenum) {
-        var rest = this.effects.length % 5
-        if (rest === 0) {
-          return 5
-        }
-        return rest
-      } else {
-        return 5
-      }
-    },
-    filter (item, queryText, itemText) {
-      if (item.header) return false
-
-      const hasValue = val => val != null ? val : ''
-
-      const text = hasValue(itemText)
-      const query = hasValue(queryText)
-
-      return text.toString()
-        .toLowerCase()
-        .indexOf(query.toString().toLowerCase()) > -1
     },
     // onInput: async function (ev) {
     //   this.onLoading = true
@@ -417,8 +383,8 @@ export default {
     //   this.page = 1
     //   this.onLoading = false
     // },
-    onEffectFilterChange: async function (ev) {
-      this.$emit('effect-filter-change', ev, this.guessFilter)
+    onEffectFilterChange: async function (ev, i) {
+      this.$emit('effect-filter-change', ev, i, this.guessFilter)
     },
     // onGuessFilterChange: async function (ev) {
     //   this.onLoading = true
@@ -480,16 +446,6 @@ export default {
         })
       }
       this.show = !this.show
-    }
-  },
-  watch: {
-    loader () {
-      const l = this.loader
-      this[l] = !this[l]
-
-      setTimeout(() => (this[l] = false), 3000)
-
-      this.loader = null
     }
   }
 }

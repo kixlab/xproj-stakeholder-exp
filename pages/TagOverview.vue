@@ -1,7 +1,7 @@
 <template>
   <v-container style="padding: 0;">
     <promise-pane :policy="policy"></promise-pane>
-    <v-layout justify-center>
+    <v-layout v-if="!tagHigh" justify-center>
       <v-flex lg8 md8>
         <v-card color="grey lighten-4">
           <v-card-text>
@@ -43,7 +43,59 @@
     </v-layout> -->
     
     <v-layout row wrap>
-      <v-flex xs5>
+      <v-flex v-if="tagHigh" xs8 offset-xs2>
+        <v-card color="grey lighten-4">
+          <v-card-title>
+            <span class="title">#{{tagHigh.tag}}</span>
+            <v-spacer/>
+            <v-btn icon @click="show = !show"><v-icon>{{show ? 'remove' : 'add'}}</v-icon></v-btn>
+            <v-btn icon style="float: right;" @click="onTagHighReset"><v-icon>close</v-icon></v-btn>
+          </v-card-title>
+          <v-slide-y-transition>
+          <v-card-text v-if="show">
+            <!-- <v-chip>{{tagHigh.tag}}</v-chip> -->
+            <div>
+              함께 자주 등장한
+              <v-chip v-for="tag in tagHighInfo.closest" :key="tag" @click="onUpdateSelectedTagHighByLink(tag)">{{tag}}</v-chip>
+              <!-- <v-chip @click="onTagHighLinkClick(tagHighInfo.closest)">{{tagHighInfo.closest}}</v-chip> -->
+            </div>
+            <div>
+              가장 적게 같이 등장한
+              <v-chip v-for="tag in tagHighInfo.farthest" :key="tag" @click="onUpdateSelectedTagHighByLink(tag)">{{tag}}</v-chip>
+            </div>
+            <div>
+              가장 의견이 다른 
+              <v-chip v-for="tag in tagHighInfo.different" :key="tag" @click="onUpdateSelectedTagHighByLink(tag)">{{tag}}</v-chip>
+            </div>
+            <br>
+            집단의 의견도 확인해보세요.
+          </v-card-text>
+          </v-slide-y-transition>
+          <!-- <v-card-actions>
+            <v-btn color="blue" flat>긍정적 영향 {{tagHigh.pos_count}} </v-btn>
+            <v-btn color="red" flat>부정적 영향 {{tagHigh.neg_count}} </v-btn>
+            <v-spacer />
+            <v-btn icon @click="show = !show">
+              <v-icon>{{show ? 'remove' : 'add'}}</v-icon>
+            </v-btn>
+          </v-card-actions>
+          <v-slide-y-transition>
+            <v-card-text v-show="show">
+              <div style="text-align: left;">
+                <br>
+                선택하신 집단과 유사한 <a @click="onTagHighLinkClick(tagHighInfo.closest)"><span class="blue--text">#{{tagHighInfo.closest}}</span></a>
+                <br>
+                가장 거리가 먼 <a @click="onTagHighLinkClick(tagHighInfo.farthest)"><span class="blue--text">#{{tagHighInfo.farthest}}</span></a>
+                <br>
+                의견이 다른 <a @click="onTagHighLinkClick(tagHighInfo.different)"><span class="blue--text">#{{tagHighInfo.different}}</span></a> 
+                <br>        
+                집단의 의견도 확인해보세요.
+              </div>
+            </v-card-text>
+          </v-slide-y-transition> -->
+        </v-card>
+      </v-flex>
+      <v-flex xs4>
         <!-- <tag-tree :tags="filteredTags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag" :onTagLoading="onTagLoading"/> -->
         <tag-pane 
           :tags="filteredTags" 
@@ -53,8 +105,18 @@
           :onTagLoading="onTagLoading"
           :onTagLowLoading="onTagLowLoading"/>
       </v-flex>
-      <v-flex xs7>
-        <effects-pane :effects="effects" :keywords="keywords" :count="count" :onLoading="onLoading" @effect-filter-change="onEffectFilterChanged" :effectFilter="effectFilter"/>
+      <v-flex xs8>
+        <effects-pane 
+          :effects="effects" 
+          :keywords="keywords" 
+          :count="count" 
+          :onLoading="onLoading"
+          @effect-filter-change="onEffectFilterChanged" 
+          @tag-high-click="onUpdateSelectedTagHigh" 
+          @tag-low-click="onUpdateSelectedTagLow"
+          :effectFilter="effectFilter" 
+          :closeTags="closeTags"
+          :tab="tab"/>
       </v-flex>
     </v-layout>
 
@@ -265,9 +327,7 @@ export default {
   fetch: async function ({app, store, params}) {
     const effects = await app.$axios.$get('/api/effects/', {
       params: {
-        policy: store.state.policyId,
-        'tag[]': store.state.selectedTag,
-        page_size: 100
+        policy: store.state.policyId
       }
     })
     store.commit('setEffects', effects.results)
@@ -300,7 +360,8 @@ export default {
       onLoading: false,
       onTagLoading: false,
       onTagLowLoading: false,
-      effectFilter: [0, 1]
+      effectFilter: [0, 1],
+      tab: 0
     }
   },
   computed: {
@@ -318,6 +379,18 @@ export default {
     },
     tags: function () {
       return this.$store.state.tags
+    },
+    tagHigh: function () {
+      return this.$store.state.tagHigh
+    },
+    tagLow: function () {
+      return this.$store.state.tagLow
+    },
+    tagHighInfo: function () {
+      return this.$store.state.tagHighInfo
+    },
+    tagLowInfo: function () {
+      return this.$store.state.tagLowInfo
     },
     filteredTags: function () {
       const ft = this.tags.filter((tag) => { return tag.total_count >= 3 })
@@ -346,6 +419,28 @@ export default {
     // },
     userGroup: function () {
       return this.$store.getters.userGroup
+    },
+    closeTags: function () {
+      const tagList = this.tagHigh ? this.tagHigh.children : this.tags
+
+      if (this.effectFilter.length === 2) {
+        return tagList.slice(0, 3)
+      } else if (this.effectFilter.length === 1 && this.effectFilter[0] === 1) {
+        let newArray = tagList.filter((a) => {
+          return a.pos_count >= a.neg_count * 2
+        })
+        return newArray.sort((a, b) => {
+          return b.pos_count - a.pos_count
+        }).slice(0, 3)
+      } else if (this.effectFilter.length === 1 && this.effectFilter[0] === 0) {
+        let newArray = tagList.filter((a) => {
+          return a.pos_count * 2 <= a.neg_count
+        })
+        return newArray.sort((a, b) => {
+          return b.neg_count - a.neg_count
+        }).slice(0, 3)
+      }
+    }
     // },
     // answer_left: function () {
     //   // console.log(this.$store.state.userPolicy)
@@ -361,7 +456,7 @@ export default {
     // },
     // explorationRequired: function () {
     //   return this.filteredTags.length >= 9 ? 9 : this.filteredTags.length
-    }
+    // }
   },
   methods: {
     // onNewStakeholderClick: function () {
@@ -373,6 +468,12 @@ export default {
     //   })
     //   this.$router.push('/NewStakeholder')
     // },
+    onUpdateSelectedTagHighByLink: function (tagTxt) {
+      const tag = this.tags.find((t) => {
+        return t.tag === tagTxt
+      })
+      this.onUpdateSelectedTagHigh(tag)
+    },
     onUpdateSelectedTagHigh: async function (tag) {
       this.onLoading = true
       this.onTagLoading = true
@@ -381,12 +482,12 @@ export default {
       this.onLoading = false
       this.onTagLoading = false
     },
-    onTagHighReset: async function (tag) {
+    onTagHighReset: async function () {
       this.onLoading = true
-      this.onTagLoading = true
+      // this.onTagLoading = true
       await this.$store.dispatch('setTagHigh', {tag: null, effectFilter: this.effectFilter})
       this.onLoading = false
-      this.onTagLoading = false
+      // this.onTagLoading = false
     },
     onUpdateSelectedTagLow: async function (tag, $event) {
       this.onLoading = true
@@ -400,9 +501,11 @@ export default {
       await this.$store.dispatch('updateSelectedTag', tag)
       this.onLoading = false
     },
-    onEffectFilterChanged: async function (effectFilter, guessFilter) {
+    onEffectFilterChanged: async function (effectFilter, tab) {
       this.onLoading = true
+      this.tab = Number(tab) - 1
       this.effectFilter = effectFilter
+      const tags = this.tagHigh ? (this.tagLow ? [this.tagHigh.tag, this.tagLow.tag] : [this.tagHigh.tag]) : null
       this.$ga.event({
         eventCategory: this.$router.currentRoute.path,
         eventAction: 'EffectFilterChanged',
@@ -412,7 +515,7 @@ export default {
       const effects = await this.$axios.$get('/api/effects/', {
         params: {
           policy: this.policy.id,
-          tag: this.selectedTags,
+          tag: tags,
           is_benefit: effectFilter.length === 1 ? effectFilter[0] : null,
           include_guess: 0
         }
@@ -490,6 +593,7 @@ export default {
 }
 .v-card__title {
   padding-bottom:0 !important;
+  padding-top: 0 !important;
 }
 
 #btn_location {
