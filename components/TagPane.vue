@@ -92,7 +92,7 @@
                   <span class="blue--text">긍정 {{tag.pos_count}}</span> vs <span class="red--text">{{tag.neg_count}} 부정</span>
                 </div>
                 <v-card :class="expansionPanelColor(tag)">
-                  <v-card-text v-if="onTagLowLoading" >
+                  <!-- <v-card-text v-if="onTagLowLoading" >
                     <v-layout align-center justify-center>
                       <v-progress-circular indeterminate :size="30" :width="5" color="purple"></v-progress-circular>
                     </v-layout>
@@ -100,13 +100,11 @@
                   <template v-else-if="tagLow !== null">
                     <v-card-text>
                       <span class="blue--text">#{{tagHigh.tag}} #{{tagLow.tag}}</span> 집단과 다른 의견을 보시려면
-                      <!-- <a @click="onTagLowLinkClick(tagLowInfo.farthest_subgroup[1])"><span class="blue--text"> -->
                       <span class="blue--text">#{{tagLowInfo.farthest_subgroup[0]}} #{{tagLowInfo.farthest_subgroup[1]}} </span>집단의 의견을 확인해보세요
                       <br>
                       <a @click="onTagHighLinkClick(tagLow.tag)"><span class="blue--text">#{{tagLow.tag}}</span> 집단 전체의 의견을 확인해보세요!</a>
-                      <!-- </span></a> -->
                     </v-card-text>
-                  </template>
+                  </template> -->
                 </v-card>
               </v-expansion-panel-content>
             </v-expansion-panel>

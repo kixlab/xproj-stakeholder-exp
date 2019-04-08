@@ -25,6 +25,8 @@ export const state = () => ({
   readCounter1: 0,
   readCounter2: 0,
   keywords: [],
+  keywordsHigh: [],
+  keywordsLow: [],
   predictedEffects: [],
   excludedTag: '',
   tagHigh: null,
@@ -184,6 +186,12 @@ export const mutations = {
   },
   setTagLowInfo (state, info) {
     state.tagLowInfo = info
+  },
+  setKeywordsLow (state, keywords) {
+    state.keywordsLow = keywords
+  },
+  setKeywordsHigh (state, keywords) {
+    state.keywordsHigh = keywords
   }
 }
 
@@ -404,6 +412,7 @@ export const actions = {
         })
         context.commit('setEffects', effects.results)
         context.commit('setKeywords', effects.keywords)
+        context.commit('setKeywordsHigh', effects.keywords)
       } catch (err) {
       }
     } else {
@@ -429,6 +438,7 @@ export const actions = {
         context.commit('setTagHigh', tag)
         context.commit('setEffects', effects.results)
         context.commit('setKeywords', effects.keywords)
+        context.commit('setKeywordsHigh', effects.keywords)
       } catch (err) {
 
       }

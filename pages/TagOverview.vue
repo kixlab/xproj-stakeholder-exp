@@ -5,7 +5,7 @@
       <v-flex lg8 md8>
         <v-card color="grey lighten-4">
           <v-card-text>
-          이 정책이 우리 사회의 다양한 사람들에게 끼칠 영향을 확인해보세요.
+          관심있는 이해 관계자를 선택하시면서 이 정책이 우리 사회의 다양한 사람들에게 끼칠 영향을 확인해보세요.
           </v-card-text>
         </v-card>
         &nbsp;
@@ -48,16 +48,19 @@
           <v-card-title>
             <span class="title">#{{tagHigh.tag}}</span>
             <v-spacer/>
+            <span class="blue--text"><strong>찬 {{tagHigh.pos_count}}</strong></span>
+            <span> vs </span>
+            <span class="red--text"><strong>반 {{tagHigh.neg_count}}</strong></span>
+            <v-spacer/>
             <v-btn icon @click="show = !show"><v-icon>{{show ? 'remove' : 'add'}}</v-icon></v-btn>
             <v-btn icon style="float: right;" @click="onTagHighReset"><v-icon>close</v-icon></v-btn>
           </v-card-title>
           <v-slide-y-transition>
           <v-card-text v-if="show">
             <!-- <v-chip>{{tagHigh.tag}}</v-chip> -->
-            <div>
+            <!-- <div>
               함께 자주 등장한
               <v-chip v-for="tag in tagHighInfo.closest" :key="tag" @click="onUpdateSelectedTagHighByLink(tag)">{{tag}}</v-chip>
-              <!-- <v-chip @click="onTagHighLinkClick(tagHighInfo.closest)">{{tagHighInfo.closest}}</v-chip> -->
             </div>
             <div>
               가장 적게 같이 등장한
@@ -66,9 +69,14 @@
             <div>
               가장 의견이 다른 
               <v-chip v-for="tag in tagHighInfo.different" :key="tag" @click="onUpdateSelectedTagHighByLink(tag)">{{tag}}</v-chip>
-            </div>
+            </div> -->
+            이 정책에 가장 긍정적인 
+            <v-chip v-for="tag in closePositiveTags" :key="tag.tag" @click="onUpdateSelectedTagLow(tag, true)">{{tag.tag}}</v-chip> 
             <br>
-            집단의 의견도 확인해보세요.
+            이 정책에 가장 부정적인
+            <v-chip v-for="tag in closeNegativeTags" :key="tag.tag" @click="onUpdateSelectedTagLow(tag, true)">{{tag.tag}}</v-chip> 
+            <br>
+            세부 집단의 의견을 확인해보세요.
           </v-card-text>
           </v-slide-y-transition>
           <!-- <v-card-actions>
@@ -115,7 +123,6 @@
           @tag-high-click="onUpdateSelectedTagHigh" 
           @tag-low-click="onUpdateSelectedTagLow"
           :effectFilter="effectFilter" 
-          :closeTags="closeTags"
           :tab="tab"/>
       </v-flex>
     </v-layout>
@@ -420,26 +427,42 @@ export default {
     userGroup: function () {
       return this.$store.getters.userGroup
     },
-    closeTags: function () {
-      const tagList = this.tagHigh ? this.tagHigh.children : this.tags
+    // closeTags: function () {
+    //   const tagList = this.tagHigh ? this.tagHigh.children : this.tags
 
-      if (this.effectFilter.length === 2) {
-        return tagList.slice(0, 3)
-      } else if (this.effectFilter.length === 1 && this.effectFilter[0] === 1) {
-        let newArray = tagList.filter((a) => {
-          return a.pos_count >= a.neg_count * 2
-        })
-        return newArray.sort((a, b) => {
-          return b.pos_count - a.pos_count
-        }).slice(0, 3)
-      } else if (this.effectFilter.length === 1 && this.effectFilter[0] === 0) {
-        let newArray = tagList.filter((a) => {
-          return a.pos_count * 2 <= a.neg_count
-        })
-        return newArray.sort((a, b) => {
-          return b.neg_count - a.neg_count
-        }).slice(0, 3)
-      }
+    //   if (this.effectFilter.length === 2) {
+    //     return tagList.slice(0, 3)
+    //   } else if (this.effectFilter.length === 1 && this.effectFilter[0] === 1) {
+    //     let newArray = tagList.filter((a) => {
+    //       return a.pos_count >= a.neg_count * 2
+    //     })
+    //     return newArray.sort((a, b) => {
+    //       return b.pos_count - a.pos_count
+    //     }).slice(0, 3)
+    //   } else if (this.effectFilter.length === 1 && this.effectFilter[0] === 0) {
+    //     let newArray = tagList.filter((a) => {
+    //       return a.pos_count * 2 <= a.neg_count
+    //     })
+    //     return newArray.sort((a, b) => {
+    //       return b.neg_count - a.neg_count
+    //     }).slice(0, 3)
+    //   }
+    // }
+    closePositiveTags: function () {
+      const tagList = this.tagHigh ? this.tagHigh.children : this.tags
+      return tagList.filter((a) => {
+        return a.pos_count >= a.neg_count * 2
+      }).sort((a, b) => {
+        return b.pos_count - a.pos_count
+      }).slice(0, 3)
+    },
+    closeNegativeTags: function () {
+      const tagList = this.tagHigh ? this.tagHigh.children : this.tags
+      return tagList.filter((a) => {
+        return a.pos_count * 2 <= a.neg_count
+      }).sort((a, b) => {
+        return b.neg_count - a.neg_count
+      }).slice(0, 3)
     }
     // },
     // answer_left: function () {

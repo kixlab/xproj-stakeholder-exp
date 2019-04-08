@@ -32,15 +32,17 @@
               </v-layout>
             </template>
             <template v-else>
-              <template v-if="effectFilter.length === 1">
+              <!-- <template v-if="effectFilter.length === 1">
                 <span v-if="tagHigh" class="blue--text">#{{tagHigh.tag}}</span>
                 <span v-else>전체 이해 관계자</span> 중에서도 다음 집단이 {{effectFilter[0] === 0 ? '부정적' : '긍정적'}} 영향을 많이 적었습니다.
                 <br>
                 <v-chip @click="onTagLinkClick(tag)" v-for="tag in closeTags" :key="tag.tag" :color="effectFilter[0] === 0 ? 'red' : 'blue'" text-color="white">#{{tag.tag}}</v-chip>
                 <br>
-              </template>
+              </template> -->
               <template v-if="keywords.length === 0">
-                해당되는 영향이 너무 적어 해당되는 단어를 찾지 못했습니다.
+                <span v-if="tagLow" class="blue--text">#{{tagHigh.tag}} #{{tagLow.tag}}</span>
+                <span v-else-if="tagHigh" class="blue--text">#{{tagHigh.tag}}</span>
+                <span v-else> 전체 이해 관계자</span> 집단의 키워드 분석을 위한 영향의 갯수가 부족합니다. 영향을 직접 읽어주세요.
               </template>
               <template v-else>
                 <span v-if="effectFilter.length === 2" class="purple--text">모든</span>
@@ -52,7 +54,22 @@
                 <span v-else> 전체 이해 관계자</span>
                 집단이 많이 사용한 단어의 목록입니다. <br>
                 <template>
-                  <v-chip v-for="keyword in keywords" :key="keyword[0]" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
+                  <v-chip v-for="keyword in keywords.slice(0, 5)" :key="keyword[0]" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
+                </template>
+              </template>
+              <br>
+              <template v-if="tagLow">
+                <template v-if="keywords.length === 0 || keywordsHigh.length === 0">
+                  <span class="blue--text">#{{tagHigh.tag}}</span> 키워드 분석을 위한 영향의 갯수가 부족합니다. 영향을 직접 읽어주세요.
+                </template>
+                <span v-if="effectFilter.length === 2" class="purple--text">모든</span>
+                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 0" class="red--text">부정적</span>
+                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 1" class="blue--text">긍정적</span>
+                 영향을 적은
+                <span class="blue--text">#{{tagHigh.tag}}</span>
+                집단이 많이 사용한 단어와 비교해보세요. <br>
+                <template>
+                  <v-chip v-for="keyword in keywordsHigh.slice(0, 5)" :key="keyword[0]" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
                 </template>
               </template>
             </template>
@@ -158,6 +175,9 @@ export default {
     },
     userGroup: function () {
       return this.$store.getters.userGroup
+    },
+    keywordsHigh: function () {
+      return this.$store.state.keywordsHigh
     },
     // stakeholder_left: function () {
     //   if (this.$store.state.userPolicy.stakeholders_seen > 3) {
@@ -307,7 +327,7 @@ export default {
     },
     getKeywordColor: function (k) {
       if (k === 'both') {
-        return 'deep-purple'
+        return 'blue-grey'
       } else if (k === 'pos') {
         return 'blue'
       } else if (k === 'neg') {
