@@ -27,12 +27,15 @@ export const state = () => ({
   keywords: [],
   keywordsHigh: [],
   keywordsLow: [],
+  keywordsAll: [],
   predictedEffects: [],
   excludedTag: '',
   tagHigh: null,
   tagHighInfo: {},
   tagLow: null,
-  tagLowInfo: {}
+  tagLowInfo: {},
+  totalPosCount: 0,
+  totalNegCount: 0
 })
 
 export const mutations = {
@@ -192,6 +195,15 @@ export const mutations = {
   },
   setKeywordsHigh (state, keywords) {
     state.keywordsHigh = keywords
+  },
+  setKeywordsAll (state, keywords) {
+    state.keywordsAll = keywords
+  },
+  setTotalPosCount (state, posCount) {
+    state.totalPosCount = posCount
+  },
+  setTotalNegCount (state, negCount) {
+    state.totalNegCount = negCount
   }
 }
 
@@ -311,6 +323,8 @@ export const actions = {
         include_guess: 0
       }
     })
+    context.commit('setTotalPosCount', tagnroot.pos_count)
+    context.commit('setTotalNegCount', tagnroot.neg_count)
     var tags = tagnroot.children
     console.log(tags)
     tags.sort((a, b) => {
@@ -405,9 +419,9 @@ export const actions = {
         const effects = await this.$axios.$get('/api/effects/', {
           params: {
             policy: context.state.policyId,
-            page_size: 100,
-            include_guess: 0,
-            is_benefit: effectFilter.length === 1 ? effectFilter[0] : null
+            page_size: 200,
+            include_guess: 0
+            // is_benefit: effectFilter.length === 1 ? effectFilter[0] : null
           }
         })
         context.commit('setEffects', effects.results)
@@ -427,9 +441,9 @@ export const actions = {
           params: {
             policy: context.state.policyId,
             'tag[]': tag.tag,
-            page_size: 100,
-            include_guess: 0,
-            is_benefit: effectFilter.length === 1 ? effectFilter[0] : null
+            page_size: 200,
+            include_guess: 0
+            // is_benefit: effectFilter.length === 1 ? effectFilter[0] : null
           }
         })
         context.commit('setTagLowInfo', null)
@@ -462,10 +476,10 @@ export const actions = {
           params: {
             policy: context.state.policyId,
             tag: [context.state.tagHigh.tag, tag.tag],
-            page_size: 100,
+            page_size: 200,
             include_guess: 0,
-            is_and: 1,
-            is_benefit: effectFilter.length === 1 ? effectFilter[0] : null
+            is_and: 1
+            // is_benefit: effectFilter.length === 1 ? effectFilter[0] : null
           }
         })
         context.commit('setTagLowInfo', tagLowInfo)

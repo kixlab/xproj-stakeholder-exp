@@ -7,9 +7,9 @@
           <span class="card__tag__title">#{{tag.tag}}</span>
         </v-flex>
         <v-flex xs5 style="text-align: right;">
-          <span class="blue--text caption"><strong>찬 {{tag.pos_count}}</strong></span>
+          <span class="blue--text caption">찬 {{tag.pos_count}}</span>
           <span class="caption"> vs </span>
-          <span class="red--text caption"><strong>반 {{tag.neg_count}}</strong></span>
+          <span class="red--text caption">반 {{tag.neg_count}}</span>
           <!--span class="card__tag__title">총 {{tag.total_count}}개</span-->
         </v-flex>
       </v-card-title>
@@ -89,7 +89,7 @@ export default {
 .card__tag__title {
   cursor: pointer;
   font-size: 11pt;
-  font-weight: bold; 
+  font-weight: 700;
 }
 
 .v-card__title {

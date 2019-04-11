@@ -1,6 +1,6 @@
 <template>
-  <v-layout row wrap>
-    <v-flex xs12 class="header">
+  <v-card>
+    <v-card-title>
       <template v-if="onTagLoading">
         태그 목록을 불러오고 있습니다. 조금만 기다려주세요...
       </template>
@@ -9,6 +9,13 @@
       </template>
       <template v-else>
         <v-layout row wrap>
+          <span class="subheading">
+            <span class="blue--text">#{{tagHigh.tag}}</span>의 세부 집단입니다.
+            <span v-if="tagLow">
+              <br>
+              <span class="blue--text">#{{tagHigh.tag}}</span> > <span class="blue--text">#{{tagLow.tag}}</span> 집단을 보고 계십니다.
+            </span>
+          </span>
           <!-- <v-flex xs12>
             <span class="blue--text">긍정적 영향 {{tagHigh.pos_count}} </span>
             <v-chip label>#{{tagHigh.tag}}</v-chip>
@@ -20,19 +27,16 @@
               <v-card-title>
                 <span class="title">#{{tagHigh.tag}}</span>
                 <v-spacer/>
+                <span class="blue--text">
+                  <strong>긍정 {{tagHigh.pos_count}} </strong>
+                </span>
+                vs
+                <span class="red--text">
+                  <strong> 부정 {{tagHigh.neg_count}}</strong>
+                </span>
+                <v-spacer />
                 <v-btn icon style="float: right;" @click="onTagHighResetClick"><v-icon>close</v-icon></v-btn>
               </v-card-title>
-              <v-card-text>
-                #{{tagHigh.tag}}
-              </v-card-text>
-              <v-card-actions>
-                <v-btn color="blue" flat>긍정적 영향 {{tagHigh.pos_count}} </v-btn>
-                <v-btn color="red" flat>부정적 영향 {{tagHigh.neg_count}} </v-btn>
-                <v-spacer />
-                <v-btn icon @click="show = !show">
-                  <v-icon>{{show ? 'remove' : 'add'}}</v-icon>
-                </v-btn>
-              </v-card-actions>
               <v-slide-y-transition>
                 <v-card-text v-show="show">
                   <div style="text-align: left;">
@@ -65,10 +69,9 @@
             </div>
           </v-flex> -->
         </v-layout>
-        <span class="subheading"><span class="blue--text">#{{tagHigh.tag}}</span>의 세부 집단도 알아보세요!</span>
       </template>
-    </v-flex>
-    <v-flex xs12>
+    </v-card-title>
+    <v-card-text>
       <v-layout column justify-center align-center class="tree">
         <v-flex style="overflow: auto; width: 100%;">
           <template v-if="onTagLoading">
@@ -79,12 +82,18 @@
           <template v-else-if="!tagHigh">
             <tag-overview-item v-for="tag in tags" :key="tag.tag" :tag="tag" @tag-click="onTagHighClick(tag)" :cls="expansionPanelColor(tag)">
             </tag-overview-item>
+            <!-- <v-list two-line>
+              <tag-overview-list-item v-for="tag in tags" :key="tag.tag" :tag="tag" @tag-click="onTagHighClick(tag)">
+              </tag-overview-list-item>
+            </v-list> -->
           </template>
           <template v-else>
-            <v-expansion-panel @input.capture="onTagLowClickDebounced($event)">
+            <v-expansion-panel 
+              @input.capture="onTagLowClickDebounced($event)"
+              :value="expansionPanelValue">
               <v-expansion-panel-content 
                 lazy 
-                v-for="tag in tagHigh.children" 
+                v-for="tag in tagLows" 
                 :key="tag.tag" :class="expansionPanelColor(tag)">
                 <div slot="header">
                   {{tag.tag}}
@@ -92,36 +101,41 @@
                   <span class="blue--text">긍정 {{tag.pos_count}}</span> vs <span class="red--text">{{tag.neg_count}} 부정</span>
                 </div>
                 <v-card :class="expansionPanelColor(tag)">
-                  <!-- <v-card-text v-if="onTagLowLoading" >
+                  <v-card-text v-if="onTagLowLoading" >
                     <v-layout align-center justify-center>
                       <v-progress-circular indeterminate :size="30" :width="5" color="purple"></v-progress-circular>
                     </v-layout>
                   </v-card-text>
                   <template v-else-if="tagLow !== null">
                     <v-card-text>
-                      <span class="blue--text">#{{tagHigh.tag}} #{{tagLow.tag}}</span> 집단과 다른 의견을 보시려면
+                      <!-- <span class="blue--text">#{{tagHigh.tag}} #{{tagLow.tag}}</span> 집단과  -->
+                      의견이 다른
                       <span class="blue--text">#{{tagLowInfo.farthest_subgroup[0]}} #{{tagLowInfo.farthest_subgroup[1]}} </span>집단의 의견을 확인해보세요
                       <br>
                       <a @click="onTagHighLinkClick(tagLow.tag)"><span class="blue--text">#{{tagLow.tag}}</span> 집단 전체의 의견을 확인해보세요!</a>
                     </v-card-text>
-                  </template> -->
+                  </template>
                 </v-card>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </template>
         </v-flex>
       </v-layout>
-    </v-flex>
-  </v-layout>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
 import TagOverviewItem from '~/components/TagOverviewItem.vue'
+import TagOverviewListItem from '~/components/TagOverviewListItem.vue'
 import Loader from '~/components/Loader.vue'
 import _ from 'lodash'
 export default {
   props: {
     tags: {
+      type: Array
+    },
+    tagLows: {
       type: Array
     },
     maxValue: {
@@ -131,7 +145,8 @@ export default {
       type: String
     },
     onTagLoading: Boolean,
-    onTagLowLoading: Boolean
+    onTagLowLoading: Boolean,
+    expansionPanelValue: Number
   },
   computed: {
     policy: function () {
@@ -152,6 +167,7 @@ export default {
   },
   components: {
     TagOverviewItem,
+    TagOverviewListItem,
     Loader
   },
   mounted: function () {
@@ -177,10 +193,12 @@ export default {
     },
     onTagLowClick: function ($event) {
       if ($event === null) {
-        this.$emit('tag-low-click', null, false)
+        this.$emit('tag-low-click', null, false, -1)
+        // this.$emit('update-expansion-panel-value', $event)
       } else {
         const tag = this.tagHigh.children[$event]
-        this.$emit('tag-low-click', tag, true)
+        this.$emit('tag-low-click', tag, true, $event)
+        // this.$emit('update-expansion-panel-value', $event)
       }
     },
     onTagLowLinkClick: function (tagTxt) {

@@ -44,6 +44,7 @@
 </template>
 <style scoped>
 @import url('https://fonts.googleapis.com/earlyaccess/nanumpenscript.css');
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
 .container.grid-list-md.text-xs-center {
   padding: 0;
   height: 100%;

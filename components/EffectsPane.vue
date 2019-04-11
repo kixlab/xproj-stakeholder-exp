@@ -1,27 +1,42 @@
 <template>
   <v-flex xs12>
-    <template>
+    <span v-if="tagLow">#{{tagHigh.tag}} > #{{tagLow.tag}}</span>
+    <span v-else-if="tagHigh">#{{tagHigh.tag}}</span>
+    <span v-else-if="!tagHigh"></span>
+    에 속한 사람들이 직접 적은 영향입니다.
+    <v-toolbar
+      color="white">
+      <template>
         <v-tabs centered grow :value="tab">
           <v-tab v-for="n in 3" :key="n" @click="onTabClick(n)">
             <span :class="['purple--text', 'blue--text', 'red--text'][n-1]">{{['모든 영향', '긍정적 영향', '부정적 영향'][n-1]}}</span>
           </v-tab>
         </v-tabs>
       </template>
-    <!-- <v-toolbar>
-      <v-select
-        :value="sort"
-        :items="sortTexts"
-        color="indigo"
-        @change="onSortChangedDebounced"
-        >
-      </v-select>
-    </v-toolbar> -->
+      <v-toolbar-items>
+        <v-btn icon @click="showFilter = !showFilter">
+          <v-icon>sort</v-icon>
+        </v-btn>
+        <!-- <v-btn icon @click="showKeywords = !showKeywords">
+          <v-icon>{{showKeywords ? 'keyboard_arrow_up':'keyboard_arrow_down'}}</v-icon>
+        </v-btn> -->
+      </v-toolbar-items>
+      <template slot="extension" v-if="showFilter">
+        <v-select
+          :value="sort"
+          :items="sortTexts"
+          color="indigo"
+          @change="onSortChangedDebounced"
+          >
+        </v-select>
+      </template>
+    </v-toolbar>
     <v-tabs-items :value="tab">
       <v-tab-item v-for="i in 3" :key="i">
-        <v-card 
+        <v-card v-if="false"
           style="width: 100%;">
           <v-card-text>
-            <template v-if="onLoading">
+            <!-- <template v-if="onLoading">
               <v-layout align-center justify-center column>
                   <v-progress-circular
                     style="margin-top: 2em; margin-bottom: 2em;"
@@ -30,49 +45,64 @@
                   ></v-progress-circular>
                 <br>
               </v-layout>
-            </template>
-            <template v-else>
-              <!-- <template v-if="effectFilter.length === 1">
-                <span v-if="tagHigh" class="blue--text">#{{tagHigh.tag}}</span>
-                <span v-else>전체 이해 관계자</span> 중에서도 다음 집단이 {{effectFilter[0] === 0 ? '부정적' : '긍정적'}} 영향을 많이 적었습니다.
-                <br>
-                <v-chip @click="onTagLinkClick(tag)" v-for="tag in closeTags" :key="tag.tag" :color="effectFilter[0] === 0 ? 'red' : 'blue'" text-color="white">#{{tag.tag}}</v-chip>
-                <br>
-              </template> -->
+            </template> -->
+            <!-- <template v-else-if="showKeywords">
               <template v-if="keywords.length === 0">
                 <span v-if="tagLow" class="blue--text">#{{tagHigh.tag}} #{{tagLow.tag}}</span>
                 <span v-else-if="tagHigh" class="blue--text">#{{tagHigh.tag}}</span>
                 <span v-else> 전체 이해 관계자</span> 집단의 키워드 분석을 위한 영향의 갯수가 부족합니다. 영향을 직접 읽어주세요.
               </template>
               <template v-else>
-                <span v-if="effectFilter.length === 2" class="purple--text">모든</span>
-                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 0" class="red--text">부정적</span>
-                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 1" class="blue--text">긍정적</span>
-                 영향을 적은
+                <span v-if="effectFilter.length === 1 && effectFilter[0] === 0"> <span class="red--text">부정적</span> 영향을 적은 </span>
+                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 1"> <span class="blue--text">긍정적</span> 영향을 적은 </span>
+
                 <span v-if="tagLow" class="blue--text">#{{tagHigh.tag}} #{{tagLow.tag}}</span>
                 <span v-else-if="tagHigh" class="blue--text">#{{tagHigh.tag}}</span>
                 <span v-else> 전체 이해 관계자</span>
                 집단이 많이 사용한 단어의 목록입니다. <br>
                 <template>
-                  <v-chip v-for="keyword in keywords.slice(0, 5)" :key="keyword[0]" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
+                  <v-chip v-for="keyword in keywords" :key="keyword[0] + keyword[1] + 'main'" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
                 </template>
               </template>
               <br>
               <template v-if="tagLow">
-                <template v-if="keywords.length === 0 || keywordsHigh.length === 0">
-                  <span class="blue--text">#{{tagHigh.tag}}</span> 키워드 분석을 위한 영향의 갯수가 부족합니다. 영향을 직접 읽어주세요.
+                <template v-if="keywordsHigh.length === 0">
+                  <span class="blue--text">#{{tagHigh.tag}}</span> 키워드 분석을 위한 영향의 갯수가 부족합니다. 아래 영향을 직접 읽어보세요!
                 </template>
+                <template v-else>
+                  <span v-if="effectFilter.length === 2" class="purple--text">모든</span>
+                  <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 0" class="red--text">부정적</span>
+                  <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 1" class="blue--text">긍정적</span>
+                  영향을 적은
+                  <span class="blue--text">#{{tagHigh.tag}}</span>
+                  집단이 많이 사용한 단어와 비교해보세요. <br>
+                  <template>
+                    <v-chip v-for="keyword in keywordsHigh" :key="keyword[0] + keyword[1] + 'high'" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
+                  </template>
+                </template>
+                <br>
                 <span v-if="effectFilter.length === 2" class="purple--text">모든</span>
                 <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 0" class="red--text">부정적</span>
                 <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 1" class="blue--text">긍정적</span>
                  영향을 적은
-                <span class="blue--text">#{{tagHigh.tag}}</span>
-                집단이 많이 사용한 단어와 비교해보세요. <br>
+                <span class="blue--text">전체 이해 관계자</span>
+                집단이 많이 사용한 단어와도 비교해보세요. <br>
                 <template>
-                  <v-chip v-for="keyword in keywordsHigh.slice(0, 5)" :key="keyword[0]" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
+                  <v-chip v-for="keyword in keywordsAll" :key="keyword[0] + keyword[1] + 'all'" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
                 </template>
               </template>
-            </template>
+              <template v-else-if="tagHigh">
+                <span v-if="effectFilter.length === 2" class="purple--text">모든</span>
+                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 0" class="red--text">부정적</span>
+                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 1" class="blue--text">긍정적</span>
+                 영향을 적은
+                <span class="blue--text">전체 이해 관계자</span>
+                집단이 많이 사용한 단어와 비교해보세요. <br>
+                <template>
+                  <v-chip v-for="keyword in keywordsAll" :key="keyword[0] + keyword[1] + 'all'" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
+                </template>
+              </template>
+            </template> -->
           </v-card-text>
         </v-card>
         <template v-if="onLoading">
@@ -160,7 +190,6 @@ export default {
         return effects.length === 0 || effects.reduce(f)
       }
     },
-    keywords: Array,
     onLoading: Boolean,
     effectFilter: Array,
     closeTags: Array,
@@ -177,7 +206,13 @@ export default {
       return this.$store.getters.userGroup
     },
     keywordsHigh: function () {
-      return this.$store.state.keywordsHigh
+      return this.$store.state.keywordsHigh[this.tab]
+    },
+    keywordsAll: function () {
+      return this.$store.state.keywordsAll[this.tab]
+    },
+    allKeywords: function () {
+      return this.$store.state.keywords[0]
     },
     // stakeholder_left: function () {
     //   if (this.$store.state.userPolicy.stakeholders_seen > 3) {
@@ -242,6 +277,9 @@ export default {
     // pagenum: function () {
     //   return Math.ceil(this.count / 50)
     // },
+    keywords: function () {
+      return this.$store.state.keywords[this.tab]
+    },
     tags: function () {
       return this.$store.state.tags
     },
@@ -284,6 +322,8 @@ export default {
       search: '',
       // onLoading: false,
       show: false,
+      showFilter: false,
+      showKeywords: true,
       guessFilter: [0, 1],
       // tab: 0,
       sortTexts: [{
@@ -449,7 +489,7 @@ export default {
     //   this.page = newPage
     //   this.onLoading = false
     // },
-    showFilter: async function () {
+    onShowFilterChanged: async function () {
       if (this.show) {
         this.$ga.event({
           eventCategory: this.$router.currentRoute.path,

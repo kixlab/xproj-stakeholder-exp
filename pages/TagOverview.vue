@@ -1,17 +1,17 @@
 <template>
   <v-container style="padding: 0;">
     <promise-pane :policy="policy"></promise-pane>
-    <v-layout v-if="!tagHigh" justify-center>
+    <!-- <v-layout v-if="!tagHigh" justify-center>
       <v-flex lg8 md8>
         <v-card color="grey lighten-4">
           <v-card-text>
-          관심있는 이해 관계자를 선택하시면서 이 정책이 우리 사회의 다양한 사람들에게 끼칠 영향을 확인해보세요.
+          모든 이해관계자가 적은 영향을 보고 계십니다. 완쪽의 이해 관계자 목록을 이용해 영향을 자세히 알아보세요!
           </v-card-text>
         </v-card>
         &nbsp;
         
       </v-flex>
-    </v-layout>
+    </v-layout> -->
 
     <!-- In case the user did persepctive taking(guessing). -->
     <!-- <v-layout>
@@ -43,67 +43,17 @@
     </v-layout> -->
     
     <v-layout row wrap>
-      <v-flex v-if="tagHigh" xs8 offset-xs2>
-        <v-card color="grey lighten-4">
-          <v-card-title>
-            <span class="title">#{{tagHigh.tag}}</span>
-            <v-spacer/>
-            <span class="blue--text"><strong>찬 {{tagHigh.pos_count}}</strong></span>
-            <span> vs </span>
-            <span class="red--text"><strong>반 {{tagHigh.neg_count}}</strong></span>
-            <v-spacer/>
-            <v-btn icon @click="show = !show"><v-icon>{{show ? 'remove' : 'add'}}</v-icon></v-btn>
-            <v-btn icon style="float: right;" @click="onTagHighReset"><v-icon>close</v-icon></v-btn>
-          </v-card-title>
-          <v-slide-y-transition>
-          <v-card-text v-if="show">
-            <!-- <v-chip>{{tagHigh.tag}}</v-chip> -->
-            <!-- <div>
-              함께 자주 등장한
-              <v-chip v-for="tag in tagHighInfo.closest" :key="tag" @click="onUpdateSelectedTagHighByLink(tag)">{{tag}}</v-chip>
-            </div>
-            <div>
-              가장 적게 같이 등장한
-              <v-chip v-for="tag in tagHighInfo.farthest" :key="tag" @click="onUpdateSelectedTagHighByLink(tag)">{{tag}}</v-chip>
-            </div>
-            <div>
-              가장 의견이 다른 
-              <v-chip v-for="tag in tagHighInfo.different" :key="tag" @click="onUpdateSelectedTagHighByLink(tag)">{{tag}}</v-chip>
-            </div> -->
-            이 정책에 가장 긍정적인 
-            <v-chip v-for="tag in closePositiveTags" :key="tag.tag" @click="onUpdateSelectedTagLow(tag, true)">{{tag.tag}}</v-chip> 
-            <br>
-            이 정책에 가장 부정적인
-            <v-chip v-for="tag in closeNegativeTags" :key="tag.tag" @click="onUpdateSelectedTagLow(tag, true)">{{tag.tag}}</v-chip> 
-            <br>
-            세부 집단의 의견을 확인해보세요.
-          </v-card-text>
-          </v-slide-y-transition>
-          <!-- <v-card-actions>
-            <v-btn color="blue" flat>긍정적 영향 {{tagHigh.pos_count}} </v-btn>
-            <v-btn color="red" flat>부정적 영향 {{tagHigh.neg_count}} </v-btn>
-            <v-spacer />
-            <v-btn icon @click="show = !show">
-              <v-icon>{{show ? 'remove' : 'add'}}</v-icon>
-            </v-btn>
-          </v-card-actions>
-          <v-slide-y-transition>
-            <v-card-text v-show="show">
-              <div style="text-align: left;">
-                <br>
-                선택하신 집단과 유사한 <a @click="onTagHighLinkClick(tagHighInfo.closest)"><span class="blue--text">#{{tagHighInfo.closest}}</span></a>
-                <br>
-                가장 거리가 먼 <a @click="onTagHighLinkClick(tagHighInfo.farthest)"><span class="blue--text">#{{tagHighInfo.farthest}}</span></a>
-                <br>
-                의견이 다른 <a @click="onTagHighLinkClick(tagHighInfo.different)"><span class="blue--text">#{{tagHighInfo.different}}</span></a> 
-                <br>        
-                집단의 의견도 확인해보세요.
-              </div>
-            </v-card-text>
-          </v-slide-y-transition> -->
-        </v-card>
+      <v-flex xs12>
+      <overview-pane 
+        :effectFilter="effectFilter"
+        :closePositiveTags="closePositiveTags"
+        :closeNegativeTags="closeNegativeTags"
+        @tag-high-reset="onTagHighReset"
+        @tag-high-click="onUpdateSelectedTagHigh"
+        @tag-low-click="onUpdateSelectedTagLow"
+        ></overview-pane>
       </v-flex>
-      <v-flex xs4>
+      <v-flex xs3>
         <!-- <tag-tree :tags="filteredTags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag" :onTagLoading="onTagLoading"/> -->
         <tag-pane 
           :tags="filteredTags" 
@@ -111,12 +61,13 @@
           @tag-low-click="onUpdateSelectedTagLow" 
           @tag-high-reset="onTagHighReset"
           :onTagLoading="onTagLoading"
-          :onTagLowLoading="onTagLowLoading"/>
+          :onTagLowLoading="onTagLowLoading"
+          :expansionPanelValue="expansionPanelValue"
+          :tagLows="tagLows"/>
       </v-flex>
-      <v-flex xs8>
+      <v-flex xs9>
         <effects-pane 
           :effects="effects" 
-          :keywords="keywords" 
           :count="count" 
           :onLoading="onLoading"
           @effect-filter-change="onEffectFilterChanged" 
@@ -327,6 +278,7 @@
 import PromisePane from '~/components/PromisePane.vue'
 import TagPane from '~/components/TagPane.vue'
 import EffectsPane from '~/components/EffectsPane.vue'
+import OverviewPane from '~/components/OverviewPane.vue'
 // import _ from 'lodash'
 import setTokenMixin from '~/mixins/setToken.js'
 
@@ -339,6 +291,7 @@ export default {
     })
     store.commit('setEffects', effects.results)
     store.commit('setKeywords', effects.keywords)
+    store.commit('setKeywordsAll', effects.keywords)
     // app.onTagLoading = true
     await store.dispatch('setTags')
     // app.onTagLoading = false
@@ -351,7 +304,8 @@ export default {
   components: {
     PromisePane,
     TagPane,
-    EffectsPane
+    EffectsPane,
+    OverviewPane
   },
   mixins: [setTokenMixin],
   data: function () {
@@ -368,7 +322,8 @@ export default {
       onTagLoading: false,
       onTagLowLoading: false,
       effectFilter: [0, 1],
-      tab: 0
+      tab: 0,
+      expansionPanelValue: -1
     }
   },
   computed: {
@@ -379,13 +334,31 @@ export default {
       return this.$store.state.policy
     },
     effects: function () {
-      return this.$store.state.effects
+      return this.$store.state.effects.filter(e => {
+        return this.effectFilter.includes(e.isBenefit)
+      })
     },
     keywords: function () {
       return this.$store.state.keywords
     },
     tags: function () {
       return this.$store.state.tags
+    },
+    tagLows: function () {
+      if (this.tagHigh) {
+        return this.tagHigh.children.slice().sort((a, b) => {
+          if (a.total_count < b.total_count) {
+            return 1
+          } else if (a.total_count > b.total_count) {
+            return -1
+          } else {
+            return 0
+          }
+        })
+        // (tag) => { return tag.total_count >= 3 }
+      } else {
+        return []
+      }
     },
     tagHigh: function () {
       return this.$store.state.tagHigh
@@ -512,10 +485,16 @@ export default {
       this.onLoading = false
       // this.onTagLoading = false
     },
-    onUpdateSelectedTagLow: async function (tag, $event) {
+    onUpdateSelectedTagLow: async function (tag, isOpening, idx) {
       this.onLoading = true
       this.onTagLowLoading = true
-      await this.$store.dispatch('setTagLow', {tag: tag, isOpening: $event, effectFilter: this.effectFilter})
+      if (!idx) {
+        idx = this.tagLows.findIndex(t => {
+          return t.tag === tag.tag
+        })
+      }
+      await this.$store.dispatch('setTagLow', {tag: tag, isOpening: isOpening, effectFilter: this.effectFilter})
+      this.expansionPanelValue = idx
       this.onLoading = false
       this.onTagLowLoading = false
     },
@@ -526,25 +505,26 @@ export default {
     },
     onEffectFilterChanged: async function (effectFilter, tab) {
       this.onLoading = true
-      this.tab = Number(tab) - 1
       this.effectFilter = effectFilter
-      const tags = this.tagHigh ? (this.tagLow ? [this.tagHigh.tag, this.tagLow.tag] : [this.tagHigh.tag]) : null
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'EffectFilterChanged',
-        eventLabel: this.effectFilter,
-        eventValue: 0
-      })
-      const effects = await this.$axios.$get('/api/effects/', {
-        params: {
-          policy: this.policy.id,
-          tag: tags,
-          is_benefit: effectFilter.length === 1 ? effectFilter[0] : null,
-          include_guess: 0
-        }
-      })
-      this.$store.commit('setEffects', effects.results)
-      this.$store.commit('setKeywords', effects.keywords)
+      this.tab = Number(tab) - 1
+
+      // const tags = this.tagHigh ? (this.tagLow ? [this.tagHigh.tag, this.tagLow.tag] : [this.tagHigh.tag]) : null
+      // this.$ga.event({
+      //   eventCategory: this.$router.currentRoute.path,
+      //   eventAction: 'EffectFilterChanged',
+      //   eventLabel: this.effectFilter,
+      //   eventValue: 0
+      // })
+      // const effects = await this.$axios.$get('/api/effects/', {
+      //   params: {
+      //     policy: this.policy.id,
+      //     tag: tags,
+      //     is_benefit: effectFilter.length === 1 ? effectFilter[0] : null,
+      //     include_guess: 0
+      //   }
+      // })
+      // this.$store.commit('setEffects', effects.results)
+      // this.$store.commit('setKeywords', effects.keywords)
       // this.effects = effects.results
       // this.count = effects.count
       this.onLoading = false
