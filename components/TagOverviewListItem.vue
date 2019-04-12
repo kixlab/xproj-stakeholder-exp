@@ -18,12 +18,17 @@
   <v-list-tile>
     <v-list-tile-content>
       <v-list-tile-title class="myfont">#{{tag.tag}}</v-list-tile-title>
-      <v-list-tile-subtitile>
+      <v-list-tile-subtitle>
         <span class="blue--text myfont">찬 {{tag.pos_count}}</span>
         <span class="myfont">vs</span>
         <span class="red--text myfont">반 {{tag.neg_count}}</span>
-      </v-list-tile-subtitile>
+      </v-list-tile-subtitle>
     </v-list-tile-content>
+    <v-list-tile-action>
+      <v-btn icon ripple @click="onTagLowSelect">
+        <v-icon :color="selected ? 'black' : 'grey lighten-1'">{{selected ? 'visibility' : 'visibility_off'}}</v-icon>
+      </v-btn>
+    </v-list-tile-action>
   </v-list-tile>
 </template>
 
@@ -38,7 +43,9 @@ export default {
     maxValue: {
       type: Number
     },
-    cls: String
+    cls: String,
+    index: Number,
+    selected: Boolean
   },
   computed: {
     pos: function () {
@@ -51,6 +58,13 @@ export default {
   methods: {
     onTagClick: function () {
       this.$emit('tag-click', this.tag.name)
+    },
+    onTagLowSelect: function () {
+      if (!this.selected) {
+        this.$emit('tag-low-click', this.index)
+      } else {
+        this.$emit('tag-low-click', null)
+      }
     }
   }
 }

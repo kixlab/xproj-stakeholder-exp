@@ -7,9 +7,9 @@
           <span class="card__tag__title">#{{tag.tag}}</span>
         </v-flex>
         <v-flex xs5 style="text-align: right;">
-          <span class="blue--text caption">찬 {{tag.pos_count}}</span>
+          <span class="blue--text caption">긍정 {{tag.pos_count}}</span>
           <span class="caption"> vs </span>
-          <span class="red--text caption">반 {{tag.neg_count}}</span>
+          <span class="red--text caption">{{tag.neg_count}} 부정</span>
           <!--span class="card__tag__title">총 {{tag.total_count}}개</span-->
         </v-flex>
       </v-card-title>

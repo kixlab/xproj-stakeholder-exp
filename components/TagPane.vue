@@ -8,67 +8,11 @@
         <span class="subheading">선택하신 정책과 관련된 모든 이해 관계자의 목록입니다.</span>
       </template>
       <template v-else>
-        <v-layout row wrap>
-          <span class="subheading">
-            <span class="blue--text">#{{tagHigh.tag}}</span>의 세부 집단입니다.
-            <span v-if="tagLow">
-              <br>
-              <span class="blue--text">#{{tagHigh.tag}}</span> > <span class="blue--text">#{{tagLow.tag}}</span> 집단을 보고 계십니다.
-            </span>
-          </span>
-          <!-- <v-flex xs12>
-            <span class="blue--text">긍정적 영향 {{tagHigh.pos_count}} </span>
-            <v-chip label>#{{tagHigh.tag}}</v-chip>
-            <span class="red--text">{{tagHigh.neg_count}} 부정적 영향 </span>
-            <v-btn icon @click="onTagHighResetClick"><v-icon>close</v-icon></v-btn>
-          </v-flex> -->
-          <!-- <v-flex xs12>
-            <v-card>
-              <v-card-title>
-                <span class="title">#{{tagHigh.tag}}</span>
-                <v-spacer/>
-                <span class="blue--text">
-                  <strong>긍정 {{tagHigh.pos_count}} </strong>
-                </span>
-                vs
-                <span class="red--text">
-                  <strong> 부정 {{tagHigh.neg_count}}</strong>
-                </span>
-                <v-spacer />
-                <v-btn icon style="float: right;" @click="onTagHighResetClick"><v-icon>close</v-icon></v-btn>
-              </v-card-title>
-              <v-slide-y-transition>
-                <v-card-text v-show="show">
-                  <div style="text-align: left;">
-                    <br>
-                    선택하신 집단과 유사한 <a @click="onTagHighLinkClick(tagHighInfo.closest)"><span class="blue--text">#{{tagHighInfo.closest}}</span></a>
-                    <br>
-                    가장 거리가 먼 <a @click="onTagHighLinkClick(tagHighInfo.farthest)"><span class="blue--text">#{{tagHighInfo.farthest}}</span></a>
-                    <br>
-                    의견이 다른 <a @click="onTagHighLinkClick(tagHighInfo.different)"><span class="blue--text">#{{tagHighInfo.different}}</span></a> 
-                    <br>        
-                    집단의 의견도 확인해보세요.
-                  </div>
-                </v-card-text>
-              </v-slide-y-transition>
-            </v-card>
-          </v-flex> -->
-          <!-- <v-flex xs3>
-            <v-btn block @click="onTagHighResetClick" class="clearBtn">다른 집단 보기</v-btn>
-          </v-flex> -->
-          <!-- <v-flex xs12>
-            <div style="text-align: left;">
-              <br>
-              선택하신 집단과 유사한 <a @click="onTagHighLinkClick(tagHighInfo.closest)"><span class="blue--text">#{{tagHighInfo.closest}}</span></a>
-              <br>
-              가장 거리가 먼 <a @click="onTagHighLinkClick(tagHighInfo.farthest)"><span class="blue--text">#{{tagHighInfo.farthest}}</span></a>
-              <br>
-              의견이 다른 <a @click="onTagHighLinkClick(tagHighInfo.different)"><span class="blue--text">#{{tagHighInfo.different}}</span></a> 
-              <br>        
-              집단의 의견도 확인해보세요.
-            </div>
-          </v-flex> -->
-        </v-layout>
+        <tag-overview-item
+          :tag="tagHigh"
+          :cls="expansionPanelColor(tagHigh)"
+        >
+        </tag-overview-item>
       </template>
     </v-card-title>
     <v-card-text>
@@ -79,16 +23,17 @@
           </template>
           <!-- <loader v-if="onTagLoading">
           </loader> -->
-          <template v-else-if="!tagHigh">
-            <tag-overview-item v-for="tag in tags" :key="tag.tag" :tag="tag" @tag-click="onTagHighClick(tag)" :cls="expansionPanelColor(tag)">
+          <template v-if="!tagHigh && !onTagLoading">
+            <tag-overview-item 
+              v-for="tag in tags" 
+              :key="tag.tag" 
+              :tag="tag" 
+              @tag-click="onTagHighClick(tag)" 
+              :cls="expansionPanelColor(tag)">
             </tag-overview-item>
-            <!-- <v-list two-line>
-              <tag-overview-list-item v-for="tag in tags" :key="tag.tag" :tag="tag" @tag-click="onTagHighClick(tag)">
-              </tag-overview-list-item>
-            </v-list> -->
           </template>
-          <template v-else>
-            <v-expansion-panel 
+          <template v-if="tagHigh && !onTagLoading">
+            <!-- <v-expansion-panel 
               @input.capture="onTagLowClickDebounced($event)"
               :value="expansionPanelValue">
               <v-expansion-panel-content 
@@ -107,17 +52,21 @@
                     </v-layout>
                   </v-card-text>
                   <template v-else-if="tagLow !== null">
-                    <v-card-text>
-                      <!-- <span class="blue--text">#{{tagHigh.tag}} #{{tagLow.tag}}</span> 집단과  -->
-                      의견이 다른
-                      <span class="blue--text">#{{tagLowInfo.farthest_subgroup[0]}} #{{tagLowInfo.farthest_subgroup[1]}} </span>집단의 의견을 확인해보세요
-                      <br>
-                      <a @click="onTagHighLinkClick(tagLow.tag)"><span class="blue--text">#{{tagLow.tag}}</span> 집단 전체의 의견을 확인해보세요!</a>
-                    </v-card-text>
                   </template>
                 </v-card>
               </v-expansion-panel-content>
-            </v-expansion-panel>
+            </v-expansion-panel> -->
+            <v-list two-line>
+              <tag-overview-list-item 
+                v-for="(tag, idx) in tagLows"
+                :key="tag.tag"
+                :tag="tag"
+                :index="idx"
+                :selected="idx === expansionPanelValue"
+                @tag-low-click="onTagLowClickDebounced"
+              >
+              </tag-overview-list-item>
+            </v-list>
           </template>
         </v-flex>
       </v-layout>

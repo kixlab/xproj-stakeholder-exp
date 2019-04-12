@@ -1,36 +1,41 @@
 <template>
-  <v-flex xs12>
-    <span v-if="tagLow">#{{tagHigh.tag}} > #{{tagLow.tag}}</span>
+  <div>
+    <!-- <span v-if="tagLow">#{{tagHigh.tag}} > #{{tagLow.tag}}</span>
     <span v-else-if="tagHigh">#{{tagHigh.tag}}</span>
-    <span v-else-if="!tagHigh"></span>
-    에 속한 사람들이 직접 적은 영향입니다.
-    <v-toolbar
+    <span v-else-if="!tagHigh"></span> -->
+    <!-- 에 속한 사람들이 직접 적은 영향입니다. -->
+    <!-- <v-toolbar
       color="white">
-      <template>
-        <v-tabs centered grow :value="tab">
+      <template> -->
+        <v-tabs grow centered :value="tab">
           <v-tab v-for="n in 3" :key="n" @click="onTabClick(n)">
             <span :class="['purple--text', 'blue--text', 'red--text'][n-1]">{{['모든 영향', '긍정적 영향', '부정적 영향'][n-1]}}</span>
           </v-tab>
+          <!-- <v-spacer/> -->
+          <v-menu>
+            <div slot="activator">
+              <v-btn icon @click="showFilter = !showFilter">
+                <v-icon>sort</v-icon>
+              </v-btn>
+            </div>
+            <v-list>
+              <v-list-tile
+                v-for="item in sortTexts"
+                :key="item.value"
+                @click="sort = item.value"
+                >
+                <v-list-tile-title>
+                  {{item.text}}
+                </v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+          </v-menu>
         </v-tabs>
-      </template>
+      <!-- </template>
       <v-toolbar-items>
-        <v-btn icon @click="showFilter = !showFilter">
-          <v-icon>sort</v-icon>
-        </v-btn>
-        <!-- <v-btn icon @click="showKeywords = !showKeywords">
-          <v-icon>{{showKeywords ? 'keyboard_arrow_up':'keyboard_arrow_down'}}</v-icon>
-        </v-btn> -->
+        
       </v-toolbar-items>
-      <template slot="extension" v-if="showFilter">
-        <v-select
-          :value="sort"
-          :items="sortTexts"
-          color="indigo"
-          @change="onSortChangedDebounced"
-          >
-        </v-select>
-      </template>
-    </v-toolbar>
+    </v-toolbar> -->
     <v-tabs-items :value="tab">
       <v-tab-item v-for="i in 3" :key="i">
         <v-card v-if="false"
@@ -130,7 +135,7 @@
         </template>
       </v-tab-item>
     </v-tabs-items>
-  </v-flex>
+  </div>
 </template>
 <style>
 .v-expansion-panel__body {
@@ -144,7 +149,7 @@
   margin-top: 20px;
 }
 .cards__list {
-  height: 60vh;
+  height: 70vh;
   margin-top: 1vh;
   margin-bottom: 1vh;
   width: 100%;

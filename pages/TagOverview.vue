@@ -53,7 +53,7 @@
         @tag-low-click="onUpdateSelectedTagLow"
         ></overview-pane>
       </v-flex>
-      <v-flex xs3>
+      <v-flex xs4>
         <!-- <tag-tree :tags="filteredTags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag" :onTagLoading="onTagLoading"/> -->
         <tag-pane 
           :tags="filteredTags" 
@@ -65,7 +65,7 @@
           :expansionPanelValue="expansionPanelValue"
           :tagLows="tagLows"/>
       </v-flex>
-      <v-flex xs9>
+      <v-flex xs8>
         <effects-pane 
           :effects="effects" 
           :count="count" 
