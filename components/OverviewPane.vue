@@ -71,15 +71,15 @@
             
             </template>
             <template v-else-if="tagHigh"> <!-- when tagHigh exists -->
-              아래 이해 관계자 목록을 이용해 #{{tagHigh.tag}} 집단에 대해 자세히 알아보세요!
+              <div class="subheader">아래 이해 관계자 목록을 이용해 #{{tagHigh.tag}} 집단에 대해 자세히 알아보세요!</div>
               <br>
               #{{tagHigh.tag}} 중 이 정책에 가장 긍정적인
-              <span v-for="tag in closePositiveTags" :key="tag.tag" class="blue--text">
+              <span v-for="tag in closePositiveTags" :key="tag.tag" class="tags blue--text">
                 <a class="blue--text" @click="onUpdateSelectedTagLow(tag, true)">#{{tag.tag}} </a>
               </span>
               <br>
               이 정책에 가장 부정적인
-              <span v-for="tag in closeNegativeTags" :key="tag.tag" class="red--text">
+              <span v-for="tag in closeNegativeTags" :key="tag.tag" class="tags red--text">
                 <a class="red--text" @click="onUpdateSelectedTagLow(tag, true)">#{{tag.tag}} </a>
               </span>
               <br>집단부터 시작해보세요.
@@ -265,6 +265,13 @@ export default {
 .v-card__title {
   padding-bottom:0 !important;
   padding-top: 0 !important;
+}
+.subheader {
+  padding-bottom: 0.5em;
+}
+.tags {
+  padding-right: 0.5em;
+  padding-left: 0.5em;
 }
 /* 
 .v-card__title .title {

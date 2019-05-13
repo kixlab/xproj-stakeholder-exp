@@ -2,21 +2,65 @@
 <v-layout>
   <navigation-drawer :drawer="drawer" @emitterdrawer="closeDrawer"></navigation-drawer>
 
-  <v-toolbar dense color="indigo" @click.native="onOpenDialog" dark fixed app clipped-left>
+  <v-toolbar dense color="indigo" dark fixed app clipped-left>
     <v-toolbar-side-icon ripple @click.stop="onToggleDrawer"></v-toolbar-side-icon>
     <v-toolbar-title>
-      <div style="cursor: pointer;">
+      <span style="cursor: pointer;" @click="onOpenDialog"> 
         <!-- Length of policy name should be less than 18 Korean syllables -->
         <!-- The line must be ended with a single space -->
         <small> {{policy.title}} </small>
         <small><v-icon dark fixed>info</v-icon></small>
-
-      </div>
+      </span>
     </v-toolbar-title>
-    
+    <v-spacer/>
+    <v-slider
+      :value="currentStance"
+      @change="onUpdateStance"
+      :tick-labels="opinions"
+      min="1"
+      max="5"
+      >
+    </v-slider>
+    <v-spacer/>
+    <v-toolbar-items>
+      <v-btn icon flat @click="revisitDialog = true">
+        <v-icon>
+          star
+        </v-icon>
+      </v-btn>
+    </v-toolbar-items>
+
+    <v-dialog
+      v-model="reviewDialog">
+      <v-card>
+        <v-card-title>
+          정책에 대한 의견이 변하셨나요? 그렇다면 왜 의견을 바꾸셨는지 알려주세요!
+        </v-card-title>
+        <v-card-text>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="revisitDialog">
+      <v-card>
+        <v-card-title>
+          표시한 의견을 다시 읽어보세요.
+        </v-card-title>
+        <v-card-text>
+          <effect-card 
+            v-for="effect in pinnedEffects" 
+            :key="effect.id"
+            :effect="effect"
+            >
+          </effect-card>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
     <v-dialog
       v-model = "dialog"
-    >
+      >
       <v-card>
         <v-card-title
           class="headline grey lighten-2"
@@ -49,20 +93,30 @@
 
 <script>
 import NavigationDrawer from '~/components/NavigationDrawer.vue'
-
+import EffectCard from '~/components/EffectCard.vue'
 export default {
   computed: {
     user: function () {
       return this.$store.state.user
+    },
+    pinnedEffects: function () {
+      return this.$store.state.pinnedEffects
     }
   },
   components: {
-    NavigationDrawer
+    NavigationDrawer,
+    EffectCard
   },
-  data: () => ({
-    dialog: false,
-    drawer: false
-  }),
+  data: function () {
+    return {
+      dialog: false,
+      drawer: false,
+      reviewDialog: false,
+      revisitDialog: false,
+      opinions: ['매우 부정적', '부정적', '중립', '긍정적', '매우 긍정적'],
+      currentStance: this.$store.state.initialStance
+    }
+  },
   props: {
     source: String,
     policy: {
@@ -114,6 +168,9 @@ export default {
         eventValue: 0
       })
       this.drawer = !this.drawer
+    },
+    onUpdateStance: function () {
+      // pass
     }
   }
 }

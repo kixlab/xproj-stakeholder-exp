@@ -23,7 +23,7 @@
           <v-radio label="조금 영향을 받는다" :value="2"></v-radio> 
           <v-radio label="적당히 영향을 받는다" :value="3"></v-radio>
           <v-radio label="많이 영향을 받는다" :value="4"></v-radio> 
-          <v-radio label="영향을 받게 될지 알 수 없다" :value="0"></v-radio>         
+          <v-radio label="영향을 받게 될지 잘 모르겠다" :value="0"></v-radio>         
         </v-radio-group>
 
         <v-btn v-if="userPolicy.effect_size != 5" block color="primary" @click="onNextButtonClick">다음</v-btn>
@@ -62,29 +62,9 @@ export default {
       return this.$store.state.policy
     },
     nextRoute: function () {
-      // switch (this.userGroup) {
-      //   case 1:
-      //   case 2:
-      //     // this.$store.commit('setNextstep')
-      //     return '/MiniSurvey'
-      //   case 3:
-      //   case 4:
-      //     return '/TagOverview'
-      //   case 5:
-      //   case 0:
-      //   case -1:
-      //   case 6:
-      //   case 7:
-      //     return '/GuessEffectRandom/0'
-      // }
       return '/GuessEffectRandom/0'
     },
     userGroup: function () {
-      // if (!this.$store.state.user.is_participant) {
-      //   return -1
-      // } else {
-      //   return this.$store.getters.experimentCondition
-      // }
       return this.$store.getters.userGroup
     }
   },

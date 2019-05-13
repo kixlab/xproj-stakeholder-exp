@@ -18,15 +18,15 @@
   <v-list-tile>
     <v-list-tile-content>
       <v-list-tile-title class="myfont">#{{tag.tag}}</v-list-tile-title>
-      <v-list-tile-subtitle>
+      <v-list-tile-sub-title>
         <span class="blue--text myfont">찬 {{tag.pos_count}}</span>
         <span class="myfont">vs</span>
         <span class="red--text myfont">반 {{tag.neg_count}}</span>
-      </v-list-tile-subtitle>
+      </v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action>
       <v-btn icon ripple @click="onTagLowSelect">
-        <v-icon :color="selected ? 'black' : 'grey lighten-1'">{{selected ? 'visibility' : 'visibility_off'}}</v-icon>
+        <v-icon :color="selected ? 'black' : 'grey lighten-1'">{{selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
       </v-btn>
     </v-list-tile-action>
   </v-list-tile>

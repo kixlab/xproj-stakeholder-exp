@@ -1,47 +1,6 @@
 <template>
   <v-container style="padding: 0;">
     <promise-pane :policy="policy"></promise-pane>
-    <!-- <v-layout v-if="!tagHigh" justify-center>
-      <v-flex lg8 md8>
-        <v-card color="grey lighten-4">
-          <v-card-text>
-          모든 이해관계자가 적은 영향을 보고 계십니다. 완쪽의 이해 관계자 목록을 이용해 영향을 자세히 알아보세요!
-          </v-card-text>
-        </v-card>
-        &nbsp;
-        
-      </v-flex>
-    </v-layout> -->
-
-    <!-- In case the user did persepctive taking(guessing). -->
-    <!-- <v-layout>
-      <v-flex xs12 sm6 offset-sm3 v-if="guessedTag.length > 0">
-        <v-card style="outline:auto;">
-          <v-card-actions>
-            <v-flex xs10 style="text-align:center;">
-              여러분이 생각해보셨던 태그는...
-            </v-flex>
-            <v-btn outline small color="primary" @click="onSeePredictedTagsClick">
-              더 보기
-            </v-btn>
-          </v-card-actions>
-
-          <v-slide-y-transition>
-            <v-card-text v-show="show" style="text-align:left;">
-              <v-chip 
-                color="primary" 
-                text-color="white"
-                v-for="tag in guessedTag"
-                :key="tag"
-                @click="onTagClick(tag)">
-                <span class="link">#{{tag}}</span>
-              </v-chip>
-            </v-card-text>
-          </v-slide-y-transition>
-        </v-card>
-      </v-flex>
-    </v-layout> -->
-    
     <v-layout row wrap>
       <v-flex xs12>
       <overview-pane 
@@ -78,152 +37,13 @@
       </v-flex>
     </v-layout>
 
-    <!--v-divider/>
-
-    <v-layout align-center justify-center row id="btn_location">
-
-      <v-flex xs2>
-        <v-btn color="success" :disabled="!$store.state.userToken" ripple block large @click="onNewStakeholderClick">
-          새로운 영향 남기기
-        </v-btn>
-      </v-flex>
-      <v-flex xs1/>
-      <v-flex xs2>
-        <v-btn v-if="!$store.state.userToken || userGroup === -1" color="primary" dark ripple block large @click="onShowPolicyListClick">
-          다른 정책 보기
-        </v-btn>
-        <v-dialog
-          v-else-if="$store.state.userToken && userGroup >= 0 && userGroup < 6 "
-          v-model="dialog"
-          width="500"
-          full-width
-          >
-          <v-btn
-            slot="activator"
-            color="primary"
-            dark ripple block
-            @click.native="onShowDialogButtonClick">
-            다른 정책 보기
-          </v-btn>
-
-          <v-card>
-            <v-card-title
-              class="headline grey lighten-2"
-              primary-title
-              style="background-color:pink !important;
-              color:red;"
-            > <strong>주의</strong>
-            </v-card-title>
-
-            <v-card-text>
-              현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
-              <strong>{{explorationRequired}}개 태그</strong>에서 영향을 둘러보셔야 보상을 받을 수 있습니다. <br><br>
-              <template v-if="effects_left!=0">
-              귀하는 <strong><font size="4">{{effects_left}}개 태그를</font></strong> 더 살펴보셔야 합니다.<br>
-              아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
-              <br><br>
-              <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
-              넘어가시면, 포기로 간주되며 보상을 받을 수 없습니다. </strong>
-              </template>
-
-              <template v-else>
-              귀하는 조건을 모두 충족하셨습니다.<br>
-              <strong style="color:blue;"> 다음으로 </strong> 넘어가주세요.<br><br>
-
-              그런데, 혹시 더 살펴보고 싶으시면 <strong style="color:red;">돌아가기</strong>를 누르셔도 좋습니다. :)
-              </template>          
-            </v-card-text>
-
-            <v-divider></v-divider>
-
-            <v-card-actions>
-              <v-btn
-                color="red"
-                flat outline ripple
-                @click="onDialogGoBackButtonClick"
-              > 돌아가기 </v-btn>
-              <v-spacer></v-spacer>
-              <v-btn
-                color="primary"
-                flat outline ripple
-                @click="onShowPolicyListClick"
-              >
-                다음으로
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        
-        <v-dialog
-          v-else-if="$store.state.userToken && userGroup >=6"
-          v-model="dialog"
-          width="500"
-          full-width
-          >
-          <v-btn
-            slot="activator"
-            color="primary"
-            dark block ripple
-          >
-            다른 정책 보기
-          </v-btn>
-
-          <v-card>
-            <v-card-title
-              class="headline grey lighten-2"
-              primary-title
-              style="background-color:pink !important;
-              color:red;"
-            > <strong>주의</strong>
-            </v-card-title>
-
-            <v-card-text>
-              현재 '정책의 다양한 영향 이해' 단계에서는 실험자가 
-              <strong>3개</strong>의 영향을 남겨주셔야 보상을 받을 수 있습니다. <br><br>
-              <template v-if="answer_left>0">
-                귀하는 <strong><font size="4">{{answer_left}}개 영향을</font></strong> 더 남겨주셔야 합니다.<br>
-                아래 <strong style="color:red;"> 돌아가기 </strong>를 누르셔서 조건을 충족시키시기 바랍니다.
-                <br><br>
-                <strong style="color:red;"> (주의) 조건을 충족하지 않고 <span style="color:blue;">다음으로</span>
-                넘어가시면, 포기로 간주되며 보상을 받을 수 없습니다. </strong>
-              </template>
-
-              <template v-else>
-                귀하는 조건을 모두 충족하셨습니다.<br>
-                <strong style="color:blue;"> 다음으로 </strong> 넘어가주세요.<br><br>
-
-                그런데, 혹시 더 살펴보고 싶으시면 <strong style="color:red;">돌아가기</strong>를 누르셔도 좋습니다. :)
-              </template>          
-            </v-card-text>
-
-            <v-divider></v-divider>
-
-            <v-card-actions>
-              <v-btn
-                color="red"
-                flat outline ripple
-                @click="onDialogGoBackButtonClick"
-              > 돌아가기 </v-btn>
-              <v-spacer></v-spacer>
-              <v-btn
-                color="primary"
-                flat outline ripple
-                @click="onShowPolicyListClick"
-              >
-                다음으로
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-flex>
-    </v-layout-->
     <v-speed-dial
       v-model="fab"
       bottom
       right
       direction="top"
       open-on-hover
-    >
+      >
         <v-btn
           slot="activator"
           v-model="fab"
@@ -231,7 +51,7 @@
           dark
           fab
           large
-        >
+          >
           <v-icon>add</v-icon>
           <v-icon>close</v-icon>
         </v-btn>
@@ -241,13 +61,13 @@
         left
         nudge-left="8"
         close-delay="0"
-      >
+        >
         <v-btn
           fab
           dark
           color="green"
           slot="activator"
-        >
+          >
           <v-icon>edit</v-icon>
         </v-btn>
         <span>새로운 영향 쓰기</span>
@@ -258,13 +78,13 @@
         nudge-left="8"
         left
         close-delay="0"
-      >
+        >
         <v-btn
           fab
           dark
           color="red"
           slot="activator"
-        >
+          >
           <v-icon>arrow_forward</v-icon>
         </v-btn>
         <span>다음 정책 보기</span>
@@ -279,7 +99,6 @@ import PromisePane from '~/components/PromisePane.vue'
 import TagPane from '~/components/TagPane.vue'
 import EffectsPane from '~/components/EffectsPane.vue'
 import OverviewPane from '~/components/OverviewPane.vue'
-// import _ from 'lodash'
 import setTokenMixin from '~/mixins/setToken.js'
 
 export default {
@@ -292,15 +111,8 @@ export default {
     store.commit('setEffects', effects.results)
     store.commit('setKeywords', effects.keywords)
     store.commit('setKeywordsAll', effects.keywords)
-    // app.onTagLoading = true
     await store.dispatch('setTags')
-    // app.onTagLoading = false
   },
-  // mounted: async function () {
-  //   this.onTagLoading = true
-  //   await this.$store.dispatch('setTags')
-  //   this.onTagLoading = false
-  // },
   components: {
     PromisePane,
     TagPane,
@@ -355,7 +167,6 @@ export default {
             return 0
           }
         })
-        // (tag) => { return tag.total_count >= 3 }
       } else {
         return []
       }
@@ -374,53 +185,11 @@ export default {
     },
     filteredTags: function () {
       const ft = this.tags.filter((tag) => { return tag.total_count >= 3 })
-      // .sort((a, b) => {
-      //   if (a.total_count > b.total_count) {
-      //     return 1
-      //   } else if (a.total_count < b.total_count) {
-      //     return -1
-      //   } else {
-      //     return 0
-      //   }
-      // })
-      return ft.length > 0 ? ft : this.tags // [...this.tags].reverse()
+      return ft.length > 0 ? ft : this.tags
     },
-    // effects_left: function () {
-    //   if (this.$store.state.userPolicy.effects_seen > 9) {
-    //     return 0
-    //   } else if (this.filteredTags.length < 9) {
-    //     return this.filteredTags.length - this.$store.state.userPolicy.effects_seen
-    //   }
-    //   return 9 - this.$store.state.userPolicy.effects_seen
-    // },
-    // maxValue: function () {
-    //   const t = this.tags.map((tag) => { return tag.total_count })
-    //   return Math.max(...t)
-    // },
     userGroup: function () {
       return this.$store.getters.userGroup
     },
-    // closeTags: function () {
-    //   const tagList = this.tagHigh ? this.tagHigh.children : this.tags
-
-    //   if (this.effectFilter.length === 2) {
-    //     return tagList.slice(0, 3)
-    //   } else if (this.effectFilter.length === 1 && this.effectFilter[0] === 1) {
-    //     let newArray = tagList.filter((a) => {
-    //       return a.pos_count >= a.neg_count * 2
-    //     })
-    //     return newArray.sort((a, b) => {
-    //       return b.pos_count - a.pos_count
-    //     }).slice(0, 3)
-    //   } else if (this.effectFilter.length === 1 && this.effectFilter[0] === 0) {
-    //     let newArray = tagList.filter((a) => {
-    //       return a.pos_count * 2 <= a.neg_count
-    //     })
-    //     return newArray.sort((a, b) => {
-    //       return b.neg_count - a.neg_count
-    //     }).slice(0, 3)
-    //   }
-    // }
     closePositiveTags: function () {
       const tagList = this.tagHigh ? this.tagHigh.children : this.tags
       return tagList.filter((a) => {
@@ -437,22 +206,6 @@ export default {
         return b.neg_count - a.neg_count
       }).slice(0, 3)
     }
-    // },
-    // answer_left: function () {
-    //   // console.log(this.$store.state.userPolicy)
-    //   if (this.userGroup === 6 || this.userGroup === 7) {
-    //     return 3 - this.$store.state.userPolicy.stakeholders_answered
-    //   } else {
-    //     return 0
-    //   }
-    // },
-    // guessedTag: function () {
-    //   return _.uniq(_.concat(...this.$store.state.guessedTags))
-    //   // return [].concat.apply([], this.$store.state.guesssedTags)
-    // },
-    // explorationRequired: function () {
-    //   return this.filteredTags.length >= 9 ? 9 : this.filteredTags.length
-    // }
   },
   methods: {
     // onNewStakeholderClick: function () {
@@ -480,10 +233,8 @@ export default {
     },
     onTagHighReset: async function () {
       this.onLoading = true
-      // this.onTagLoading = true
       await this.$store.dispatch('setTagHigh', {tag: null, effectFilter: this.effectFilter})
       this.onLoading = false
-      // this.onTagLoading = false
     },
     onUpdateSelectedTagLow: async function (tag, isOpening, idx) {
       this.onLoading = true
@@ -507,48 +258,8 @@ export default {
       this.onLoading = true
       this.effectFilter = effectFilter
       this.tab = Number(tab) - 1
-
-      // const tags = this.tagHigh ? (this.tagLow ? [this.tagHigh.tag, this.tagLow.tag] : [this.tagHigh.tag]) : null
-      // this.$ga.event({
-      //   eventCategory: this.$router.currentRoute.path,
-      //   eventAction: 'EffectFilterChanged',
-      //   eventLabel: this.effectFilter,
-      //   eventValue: 0
-      // })
-      // const effects = await this.$axios.$get('/api/effects/', {
-      //   params: {
-      //     policy: this.policy.id,
-      //     tag: tags,
-      //     is_benefit: effectFilter.length === 1 ? effectFilter[0] : null,
-      //     include_guess: 0
-      //   }
-      // })
-      // this.$store.commit('setEffects', effects.results)
-      // this.$store.commit('setKeywords', effects.keywords)
-      // this.effects = effects.results
-      // this.count = effects.count
       this.onLoading = false
     },
-    // onSeePredictedTagsClick: function () {
-    //   this.$ga.event({
-    //     eventCategory: this.$router.currentRoute.path,
-    //     eventAction: this.show ? 'HidePredictedTags' : 'ShowPredictedTags',
-    //     eventLabel: `${this.policy.title} / ${this.guessedTags}`,
-    //     eventValue: 0
-    //   })
-    //   this.show = !this.show
-    // },
-    // onTagClick: async function (tag) {
-    //   this.$ga.event({
-    //     eventCategory: this.$router.currentRoute.path,
-    //     eventAction: 'ShowStakeholderGroupEffects',
-    //     eventLabel: `${this.policy.title} / ${tag}`,
-    //     eventValue: 0
-    //   })
-    //   this.$store.commit('setSelectedTag', tag)
-    //   this.$router.push('/ExploreOpinions')
-    //   // this.$router.push('/GuessEffectRandom/0')
-    // },
     onShowPolicyListClick: function () {
       this.$ga.event({
         eventCategory: '/SelectStakeholder',
@@ -561,24 +272,6 @@ export default {
       } else {
         this.$router.push('/MiniSurvey')
       }
-    // },
-    // onShowDialogButtonClick: function () {
-    //   this.$ga.event({
-    //     eventCategory: this.$router.currentRoute.path,
-    //     eventAction: 'SeeOtherPolicy',
-    //     eventLabel: `${this.policy.title} / effects_left: ${this.effects_left}`,
-    //     eventValue: 0
-    //   })
-    //   this.dialog = true
-    // },
-    // onDialogGoBackButtonClick: function () {
-    //   this.$ga.event({
-    //     eventCategory: this.$router.currentRoute.path,
-    //     eventAction: 'GoBackToStakeholderList',
-    //     eventLabel: `${this.policy.title} / effects_left: ${this.effects_left}`,
-    //     eventValue: 0
-    //   })
-    //   this.dialog = false
     }
   }
 }

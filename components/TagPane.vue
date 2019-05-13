@@ -1,19 +1,62 @@
 <template>
   <v-card>
+    <v-expand-transition>
+      <div
+        v-if="showHelp"
+        class="d-flex transition-fast-in-fast-out grey darken-2 v-card--reveal white--text"
+        style="height: 100%;"
+        @click="showHelp = !showHelp"
+        >
+        <div v-if="tagHigh">
+          #{{tagHigh.tag}} 집단과 같이 등장한 태그의 목록입니다.
+          <br>
+          사용자님과 유사한 집단부터 선택하고 의견을 알아보세요!
+        </div>
+        <div v-else>
+          사용자님과 유사한 집단, 또는 사용자님 주변에 없는 집단부터 선택해보시고 의견을 알아보세요!
+        </div>
+      </div>
+    </v-expand-transition>
     <v-card-title>
       <template v-if="onTagLoading">
         태그 목록을 불러오고 있습니다. 조금만 기다려주세요...
       </template>
       <template v-else-if="!tagHigh">
-        <span class="subheading">선택하신 정책과 관련된 모든 이해 관계자의 목록입니다.</span>
+        <span class="subheading">선택하신 정책과 관련해 수집된 모든 이해 관계자 집단입니다.</span>
       </template>
       <template v-else>
-        <tag-overview-item
-          :tag="tagHigh"
-          :cls="expansionPanelColor(tagHigh)"
-        >
-        </tag-overview-item>
+        <span class="title">#{{tagHigh.tag}}</span>
+        <v-spacer/>
+        <span class="blue--text">긍정 {{tagHigh.pos_count}} </span>
+          vs
+        <span class="red--text">{{tagHigh.neg_count}} 부정</span>
       </template>
+      <v-spacer/>
+      <v-btn small icon class="tagpane--button" @click="showHelp = !showHelp">
+        <v-icon>help</v-icon>
+      </v-btn>
+      <v-menu>
+        <div slot="activator">
+          <v-btn icon>
+            <v-icon>sort</v-icon>
+          </v-btn>
+        </div>
+        <v-list>
+          <v-list-tile
+            v-for="item in sortTexts"
+            :key="item.value"
+            @click="sort = item.value"
+            >
+            <v-list-tile-title>
+              {{item.text}}
+            </v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+    </v-card-title>
+    <v-card-title class="mysearchbox">
+      <v-text-field append-icon="search">
+      </v-text-field>
     </v-card-title>
     <v-card-text>
       <v-layout column justify-center align-center class="tree">
@@ -25,7 +68,7 @@
           </loader> -->
           <template v-if="!tagHigh && !onTagLoading">
             <tag-overview-item 
-              v-for="tag in tags" 
+              v-for="tag in sortedTagHigh" 
               :key="tag.tag" 
               :tag="tag" 
               @tag-click="onTagHighClick(tag)" 
@@ -58,7 +101,7 @@
             </v-expansion-panel> -->
             <v-list two-line>
               <tag-overview-list-item 
-                v-for="(tag, idx) in tagLows"
+                v-for="(tag, idx) in sortedTagLow"
                 :key="tag.tag"
                 :tag="tag"
                 :index="idx"
@@ -101,6 +144,16 @@ export default {
     policy: function () {
       return this.$store.state.policy
     },
+    sortedTagHigh: function () {
+      return this.tags.slice().sort(this.sorter)
+    },
+    sortedTagLow: function () {
+      if (!this.tagLows) {
+        return []
+      } else {
+        return this.tagLows.slice().sort(this.sorter)
+      }
+    },
     tagHigh: function () {
       return this.$store.state.tagHigh
     },
@@ -112,6 +165,22 @@ export default {
     },
     tagLowInfo: function () {
       return this.$store.state.tagLowInfo
+    },
+    sorter: function () {
+      return [
+        (a, b) => {
+          return a.total_count > b.total_count ? -1 : 1
+        },
+        (a, b) => {
+          return a.total_count > b.total_count ? 1 : -1
+        },
+        (a, b) => {
+          return (a.pos_count / a.total_count) > (b.pos_count / b.total_count) ? -1 : 1
+        },
+        (a, b) => {
+          return (a.neg_count / a.total_count) > (b.neg_count / b.total_count) ? -1 : 1
+        }
+      ][this.sort]
     }
   },
   components: {
@@ -124,7 +193,25 @@ export default {
   },
   data: function () {
     return {
-      show: false
+      show: false,
+      showHelp: false,
+      sortTexts: [{
+        text: '많이 등장한 집단부터 보기',
+        value: 0
+      },
+      {
+        text: '적게 등장한 집단부터 보기',
+        value: 1
+      },
+      {
+        text: '가장 긍정적인 집단부터 보기',
+        value: 2
+      },
+      {
+        text: '가장 부정적인 집단부터 보기',
+        value: 3
+      }],
+      sort: 0
     }
   },
   methods: {
@@ -145,7 +232,7 @@ export default {
         this.$emit('tag-low-click', null, false, -1)
         // this.$emit('update-expansion-panel-value', $event)
       } else {
-        const tag = this.tagHigh.children[$event]
+        const tag = this.tagHigh.sortedTagLow[$event]
         this.$emit('tag-low-click', tag, true, $event)
         // this.$emit('update-expansion-panel-value', $event)
       }
@@ -184,6 +271,12 @@ export default {
 
 <style scoped>
 
+.v-card__title {
+  padding-bottom: 0;
+}
+.mysearchbox {
+  padding-top: 0;
+}
 .tree {
   height: 70vh;
   margin-top: 1vh;
@@ -195,8 +288,24 @@ export default {
   text-align: left;
 
 } */
-
+.tagPane--button {
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
 .clearBtn {
   height: 80%;
 }
+
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: .8;
+  position: absolute;
+  width: 100%;
+  z-index: 63;
+}
+
 </style>

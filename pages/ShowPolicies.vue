@@ -14,7 +14,7 @@
       </template>
 
       <template v-for="policy in policies"> <!-- ontest -->
-        <v-btn :key="policy.id" :disabled="selectPolicy(policy.id)" color="primary" large block @click="onPolicyClick(policy)">
+        <v-btn :key="policy.id" :disabled="selectPolicy(policy.id)" color="primary" large block @click="onPolicyBtnClick(policy)">
           {{policy.title}}
         </v-btn>
       </template>
@@ -24,7 +24,33 @@
       </template>
 
     </v-flex>
+    <v-dialog
+      v-model="showInitialOpinionDialog"
+      >
+      <v-card>
+        <v-card-title>
+          이 정책에 대해 어떻게 생각하시는 지 알려주세요!
+        </v-card-title>
+        <v-card-text>
+          이 정책에 대해 어떻게 생각하시나요? 
+          <v-slider
+            max="5"
+            min="1"
+            :tick-labels="opinions"
+            v-model="initialStance">
+          </v-slider>
+          왜 그렇게 생각하시나요? 이유를 적어주세요!
+          <v-text-field v-model="initialOpinion">
 
+          </v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="success" @click="onPolicyClick(chosenPolicy)">
+            다음
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -45,7 +71,12 @@ export default {
   },
   data: function () {
     return {
-      drawer: false
+      drawer: false,
+      opinions: ['매우 부정적', '부정적', '중립', '긍정적', '매우 긍정적'],
+      showInitialOpinionDialog: false,
+      chosenPolicy: {},
+      initialOpinion: '',
+      initialStance: ''
     }
   },
   // List of policies fetched from here
@@ -82,6 +113,10 @@ export default {
     }
   },
   methods: {
+    onPolicyBtnClick: function (policy) {
+      this.chosenPolicy = policy
+      this.showInitialOpinionDialog = true
+    },
     onPolicyClick: async function (policy) {
       this.$ga.event({
         eventCategory: '/ShowPolicies',
@@ -90,6 +125,11 @@ export default {
         eventValue: 0
       })
       this.$store.commit('setPolicy', policy)
+      this.$store.dispatch('setInitialOpinion', {
+        initialStance: this.initialStance,
+        initialOpinion: this.initialOpinion,
+        policy: policy.id
+      })
       if (this.$store.state.userToken) {
         const upIdx = this.userpolicies.findIndex((up) => {
           return up.policy === policy.id

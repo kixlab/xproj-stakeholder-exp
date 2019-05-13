@@ -1,115 +1,44 @@
 <template>
-  <div>
-    <!-- <span v-if="tagLow">#{{tagHigh.tag}} > #{{tagLow.tag}}</span>
-    <span v-else-if="tagHigh">#{{tagHigh.tag}}</span>
-    <span v-else-if="!tagHigh"></span> -->
-    <!-- 에 속한 사람들이 직접 적은 영향입니다. -->
-    <!-- <v-toolbar
-      color="white">
-      <template> -->
-        <v-tabs grow centered :value="tab">
-          <v-tab v-for="n in 3" :key="n" @click="onTabClick(n)">
-            <span :class="['purple--text', 'blue--text', 'red--text'][n-1]">{{['모든 영향', '긍정적 영향', '부정적 영향'][n-1]}}</span>
-          </v-tab>
-          <!-- <v-spacer/> -->
-          <v-menu>
-            <div slot="activator">
-              <v-btn icon @click="showFilter = !showFilter">
-                <v-icon>sort</v-icon>
-              </v-btn>
-            </div>
-            <v-list>
-              <v-list-tile
-                v-for="item in sortTexts"
-                :key="item.value"
-                @click="sort = item.value"
-                >
-                <v-list-tile-title>
-                  {{item.text}}
-                </v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
-        </v-tabs>
-      <!-- </template>
-      <v-toolbar-items>
-        
-      </v-toolbar-items>
-    </v-toolbar> -->
+  <v-card>
+    <v-expand-transition>
+      <div
+        v-if="showHelp"
+        class="d-flex transition-fast-in-fast-out grey darken-2 v-card--reveal display-1 white--text"
+        style="height: 100%;"
+        @click="showHelp = !showHelp"
+      >
+        선택하신 집단에 속한 사람들이 직접 적은 의견을 알아보세요!
+      </div>
+    </v-expand-transition>
+    <div>
+    <v-tabs grow centered :value="tab">
+      <v-tab v-for="n in 3" :key="n" @click="onTabClick(n)">
+        <span :class="['purple--text', 'blue--text', 'red--text'][n-1]">{{['모든 영향', '긍정적 영향', '부정적 영향'][n-1]}}</span>
+      </v-tab>
+      <v-btn icon @click="showHelp = !showHelp">
+        <v-icon>help</v-icon>
+      </v-btn>
+      <v-menu>
+        <div slot="activator">
+          <v-btn icon @click="showFilter = !showFilter">
+            <v-icon>sort</v-icon>
+          </v-btn>
+        </div>
+        <v-list>
+          <v-list-tile
+            v-for="item in sortTexts"
+            :key="item.value"
+            @click="sort = item.value"
+            >
+            <v-list-tile-title>
+              {{item.text}}
+            </v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+    </v-tabs>
     <v-tabs-items :value="tab">
       <v-tab-item v-for="i in 3" :key="i">
-        <v-card v-if="false"
-          style="width: 100%;">
-          <v-card-text>
-            <!-- <template v-if="onLoading">
-              <v-layout align-center justify-center column>
-                  <v-progress-circular
-                    style="margin-top: 2em; margin-bottom: 2em;"
-                    color="purple"
-                    indeterminate
-                  ></v-progress-circular>
-                <br>
-              </v-layout>
-            </template> -->
-            <!-- <template v-else-if="showKeywords">
-              <template v-if="keywords.length === 0">
-                <span v-if="tagLow" class="blue--text">#{{tagHigh.tag}} #{{tagLow.tag}}</span>
-                <span v-else-if="tagHigh" class="blue--text">#{{tagHigh.tag}}</span>
-                <span v-else> 전체 이해 관계자</span> 집단의 키워드 분석을 위한 영향의 갯수가 부족합니다. 영향을 직접 읽어주세요.
-              </template>
-              <template v-else>
-                <span v-if="effectFilter.length === 1 && effectFilter[0] === 0"> <span class="red--text">부정적</span> 영향을 적은 </span>
-                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 1"> <span class="blue--text">긍정적</span> 영향을 적은 </span>
-
-                <span v-if="tagLow" class="blue--text">#{{tagHigh.tag}} #{{tagLow.tag}}</span>
-                <span v-else-if="tagHigh" class="blue--text">#{{tagHigh.tag}}</span>
-                <span v-else> 전체 이해 관계자</span>
-                집단이 많이 사용한 단어의 목록입니다. <br>
-                <template>
-                  <v-chip v-for="keyword in keywords" :key="keyword[0] + keyword[1] + 'main'" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
-                </template>
-              </template>
-              <br>
-              <template v-if="tagLow">
-                <template v-if="keywordsHigh.length === 0">
-                  <span class="blue--text">#{{tagHigh.tag}}</span> 키워드 분석을 위한 영향의 갯수가 부족합니다. 아래 영향을 직접 읽어보세요!
-                </template>
-                <template v-else>
-                  <span v-if="effectFilter.length === 2" class="purple--text">모든</span>
-                  <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 0" class="red--text">부정적</span>
-                  <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 1" class="blue--text">긍정적</span>
-                  영향을 적은
-                  <span class="blue--text">#{{tagHigh.tag}}</span>
-                  집단이 많이 사용한 단어와 비교해보세요. <br>
-                  <template>
-                    <v-chip v-for="keyword in keywordsHigh" :key="keyword[0] + keyword[1] + 'high'" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
-                  </template>
-                </template>
-                <br>
-                <span v-if="effectFilter.length === 2" class="purple--text">모든</span>
-                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 0" class="red--text">부정적</span>
-                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 1" class="blue--text">긍정적</span>
-                 영향을 적은
-                <span class="blue--text">전체 이해 관계자</span>
-                집단이 많이 사용한 단어와도 비교해보세요. <br>
-                <template>
-                  <v-chip v-for="keyword in keywordsAll" :key="keyword[0] + keyword[1] + 'all'" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
-                </template>
-              </template>
-              <template v-else-if="tagHigh">
-                <span v-if="effectFilter.length === 2" class="purple--text">모든</span>
-                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 0" class="red--text">부정적</span>
-                <span v-else-if="effectFilter.length === 1 && effectFilter[0] === 1" class="blue--text">긍정적</span>
-                 영향을 적은
-                <span class="blue--text">전체 이해 관계자</span>
-                집단이 많이 사용한 단어와 비교해보세요. <br>
-                <template>
-                  <v-chip v-for="keyword in keywordsAll" :key="keyword[0] + keyword[1] + 'all'" :color="getKeywordColor(keyword[2])" text-color="white">{{keyword[0]}}</v-chip>
-                </template>
-              </template>
-            </template> -->
-          </v-card-text>
-        </v-card>
         <template v-if="onLoading">
           <v-layout class="cards__list" align-center justify-center column>
             <div style="width: 100%">
@@ -135,9 +64,11 @@
         </template>
       </v-tab-item>
     </v-tabs-items>
-  </div>
+    </div>
+  </v-card>
 </template>
-<style>
+
+<style scoped>
 .v-expansion-panel__body {
   padding: 10px !important;
 }
@@ -149,12 +80,23 @@
   margin-top: 20px;
 }
 .cards__list {
-  height: 70vh;
+  height: 72.7vh;
   margin-top: 1vh;
   margin-bottom: 1vh;
   width: 100%;
 }
+
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: .5;
+  position: absolute;
+  width: 100%;
+  z-index: 63;
+}
 </style>
+
 <script>
 import EffectCard from '~/components/EffectCard.vue'
 import PromisePane from '~/components/PromisePane.vue'
@@ -163,13 +105,8 @@ import hangulSearchMixin from '~/mixins/hangulSearch.js'
 import _ from 'lodash'
 export default {
   created: function () {
-    // this.onInputDebounced = _.debounce(this.onInput, 1000)
     this.onEffectFilterChangeDebounced = _.debounce(this.onEffectFilterChange, 500)
     this.onSortChangedDebounced = _.debounce(this.onSortChanged, 500)
-    // this.onGuessFilterChangeDebounced = _.debounce(this.onGuessFilterChange, 500)
-    // if(this.$store.state.selectedTag){
-    //   this.onInput([this.$store.state.selectedTag])
-    // }
     if (this.$store.state.selectedTag) {
       this.selectedTags.push(this.$store.state.selectedTag)
       this.$ga.event({
@@ -201,42 +138,12 @@ export default {
     tab: Number
   },
   computed: {
-    selectedTag: function () {
-      return this.$store.state.selectedTag
-    },
     policy: function () {
       return this.$store.state.policy
     },
     userGroup: function () {
       return this.$store.getters.userGroup
     },
-    keywordsHigh: function () {
-      return this.$store.state.keywordsHigh[this.tab]
-    },
-    keywordsAll: function () {
-      return this.$store.state.keywordsAll[this.tab]
-    },
-    allKeywords: function () {
-      return this.$store.state.keywords[0]
-    },
-    // stakeholder_left: function () {
-    //   if (this.$store.state.userPolicy.stakeholders_seen > 3) {
-    //     return 0
-    //   }
-    //   return 3 - this.$store.state.userPolicy.stakeholders_seen
-    // },
-    // effect_left: function () {
-    //   if (this.$store.state.userPolicy.effects_seen > 9) {
-    //     return 0
-    //   } else if (this.filteredTags.length < 9) {
-    //     return this.filteredTags.length - this.$store.state.userPolicy.effects_seen
-    //   }
-    //   return 9 - this.$store.state.userPolicy.effects_seen
-    // },
-    // filteredTags: function () {
-    //   const ft = this.tags.filter((tag) => { return tag.total_count >= 3 })
-    //   return ft.length > 0 ? ft : this.tags
-    // },
     sorter: function () {
       return [
         (a, b) => {
@@ -268,32 +175,6 @@ export default {
     sortedEffects: function () {
       return this.effects.slice().sort(this.sorter)
     },
-    // explorationRequired: function () {
-    //   return this.filteredTags.length >= 9 ? 9 : this.filteredTags.length
-    // },
-    // answer_left: function () {
-    //   // console.log(this.$store.state.userPolicy)
-    //   if (this.userGroup === 6 || this.userGroup === 7) {
-    //     return 3 - this.$store.state.userPolicy.stakeholders_answered
-    //   } else {
-    //     return 0
-    //   }
-    // },
-    // pagenum: function () {
-    //   return Math.ceil(this.count / 50)
-    // },
-    keywords: function () {
-      return this.$store.state.keywords[this.tab]
-    },
-    tags: function () {
-      return this.$store.state.tags
-    },
-    tagHigh: function () {
-      return this.$store.state.tagHigh
-    },
-    tagLow: function () {
-      return this.$store.state.tagLow
-    },
     effectDirection: function () {
       if (this.effectFilter.length === 1) {
         if (this.effectFilter[0] === 0) {
@@ -319,18 +200,10 @@ export default {
   },
   data: function () {
     return {
-      opinionTexts: false,
-      active_button: true,
-      seeOtherPolicyDialog: false,
-      page: 1,
-      selectedTags: [],
-      search: '',
-      // onLoading: false,
       show: false,
       showFilter: false,
-      showKeywords: true,
       guessFilter: [0, 1],
-      // tab: 0,
+      showHelp: false,
       sortTexts: [{
         text: '긴 영향부터 보기',
         value: 0
@@ -381,136 +254,17 @@ export default {
         return 'grey'
       }
     },
-    onTagHighClick: function (tag) {
-      this.$emit('tag-high-click', tag)
-    },
-    onTagHighLinkClick: function (tagTxt) {
-      const tag = this.tags.find((t) => {
-        return t.tag === tagTxt
-      })
-      this.onTagHighClick(tag)
-    },
-    onTagLinkClick: function (tagTxt) {
-      if (this.tagHigh) {
-        this.onTagLowLinkClick(tagTxt)
-      } else {
-        this.onTagHighLinkClick(tagTxt)
-      }
-    },
-    onTagLowClick: function ($event) {
-      if ($event === null) {
-        this.$emit('tag-low-click', null, false)
-      } else {
-        const tag = this.tagHigh.children[$event]
-        this.$emit('tag-low-click', tag, true)
-      }
-    },
-    onTagLowLinkClick: function (tagTxt) {
-      const tag = this.tagHigh.children.find((t) => {
-        return t.tag === tagTxt
-      })
-      this.$emit('tag-low-click', tag, true)
-    },
     onTabClick: function (i) {
-      // this.tab = i
       if (i === 1 && this.effectFilter.length < 2) {
-        // this.tab = i
         this.onEffectFilterChangeDebounced([0, 1], i)
       } else if (i === 2 && !(this.effectFilter.length === 1 && this.effectFilter[0] === 1)) {
-        // this.tab = i
         this.onEffectFilterChangeDebounced([1], i)
       } else if (i === 3 && !(this.effectFilter.length === 1 && this.effectFilter[0] === 0)) {
-        // this.tab = i
         this.onEffectFilterChangeDebounced([0], i)
       }
     },
-    // onInput: async function (ev) {
-    //   this.onLoading = true
-    //   this.selectedTags = ev
-    //   this.$ga.event({
-    //     eventCategory: this.$router.currentRoute.path,
-    //     eventAction: 'SearchTags',
-    //     eventLabel: this.selectedTags,
-    //     eventValue: 0
-    //   })
-    //   this.$store.dispatch('addBrowsedTags', this.selectedTags)
-    //   const effects = await this.$axios.$get('/api/effects/', {
-    //     params: {
-    //       policy: this.policy.id,
-    //       tag: this.selectedTags,
-    //       is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-    //       include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
-    //     }
-    //   })
-    //   // this.$store.dispatch('incrementUserPolicyEffectsSeen')
-    //   this.effects = effects.results
-    //   this.count = effects.count
-    //   this.page = 1
-    //   this.onLoading = false
-    // },
     onEffectFilterChange: async function (ev, i) {
       this.$emit('effect-filter-change', ev, i, this.guessFilter)
-    },
-    // onGuessFilterChange: async function (ev) {
-    //   this.onLoading = true
-    //   this.guessFilter = ev
-    //   this.$ga.event({
-    //     eventCategory: this.$router.currentRoute.path,
-    //     eventAction: 'GuessFilterChanged',
-    //     eventLabel: this.guessFilter,
-    //     eventValue: 0
-    //   })
-    //   const effects = await this.$axios.$get('/api/effects/', {
-    //     params: {
-    //       policy: this.policy.id,
-    //       tag: this.selectedTags,
-    //       is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-    //       include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null
-    //     }
-    //   })
-    //   this.effects = effects.results
-    //   this.count = effects.count
-    //   this.page = 1
-    //   this.onLoading = false
-    // },
-    // onPageChange: async function (newPage) {
-    //   this.onLoading = true
-    //   this.$ga.event({
-    //     eventCategory: this.$router.currentRoute.path,
-    //     eventAction: 'PageChange',
-    //     eventLabel: `${newPage} / ${this.pagenum}`,
-    //     eventValue: 0
-    //   })
-    //   const effects = await this.$axios.$get('/api/effects/', {
-    //     params: {
-    //       policy: this.policy.id,
-    //       tag: this.selectedTags,
-    //       is_benefit: this.effectFilter.length === 1 ? this.effectFilter[0] : null,
-    //       include_guess: this.guessFilter.length === 1 ? this.guessFilter[0] : null,
-    //       page: newPage
-    //     }
-    //   })
-    //   this.effects = effects.results
-    //   this.page = newPage
-    //   this.onLoading = false
-    // },
-    onShowFilterChanged: async function () {
-      if (this.show) {
-        this.$ga.event({
-          eventCategory: this.$router.currentRoute.path,
-          eventAction: 'HideFilter',
-          eventLabel: ``,
-          eventValue: 0
-        })
-      } else {
-        this.$ga.event({
-          eventCategory: this.$router.currentRoute.path,
-          eventAction: 'ShowFilter',
-          eventLabel: ``,
-          eventValue: 0
-        })
-      }
-      this.show = !this.show
     }
   }
 }
