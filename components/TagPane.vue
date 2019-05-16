@@ -54,10 +54,10 @@
         </v-list>
       </v-menu>
     </v-card-title>
-    <v-card-title class="mysearchbox">
+    <!-- <v-card-title class="mysearchbox">
       <v-text-field append-icon="search">
       </v-text-field>
-    </v-card-title>
+    </v-card-title> -->
     <v-card-text>
       <v-layout column justify-center align-center class="tree">
         <v-flex style="overflow: auto; width: 100%;">
@@ -71,6 +71,7 @@
               v-for="tag in sortedTagHigh" 
               :key="tag.tag" 
               :tag="tag" 
+              :important="policy.key_stakeholders.includes(tag.tag)"
               @tag-click="onTagHighClick(tag)" 
               :cls="expansionPanelColor(tag)">
             </tag-overview-item>
@@ -244,10 +245,13 @@ export default {
       this.onTagLowClick(tag, true)
     },
     expansionPanelColor: function (tag) {
+      // if (!this.policy.key_stakeholders.includes(tag.tag)) {
+      //   return ''
+      // }
       if (tag.pos_count >= 2 * tag.neg_count) {
-        return 'blue lighten-5'
+        return 'light-blue accent-1'
       } else if (tag.pos_count * 2 <= tag.neg_count) {
-        return 'red lighten-5'
+        return 'red accent-1'
       } else {
         return 'blue-grey lighten-5'
       }

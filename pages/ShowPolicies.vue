@@ -26,12 +26,21 @@
     </v-flex>
     <v-dialog
       v-model="showInitialOpinionDialog"
+      max-width="50%"
       >
       <v-card>
         <v-card-title>
-          이 정책에 대해 어떻게 생각하시는 지 알려주세요!
+          <span class="dialog__title">이 정책에 대해 어떻게 생각하시는 지 알려주세요!</span>
         </v-card-title>
+        <v-divider/>
         <v-card-text>
+          먼저, <span class="policy__title">{{chosenPolicy.title}}</span> 정책에 대한 간단한 설명을 읽어주세요.
+          <br>
+          <div v-html="chosenPolicy.description">
+          </div>
+          <br>
+          <v-divider/>
+          <br>
           이 정책에 대해 어떻게 생각하시나요? 
           <v-slider
             max="5"
@@ -39,12 +48,16 @@
             :tick-labels="opinions"
             v-model="initialStance">
           </v-slider>
+          
           왜 그렇게 생각하시나요? 이유를 적어주세요!
-          <v-text-field v-model="initialOpinion">
+          <v-text-field 
+            v-model="initialOpinion"
+            multi-line="true">
 
           </v-text-field>
         </v-card-text>
         <v-card-actions>
+          <v-spacer/>
           <v-btn color="success" @click="onPolicyClick(chosenPolicy)">
             다음
           </v-btn>
@@ -83,6 +96,9 @@ export default {
   mixins: [setTokenMixin],
   fetch: async function ({app, store}) {
     const policies = await app.$axios.$get('/api/policies/')
+    policies.results.forEach(function (p) {
+      p.key_stakeholders = p.key_stakeholders.split(',')
+    })
     store.commit('setPolicies', policies.results)
   },
   asyncData: async function ({app, store}) { // fetch the list of policies from the server
@@ -196,5 +212,14 @@ export default {
 <style scoped>
 a {
   cursor: pointer;
+}
+
+.policy__title {
+  font-weight: bold;
+}
+
+.dialog__title {
+  font-weight: bold;
+  font-size: 1.2em;
 }
 </style>

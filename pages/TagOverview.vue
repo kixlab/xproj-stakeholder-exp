@@ -26,6 +26,7 @@
       </v-flex>
       <v-flex xs8>
         <effects-pane 
+          v-if="tagHigh"
           :effects="effects" 
           :count="count" 
           :onLoading="onLoading"

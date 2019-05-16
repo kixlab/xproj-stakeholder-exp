@@ -6,7 +6,7 @@
         class="d-flex transition-fast-in-fast-out grey darken-2 v-card--reveal display-1 white--text"
         style="height: 100%;"
         @click="showHelp = !showHelp"
-      >
+        >
         선택하신 집단에 속한 사람들이 직접 적은 의견을 알아보세요!
       </div>
     </v-expand-transition>
@@ -38,7 +38,7 @@
       </v-menu>
     </v-tabs>
     <v-tabs-items :value="tab">
-      <v-tab-item v-for="i in 3" :key="i">
+      <v-tab-item>
         <template v-if="onLoading">
           <v-layout class="cards__list" align-center justify-center column>
             <div style="width: 100%">
@@ -53,10 +53,26 @@
           </v-layout>
         </template>
         <template v-else>
+          <div ref="myCloudContainer" style="width: 100%; height: 30vh;">
+            <svg ref="myCloud" style="width: 100%; height: 100%;">
+              <g :transform="`translate(${svgWidth/2}, ${svgHeight/2})`">
+                <text v-for="word in words"
+                  :key="word.text"
+                  :fill-opacity="word.ratio"
+                  text-anchor="middle"
+                  :transform="`translate(${word.x}, ${word.y})rotate(${word.rotate})`"
+                  :style="`font-size: ${word.size}px; font-family: 'sans-serif'; fill: ${fill(word.type)};`"
+                  @click="selectedKeyword = word.text"
+                  >
+                {{word.text}}
+                </text>
+              </g>
+            </svg>
+          </div>
           <v-layout class="cards__list" column align-center justify-center>
             <v-flex style="overflow: auto; width: 100%;">
               <effect-card
-                v-for="effect in sortedEffects"
+                v-for="effect in filteredEffects"
                 :key="effect.id"
                 :effect="effect"/>
             </v-flex>
@@ -103,20 +119,37 @@ import PromisePane from '~/components/PromisePane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
 import hangulSearchMixin from '~/mixins/hangulSearch.js'
 import _ from 'lodash'
+// import * as d3 from 'd3'
+import cloud from 'd3-cloud'
+
 export default {
   created: function () {
     this.onEffectFilterChangeDebounced = _.debounce(this.onEffectFilterChange, 500)
     this.onSortChangedDebounced = _.debounce(this.onSortChanged, 500)
-    if (this.$store.state.selectedTag) {
-      this.selectedTags.push(this.$store.state.selectedTag)
-      this.$ga.event({
-        eventCategory: this.$router.currentRoute.path,
-        eventAction: 'SearchTags',
-        eventLabel: this.selectedTags,
-        eventValue: 0
+    // if (this.$store.state.selectedTag) {
+    //   this.selectedTags.push(this.$store.state.selectedTag)
+    //   this.$ga.event({
+    //     eventCategory: this.$router.currentRoute.path,
+    //     eventAction: 'SearchTags',
+    //     eventLabel: this.selectedTags,
+    //     eventValue: 0
+    //   })
+    //   this.$store.dispatch('addBrowsedTags', [this.$store.state.selectedTag])
+    // }
+  },
+  mounted: function () {
+    this.$nextTick(async function () {
+      this.words = this.keywords[this.tab].map(w => {
+        return {
+          text: w[0],
+          size: w[1] * 8,
+          type: w[2],
+          ratio: w[3]
+        }
       })
-      this.$store.dispatch('addBrowsedTags', [this.$store.state.selectedTag])
-    }
+      this.svgWidth = this.$refs.myCloudContainer.clientWidth
+      this.svgHeight = this.$refs.myCloudContainer.clientHeight
+    })
   },
   mixins: [setTokenMixin, hangulSearchMixin],
   components: {
@@ -137,7 +170,64 @@ export default {
     closeTags: Array,
     tab: Number
   },
+  watch: {
+    effects: function (newEffects) {
+      this.words = this.keywords[this.tab].map(w => {
+        return {
+          text: w[0],
+          size: w[1] * 8,
+          type: w[2],
+          ratio: w[3]
+        }
+      })
+      const width = this.svgWidth
+      const height = this.svgHeight
+      cloud().size([width, height]).words(this.words)
+        .rotate(0)
+        .font('sans-serif')
+        .fontSize(d => d.size)
+        .start()
+    },
+    svgWidth: function (newWidth) {
+      cloud().size([this.svgWidth, this.svgHeight]).words(this.words)
+        .rotate(0)
+        .font('sans-serif')
+        .fontSize(d => d.size)
+        .start()
+    }
+  },
   computed: {
+    // words: function () {
+    //   return this.effects.keywords.map(function (list) {
+    //     return list.map(function (w) {
+    //       return {
+    //         text: w[0],
+    //         size: w[1] * 8,
+    //         type: w[2],
+    //         ratio: w[3]
+    //       }
+    //     })
+    //   })
+    // },
+    // layouts: function () {
+    //   return d3.layout.cloud().size([1200, 800]).words(this.data)
+    //     .rotate(0)
+    //     .font('sans-serif')
+    //     .fontSize(d => d.size)
+    //     .start()
+    // },
+    // word: function () {
+    //   return this.words[this.tab]
+    // },
+    filteredEffects: function () {
+      if (this.selectedKeyword) {
+        return this.sortedEffects.filter(e => {
+          return e.description.includes(this.selectedKeyword)
+        })
+      } else {
+        return this.sortedEffects
+      }
+    },
     policy: function () {
       return this.$store.state.policy
     },
@@ -196,6 +286,9 @@ export default {
       } else {
         return 'black'
       }
+    },
+    keywords: function () {
+      return this.$store.state.keywords
     }
   },
   data: function () {
@@ -236,7 +329,12 @@ export default {
         text: '새로 올라온 영향부터 보기',
         value: 7
       }],
-      sort: 0
+      sort: 0,
+      layout: [],
+      words: [],
+      svgWidth: 0,
+      svgHeight: 0,
+      selectedKeyword: ''
     }
   },
   methods: {
@@ -252,6 +350,17 @@ export default {
         return 'red'
       } else {
         return 'grey'
+      }
+    },
+    fill: function (type) {
+      if (type === 'pos') {
+        return '#03A9F4'
+      } else if (type === 'neg') {
+        return '#F44336'
+      } else if (type === 'both') {
+        return '#673AB7'
+      } else {
+        return '#607D88'
       }
     },
     onTabClick: function (i) {

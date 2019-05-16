@@ -5,12 +5,18 @@
       <v-card-title>
         <v-flex xs7 style="text-align: left;">
           <span class="card__tag__title">#{{tag.tag}}</span>
-        </v-flex>
-        <v-flex xs5 style="text-align: right;">
+          <br>
           <span class="blue--text caption">긍정 {{tag.pos_count}}</span>
           <span class="caption"> vs </span>
           <span class="red--text caption">{{tag.neg_count}} 부정</span>
-          <!--span class="card__tag__title">총 {{tag.total_count}}개</span-->
+        </v-flex>
+        <v-flex xs5 style="text-align: right;">
+          <!-- <span class="blue--text caption">긍정 {{tag.pos_count}}</span>
+          <span class="caption"> vs </span>
+          <span class="red--text caption">{{tag.neg_count}} 부정</span> -->
+          <v-icon v-if="important">
+            priority_high
+          </v-icon>
         </v-flex>
       </v-card-title>
       <v-card-text>
@@ -51,7 +57,8 @@ export default {
     maxValue: {
       type: Number
     },
-    cls: String
+    cls: String,
+    important: Boolean
   },
   computed: {
     pos: function () {

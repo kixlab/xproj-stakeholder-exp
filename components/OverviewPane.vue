@@ -35,104 +35,49 @@
         <template v-else>
         </template>
         <v-spacer/>
-        <!-- <v-btn @click="onShowRelevantTagsClick">
-          {{showRelevantTags ? '접어두기' : '관련 집단 보기'}}
-        </v-btn> -->
-        <v-btn @click="onShowKeywordsClick">
-          {{showKeywords ? '접어두기' : '키워드 보기'}}
+        <v-btn @click="onShowMyOpinionClick">
+          {{showMyOpinion ? '접어두기' : '내 의견 다시보기'}}
         </v-btn>
-        <!-- <v-btn style="float: right;" @click="onTagHighReset">모든 집단 보기</v-btn> -->
       </template>
       <template v-else>
         <span class="title">모든 이해관계자</span>
-        <!-- <v-spacer/>
-        <span class="blue--text">
-          <strong>긍정 {{totalPosCount}} </strong>
-        </span>
-        vs
-        <span class="red--text">
-          <strong> 부정 {{totalNegCount}}</strong>
-        </span> -->
         <v-spacer/>
-        <!-- <v-btn @click="onShowRelevantTagsClick">
-          {{showRelevantTags ? '접어두기' : '관련 집단 보기'}}
-        </v-btn> -->
-        <v-btn @click="onShowKeywordsClick">
-          {{showKeywords ? '접어두기' : '키워드 보기'}}
+        <v-btn @click="onShowMyOpinionClick">
+          {{showMyOpinion ? '접어두기' : '내 의견 다시보기'}}
         </v-btn>
       </template>
     </v-card-title>
     <!-- content here -->
     <v-expand-transition>
-      <v-card-text v-if="showKeywords">
+      <v-card-text v-if="showMyOpinion">
         <v-layout row wrap>
-          <v-flex xs4 style="text-align: left;"> <!-- related groups-->
-            <template v-if="tagLow"> <!-- when tagLow exists -->
-            
-            </template>
-            <template v-else-if="tagHigh"> <!-- when tagHigh exists -->
-              <div class="subheader">아래 이해 관계자 목록을 이용해 #{{tagHigh.tag}} 집단에 대해 자세히 알아보세요!</div>
+          <v-flex xs12>
+            혹시 정책에 대한 의견이 변하셨나요? 의견이 어떻게 바뀌셨는지 알려주세요!
+            <v-slider
+              v-model="currentStance"
+              @change="onUpdateStance"
+              @start="previousStance = currentStance"
+              :tick-labels="opinions"
+              min="1"
+              max="5"
+              >
+            </v-slider>
+            <br>
+            <div v-if="updateStance">
+              이 정책에 대해서 왜 그렇게 생각하시나요? 이유를 알려주세요!
+              <v-textarea
+                v-model="changedOpinion">
+              </v-textarea>
               <br>
-              #{{tagHigh.tag}} 중 이 정책에 가장 긍정적인
-              <span v-for="tag in closePositiveTags" :key="tag.tag" class="tags blue--text">
-                <a class="blue--text" @click="onUpdateSelectedTagLow(tag, true)">#{{tag.tag}} </a>
-              </span>
-              <br>
-              이 정책에 가장 부정적인
-              <span v-for="tag in closeNegativeTags" :key="tag.tag" class="tags red--text">
-                <a class="red--text" @click="onUpdateSelectedTagLow(tag, true)">#{{tag.tag}} </a>
-              </span>
-              <br>집단부터 시작해보세요.
-            </template>
-            <template v-else-if="!tagHigh"> <!-- when no tag exists -->
-              아래 이해 관계자 목록을 이용해 영향을 자세히 알아보세요!
-              <br>
-              이 정책에 가장 긍정적인
-              <span v-for="tag in closePositiveTags" :key="tag.tag" class="blue--text">
-                <a class="blue--text" @click="onUpdateSelectedTagHigh(tag)">#{{tag.tag}} </a>
-              </span>
-
-              <br>이 정책에 가장 부정적인
-              <span v-for="tag in closeNegativeTags" :key="tag.tag" class="red--text">
-                <a class="red--text" @click="onUpdateSelectedTagHigh(tag)">#{{tag.tag}} </a>
-              </span>
-
-              <br>집단부터 시작해보세요.
-            </template>
-          </v-flex>
-          <v-flex xs8> <!-- keywords -->
-            <v-layout row wrap>
-              <v-flex xs12>  <!-- keywords_all -->
-                이 집단이 특히 많이 사용한 단어들입니다.
-                <br>
-                <v-chip 
-                  v-for="keyword in distinctKeywords"
-                  :key="keyword[0] + keyword[1] + 'main'"
-                  :color="getKeywordColor(keyword[2])"
-                  text-color="white"
-                  >{{keyword[0]}}</v-chip>
-              </v-flex>
-              <v-flex xs6> <!-- keywords-pos -->
-                긍정적 영향에서 자주 등장한 단어
-                <br>
-                <v-chip
-                  v-for="keyword in positiveKeywords"
-                  :key="keyword[0] + keyword[1] + 'pos'"
-                  :color="getKeywordColor(keyword[2])"
-                  text-color="white"
-                >{{keyword[0]}}</v-chip>
-              </v-flex>
-              <v-flex xs6> <!-- keywords-neg-->
-                부정적 영향에서 자주 등장한 단어
-                <br>
-                <v-chip
-                  v-for="keyword in negativeKeywords"
-                  :key="keyword[0] + keyword[1] + 'neg'"
-                  :color="getKeywordColor(keyword[2])"
-                  text-color="white"
-                >{{keyword[0]}}</v-chip>
-              </v-flex>
-            </v-layout>
+              <v-btn class="error"
+                @click="onCancelUpdateStance">
+                취소
+              </v-btn>
+              <v-btn class="success"
+                @click="onCommitUpdateStance">
+                저장
+              </v-btn>
+            </div>
           </v-flex>
         </v-layout>
       </v-card-text>
@@ -143,90 +88,29 @@
 <script>
 export default {
   props: {
-    effectFilter: Array,
-    closePositiveTags: Array,
-    closeNegativeTags: Array
   },
   computed: {
-    totalPosCount: function () {
-      return this.$store.state.totalPosCount
+    initialStance: function () {
+      return this.$store.state.initialStance
     },
-    totalNegCount: function () {
-      return this.$store.state.totalNegCount
+    initialOpinion: function () {
+      return this.$store.state.initialOpinion
     },
     tagHigh: function () {
       return this.$store.state.tagHigh
     },
     tagLow: function () {
       return this.$store.state.tagLow
-    },
-    keywords: function () {
-      return this.$store.state.keywords[0]
-    },
-    bothKeywords: function () {
-      return this.keywords.filter(k => {
-        return k[2] === 'both' || k[2] === 'none'
-      })
-    },
-    positiveKeywords: function () {
-      return this.keywords.filter(k => {
-        return k[2] === 'pos'
-      })
-    },
-    distinctKeywords: function () {
-      const keywordsUpper = this.keywordsUpper.map(x => {
-        return x[0]
-      })
-      return this.keywords.filter(k => {
-        return !keywordsUpper.includes(k[0])
-      })
-    },
-    negativeKeywords: function () {
-      return this.keywords.filter(k => {
-        return k[2] === 'neg'
-      })
-    },
-    bothKeywordsUpper: function () {
-      return this.keywordsUpper[0].filter(k => {
-        return k[2] === 'both' || k[2] === 'none'
-      })
-    },
-    positiveKeywordsUpper: function () {
-      return this.keywordsUpper[0].filter(k => {
-        return k[2] === 'pos'
-      })
-    },
-    negativeKeywordsUpper: function () {
-      return this.keywordsUpper[0].filter(k => {
-        return k[2] === 'neg'
-      })
-    },
-    // positiveKeywords: function () {
-    //   return this.$store.state.keywords[1]
-    // },
-    // negativeKeywords: function () {
-    //   return this.$store.state.keywords[2]
-    // },
-    keywordsHigh: function () {
-      return this.$store.state.keywordsHigh[0]
-    },
-    keywordsAll: function () {
-      return this.$store.state.keywordsAll[0]
-    },
-    keywordsUpper: function () {
-      if (this.tagLow) {
-        return this.keywordsHigh
-      } else if (this.tagHigh) {
-        return this.keywordsAll
-      } else if (!this.tagHigh) {
-        return []
-      }
     }
   },
   data: function () {
     return {
-      showKeywords: false,
-      showRelevantTags: false
+      changedOpinion: this.$store.state.initialOpinion,
+      currentStance: this.$store.state.initialStance,
+      previousStance: this.$store.state.initialStance,
+      updateStance: false,
+      showMyOpinion: false,
+      opinions: ['매우 부정적', '부정적', '중립', '긍정적', '매우 긍정적']
     }
   },
   methods: {
@@ -239,24 +123,19 @@ export default {
     onTagHighReset: function () {
       this.$emit('tag-high-reset')
     },
-    onShowKeywordsClick: function () {
-      this.showKeywords = !this.showKeywords
-      this.showRelevantTags = false
+    onShowMyOpinionClick: function () {
+      this.showMyOpinion = !this.showMyOpinion
     },
-    onShowRelevantTagsClick: function () {
-      this.showRelevantTags = !this.showRelevantTags
-      this.showKeywords = false
+    onUpdateStance: function () {
+      this.updateStance = true
     },
-    getKeywordColor: function (k) {
-      if (k === 'both') {
-        return 'blue-grey'
-      } else if (k === 'pos') {
-        return 'blue'
-      } else if (k === 'neg') {
-        return 'red'
-      } else {
-        return 'grey'
-      }
+    onCancelUpdateStance: function () {
+      this.updateStance = false
+      this.currentStance = this.previousStance
+    },
+    onCommitUpdateStance: function () {
+      // TODO: Apply in database
+      this.updateStance = false
     }
   }
 }

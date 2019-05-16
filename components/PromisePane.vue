@@ -13,14 +13,7 @@
       </span>
     </v-toolbar-title>
     <v-spacer/>
-    <v-slider
-      :value="currentStance"
-      @change="onUpdateStance"
-      :tick-labels="opinions"
-      min="1"
-      max="5"
-      >
-    </v-slider>
+
     <v-spacer/>
     <v-toolbar-items>
       <v-btn icon flat @click="revisitDialog = true">
@@ -28,10 +21,15 @@
           star
         </v-icon>
       </v-btn>
+      <v-btn icon flat @click="editDialog = true">
+        <v-icon>
+          edit
+        </v-icon>
+      </v-btn>
     </v-toolbar-items>
 
     <v-dialog
-      v-model="reviewDialog">
+      v-model="editDialog">
       <v-card>
         <v-card-title>
           정책에 대한 의견이 변하셨나요? 그렇다면 왜 의견을 바꾸셨는지 알려주세요!
@@ -59,7 +57,7 @@
     </v-dialog>
 
     <v-dialog
-      v-model = "dialog"
+      v-model="dialog"
       >
       <v-card>
         <v-card-title
@@ -101,6 +99,9 @@ export default {
     },
     pinnedEffects: function () {
       return this.$store.state.pinnedEffects
+    },
+    initialStance: function () {
+      return this.$store.state.initialStance
     }
   },
   components: {
@@ -111,10 +112,13 @@ export default {
     return {
       dialog: false,
       drawer: false,
-      reviewDialog: false,
+      reviewOpinionDialog: false,
       revisitDialog: false,
+      previousStance: '',
       opinions: ['매우 부정적', '부정적', '중립', '긍정적', '매우 긍정적'],
-      currentStance: this.$store.state.initialStance
+      currentStance: this.$store.state.initialStance,
+      editDialog: false,
+      changedOpinion: ''
     }
   },
   props: {
@@ -171,6 +175,16 @@ export default {
     },
     onUpdateStance: function () {
       // pass
+      this.reviewOpinionDialog = true
+    },
+    onCancelUpdateStance: function () {
+      this.currentStance = this.previousStance
+      this.reviewOpinionDialog = false
+    },
+    onSubmitUpdateStance: function () {
+      // TODO: connect to db
+      this.changedOpinion = ''
+      this.reviewOpinionDialog = false
     }
   }
 }
