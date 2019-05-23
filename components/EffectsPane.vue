@@ -7,79 +7,93 @@
         style="height: 100%;"
         @click="showHelp = !showHelp"
         >
-        선택하신 집단에 속한 사람들이 직접 적은 의견을 알아보세요!
+        선택하신 집단에 속한 사람들이 직접 적은 정책의 영향을 알아보세요!
       </div>
     </v-expand-transition>
     <div>
-    <v-tabs grow centered :value="tab">
-      <v-tab v-for="n in 3" :key="n" @click="onTabClick(n)">
-        <span :class="['purple--text', 'blue--text', 'red--text'][n-1]">{{['모든 영향', '긍정적 영향', '부정적 영향'][n-1]}}</span>
-      </v-tab>
-      <v-btn icon @click="showHelp = !showHelp">
-        <v-icon>help</v-icon>
-      </v-btn>
-      <v-menu>
-        <div slot="activator">
-          <v-btn icon @click="showFilter = !showFilter">
-            <v-icon>sort</v-icon>
-          </v-btn>
-        </div>
-        <v-list>
-          <v-list-tile
-            v-for="item in sortTexts"
-            :key="item.value"
-            @click="sort = item.value"
-            >
-            <v-list-tile-title>
-              {{item.text}}
-            </v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
-    </v-tabs>
-    <v-tabs-items :value="tab">
-      <v-tab-item>
-        <template v-if="onLoading">
-          <v-layout class="cards__list" align-center justify-center column>
-            <div style="width: 100%">
-              <v-progress-circular
-                :size="70"
-                :width="7"
-                color="purple"
-                indeterminate
-              ></v-progress-circular>
-            </div>
-            <br>
-          </v-layout>
-        </template>
-        <template v-else>
-          <div ref="myCloudContainer" style="width: 100%; height: 30vh;">
-            <svg ref="myCloud" style="width: 100%; height: 100%;">
-              <g :transform="`translate(${svgWidth/2}, ${svgHeight/2})`">
-                <text v-for="word in words"
-                  :key="word.text"
-                  :fill-opacity="word.ratio"
-                  text-anchor="middle"
-                  :transform="`translate(${word.x}, ${word.y})rotate(${word.rotate})`"
-                  :style="`font-size: ${word.size}px; font-family: 'sans-serif'; fill: ${fill(word.type)};`"
-                  @click="selectedKeyword = word.text"
-                  >
-                {{word.text}}
-                </text>
-              </g>
-            </svg>
+      <v-tabs grow centered :value="tab">
+        <v-tab v-for="n in 3" :key="n" @click="onTabClick(n)">
+          <span :class="['purple--text', 'blue--text', 'red--text'][n-1]">{{['모든 영향', '긍정적 영향', '부정적 영향'][n-1]}}</span>
+        </v-tab>
+        <v-btn icon @click="showHelp = !showHelp">
+          <v-icon>help</v-icon>
+        </v-btn>
+        <v-menu>
+          <div slot="activator">
+            <v-btn icon @click="showFilter = !showFilter">
+              <v-icon>sort</v-icon>
+            </v-btn>
           </div>
-          <v-layout class="cards__list" column align-center justify-center>
-            <v-flex style="overflow: auto; width: 100%;">
-              <effect-card
-                v-for="effect in filteredEffects"
-                :key="effect.id"
-                :effect="effect"/>
-            </v-flex>
-          </v-layout>
-        </template>
-      </v-tab-item>
-    </v-tabs-items>
+          <v-list>
+            <v-list-tile
+              v-for="item in sortTexts"
+              :key="item.value"
+              @click="sort = item.value"
+              >
+              <v-list-tile-title>
+                {{item.text}}
+              </v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+      </v-tabs>
+      <v-tabs-items :value="tab">
+        <v-tab-item>
+          <template v-if="onLoading">
+            <v-layout class="cards__list" align-center justify-center column>
+              <div style="width: 100%">
+                <v-progress-circular
+                  :size="70"
+                  :width="7"
+                  color="purple"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+              <br>
+            </v-layout>
+          </template>
+          <template v-else>
+            <div ref="myCloudContainer" :style="`width: 100%; height: ${sortedEffects.length >= 10 ? 30 : 0}vh;`">
+              선택하신 집단이 많이 사용한 단어입니다. 단어를 클릭해보면서 이 집단이 어떤 의견을 갖고 있는지 알아보세요!
+              <svg ref="myCloud" style="width: 100%; height: 100%;">
+                <g :transform="`translate(${svgWidth/2}, ${svgHeight/2})`">
+                  <text v-for="word in words"
+                    :key="word.text"
+                    :fill-opacity="word.ratio"
+                    text-anchor="middle"
+                    :transform="`translate(${word.x}, ${word.y})rotate(${word.rotate})`"
+                    :style="`font-size: ${word.size}px; font-family: 'sans-serif'; fill: ${fill(word.type)}; cursor: pointer; ${selectedKeyword === word.text ? 'stroke: #000000; stroke-width: 2px; ' : ''}`"
+                    @click="onKeywordSelected(word.text)"
+                    >
+                  {{word.text}}
+                  </text>
+                </g>
+              </svg>
+            </div>
+            <v-layout :class="sortedEffects.length >= 10 ? 'cards__list__cloud' : 'cards__list'" column align-center justify-center>
+              <v-flex style="overflow: auto; width: 100%;">
+                <template v-if="onKeywordLoading">
+                  <div style="width: 100%">
+                    <v-progress-circular
+                      :size="70"
+                      :width="7"
+                      color="purple"
+                      indeterminate
+                    ></v-progress-circular>
+                  </div>
+                </template>
+                <template v-else>
+                  <effect-card
+                    v-for="effect in filteredEffects"
+                    :key="effect.id"
+                    :effect="effect"
+                    :selectedKeyword="selectedKeyword"/>
+                </template>
+              </v-flex>
+            </v-layout>
+          </template>
+        </v-tab-item>
+      </v-tabs-items>
     </div>
   </v-card>
 </template>
@@ -100,6 +114,17 @@
   margin-top: 1vh;
   margin-bottom: 1vh;
   width: 100%;
+}
+
+.cards__list__cloud {
+  height: 42.7vh;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  width: 100%;
+}
+
+.effect__list__all {
+  height: 76.6vh;
 }
 
 .v-card--reveal {
@@ -166,9 +191,7 @@ export default {
       }
     },
     onLoading: Boolean,
-    effectFilter: Array,
-    closeTags: Array,
-    tab: Number
+    closeTags: Array
   },
   watch: {
     effects: function (newEffects) {
@@ -197,28 +220,6 @@ export default {
     }
   },
   computed: {
-    // words: function () {
-    //   return this.effects.keywords.map(function (list) {
-    //     return list.map(function (w) {
-    //       return {
-    //         text: w[0],
-    //         size: w[1] * 8,
-    //         type: w[2],
-    //         ratio: w[3]
-    //       }
-    //     })
-    //   })
-    // },
-    // layouts: function () {
-    //   return d3.layout.cloud().size([1200, 800]).words(this.data)
-    //     .rotate(0)
-    //     .font('sans-serif')
-    //     .fontSize(d => d.size)
-    //     .start()
-    // },
-    // word: function () {
-    //   return this.words[this.tab]
-    // },
     filteredEffects: function () {
       if (this.selectedKeyword) {
         return this.sortedEffects.filter(e => {
@@ -262,8 +263,13 @@ export default {
         }
       ][this.sort]
     },
+    filteredEffectsByTab: function () {
+      return this.effects.filter(e => {
+        return this.effectFilter.includes(e.isBenefit)
+      })
+    },
     sortedEffects: function () {
-      return this.effects.slice().sort(this.sorter)
+      return this.filteredEffectsByTab.sort(this.sorter)
     },
     effectDirection: function () {
       if (this.effectFilter.length === 1) {
@@ -289,6 +295,9 @@ export default {
     },
     keywords: function () {
       return this.$store.state.keywords
+    },
+    tagHigh: function () {
+      return this.$store.state.tagHigh
     }
   },
   data: function () {
@@ -334,7 +343,10 @@ export default {
       words: [],
       svgWidth: 0,
       svgHeight: 0,
-      selectedKeyword: ''
+      selectedKeyword: '',
+      onKeywordLoading: false,
+      effectFilter: [0, 1],
+      tab: 0
     }
   },
   methods: {
@@ -373,7 +385,24 @@ export default {
       }
     },
     onEffectFilterChange: async function (ev, i) {
-      this.$emit('effect-filter-change', ev, i, this.guessFilter)
+      // this.$emit('effect-filter-change', ev, i, this.guessFilter)
+      this.onKeywordLoading = true
+      setTimeout(() => {
+        this.onKeywordLoading = false
+      }, 500)
+      this.tab = i - 1
+      this.effectFilter = ev
+    },
+    onKeywordSelected: function (text) {
+      this.onKeywordLoading = true
+      if (this.selectedKeyword === text) {
+        this.selectedKeyword = ''
+      } else {
+        this.selectedKeyword = text
+      }
+      setTimeout(() => {
+        this.onKeywordLoading = false
+      }, 500)
     }
   }
 }

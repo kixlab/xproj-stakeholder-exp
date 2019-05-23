@@ -12,7 +12,7 @@
         </v-flex>
       </v-card-title>      
       <v-card-text class="effect-card__textbox">
-        <span class="effect-card__text"> {{effect.description}} </span>
+        <span class="effect-card__text" v-html="highlightedDescription"> </span>
       </v-card-text>
       <v-card-actions>
         <v-flex xs11 style="text-align: left;">
@@ -57,12 +57,22 @@ export default {
         return ('tags' in value) && ('description' in value)
       }
     },
-    expanded: Boolean
+    expanded: Boolean,
+    selectedKeyword: String
   },
   computed: {
-    shortDescription: function () {
-      if (this.effect.description.length > 40) {
-        return this.effect.description.slice(0, 23) + '...'
+    // shortDescription: function () {
+    //   if (this.effect.description.length > 40) {
+    //     return this.effect.description.slice(0, 23) + '...'
+    //   } else {
+    //     return this.effect.description
+    //   }
+    // },
+    highlightedDescription: function () {
+      if (this.selectedKeyword) {
+        return this.effect.description.replace(new RegExp(this.selectedKeyword, 'gi'), match => {
+          return `<span style="font-weight: bold">${match}</span>`
+        })
       } else {
         return this.effect.description
       }
@@ -104,6 +114,10 @@ export default {
 .v-btn--small {
   min-width: 70px;
   padding: 0 !important;
+}
+
+.keyword {
+  font-weight: bold;
 }
 
 a {

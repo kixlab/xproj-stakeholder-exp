@@ -234,7 +234,6 @@ export const actions = {
     }
   },
   async incrementUserStep (context) {
-    context.commit('setNextstep')
     if (context.state.userToken) {
       const user = context.state.user
       await this.$axios.$put('/api/auth/user/', {
@@ -243,6 +242,7 @@ export const actions = {
         is_participant: user.is_participant,
         presurvey_done: user.presurvey_done
       })
+      context.commit('setNextstep')
     }
   },
   async finishPresurvey (context) {

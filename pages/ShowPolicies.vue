@@ -14,7 +14,7 @@
       </template>
 
       <template v-for="policy in policies"> <!-- ontest -->
-        <v-btn :key="policy.id" :disabled="selectPolicy(policy.id)" color="primary" large block @click="onPolicyBtnClick(policy)">
+        <v-btn :key="policy.id" :disabled="selectPolicy(policy.id)" color="primary" large block @click="onPolicyClick(policy)">
           {{policy.title}}
         </v-btn>
       </template>
@@ -24,7 +24,7 @@
       </template>
 
     </v-flex>
-    <v-dialog
+    <!-- <v-dialog
       v-model="showInitialOpinionDialog"
       max-width="50%"
       >
@@ -50,11 +50,11 @@
           </v-slider>
           
           왜 그렇게 생각하시나요? 이유를 적어주세요!
-          <v-text-field 
+          <v-textarea 
             v-model="initialOpinion"
-            multi-line="true">
+            >
 
-          </v-text-field>
+          </v-textarea>
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
@@ -63,7 +63,7 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
   </v-layout>
 </template>
 
@@ -72,13 +72,13 @@ import setTokenMixin from '~/mixins/setToken.js'
 import GeneralToolbar from '~/components/GeneralToolbar.vue'
 
 export default {
-  beforeRouteEnter (to, from, next) {
-    next((vm) => {
-      if (from.path === '/MiniSurvey') {
-        vm.$store.dispatch('incrementUserStep')
-      }
-    })
-  },
+  // beforeRouteEnter (to, from, next) {
+  //   next((vm) => {
+  //     if (from.path === '/MiniSurvey') {
+  //       vm.$store.dispatch('incrementUserStep')
+  //     }
+  //   })
+  // },
   components: {
     GeneralToolbar
   },
@@ -89,7 +89,7 @@ export default {
       showInitialOpinionDialog: false,
       chosenPolicy: {},
       initialOpinion: '',
-      initialStance: ''
+      initialStance: 3
     }
   },
   // List of policies fetched from here
@@ -129,10 +129,10 @@ export default {
     }
   },
   methods: {
-    onPolicyBtnClick: function (policy) {
-      this.chosenPolicy = policy
-      this.showInitialOpinionDialog = true
-    },
+    // onPolicyBtnClick: function (policy) {
+    //   this.chosenPolicy = policy
+    //   this.showInitialOpinionDialog = true
+    // },
     onPolicyClick: async function (policy) {
       this.$ga.event({
         eventCategory: '/ShowPolicies',
@@ -159,7 +159,11 @@ export default {
             stakeholders_answered: 0,
             stakeholders_seen: 0,
             articles_seen: 0,
-            effects_seen: 0
+            effects_seen: 0,
+            initial_stance: this.initialStance,
+            initial_opinion: this.initialOpinion,
+            final_stance: this.initialStance,
+            final_opinion: this.initialOpinion
           }
           const result = await this.$axios.$post('/api/userpolicy/', newUP)
           this.$store.commit('setUserPolicy', result)

@@ -330,6 +330,10 @@ export default {
         case 3:
         case 4:
         case -1:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
           return 0
         case 5:
         case 0:
@@ -358,6 +362,10 @@ export default {
         case -1:
         case 6:
         case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
           return 0
         case 3:
         case 4:
@@ -384,6 +392,10 @@ export default {
           return ['뉴스<br>읽기', ' ', ' ']
         case 3:
         case 4:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
           return ['뉴스<br>읽기', ' ', '영향<br>읽기']
         case 6:
         case 7:

@@ -213,7 +213,7 @@ export default {
       password2: '',
       dialog: false,
       agreement: false,
-      e1: 2,
+      e1: 1,
       dictionary: {
         attributes: {
           email: '이메일 ',

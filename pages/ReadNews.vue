@@ -15,10 +15,20 @@
     </v-flex>
 
     <v-flex xs12>
-      기사를 읽기 전, 먼저 정책에 대한 아래의 설명을 읽어주세요.
+      먼저, 정책에 대한 아래의 설명을 읽어주세요. <!-- replace with article....?? -->
+      <br>
       <div style="text-align: left;" v-html="policy.description"></div>
     </v-flex>
-
+    
+    <v-flex xs12>
+      이제, 이 정책에 대해 어떻게 생각하시는지 알려주세요!
+      <v-slider
+        max="7"
+        min="1"
+        :tick-labels="opinions"
+        v-model="initialStance">
+      </v-slider>
+    </v-flex>
     <v-flex xs12>
       <span style="text-align:left;"><strong> 첫 번째 기사 </strong></span>
       <v-divider/>
@@ -103,7 +113,9 @@ export default {
       curTime: 0,
       // read1: false,
       // read2: false,
-      article1Show: false
+      article1Show: false,
+      opinions: ['매우 부정적', '', '', '', '', '', '매우 긍정적'],
+      initialStance: 4
     }
   },
   computed: {
@@ -136,6 +148,17 @@ export default {
       return this.$store.getters.userGroup
     },
     nextRoute: function () {
+      if ((this.userGroup === 8 && this.policy.id === 1) ||
+      (this.userGroup === 9 && this.policy.id === 1) ||
+      (this.userGroup === 10 && this.policy.id === 2) ||
+      (this.userGroup === 11 && this.policy.id === 2)) {
+        return '/TagOverview'
+      } else if ((this.userGroup === 8 && this.policy.id === 2) ||
+      (this.userGroup === 9 && this.policy.id === 2) ||
+      (this.userGroup === 10 && this.policy.id === 1) ||
+      (this.userGroup === 11 && this.policy.id === 1)) {
+        return '/EffectsList'
+      }
       switch (this.userGroup) {
         case 1:
         case 2:

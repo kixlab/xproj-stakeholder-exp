@@ -233,7 +233,7 @@ export default {
         this.$emit('tag-low-click', null, false, -1)
         // this.$emit('update-expansion-panel-value', $event)
       } else {
-        const tag = this.tagHigh.sortedTagLow[$event]
+        const tag = this.sortedTagLow[$event]
         this.$emit('tag-low-click', tag, true, $event)
         // this.$emit('update-expansion-panel-value', $event)
       }
@@ -246,15 +246,22 @@ export default {
     },
     expansionPanelColor: function (tag) {
       // if (!this.policy.key_stakeholders.includes(tag.tag)) {
-      //   return ''
-      // }
       if (tag.pos_count >= 2 * tag.neg_count) {
-        return 'light-blue accent-1'
+        return 'light-blue lighten-4'
       } else if (tag.pos_count * 2 <= tag.neg_count) {
-        return 'red accent-1'
+        return 'red lighten-4'
       } else {
-        return 'blue-grey lighten-5'
+        return 'blue-grey lighten-4'
       }
+      // } else {
+      //   if (tag.pos_count >= 2 * tag.neg_count) {
+      //     return 'light-blue accent-1'
+      //   } else if (tag.pos_count * 2 <= tag.neg_count) {
+      //     return 'red accent-1'
+      //   } else {
+      //     return 'deep-purple accent-1'
+      //   }
+      // }
       // const tagTxt = tag.tag
       // return tagTxt === this.tagHighInfo.most_pos ? 'blue lighten-5' : (tagTxt === this.tagHighInfo.most_neg ? 'red lighten-5' : '')
     },

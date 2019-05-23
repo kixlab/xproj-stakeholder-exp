@@ -3,14 +3,15 @@
     <promise-pane :policy="policy"></promise-pane>
     <v-layout row wrap>
       <v-flex xs12>
-      <overview-pane 
-        :effectFilter="effectFilter"
-        :closePositiveTags="closePositiveTags"
-        :closeNegativeTags="closeNegativeTags"
-        @tag-high-reset="onTagHighReset"
-        @tag-high-click="onUpdateSelectedTagHigh"
-        @tag-low-click="onUpdateSelectedTagLow"
-        ></overview-pane>
+        <opinion-revisit-pane />
+        <overview-pane 
+          :effectFilter="effectFilter"
+          :closePositiveTags="closePositiveTags"
+          :closeNegativeTags="closeNegativeTags"
+          @tag-high-reset="onTagHighReset"
+          @tag-high-click="onUpdateSelectedTagHigh"
+          @tag-low-click="onUpdateSelectedTagLow"
+          ></overview-pane>
       </v-flex>
       <v-flex xs4>
         <!-- <tag-tree :tags="filteredTags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag" :onTagLoading="onTagLoading"/> -->
@@ -30,15 +31,23 @@
           :effects="effects" 
           :count="count" 
           :onLoading="onLoading"
-          @effect-filter-change="onEffectFilterChanged" 
           @tag-high-click="onUpdateSelectedTagHigh" 
-          @tag-low-click="onUpdateSelectedTagLow"
-          :effectFilter="effectFilter" 
-          :tab="tab"/>
+          @tag-low-click="onUpdateSelectedTagLow"/>
+        <v-card v-else>
+          <v-card-text>
+            왼쪽 패널에서 이해 관계자 집단을 선택하셔서 이 정책에 대해 사람들이 어떻게 생각하는 지 알아보세요!
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex xs12>
+        <v-btn block color="primary" @click="onShowPolicyListClick">
+          다음 정책 보기
+        </v-btn>
       </v-flex>
     </v-layout>
 
-    <v-speed-dial
+
+    <!-- <v-speed-dial
       v-model="fab"
       bottom
       right
@@ -91,7 +100,7 @@
         <span>다음 정책 보기</span>
       </v-tooltip>
 
-    </v-speed-dial>
+    </v-speed-dial> -->
  
   </v-container>
 </template>
@@ -100,13 +109,15 @@ import PromisePane from '~/components/PromisePane.vue'
 import TagPane from '~/components/TagPane.vue'
 import EffectsPane from '~/components/EffectsPane.vue'
 import OverviewPane from '~/components/OverviewPane.vue'
+import OpinionRevisitPane from '~/components/OpinionRevisitPane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
 
 export default {
   fetch: async function ({app, store, params}) {
     const effects = await app.$axios.$get('/api/effects/', {
       params: {
-        policy: store.state.policyId
+        policy: store.state.policyId,
+        include_guess: 0
       }
     })
     store.commit('setEffects', effects.results)
@@ -118,7 +129,8 @@ export default {
     PromisePane,
     TagPane,
     EffectsPane,
-    OverviewPane
+    OverviewPane,
+    OpinionRevisitPane
   },
   mixins: [setTokenMixin],
   data: function () {
@@ -147,9 +159,10 @@ export default {
       return this.$store.state.policy
     },
     effects: function () {
-      return this.$store.state.effects.filter(e => {
-        return this.effectFilter.includes(e.isBenefit)
-      })
+      return this.$store.state.effects
+      // .filter(e => {
+      //   return this.effectFilter.includes(e.isBenefit)
+      // })
     },
     keywords: function () {
       return this.$store.state.keywords
@@ -240,11 +253,11 @@ export default {
     onUpdateSelectedTagLow: async function (tag, isOpening, idx) {
       this.onLoading = true
       this.onTagLowLoading = true
-      if (!idx) {
-        idx = this.tagLows.findIndex(t => {
-          return t.tag === tag.tag
-        })
-      }
+      // if (!idx) {
+      //   idx = this.tagLows.findIndex(t => {
+      //     return t.tag === tag.tag
+      //   })
+      // }
       await this.$store.dispatch('setTagLow', {tag: tag, isOpening: isOpening, effectFilter: this.effectFilter})
       this.expansionPanelValue = idx
       this.onLoading = false
@@ -255,23 +268,23 @@ export default {
       await this.$store.dispatch('updateSelectedTag', tag)
       this.onLoading = false
     },
-    onEffectFilterChanged: async function (effectFilter, tab) {
-      this.onLoading = true
-      this.effectFilter = effectFilter
-      this.tab = Number(tab) - 1
-      this.onLoading = false
-    },
+    // onEffectFilterChanged: async function (effectFilter, tab) {
+    //   this.onLoading = true
+    //   this.effectFilter = effectFilter
+    //   this.tab = Number(tab) - 1
+    //   this.onLoading = false
+    // },
     onShowPolicyListClick: function () {
-      this.$ga.event({
-        eventCategory: '/SelectStakeholder',
-        eventAction: 'ShowPolicyList',
-        eventLabel: this.policy.title,
-        eventValue: 0
-      })
+      // this.$ga.event({
+      //   eventCategory: '/SelectStakeholder',
+      //   eventAction: 'ShowPolicyList',
+      //   eventLabel: this.policy.title,
+      //   eventValue: 0
+      // })
       if (!this.$store.state.userToken || !this.$store.state.user.is_participant || this.$store.state.user.step > 2) {
         this.$router.push('/ShowPolicies')
       } else {
-        this.$router.push('/MiniSurvey')
+        this.$router.push('/PostSurvey')
       }
     }
   }

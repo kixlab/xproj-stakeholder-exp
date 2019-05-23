@@ -1,5 +1,5 @@
 <template>
-  <v-card color="grey lighten-4">
+  <v-card>
     <!-- Header here -->
     <v-card-title>
       <template v-if="tagHigh">
@@ -35,20 +35,14 @@
         <template v-else>
         </template>
         <v-spacer/>
-        <v-btn @click="onShowMyOpinionClick">
-          {{showMyOpinion ? '접어두기' : '내 의견 다시보기'}}
-        </v-btn>
       </template>
       <template v-else>
         <span class="title">모든 이해관계자</span>
         <v-spacer/>
-        <v-btn @click="onShowMyOpinionClick">
-          {{showMyOpinion ? '접어두기' : '내 의견 다시보기'}}
-        </v-btn>
       </template>
     </v-card-title>
     <!-- content here -->
-    <v-expand-transition>
+    <!-- <v-expand-transition>
       <v-card-text v-if="showMyOpinion">
         <v-layout row wrap>
           <v-flex xs12>
@@ -69,6 +63,9 @@
                 v-model="changedOpinion">
               </v-textarea>
               <br>
+              <div v-if="error">
+                의견 업데이트가 실패했습니다. 다시 한 번 시도해주세요!
+              </div>
               <v-btn class="error"
                 @click="onCancelUpdateStance">
                 취소
@@ -81,21 +78,13 @@
           </v-flex>
         </v-layout>
       </v-card-text>
-    </v-expand-transition>
+    </v-expand-transition> -->
   </v-card>
 </template>
 
 <script>
 export default {
-  props: {
-  },
   computed: {
-    initialStance: function () {
-      return this.$store.state.initialStance
-    },
-    initialOpinion: function () {
-      return this.$store.state.initialOpinion
-    },
     tagHigh: function () {
       return this.$store.state.tagHigh
     },
@@ -105,12 +94,6 @@ export default {
   },
   data: function () {
     return {
-      changedOpinion: this.$store.state.initialOpinion,
-      currentStance: this.$store.state.initialStance,
-      previousStance: this.$store.state.initialStance,
-      updateStance: false,
-      showMyOpinion: false,
-      opinions: ['매우 부정적', '부정적', '중립', '긍정적', '매우 긍정적']
     }
   },
   methods: {
@@ -122,28 +105,14 @@ export default {
     },
     onTagHighReset: function () {
       this.$emit('tag-high-reset')
-    },
-    onShowMyOpinionClick: function () {
-      this.showMyOpinion = !this.showMyOpinion
-    },
-    onUpdateStance: function () {
-      this.updateStance = true
-    },
-    onCancelUpdateStance: function () {
-      this.updateStance = false
-      this.currentStance = this.previousStance
-    },
-    onCommitUpdateStance: function () {
-      // TODO: Apply in database
-      this.updateStance = false
     }
   }
 }
 </script>
 <style scoped>
 .v-card__title {
-  padding-bottom:0 !important;
-  padding-top: 0 !important;
+  padding-bottom: 0.7em !important;
+  padding-top: 0.7em !important;
 }
 .subheader {
   padding-bottom: 0.5em;

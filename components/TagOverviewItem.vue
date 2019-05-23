@@ -14,7 +14,7 @@
           <!-- <span class="blue--text caption">긍정 {{tag.pos_count}}</span>
           <span class="caption"> vs </span>
           <span class="red--text caption">{{tag.neg_count}} 부정</span> -->
-          <v-icon v-if="important">
+          <v-icon light medium color="red accent-2" v-if="important">
             priority_high
           </v-icon>
         </v-flex>

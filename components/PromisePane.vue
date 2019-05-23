@@ -26,6 +26,11 @@
           edit
         </v-icon>
       </v-btn>
+      <!-- <v-btn icon flat v-if="$router.currentRoute === 'TagOverview' || $router.currentRoute === 'EffectsList'" @click="$emit('go-next')">
+        <v-icon>
+          arrow_right
+        </v-icon>
+      </v-btn> -->
     </v-toolbar-items>
 
     <v-dialog
