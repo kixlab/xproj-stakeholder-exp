@@ -157,6 +157,9 @@ export const getters = {
   },
   isLookingAround (state) {
     return !state.userToken
+  },
+  pinnedEffectIds (state) {
+    return state.userPolicy.fav_effects
   }
 }
 
@@ -393,10 +396,30 @@ export const actions = {
     // TODO: Add async operation with API
   },
   async addPinnedEffects (context, {effect}) {
-    context.commit('addPinnedEffects', [effect])
+    console.log('aaa')
+    try {
+      let currentFavs = context.state.userPolicy.fav_effects.slice()
+      currentFavs.push(effect.id)
+      const newUP = await this.$axios.$patch(`/api/userpolicy/${context.state.userPolicy.id}/`, {
+        fav_effects: currentFavs
+      })
+      context.commit('setUserPolicy', newUP)
+      context.commit('addPinnedEffects', [effect])
+    } catch (err) {
+      console.log(err)
+    }
     // TODO: Add async operation with backend
   },
   async removePinnedEffects (context, {effect}) {
-    context.commit('removePinnedEffects', [effect])
+    try {
+      let currentFavs = context.state.userPolicy.fav_effects.slice()
+      currentFavs.remove(effect.id)
+      const newUP = await this.$axios.$patch(`/api/userpolicy/${context.state.userPolicy.id}/`, {
+        fav_effects: currentFavs
+      })
+      context.commit('setUserPolicy', newUP)
+      context.commit('removePinnedEffects', [effect])
+    } catch (err) {
+    }
   }
 }

@@ -40,7 +40,7 @@
             required
             @keyup.enter="onLoginClick"
             ></v-text-field>
-          <v-btn @click="onLoginClick" ripple> 로그인 </v-btn>
+          <v-btn @click="onLoginClick" ripple color="primary"> 로그인 </v-btn>
           <v-btn @click="register" ripple> 회원가입 </v-btn>
         </v-form>
       </v-card>

@@ -1,5 +1,8 @@
 <template>
   <v-card>
+    <v-card-title>
+      정책에 관한 이해관계자의 의견을 살펴보세요!
+    </v-card-title>
     <v-expand-transition>
       <div
         v-if="showHelp"
@@ -87,8 +90,8 @@
                     v-for="effect in filteredEffects"
                     :key="effect.id"
                     :effect="effect"
-                    :selectedKeyword="selectedKeyword"
-                    :show-tag="showTags"/>
+                    :showTag="false"
+                    :selectedKeyword="selectedKeyword"/>
                 </template>
               </v-flex>
             </v-layout>
@@ -96,6 +99,11 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
+    <v-flex xs12>
+      <v-btn block color="primary" @click="onShowPolicyListClick">
+        다음 정책 보기
+      </v-btn>
+    </v-flex>
   </v-card>
 </template>
 
@@ -111,14 +119,14 @@
   margin-top: 20px;
 }
 .cards__list {
-  height: 72.7vh;
+  height: 85vh;
   margin-top: 1vh;
   margin-bottom: 1vh;
   width: 100%;
 }
 
 .cards__list__cloud {
-  height: 42.7vh;
+  height: 55vh;
   margin-top: 1vh;
   margin-bottom: 1vh;
   width: 100%;
@@ -149,19 +157,21 @@ import _ from 'lodash'
 import cloud from 'd3-cloud'
 
 export default {
+  fetch: async function ({app, store, params}) {
+    const effects = await app.$axios.$get('/api/effects/', {
+      params: {
+        policy: store.state.policyId,
+        include_guess: 0
+      }
+    })
+    store.commit('setEffects', effects.results)
+    store.commit('setKeywords', effects.keywords)
+    store.commit('setKeywordsAll', effects.keywords)
+    await store.dispatch('setTags')
+  },
   created: function () {
     this.onEffectFilterChangeDebounced = _.debounce(this.onEffectFilterChange, 500)
     this.onSortChangedDebounced = _.debounce(this.onSortChanged, 500)
-    // if (this.$store.state.selectedTag) {
-    //   this.selectedTags.push(this.$store.state.selectedTag)
-    //   this.$ga.event({
-    //     eventCategory: this.$router.currentRoute.path,
-    //     eventAction: 'SearchTags',
-    //     eventLabel: this.selectedTags,
-    //     eventValue: 0
-    //   })
-    //   this.$store.dispatch('addBrowsedTags', [this.$store.state.selectedTag])
-    // }
   },
   mounted: function () {
     this.$nextTick(async function () {
@@ -181,21 +191,6 @@ export default {
   components: {
     EffectCard,
     PromisePane
-  },
-  props: {
-    effects: {
-      validator: function (effects) {
-        const f = function (prev, value) {
-          return prev && ('tags' in value) && ('description' in value)
-        }
-        return effects.length === 0 || effects.reduce(f)
-      }
-    },
-    onLoading: Boolean,
-    closeTags: Array,
-    showTags: {
-      default: true
-    }
   },
   watch: {
     effects: function (newEffects) {
@@ -232,6 +227,9 @@ export default {
       } else {
         return this.sortedEffects
       }
+    },
+    effects: function () {
+      return this.$store.state.effects
     },
     policy: function () {
       return this.$store.state.policy
@@ -310,38 +308,40 @@ export default {
       showFilter: false,
       guessFilter: [0, 1],
       showHelp: false,
-      sortTexts: [{
-        text: '긴 영향부터 보기',
-        value: 0
-      },
-      {
-        text: '짧은 영향부터 보기',
-        value: 1
-      },
-      {
-        text: '긴 설명부터 보기',
-        value: 2
-      },
-      {
-        text: '짧은 설명부터 보기',
-        value: 3
-      },
-      {
-        text: '태그 많은 영향부터 보기',
-        value: 4
-      },
-      {
-        text: '태그 적은 영향부터 보기',
-        value: 5
-      },
-      {
-        text: '오래된 영향부터 보기',
-        value: 6
-      },
-      {
-        text: '새로 올라온 영향부터 보기',
-        value: 7
-      }],
+      sortTexts: [
+        {
+          text: '긴 영향부터 보기',
+          value: 0
+        },
+        {
+          text: '짧은 영향부터 보기',
+          value: 1
+        },
+        {
+          text: '긴 설명부터 보기',
+          value: 2
+        },
+        {
+          text: '짧은 설명부터 보기',
+          value: 3
+        },
+        {
+          text: '태그 많은 영향부터 보기',
+          value: 4
+        },
+        {
+          text: '태그 적은 영향부터 보기',
+          value: 5
+        },
+        {
+          text: '오래된 영향부터 보기',
+          value: 6
+        },
+        {
+          text: '새로 올라온 영향부터 보기',
+          value: 7
+        }
+      ],
       sort: 0,
       layout: [],
       words: [],
@@ -349,6 +349,7 @@ export default {
       svgHeight: 0,
       selectedKeyword: '',
       onKeywordLoading: false,
+      onLoading: false,
       effectFilter: [0, 1],
       tab: 0
     }
@@ -389,13 +390,12 @@ export default {
       }
     },
     onEffectFilterChange: async function (ev, i) {
-      // this.$emit('effect-filter-change', ev, i, this.guessFilter)
       this.onKeywordLoading = true
+      this.effectFilter = ev
+      this.tab = i - 1
       setTimeout(() => {
         this.onKeywordLoading = false
       }, 500)
-      this.tab = i - 1
-      this.effectFilter = ev
     },
     onKeywordSelected: function (text) {
       this.onKeywordLoading = true

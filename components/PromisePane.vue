@@ -15,23 +15,25 @@
     <v-spacer/>
 
     <v-spacer/>
-    <v-toolbar-items>
-      <v-btn icon flat @click="revisitDialog = true">
-        <v-icon>
-          star
-        </v-icon>
-      </v-btn>
-      <v-btn icon flat @click="editDialog = true">
-        <v-icon>
-          edit
-        </v-icon>
-      </v-btn>
-      <!-- <v-btn icon flat v-if="$router.currentRoute === 'TagOverview' || $router.currentRoute === 'EffectsList'" @click="$emit('go-next')">
-        <v-icon>
-          arrow_right
-        </v-icon>
-      </v-btn> -->
-    </v-toolbar-items>
+    <template v-if="isExploring">
+      <v-toolbar-items>
+        <v-btn icon flat @click="revisitDialog = true">
+          <v-icon>
+            star
+          </v-icon>
+        </v-btn>
+        <v-btn icon flat @click="editDialog = true">
+          <v-icon>
+            edit
+          </v-icon>
+        </v-btn>
+        <!-- <v-btn icon flat v-if="$router.currentRoute === 'TagOverview' || $router.currentRoute === 'EffectsList'" @click="$emit('go-next')">
+          <v-icon>
+            arrow_right
+          </v-icon>
+        </v-btn> -->
+      </v-toolbar-items>
+    </template>
 
     <v-dialog
       v-model="editDialog">
@@ -45,10 +47,11 @@
     </v-dialog>
 
     <v-dialog
-      v-model="revisitDialog">
+      v-model="revisitDialog"
+      >
       <v-card>
         <v-card-title>
-          표시한 의견을 다시 읽어보세요.
+          즐겨찾기한 의견을 다시 확인하실 수 있습니다.
         </v-card-title>
         <v-card-text>
           <effect-card 
@@ -107,6 +110,9 @@ export default {
     },
     initialStance: function () {
       return this.$store.state.initialStance
+    },
+    isExploring: function () {
+      return this.$router.currentRoute.path === '/TagOverview' || this.$router.currentRoute.path === '/EffectsList'
     }
   },
   components: {

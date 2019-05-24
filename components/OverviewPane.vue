@@ -3,7 +3,9 @@
     <!-- Header here -->
     <v-card-title>
       <template v-if="tagHigh">
-        <a @click="onTagHighReset"><span class="title">모든 이해 관계자 </span></a>
+        <a @click="onTagHighReset">
+          <span class="title">모든 이해 관계자 </span>
+        </a>
         <v-icon>chevron_right</v-icon>
         <a v-if="tagLow" @click="onUpdateSelectedTagLow(null, false, -1)"><span class="title"> #{{tagHigh.tag}}</span></a>
         <v-icon v-if="tagLow">chevron_right</v-icon>

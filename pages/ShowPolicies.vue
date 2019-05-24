@@ -161,9 +161,10 @@ export default {
             articles_seen: 0,
             effects_seen: 0,
             initial_stance: this.initialStance,
-            initial_opinion: this.initialOpinion,
+            initial_opinion: 'aaaa',
             final_stance: this.initialStance,
-            final_opinion: this.initialOpinion
+            final_opinion: 'aaaa',
+            fav_effects: []
           }
           const result = await this.$axios.$post('/api/userpolicy/', newUP)
           this.$store.commit('setUserPolicy', result)

@@ -1,5 +1,5 @@
 <template>
-  <v-card color="grey lighten-4" style="width: 50%;">
+  <v-card color="grey lighten-4">
     <!-- <v-card-title>
       aaaa
     </v-card-title> -->

@@ -3,7 +3,9 @@
     <v-card :color="cardColor">
       <v-card-title>
         <v-flex xs11 style="text-align: left;">
-        <strong><font size="3">{{effect.stakeholder_detail}}</font></strong>
+          <template v-if="showTag">
+            <strong><font size="3">{{effect.stakeholder_detail}}</font></strong>
+          </template>
         </v-flex>
         <v-flex xs1 style="text-align: right;">
           <v-icon :color="effect.isBenefit ? 'primary' : 'error'">
@@ -16,10 +18,12 @@
       </v-card-text>
       <v-card-actions>
         <v-flex xs11 style="text-align: left;">
-          <font size="2"><span style="text-align:left; color:blue;" v-for="tag in effect.tags" :key="tag">#{{tag}}&nbsp;&nbsp;</span></font>
+          <template v-if="showTag">
+            <font size="2"><span style="text-align:left; color:blue;" v-for="tag in effect.tags" :key="tag">#{{tag}}&nbsp;&nbsp;</span></font>
+          </template>
         </v-flex>
         <v-flex xs1>
-          <v-btn icon flat :color="disabled ? 'gray': 'yellow'" @click="onPinClick">
+          <v-btn icon flat :color="pinned ? 'yellow': 'grey'" @click="onPinClick">
             <v-icon>
               star
             </v-icon>
@@ -33,20 +37,22 @@
 <script>
 import setTokenMixin from '~/mixins/setToken.js'
 export default {
-  data: () => ({
-    disabled: true
-  }),
+  data: function () {
+    return {
+      pinned: this.$store.getters.pinnedEffectIds.includes(this.effect.id)
+    }
+  },
   methods: {
-    onPinClick: function () {
+    onPinClick: async function () {
       const payload = {
         effect: this.effect
       }
-      if (this.disabled) {
-        this.$store.dispatch('addPinnedEffects', payload)
+      if (!this.pinned) {
+        await this.$store.dispatch('addPinnedEffects', payload)
       } else {
-        this.$store.dispatch('removePinnedEffects', payload)
+        await this.$store.dispatch('removePinnedEffects', payload)
       }
-      this.disabled = !this.disabled
+      this.pinned = !this.pinned
     }
   },
   mixins: [setTokenMixin],
@@ -58,7 +64,10 @@ export default {
       }
     },
     expanded: Boolean,
-    selectedKeyword: String
+    selectedKeyword: String,
+    showTag: {
+      default: true
+    }
   },
   computed: {
     // shortDescription: function () {
@@ -67,6 +76,9 @@ export default {
     //   } else {
     //     return this.effect.description
     //   }
+    // },
+    // pinned: function () {
+    //   return this.$store.getters.pinnedEffectIds.includes(this.effect.id)
     // },
     highlightedDescription: function () {
       if (this.selectedKeyword) {
