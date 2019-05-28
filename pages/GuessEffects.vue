@@ -1,115 +1,38 @@
 <template>
   <v-container style="padding: 0;">
     <promise-pane :policy="policy"></promise-pane>
-    <v-layout row wrap>
-      <v-flex xs12>
+    <v-layout row wrap justify-center>
+      <!-- <v-flex xs12>
         <opinion-revisit-pane />
-        <overview-pane 
-          :effectFilter="effectFilter"
-          :closePositiveTags="closePositiveTags"
-          :closeNegativeTags="closeNegativeTags"
-          @tag-high-reset="onTagHighReset"
-          @tag-high-click="onUpdateSelectedTagHigh"
-          @tag-low-click="onUpdateSelectedTagLow"
-          ></overview-pane>
-      </v-flex>
-      <v-flex xs4>
-        <!-- <tag-tree :tags="filteredTags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag" :onTagLoading="onTagLoading"/> -->
-        <tag-pane 
-          :tags="filteredTags" 
-          @tag-high-click="onUpdateSelectedTagHigh" 
-          @tag-low-click="onUpdateSelectedTagLow" 
-          @tag-high-reset="onTagHighReset"
-          :onTagLoading="onTagLoading"
-          :onTagLowLoading="onTagLowLoading"
-          :expansionPanelValue="expansionPanelValue"
-          :tagLows="tagLows"/>
-      </v-flex>
-      <v-flex xs8>
-        <effects-pane 
-          v-if="tagHigh"
-          :effects="effects" 
-          :count="count" 
-          :onLoading="onLoading"
-          @tag-high-click="onUpdateSelectedTagHigh" 
-          @tag-low-click="onUpdateSelectedTagLow"/>
-        <v-card v-else>
-          <v-card-text>
-            왼쪽 패널에서 이해 관계자 집단을 선택하셔서 이 정책에 대해 사람들이 어떻게 생각하는 지 알아보세요!
-          </v-card-text>
-        </v-card>
-      </v-flex>
+      </v-flex> -->
       <v-flex xs12>
-        <v-btn block color="primary" @click="onShowPolicyListClick">
-          다음 정책 보기
-        </v-btn>
+        <span class="question">
+          <span class="tag">#{{tagHigh.tag}}</span> 집단은 <span class="policy">{{policy.title}}</span> 정책에 대해 어떻게 생각할까요? 
+          <br>
+          아래 워드 클라우드를 보시고 생각나는 대로 아래에 적어주세요!
+        </span>
+      </v-flex>
+      <v-flex xl8 lg10>
+        <v-text-field>
+        </v-text-field>
+      </v-flex>
+      <v-flex xl8 lg10>
+        <effects-word-cloud
+          :keywords="keywords[0]"
+          >
+        </effects-word-cloud>
       </v-flex>
     </v-layout>
-
-
-    <!-- <v-speed-dial
-      v-model="fab"
-      bottom
-      right
-      direction="top"
-      open-on-hover
-      >
-        <v-btn
-          slot="activator"
-          v-model="fab"
-          color="blue darken-2"
-          dark
-          fab
-          large
-          >
-          <v-icon>add</v-icon>
-          <v-icon>close</v-icon>
-        </v-btn>
-
-      <v-tooltip 
-        v-model="show1" 
-        left
-        nudge-left="8"
-        close-delay="0"
-        >
-        <v-btn
-          fab
-          dark
-          color="green"
-          slot="activator"
-          >
-          <v-icon>edit</v-icon>
-        </v-btn>
-        <span>새로운 영향 쓰기</span>
-      </v-tooltip>
-
-      <v-tooltip 
-        v-model="show2" 
-        nudge-left="8"
-        left
-        close-delay="0"
-        >
-        <v-btn
-          fab
-          dark
-          color="red"
-          slot="activator"
-          >
-          <v-icon>arrow_forward</v-icon>
-        </v-btn>
-        <span>다음 정책 보기</span>
-      </v-tooltip>
-
-    </v-speed-dial> -->
- 
+    <v-btn block primary @click="onNextClick">
+      확인하기
+    </v-btn>
   </v-container>
 </template>
 <script>
 import PromisePane from '~/components/PromisePane.vue'
-import TagPane from '~/components/TagPane.vue'
 import EffectsPane from '~/components/EffectsPane.vue'
-import OverviewPane from '~/components/OverviewPane.vue'
 import OpinionRevisitPane from '~/components/OpinionRevisitPane.vue'
+import EffectsWordCloud from '~/components/EffectsWordCloud.vue'
 import setTokenMixin from '~/mixins/setToken.js'
 
 export default {
@@ -123,27 +46,18 @@ export default {
   //   store.commit('setEffects', effects.results)
   //   store.commit('setKeywords', effects.keywords)
   //   store.commit('setKeywordsAll', effects.keywords)
-  //   await store.dispatch('setTags')
-  //   // store.dispatch('')
   // },
   components: {
     PromisePane,
-    TagPane,
     EffectsPane,
-    OverviewPane,
-    OpinionRevisitPane
+    OpinionRevisitPane,
+    EffectsWordCloud
   },
   mixins: [setTokenMixin],
   data: function () {
     return {
-      fab: false,
-      opinionTexts: false,
       dialog: false,
       tag: null,
-      show: false,
-      show1: false,
-      show2: false,
-      count: 0,
       onLoading: false,
       onTagLoading: false,
       onTagLowLoading: false,
@@ -153,17 +67,11 @@ export default {
     }
   },
   computed: {
-    activeFab: function () {
-      return {}
-    },
     policy: function () {
       return this.$store.state.policy
     },
     effects: function () {
       return this.$store.state.effects
-      // .filter(e => {
-      //   return this.effectFilter.includes(e.isBenefit)
-      // })
     },
     keywords: function () {
       return this.$store.state.keywords
@@ -204,34 +112,9 @@ export default {
     },
     userGroup: function () {
       return this.$store.getters.userGroup
-    },
-    closePositiveTags: function () {
-      const tagList = this.tagHigh ? this.tagHigh.children : this.tags
-      return tagList.filter((a) => {
-        return a.pos_count >= a.neg_count * 2
-      }).sort((a, b) => {
-        return b.pos_count - a.pos_count
-      }).slice(0, 3)
-    },
-    closeNegativeTags: function () {
-      const tagList = this.tagHigh ? this.tagHigh.children : this.tags
-      return tagList.filter((a) => {
-        return a.pos_count * 2 <= a.neg_count
-      }).sort((a, b) => {
-        return b.neg_count - a.neg_count
-      }).slice(0, 3)
     }
   },
   methods: {
-    // onNewStakeholderClick: function () {
-    //   this.$ga.event({
-    //     eventCategory: this.$router.currentRoute.path,
-    //     eventAction: 'NewStakeholder',
-    //     eventLabel: this.policy.title,
-    //     eventValue: 0
-    //   })
-    //   this.$router.push('/NewStakeholder')
-    // },
     onUpdateSelectedTagHighByLink: function (tagTxt) {
       const tag = this.tags.find((t) => {
         return t.tag === tagTxt
@@ -269,24 +152,15 @@ export default {
       await this.$store.dispatch('updateSelectedTag', tag)
       this.onLoading = false
     },
-    // onEffectFilterChanged: async function (effectFilter, tab) {
-    //   this.onLoading = true
-    //   this.effectFilter = effectFilter
-    //   this.tab = Number(tab) - 1
-    //   this.onLoading = false
-    // },
     onShowPolicyListClick: function () {
-      // this.$ga.event({
-      //   eventCategory: '/SelectStakeholder',
-      //   eventAction: 'ShowPolicyList',
-      //   eventLabel: this.policy.title,
-      //   eventValue: 0
-      // })
       if (!this.$store.state.userToken || !this.$store.state.user.is_participant || this.$store.state.user.step > 2) {
         this.$router.push('/ShowPolicies')
       } else {
         this.$router.push('/PostSurvey')
       }
+    },
+    onNextClick: function () {
+      this.$router.push('/TagOverview')
     }
   }
 }
@@ -298,6 +172,15 @@ export default {
 
 </style>
 <style scoped>
+.question {
+  font-size: 1.1em;
+}
+.tag {
+  font-weight: bold;
+}
+.policy {
+  font-weight: bold;
+}
 .link {
   cursor: pointer;
   word-break: keep-all;

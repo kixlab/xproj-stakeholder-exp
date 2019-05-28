@@ -53,7 +53,7 @@
             </v-layout>
           </template>
           <template v-else>
-            #{{tagHigh.tag}} {{tagLow ? '#' + tagLow.tag : ''}} 집단은 이 단어들을 어떻게 사용했을까요?
+            <!-- #{{tagHigh.tag}} {{tagLow ? '#' + tagLow.tag : ''}} 집단은 이 단어들을 어떻게 사용했을까요? -->
             <v-layout>
               <v-flex md12 lg9 ref="myCloudContainer" :style="`height: ${sortedEffects.length >= 10 ? 30 : 0}em;`">
                 <svg ref="myCloud" style="width: 100%; height: 100%;">

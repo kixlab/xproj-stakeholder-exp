@@ -66,6 +66,7 @@
 
     <v-dialog
       v-model="dialog"
+      width="50%"
       >
       <v-card>
         <v-card-title

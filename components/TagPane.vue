@@ -189,7 +189,7 @@ export default {
     TagOverviewListItem,
     Loader
   },
-  mounted: function () {
+  created: function () {
     this.onTagLowClickDebounced = _.debounce(this.onTagLowClick, 500)
   },
   data: function () {
