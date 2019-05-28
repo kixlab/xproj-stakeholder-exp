@@ -22,12 +22,22 @@
       </v-flex> -->
     </v-flex>
     <v-flex xl6 lg10>
-      <v-layout row wrap justify-space-between>
-        <v-flex xs3 v-for="i in 3" :key="i">
+      <v-layout row wrap justify-space-between align-center>
+        <v-flex xs3 v-for="(item, idx) in guessedItems" :key="`guess${idx}`">
           <guess-stakeholder-item
+            :guessedItem="item"
             :seeAnswer="seeAnswer"
             @tag-see-more="onTagSeeMore"
             ></guess-stakeholder-item>
+        </v-flex>
+        <v-flex xs3 v-if="guessedItems.length < 3">
+          <v-btn icon @click="addNewGuessedItem">
+            <v-icon>
+              add
+            </v-icon>
+          </v-btn>
+          <br>
+          또 누가 있을까요?
         </v-flex>
       </v-layout>
     </v-flex>
@@ -65,7 +75,13 @@ export default {
     return {
       // tags: [],
       tag: '',
-      seeAnswer: false
+      seeAnswer: false,
+      guessedItems: [
+        {
+          tag: '',
+          isBenefit: -1
+        }
+      ]
     }
   },
   methods: {
@@ -83,8 +99,16 @@ export default {
       const tag = this.tags.find((t) => {
         return t.tag === selectedTag
       })
-      await this.$store.dispatch('setTagHigh', {tag: tag})
-      this.$router.push('/GuessEffects')
+      this.$store.commit('setGuessedItems', this.guessedItems)
+      this.$store.dispatch('setTagHigh', {tag: tag}).then(() => {
+        this.$router.push('/GuessEffects')
+      })
+    },
+    addNewGuessedItem: function () {
+      this.guessedItems.push({
+        tag: '',
+        isBenefit: -1
+      })
     }
   }
 }

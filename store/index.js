@@ -35,7 +35,8 @@ export const state = () => ({
   totalNegCount: 0,
   initialOpinion: '',
   initialStance: 0,
-  pinnedEffects: []
+  pinnedEffects: [],
+  guessedItems: []
 })
 
 export const mutations = {
@@ -148,6 +149,9 @@ export const mutations = {
         state.pinnedEffects = state.pinnedEffects.splice(idx, 1)
       }
     })
+  },
+  setGuessedItems (state, guessedItems) {
+    state.guessedItems = guessedItems
   }
 }
 

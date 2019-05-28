@@ -9,7 +9,7 @@
     </v-flex>
     <v-flex xs12>
       <v-combobox
-        :disabled="seeAnswer"
+        disabled
         :value="guessedItem.tag"
         :items="tags"
         item-text="tag"
@@ -45,7 +45,7 @@
     </v-flex>
     <v-flex xs12 class="item__question__box">
       <span class="question"> 이 사람은 어떻게 영향을 받나요? </span>
-      <v-radio-group v-model="guessedItem.isBenefit" :disabled="seeAnswer" row class="item__question__radio">
+      <v-radio-group v-model="guessedItem.isBenefit" disabled row class="item__question__radio">
         <v-radio label="긍정적" :value="1"></v-radio>
         <v-radio label="부정적" :value="0"></v-radio>
       </v-radio-group>
@@ -58,12 +58,15 @@
         v-model="guessStance">
       </v-slider>
     </v-flex> -->
-    <v-flex v-if="seeAnswer && guessedItem.tag" xs12>
+    <v-flex xs12>
       긍정적 {{selectedTagInfo ? selectedTagInfo.pos_count : ''}} vs {{selectedTagInfo ? selectedTagInfo.neg_count : ''}} 부정적 
     </v-flex>
-    <v-flex v-if="seeAnswer && guessedItem.tag" xs12>
+    <v-flex xs12>
       <v-btn @click="onSeeMoreClick">
         더 알아보기
+        <v-icon right dark>
+          search
+        </v-icon>
       </v-btn>
     </v-flex>
   </v-layout>

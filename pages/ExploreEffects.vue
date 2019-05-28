@@ -3,7 +3,8 @@
     <promise-pane :policy="policy"></promise-pane>
     <v-layout row wrap>
       <v-flex xs12>
-        <opinion-revisit-pane />
+        <guess-pane />
+        <br>
         <overview-pane 
           :effectFilter="effectFilter"
           :closePositiveTags="closePositiveTags"
@@ -45,63 +46,6 @@
         </v-btn>
       </v-flex>
     </v-layout>
-
-
-    <!-- <v-speed-dial
-      v-model="fab"
-      bottom
-      right
-      direction="top"
-      open-on-hover
-      >
-        <v-btn
-          slot="activator"
-          v-model="fab"
-          color="blue darken-2"
-          dark
-          fab
-          large
-          >
-          <v-icon>add</v-icon>
-          <v-icon>close</v-icon>
-        </v-btn>
-
-      <v-tooltip 
-        v-model="show1" 
-        left
-        nudge-left="8"
-        close-delay="0"
-        >
-        <v-btn
-          fab
-          dark
-          color="green"
-          slot="activator"
-          >
-          <v-icon>edit</v-icon>
-        </v-btn>
-        <span>새로운 영향 쓰기</span>
-      </v-tooltip>
-
-      <v-tooltip 
-        v-model="show2" 
-        nudge-left="8"
-        left
-        close-delay="0"
-        >
-        <v-btn
-          fab
-          dark
-          color="red"
-          slot="activator"
-          >
-          <v-icon>arrow_forward</v-icon>
-        </v-btn>
-        <span>다음 정책 보기</span>
-      </v-tooltip>
-
-    </v-speed-dial> -->
- 
   </v-container>
 </template>
 <script>
@@ -110,28 +54,30 @@ import TagPane from '~/components/TagPane.vue'
 import EffectsPane from '~/components/EffectsPane.vue'
 import OverviewPane from '~/components/OverviewPane.vue'
 import OpinionRevisitPane from '~/components/OpinionRevisitPane.vue'
+import GuessPane from '~/components/GuessPane.vue'
 import setTokenMixin from '~/mixins/setToken.js'
 
 export default {
-  fetch: async function ({app, store, params}) {
-    const effects = await app.$axios.$get('/api/effects/', {
-      params: {
-        policy: store.state.policyId,
-        include_guess: 0
-      }
-    })
-    store.commit('setEffects', effects.results)
-    store.commit('setKeywords', effects.keywords)
-    store.commit('setKeywordsAll', effects.keywords)
-    await store.dispatch('setTags')
-    // store.dispatch('')
-  },
+  // fetch: async function ({app, store, params}) {
+  //   const effects = await app.$axios.$get('/api/effects/', {
+  //     params: {
+  //       policy: store.state.policyId,
+  //       include_guess: 0
+  //     }
+  //   })
+  //   store.commit('setEffects', effects.results)
+  //   store.commit('setKeywords', effects.keywords)
+  //   store.commit('setKeywordsAll', effects.keywords)
+  //   await store.dispatch('setTags')
+  //   // store.dispatch('')
+  // },
   components: {
     PromisePane,
     TagPane,
     EffectsPane,
     OverviewPane,
-    OpinionRevisitPane
+    OpinionRevisitPane,
+    GuessPane
   },
   mixins: [setTokenMixin],
   data: function () {
@@ -291,11 +237,13 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
 .v-speed-dial {
   position: fixed;
 }
 
+</style>
+<style scoped>
 .link {
   cursor: pointer;
   word-break: keep-all;

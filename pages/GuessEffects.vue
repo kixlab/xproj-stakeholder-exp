@@ -6,6 +6,9 @@
         <opinion-revisit-pane />
       </v-flex> -->
       <v-flex xs12>
+        <guess-pane></guess-pane>
+      </v-flex>
+      <v-flex xs12>
         <span class="question">
           <span class="tag">#{{tagHigh.tag}}</span> 집단은 <span class="policy">{{policy.title}}</span> 정책에 대해 어떻게 생각할까요? 
           <br>
@@ -13,7 +16,8 @@
         </span>
       </v-flex>
       <v-flex xl8 lg10>
-        <v-text-field>
+        <v-text-field
+          :label="`${tagHigh.tag}인 사람들은 어떻게 생각할까요?`">
         </v-text-field>
       </v-flex>
       <v-flex xl8 lg10>
@@ -22,19 +26,35 @@
           >
         </effects-word-cloud>
       </v-flex>
+      <v-flex xl8 lg10>
+        <v-btn block primary @click="onRateClick">
+          확인하기
+        </v-btn>
+      </v-flex>
     </v-layout>
-    <v-btn block primary @click="onNextClick">
-      확인하기
-    </v-btn>
+
+    <br>
+    <v-divider v-show="isRatingPaneVisible" ref="mydivider"/>
+    <template v-if="isRatingPaneVisible">
+      <span class="question"> 
+        #{{tagHigh.tag}} 집단이 적은 의견 몇 개를 먼저 보여드릴게요. 아래 버튼을 사용해 평가해주세요!
+      </span>
+      <br>
+      <rating-pane
+        >
+      </rating-pane>
+      <v-btn @click="onNextClick">
+        더 많은 의견 보기
+      </v-btn>
+    </template>
   </v-container>
 </template>
 <script>
 import PromisePane from '~/components/PromisePane.vue'
-import EffectsPane from '~/components/EffectsPane.vue'
-import OpinionRevisitPane from '~/components/OpinionRevisitPane.vue'
 import EffectsWordCloud from '~/components/EffectsWordCloud.vue'
 import setTokenMixin from '~/mixins/setToken.js'
-
+import RatingPane from '~/components/RatingPane.vue'
+import GuessPane from '~/components/GuessPane.vue'
 export default {
   // fetch: async function ({app, store, params}) {
   //   const effects = await app.$axios.$get('/api/effects/', {
@@ -49,9 +69,9 @@ export default {
   // },
   components: {
     PromisePane,
-    EffectsPane,
-    OpinionRevisitPane,
-    EffectsWordCloud
+    EffectsWordCloud,
+    RatingPane,
+    GuessPane
   },
   mixins: [setTokenMixin],
   data: function () {
@@ -62,8 +82,7 @@ export default {
       onTagLoading: false,
       onTagLowLoading: false,
       effectFilter: [0, 1],
-      tab: 0,
-      expansionPanelValue: -1
+      isRatingPaneVisible: false
     }
   },
   computed: {
@@ -79,88 +98,92 @@ export default {
     tags: function () {
       return this.$store.state.tags
     },
-    tagLows: function () {
-      if (this.tagHigh) {
-        return this.tagHigh.children.slice().sort((a, b) => {
-          if (a.total_count < b.total_count) {
-            return 1
-          } else if (a.total_count > b.total_count) {
-            return -1
-          } else {
-            return 0
-          }
-        })
-      } else {
-        return []
-      }
-    },
+    // tagLows: function () {
+    //   if (this.tagHigh) {
+    //     return this.tagHigh.children.slice().sort((a, b) => {
+    //       if (a.total_count < b.total_count) {
+    //         return 1
+    //       } else if (a.total_count > b.total_count) {
+    //         return -1
+    //       } else {
+    //         return 0
+    //       }
+    //     })
+    //   } else {
+    //     return []
+    //   }
+    // },
     tagHigh: function () {
       return this.$store.state.tagHigh
-    },
-    tagLow: function () {
-      return this.$store.state.tagLow
-    },
-    tagHighInfo: function () {
-      return this.$store.state.tagHighInfo
-    },
-    tagLowInfo: function () {
-      return this.$store.state.tagLowInfo
-    },
-    filteredTags: function () {
-      const ft = this.tags.filter((tag) => { return tag.total_count >= 3 })
-      return ft.length > 0 ? ft : this.tags
-    },
-    userGroup: function () {
-      return this.$store.getters.userGroup
     }
+    // tagLow: function () {
+    //   return this.$store.state.tagLow
+    // },
+    // tagHighInfo: function () {
+    //   return this.$store.state.tagHighInfo
+    // },
+    // tagLowInfo: function () {
+    //   return this.$store.state.tagLowInfo
+    // },
+    // filteredTags: function () {
+    //   const ft = this.tags.filter((tag) => { return tag.total_count >= 3 })
+    //   return ft.length > 0 ? ft : this.tags
+    // },
+    // userGroup: function () {
+    //   return this.$store.getters.userGroup
+    // }
   },
   methods: {
-    onUpdateSelectedTagHighByLink: function (tagTxt) {
-      const tag = this.tags.find((t) => {
-        return t.tag === tagTxt
-      })
-      this.onUpdateSelectedTagHigh(tag)
-    },
-    onUpdateSelectedTagHigh: async function (tag) {
-      this.onLoading = true
-      this.onTagLoading = true
-      console.log('aaa')
-      await this.$store.dispatch('setTagHigh', {tag: tag, effectFilter: this.effectFilter})
-      this.onLoading = false
-      this.onTagLoading = false
-    },
-    onTagHighReset: async function () {
-      this.onLoading = true
-      await this.$store.dispatch('setTagHigh', {tag: null, effectFilter: this.effectFilter})
-      this.onLoading = false
-    },
-    onUpdateSelectedTagLow: async function (tag, isOpening, idx) {
-      this.onLoading = true
-      this.onTagLowLoading = true
-      // if (!idx) {
-      //   idx = this.tagLows.findIndex(t => {
-      //     return t.tag === tag.tag
-      //   })
-      // }
-      await this.$store.dispatch('setTagLow', {tag: tag, isOpening: isOpening, effectFilter: this.effectFilter})
-      this.expansionPanelValue = idx
-      this.onLoading = false
-      this.onTagLowLoading = false
-    },
-    onUpdateSelectedTag: async function (tag) {
-      this.onLoading = true
-      await this.$store.dispatch('updateSelectedTag', tag)
-      this.onLoading = false
-    },
-    onShowPolicyListClick: function () {
-      if (!this.$store.state.userToken || !this.$store.state.user.is_participant || this.$store.state.user.step > 2) {
-        this.$router.push('/ShowPolicies')
-      } else {
-        this.$router.push('/PostSurvey')
-      }
+    // onUpdateSelectedTagHighByLink: function (tagTxt) {
+    //   const tag = this.tags.find((t) => {
+    //     return t.tag === tagTxt
+    //   })
+    //   this.onUpdateSelectedTagHigh(tag)
+    // },
+    // onUpdateSelectedTagHigh: async function (tag) {
+    //   this.onLoading = true
+    //   this.onTagLoading = true
+    //   console.log('aaa')
+    //   await this.$store.dispatch('setTagHigh', {tag: tag, effectFilter: this.effectFilter})
+    //   this.onLoading = false
+    //   this.onTagLoading = false
+    // },
+    // onTagHighReset: async function () {
+    //   this.onLoading = true
+    //   await this.$store.dispatch('setTagHigh', {tag: null, effectFilter: this.effectFilter})
+    //   this.onLoading = false
+    // },
+    // onUpdateSelectedTagLow: async function (tag, isOpening, idx) {
+    //   this.onLoading = true
+    //   this.onTagLowLoading = true
+    //   // if (!idx) {
+    //   //   idx = this.tagLows.findIndex(t => {
+    //   //     return t.tag === tag.tag
+    //   //   })
+    //   // }
+    //   await this.$store.dispatch('setTagLow', {tag: tag, isOpening: isOpening, effectFilter: this.effectFilter})
+    //   this.expansionPanelValue = idx
+    //   this.onLoading = false
+    //   this.onTagLowLoading = false
+    // },
+    // onUpdateSelectedTag: async function (tag) {
+    //   this.onLoading = true
+    //   await this.$store.dispatch('updateSelectedTag', tag)
+    //   this.onLoading = false
+    // },
+    // onShowPolicyListClick: function () {
+    //   if (!this.$store.state.userToken || !this.$store.state.user.is_participant || this.$store.state.user.step > 2) {
+    //     this.$router.push('/ShowPolicies')
+    //   } else {
+    //     this.$router.push('/PostSurvey')
+    //   }
+    // },
+    onRateClick: function () {
+      this.isRatingPaneVisible = true
+      this.$vuetify.goTo(this.$refs.mydivider)
     },
     onNextClick: function () {
-      this.$router.push('/TagOverview')
+      this.$router.push('/ExploreEffects')
     }
   }
 }
