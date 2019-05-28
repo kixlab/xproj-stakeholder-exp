@@ -53,23 +53,53 @@
             </v-layout>
           </template>
           <template v-else>
-            <div ref="myCloudContainer" :style="`width: 100%; height: ${sortedEffects.length >= 10 ? 30 : 0}vh;`">
-              선택하신 집단이 많이 사용한 단어입니다. 단어를 클릭해보면서 이 집단이 어떤 의견을 갖고 있는지 알아보세요!
-              <svg ref="myCloud" style="width: 100%; height: 100%;">
-                <g :transform="`translate(${svgWidth/2}, ${svgHeight/2})`">
-                  <text v-for="word in words"
-                    :key="word.text"
-                    :fill-opacity="word.ratio"
-                    text-anchor="middle"
-                    :transform="`translate(${word.x}, ${word.y})rotate(${word.rotate})`"
-                    :style="`font-size: ${word.size}px; font-family: 'sans-serif'; fill: ${fill(word.type)}; cursor: pointer; ${selectedKeyword === word.text ? 'stroke: #000000; stroke-width: 2px; ' : ''}`"
-                    @click="onKeywordSelected(word.text)"
-                    >
-                  {{word.text}}
-                  </text>
-                </g>
-              </svg>
-            </div>
+            #{{tagHigh.tag}} {{tagLow ? '#' + tagLow.tag : ''}} 집단은 이 단어들을 어떻게 사용했을까요?
+            <v-layout>
+              <v-flex md12 lg9 ref="myCloudContainer" :style="`height: ${sortedEffects.length >= 10 ? 30 : 0}em;`">
+                <svg ref="myCloud" style="width: 100%; height: 100%;">
+                  <g :transform="`translate(${svgWidth/2}, ${svgHeight/2})`">
+                    <text v-for="word in words"
+                      :key="word.text"
+                      :fill-opacity="word.ratio"
+                      text-anchor="middle"
+                      :transform="`translate(${word.x}, ${word.y})rotate(${word.rotate})`"
+                      :style="`font-size: ${word.size}px; font-family: 'sans-serif'; fill: ${fill(word.type)}; cursor: pointer; ${selectedKeyword === word.text ? 'stroke: #000000; stroke-width: 2px; ' : ''}`"
+                      @click="onKeywordSelected(word.text)"
+                      @mouseover="hover = word"
+                      @mouseleave="hover = null"
+                      >
+                    {{word.text}}
+                    </text>
+                    <!-- <rect v-if="hover"
+                      :x="hover.x - (hover.width / 4)"
+                      :y="hover.y - (hover.height / 4)"
+                      width="200"
+                      height="90"
+                      style="fill: white;"
+                      fill-opacity="0.8"
+                      >
+                    </rect>
+                    <template v-if="hover">
+                      <text
+                        v-for="(t,i) in getHoverContext(hover.text)"
+                        :key="t[0]"
+                        style="font-size: 1em; font-family: 'Roboto'; fill: black;"
+                        :x="hover.x - (hover.width / 4)"
+                        :y="hover.y - (hover.height / 4) + i * 15"
+                        >...{{t[0]}}...
+                      </text>
+                    </template> -->
+                  </g>
+                </svg>
+              </v-flex>
+              <v-flex md12 lg3 v-if="hover">
+                <div class="triangle-obtuse" v-for="t in getHoverContext(hover.text)"
+                  :key="t"
+                  v-html="t">
+                  
+                </div>
+              </v-flex>
+            </v-layout>
             <v-layout :class="sortedEffects.length >= 10 ? 'cards__list__cloud' : 'cards__list'" column align-center justify-center>
               <v-flex style="overflow: auto; width: 100%;">
                 <template v-if="onKeywordLoading">
@@ -118,7 +148,7 @@
 }
 
 .cards__list__cloud {
-  height: 42.7vh;
+  height: 40vh;
   margin-top: 1vh;
   margin-bottom: 1vh;
   width: 100%;
@@ -136,6 +166,56 @@
   position: absolute;
   width: 100%;
   z-index: 63;
+}
+
+.triangle-obtuse {
+  position:relative;
+  padding:1em;
+  margin:1em 0 2em;
+  width: 98%;
+  /* color:#fff; */
+  background:#3f51b540;
+  /* css3 */
+  /* background:-webkit-gradient(linear, 0 0, 0 100%, from(#f04349), to(#c81e2b));
+  background:-moz-linear-gradient(#f04349, #c81e2b);
+  background:-o-linear-gradient(#f04349, #c81e2b);
+  background:linear-gradient(#f04349, #c81e2b); */
+  /* -webkit-border-radius:10px;
+  -moz-border-radius:10px; */
+  border-radius:0.6em;
+}
+
+
+/* creates the wider right-angled triangle */
+.triangle-obtuse:before {
+  content:"";
+  position:absolute;
+  bottom:-2em; /* value = - border-top-width - border-bottom-width */
+  left:25%; /* controls horizontal position */
+  border:0;
+  border-left-width:2em; /* vary this value to change the angle of the vertex */
+  border-bottom-width:2em; /* vary this value to change the height of the triangle. must be equal to the corresponding value in :after */
+  border-style:solid;
+  border-color:transparent #3f51b540;
+  /* reduce the damage in FF3.0 */
+  display:block;
+  width:0;
+}
+
+/* creates the narrower right-angled triangle */
+.triangle-obtuse:after {
+  content:"";
+  position:absolute;
+  bottom:-2em; /* value = - border-top-width - border-bottom-width */
+  left:25%; /* value = (:before's left) + (:before's border-right/left-width)  - (:after's border-right/left-width) */
+  border:0;
+  border-left-width:0.625em; /* vary this value to change the angle of the vertex */
+  border-bottom-width:2em; /* vary this value to change the height of the triangle. must be equal to the corresponding value in :before */
+  border-style:solid;
+  border-color:transparent #fafafa;
+  /* reduce the damage in FF3.0 */
+  display:block;
+  width:0;
 }
 </style>
 
@@ -168,7 +248,7 @@ export default {
       this.words = this.keywords[this.tab].map(w => {
         return {
           text: w[0],
-          size: w[1] * 8,
+          size: w[1] * 6,
           type: w[2],
           ratio: w[3]
         }
@@ -198,6 +278,23 @@ export default {
     }
   },
   watch: {
+    tab: function (newTab) {
+      this.words = this.keywords[newTab].map(w => {
+        return {
+          text: w[0],
+          size: w[1] * 8,
+          type: w[2],
+          ratio: w[3]
+        }
+      })
+      const width = this.svgWidth
+      const height = this.svgHeight
+      cloud().size([width, height]).words(this.words)
+        .rotate(0)
+        .font('sans-serif')
+        .fontSize(d => d.size)
+        .start()
+    },
     effects: function (newEffects) {
       this.words = this.keywords[this.tab].map(w => {
         return {
@@ -216,7 +313,7 @@ export default {
         .start()
     },
     svgWidth: function (newWidth) {
-      cloud().size([this.svgWidth, this.svgHeight]).words(this.words)
+      cloud().size([newWidth, this.svgHeight]).words(this.words)
         .rotate(0)
         .font('sans-serif')
         .fontSize(d => d.size)
@@ -350,7 +447,8 @@ export default {
       selectedKeyword: '',
       onKeywordLoading: false,
       effectFilter: [0, 1],
-      tab: 0
+      tab: 0,
+      hover: null
     }
   },
   methods: {
@@ -407,6 +505,18 @@ export default {
       setTimeout(() => {
         this.onKeywordLoading = false
       }, 500)
+    },
+    getHoverContext: function (text) {
+      const regex = new RegExp(`[^ ]* [^ ]+ [^ ]*${text}[^ ]* [^ ]+ [^ ]*`)
+      const res = this.effects.map((e) => {
+        return e.description.match(regex)
+      }).filter(e => {
+        return e
+      }).slice(0, 5).map(d => {
+        return '...' + d[0].replace(new RegExp(text, 'gi'), `<span style="font-weight: bold">${text}</span>`) + '...'
+      })
+      // console.log(res)
+      return res
     }
   }
 }

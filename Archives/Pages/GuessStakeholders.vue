@@ -3,7 +3,7 @@
     <promise-pane :policy="policy" />
     <v-flex xs12>
       <v-list two-line>
-        <stakeholder-guess-item v-for="stakeholder in stakeholders" :key="stakeholder.stakeholder"></stakeholder-guess-item>
+        <stakeholder-guess-item v-for="stakeholder in stakeholders" :stakeholder="stakeholder" :key="stakeholder.stakeholder"></stakeholder-guess-item>
         <v-list-tile class='current'>
           <v-list-tile-content>
             <v-list-tile-title>

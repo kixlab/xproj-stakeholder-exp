@@ -14,7 +14,7 @@
             @start="previousStance = currentStance"
             :tick-labels="opinions"
             min="1"
-            max="5"
+            max="7"
             >
           </v-slider>
           <!-- <br>
@@ -62,7 +62,7 @@ export default {
       previousStance: this.$store.state.userPolicy.final_stance,
       updateStance: false,
       showMyOpinion: false,
-      opinions: ['매우 부정적', '부정적', '중립', '긍정적', '매우 긍정적'],
+      opinions: ['매우 부정적', '', '', '', '', '', '매우 긍정적'],
       error: false
     }
   },

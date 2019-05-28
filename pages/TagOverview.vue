@@ -124,6 +124,7 @@ export default {
     store.commit('setKeywords', effects.keywords)
     store.commit('setKeywordsAll', effects.keywords)
     await store.dispatch('setTags')
+    // store.dispatch('')
   },
   components: {
     PromisePane,
