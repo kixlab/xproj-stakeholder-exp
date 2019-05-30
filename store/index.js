@@ -163,7 +163,11 @@ export const getters = {
     return !state.userToken
   },
   pinnedEffectIds (state) {
-    return state.userPolicy.fav_effects
+    if (state.userToken) {
+      return state.userPolicy.fav_effects
+    } else {
+      return []
+    }
   }
 }
 

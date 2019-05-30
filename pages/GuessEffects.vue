@@ -1,7 +1,8 @@
 <template>
   <v-container style="padding: 0;">
     <promise-pane :policy="policy"></promise-pane>
-    <v-layout row wrap justify-center>
+    <v-layout row wrap justify-center
+      v-if="tagHigh.pos_count + tagHigh.neg_count >= 10">
       <!-- <v-flex xs12>
         <opinion-revisit-pane />
       </v-flex> -->
@@ -17,7 +18,7 @@
       </v-flex>
       <v-flex xl8 lg10>
         <v-text-field
-          :label="`${tagHigh.tag}인 사람들은 어떻게 생각할까요?`">
+          :label="`#${tagHigh.tag} 집단은 어떻게 생각할까요?`">
         </v-text-field>
       </v-flex>
       <v-flex xl8 lg10>
@@ -28,25 +29,57 @@
       </v-flex>
       <v-flex xl8 lg10>
         <v-btn block primary @click="onRateClick">
-          확인하기
+          실제 #{{tagHigh.tag}} 집단의 의견 확인하기
+        </v-btn>
+      </v-flex>
+      <v-flex xl8 lg10>
+        <v-divider v-show="isRatingPaneVisible" ref="mydivider"/>
+      </v-flex>
+      <v-flex xl8 lg10 v-if="isRatingPaneVisible">
+        <span class="question"> 
+          #{{tagHigh.tag}} 집단이 적은 의견 몇 개를 먼저 보여드릴게요.
+          의견을 평가해주시면 다른 의견을 볼 수 있습니다.
+        </span>
+        <br>
+        <rating-pane
+          >
+        </rating-pane>
+        <v-btn @click="onSeeMoreTagsClick">
+          다른 집단 보러 가기
+        </v-btn>
+        <v-btn @click="onNextClick">
+          #{{tagHigh.tag}} 집단의 더 많은 의견 보기
         </v-btn>
       </v-flex>
     </v-layout>
-
-    <br>
-    <v-divider v-show="isRatingPaneVisible" ref="mydivider"/>
-    <template v-if="isRatingPaneVisible">
-      <span class="question"> 
-        #{{tagHigh.tag}} 집단이 적은 의견 몇 개를 먼저 보여드릴게요. 아래 버튼을 사용해 평가해주세요!
-      </span>
-      <br>
-      <rating-pane
-        >
-      </rating-pane>
-      <v-btn @click="onNextClick">
-        더 많은 의견 보기
+    <v-layout row wrap justify-center v-else>
+      <v-flex xs12>
+        <guess-pane></guess-pane>
+      </v-flex>
+      <v-flex xl8 lg10>
+        <span class="question"> 
+          #{{tagHigh.tag}} 집단이 적은 의견 몇 개를 먼저 보여드릴게요.
+          <br>
+          의견을 평가해주시면 다른 의견을 볼 수 있습니다.
+        </span>
+        <br>
+        <rating-pane
+          >
+        </rating-pane>
+        <span>
+          #{{tagHigh.tag}} 집단은 어떤 영향을 받는 지 간단히 적어주세요.
+        </span>
+        <v-text-field
+          :label="`${tagHigh.tag} 집단은 어떻게 영향을 받나요? 간단히 적어주세요!`">
+        </v-text-field>
+        <v-btn @click="onSeeMoreTagsClick">
+          다른 집단 보러 가기
+        </v-btn>
+        <v-btn @click="onNextClick">
+          #{{tagHigh.tag}} 집단의 더 많은 의견 보기
       </v-btn>
-    </template>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 <script>
@@ -184,6 +217,9 @@ export default {
     },
     onNextClick: function () {
       this.$router.push('/ExploreEffects')
+    },
+    onSeeMoreTagsClick: function () {
+      this.$router.push('/GuessStakeholder')
     }
   }
 }

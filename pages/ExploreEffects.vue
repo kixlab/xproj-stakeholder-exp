@@ -4,15 +4,12 @@
     <v-layout row wrap>
       <v-flex xs12>
         <guess-pane />
-        <br>
+        <!-- <br>
         <overview-pane 
-          :effectFilter="effectFilter"
-          :closePositiveTags="closePositiveTags"
-          :closeNegativeTags="closeNegativeTags"
           @tag-high-reset="onTagHighReset"
           @tag-high-click="onUpdateSelectedTagHigh"
           @tag-low-click="onUpdateSelectedTagLow"
-          ></overview-pane>
+          ></overview-pane> -->
       </v-flex>
       <v-flex xs4>
         <!-- <tag-tree :tags="filteredTags" :maxValue="maxValue" category="children" @update-selected-tag="onUpdateSelectedTag" :onTagLoading="onTagLoading"/> -->
@@ -150,22 +147,6 @@ export default {
     },
     userGroup: function () {
       return this.$store.getters.userGroup
-    },
-    closePositiveTags: function () {
-      const tagList = this.tagHigh ? this.tagHigh.children : this.tags
-      return tagList.filter((a) => {
-        return a.pos_count >= a.neg_count * 2
-      }).sort((a, b) => {
-        return b.pos_count - a.pos_count
-      }).slice(0, 3)
-    },
-    closeNegativeTags: function () {
-      const tagList = this.tagHigh ? this.tagHigh.children : this.tags
-      return tagList.filter((a) => {
-        return a.pos_count * 2 <= a.neg_count
-      }).sort((a, b) => {
-        return b.neg_count - a.neg_count
-      }).slice(0, 3)
     }
   },
   methods: {

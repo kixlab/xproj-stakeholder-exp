@@ -8,10 +8,10 @@
     </v-flex>
     <v-flex xs12>
       <v-btn @click="randEffect()">
-        좋아요!
+        새로워요
       </v-btn>
       <v-btn @click="randEffect()">
-        싫어요!
+        뻔해요
       </v-btn>
     </v-flex>
   </v-layout>
