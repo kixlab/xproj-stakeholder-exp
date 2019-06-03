@@ -1,11 +1,11 @@
 <template>
   <v-layout>
-    <v-flex xs12 lg9 grow ref="myCloudContainer" :style="`height: 40em;`">
+    <v-flex xs8 lg8 grow ref="myCloudContainer" :style="`height: 40em;`">
       <svg ref="myCloud" style="width: 100%; height: 100%;">
         <g :transform="`translate(${svgWidth/2}, ${svgHeight/2})`">
           <text v-for="word in words"
             :key="word.text"
-            :fill-opacity="word.ratio"
+            :fill-opacity="Math.sqrt(word.ratio * word.ratio * word.ratio)"
             text-anchor="middle"
             :transform="`translate(${word.x}, ${word.y})rotate(${word.rotate})`"
             :style="`font-size: ${word.size}px; font-family: 'sans-serif'; fill: ${fill(word.type)}; cursor: pointer; ${selectedKeyword === word.text ? 'stroke: #000000; stroke-width: 2px; ' : ''}`"
@@ -18,12 +18,28 @@
         </g>
       </svg>
     </v-flex>
-    <v-flex xs12 lg3 v-if="hover">
+    <v-flex xs4 lg4 v-if="hover">
       <div class="triangle-obtuse" v-for="t in getHoverContext(hover.text)"
-        :key="t"
-        v-html="t">
-        
+        :class="t.isBenefit ? 'pos' : 'neg'"
+        :key="t.description"
+        v-html="t.description">
       </div>
+    </v-flex>
+    <v-flex xs3 lg3 v-else>
+      <ul>
+        <!-- <li>
+          <span class="light-blue--text">긍정적 영향에서 많이 등장한 단어</span>는 파랗게 보여집니다.
+        </li>
+        <li>
+          <span class="red--text">부정적 영향에서 많이 등장한 단어</span>는 빨갛게 보여집니다.
+        </li> -->
+        <li>
+          다른 사람들에 비해 #{{tagHigh.tag}} 집단이 많이 사용한 단어일수록 진하게 보여집니다.
+        </li>
+        <li>
+          단어에 마우스를 가져다 대면 단어가 사용된 문장을 보실 수 있습니다.
+        </li>
+      </ul>
     </v-flex>
   </v-layout>
 </template>
@@ -51,7 +67,7 @@ export default {
       this.words = newKeywords.map(w => {
         return {
           text: w[0],
-          size: w[1] * 8,
+          size: Math.sqrt(w[1] * 8),
           type: w[2],
           ratio: w[3]
         }
@@ -103,27 +119,35 @@ export default {
   },
   methods: {
     fill: function (type) {
-      if (type === 'pos') {
-        return '#03A9F4'
-      } else if (type === 'neg') {
-        return '#F44336'
-      } else if (type === 'both') {
-        return '#673AB7'
-      } else {
-        return '#607D88'
-      }
+      // if (type === 'pos') {
+      //   return '#03A9F4'
+      // } else if (type === 'neg') {
+      //   return '#F44336'
+      // } else if (type === 'both') {
+      //   return '#673AB7'
+      // } else {
+      //   return '#607D88'
+      // }
+      return '#607D88'
     },
     onKeywordSelected: function (text) {
       this.$emit('keyword-selected', text)
     },
     getHoverContext: function (text) {
-      const regex = new RegExp(`[^ ]* [^ ]+ [^ ]*${text}[^ ]* [^ ]+ [^ ]*`)
+      // const regex = new RegExp(`[^ ]* [^ ]+ [^ ]*${text}[^ ]* [^ ]+ [^ ]*`)
+      const regex = new RegExp(`[^.]*${text}[^.]*`) // sentence containing the word
       const res = this.effects.map((e) => {
-        return e.description.match(regex)
+        return {
+          description: e.description.match(regex),
+          isBenefit: e.isBenefit
+        }
       }).filter(e => {
-        return e
+        return e.description
       }).slice(0, 5).map(d => {
-        return '...' + d[0].replace(new RegExp(text, 'gi'), `<span style="font-weight: bold">${text}</span>`) + '...'
+        return {
+          description: d.description[0].replace(new RegExp(text, 'gi'), `<span style="font-weight: bold">${text}</span>`),
+          isBenefit: d.isBenefit
+        }
       })
       // console.log(res)
       return res
@@ -132,19 +156,26 @@ export default {
   computed: {
     effects: function () {
       return this.$store.state.effects
+    },
+    tagHigh: function () {
+      return this.$store.state.tagHigh
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
+
+li {
+  word-break: keep-all;
+}
 .triangle-obtuse {
   position:relative;
   padding:1em;
   margin:1em 0 2em;
   width: 98%;
   /* color:#fff; */
-  background:#3f51b540;
+  /* background:#3f51b540; */
   /* css3 */
   /* background:-webkit-gradient(linear, 0 0, 0 100%, from(#f04349), to(#c81e2b));
   background:-moz-linear-gradient(#f04349, #c81e2b);
@@ -155,6 +186,21 @@ export default {
   border-radius:0.6em;
 }
 
+.pos {
+  background: #B3E5FC;
+}
+
+.pos:before {
+  border-color: transparent #B3E5FC !important;
+}
+
+.neg {
+  background: #FFCDD2;
+}
+
+.neg:before {
+  border-color: transparent #FFCDD2 !important;
+}
 
 /* creates the wider right-angled triangle */
 .triangle-obtuse:before {

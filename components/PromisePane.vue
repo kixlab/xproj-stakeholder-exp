@@ -78,6 +78,15 @@
 
         <v-card-text>
           <span v-html="policy.description"/>
+
+          <!-- <span style="text-align:left;"><strong> 첫 번째 기사 </strong></span> -->
+          <v-divider class="mydivider"/>
+          정책에 관한 기사도 읽어보세요!
+          <v-btn 
+            color="black"
+            outline
+            @click="openFirstArticle"
+            block ripple large v-html="policy.article1_title"></v-btn>
         </v-card-text>
 
       <v-divider></v-divider>
@@ -88,7 +97,7 @@
           color="primary"
           flat
           @click="onCloseDialog"
-        >
+          >
           다 읽었어요!
         </v-btn>
       </v-card-actions>
@@ -197,9 +206,17 @@ export default {
       // TODO: connect to db
       this.changedOpinion = ''
       this.reviewOpinionDialog = false
+    },
+    openFirstArticle: function () {
+      window.open(this.policy.article1_link, '_blank')
     }
   }
 }
 </script>
 
+<style scoped>
+.mydivider {
+  margin: 1em 0 1em 0;
+}
+</style>
 

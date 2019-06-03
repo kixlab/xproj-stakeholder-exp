@@ -3,6 +3,7 @@
     <promise-pane :policy="policy"></promise-pane>
     <v-layout row wrap>
       <v-flex xs12>
+        <opinion-revisit-pane></opinion-revisit-pane>
         <guess-pane />
         <!-- <br>
         <overview-pane 

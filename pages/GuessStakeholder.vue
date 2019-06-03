@@ -1,31 +1,41 @@
 <template>
   <v-layout row wrap justify-center>
     <promise-pane :policy="policy"></promise-pane>
+    <v-flex xs12>
+      <opinion-revisit-pane v-if="alreadyGuessed"></opinion-revisit-pane>
+      <guess-pane></guess-pane>
+    </v-flex>
     <v-flex xs12 sm12 class="question__box">
       <span class="question">
-        <span style="font-weight: bold">{{policy.title}} </span>정책에 영향을 받는 사람은 어떤 사람일까요?
+        <span class="emphasis">{{policy.title}} </span>정책에 영향을 받는 사람은 어떤 사람일까요?
         <br>
-        생각나시는 대로 아래에 적어보시고, 수집된 데이터와 비교해보세요!
+        정답은 없으니 생각나는대로 편하게 적어주세요. 
       </span>
     </v-flex>
-    <v-flex xl8 lg10>
+    <v-flex xl8 lg10 md12>
       <v-text-field 
         v-if="!alreadyGuessed"
         clearable 
         v-model="tag" 
-        append-outer-icon="add" 
-        @click:append-outer="onAddTagGuess" 
         @keyup.enter="onAddTagGuess"
-        :label="`${policy.title} 정책에 영향을 받을 것 같은 사람을 편하게 적어주세요!`" />
+        :label="`${policy.title} 정책에 영향을 받을 것 같은 사람을 편하게 적어주세요!`" >
+        <div slot="append">
+          <v-btn @click="onAddTagGuess">
+            추가하기
+          </v-btn>
+        </div>
+      </v-text-field>
       <span v-else>처음에 생각하셨던 정책에 영향을 받는 사람들입니다!</span>
     </v-flex>
-    <v-flex xl8 lg10>
+    <v-flex xl8 lg10 md12>
       <v-card>
         <v-card-text>
-          <!-- <template v-if="guessedItems.length === 0">
-            <span style="font-weight: bold">{{policy.title}} </span>정책에 영향을 받는 사람을 적어주세요!
-          </template> -->
           <template v-if="!alreadyGuessed">
+            <template v-if="guessedItems.length === 0">
+              <span style="font-weight: bold">{{policy.title}} </span>정책에 영향을 받는다고 생각하시는 집단을 적고
+              <br> "추가하기" 버튼을 눌러보세요!
+              <!-- <span style="font-weight: bold">{{policy.title}} </span>정책에 영향을 받는 사람을 적어주세요! -->
+            </template>
             <v-chip 
               v-for="(tag, idx) in guessedItems" 
               close 
@@ -69,7 +79,7 @@
       </v-layout>
     </v-flex> -->
     <template v-if="alreadyGuessed">
-      <v-flex xs12>
+      <!-- <v-flex xs12>
         <v-divider/>
       </v-flex>
       <v-flex xl8 lg10>
@@ -83,30 +93,32 @@
           >
           #{{tag}}
         </span>
-        <!-- <v-layout row wrap justify-space-between align-center>
-          <v-flex xs3 v-for="tag in importantTags" :key="tag.tag">
-            <stakeholder-item
-              :tag="tag"
-              @tag-see-more="onTagSeeMore"
-              >
-            </stakeholder-item>
-          </v-flex>
-        </v-layout> -->
       </v-flex>
-      <br>
+      <br> -->
       <v-flex xs12>
         <v-divider/>
       </v-flex>
       <v-flex xl8 lg10>
-        사람들이 이 정책과 관련 있다고 적어준 집단들입니다. 
-        <br>
-        가장 찬성할 것 같은 집단을 선택해보세요!
+        <span class="question">
+          다른 사람들이 이 정책과 관련 있다고 적은 집단들입니다. 
+          <br>
+          더 알고 싶으신 집단을 클릭해서, 오른쪽 분류에 넣어주세요!
+          <br>
+          분류하신 집단을 클릭하시면 그 집단의 생각을 보실 수 있습니다.
+          <!-- <span class="emphasis">{{prompts[promptIdx]}}</span>을 선택해보세요! -->
+        </span>
       </v-flex>
       <v-flex xl8 lg10>
         <tag-cloud
           :tags="tags"
+          :importantTags="importantTags"
           @keyword-selected="onTagSeeMore">
         </tag-cloud>
+      </v-flex>
+      <v-flex xl8 lg10 xs12>
+        <v-btn block @click="onShowPolicyListClick">
+          다음 정책 보기
+        </v-btn>
       </v-flex>
     </template>
     <v-flex xs12 v-if="!alreadyGuessed">
@@ -115,7 +127,7 @@
     <v-flex xs12 v-if="error">
       <span class="red--text">집단 하나는 적어주세요!</span>
     </v-flex>
-    
+
   </v-layout>
 </template>
 
@@ -124,12 +136,16 @@ import PromisePane from '~/components/PromisePane.vue'
 import TagPane from '~/components/TagPane.vue'
 import StakeholderItem from '~/components/StakeholderItem.vue'
 import TagCloud from '~/components/TagCloud.vue'
+import GuessPane from '~/components/GuessPane.vue'
+import OpinionRevisitPane from '~/components/OpinionRevisitPane.vue'
 export default {
   components: {
     PromisePane,
     TagPane,
     StakeholderItem,
-    TagCloud
+    TagCloud,
+    GuessPane,
+    OpinionRevisitPane
   },
   fetch: async function ({app, store, params}) {
     await store.dispatch('setTags')
@@ -171,7 +187,14 @@ export default {
       seeAnswer: false,
       guessedItems: [
       ],
-      error: false
+      error: false,
+      prompts: [
+        '가장 영향을 많이 받을 집단',
+        '가장 찬성할 것 같은 집단',
+        '가장 반대할 것 같은 집단',
+        '더 보고싶은 집단'
+      ],
+      promptIdx: 0
     }
   },
   methods: {
@@ -219,6 +242,13 @@ export default {
       if ($event === false) {
         this.guessedItems.splice(idx, 1)
       }
+    },
+    onShowPolicyListClick: function () {
+      if (!this.$store.state.userToken || !this.$store.state.user.is_participant || this.$store.state.user.step > 2) {
+        this.$router.push('/ShowPolicies')
+      } else {
+        this.$router.push('/PostSurvey')
+      }
     }
   }
 }
@@ -227,6 +257,10 @@ export default {
 <style scoped>
 .question {
   font-size: 1.1em;
+}
+
+.emphasis {
+  font-weight: bold;
 }
 
 .question__box {
@@ -238,5 +272,10 @@ export default {
   font-size: 3em;
   font-family: 'sans-serif';
   cursor: pointer;
+}
+
+.v-divider {
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 </style>

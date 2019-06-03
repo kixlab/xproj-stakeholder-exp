@@ -1,13 +1,13 @@
 <template>
   <v-card>
-    <v-card-title>
+    <v-card-title :class="(isGuessingEffect || isExploringEffect) ? 'no--padding' : ''">
       <template v-if="isGuessingStakeholder">
-        <a @click="onAllStakeholdersClick">
+        <!-- <a @click="onAllStakeholdersClick">
           <span class="title">
             모든 이해 관계자
           </span>
         </a>
-        <v-icon>chevron_right</v-icon>
+        <v-icon>chevron_right</v-icon> -->
         <span class="title">모든 이해 관계자</span>
       </template>
       <template v-else-if="isGuessingEffect || isExploringEffect">
@@ -20,26 +20,51 @@
         <span class="title">#{{tagHigh.tag}}</span>
       </template>
       <v-spacer />
-      <v-btn icon @click="isVisible = !isVisible">
+      <v-btn v-if="isGuessingEffect || isExploringEffect" icon @click="isVisible = !isVisible">
         <v-icon>
           {{isVisible ? 'expand_less' : 'expand_more'}}
         </v-icon>
       </v-btn>
     </v-card-title>
-    <!-- <v-expand-transition>
+    <v-expand-transition>
       <v-card-text v-if="isVisible">
-        <v-layout row wrap justify-space-between>
-          <v-flex xs3 v-for="(item, idx) in guessedItems" :key="`guess-item-${idx}`" class="guess-item">
-            <guess-stakeholder-item
-              v-if="item.tag"
-              :guessedItem="item"
-              :fixed="true"
+        <v-layout row justify-space-between fill-height> 
+          <v-flex xs3>
+            <v-card class="guesses" dark color="grey"
               >
-            </guess-stakeholder-item>
+              <v-card-title class="title">
+                기사에 많이 언급된 사람들
+              </v-card-title>
+              <v-card-text>
+                <div v-for="t in importantTags" 
+                  :key="t"
+                  @click="onKeywordSelected(t)"
+                  class="mytags"
+                  >
+                  <span class="mytag">{{t}}</span>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+          <v-flex xs3 v-for="(box, idx) in mybox" :key="`box${idx}`">
+            <v-card class="guesses" dark :color="colors[idx]">
+              <v-card-title class="title">
+                {{title[idx]}}
+              </v-card-title>
+              <v-card-text>
+                <div v-for="e in box" 
+                  :key="e.tag"
+                  @click="onKeywordSelected(e.tag)"
+                  class="mytags"
+                  >
+                  <span class="mytag">{{e.tag}}</span>
+                </div>
+              </v-card-text>
+            </v-card>
           </v-flex>
         </v-layout>
       </v-card-text>
-    </v-expand-transition> -->
+    </v-expand-transition>
   </v-card>
 </template>
 
@@ -60,6 +85,22 @@ export default {
     },
     isExploringEffect: function () {
       return this.$router.currentRoute.path === '/ExploreEffects'
+    },
+    mybox: function () {
+      return this.$store.state.mybox
+    },
+    title: function () {
+      return [
+        '나와 관련있는 사람들',
+        '예상하지 못한 사람들',
+        '의견을 알 것 같은 사람들'
+      ]
+    },
+    colors: function () {
+      return ['green', 'light-blue', 'red']
+    },
+    importantTags: function () {
+      return this.$store.state.policy.key_stakeholders
     }
   },
   data: function () {
@@ -71,6 +112,14 @@ export default {
     onAllStakeholdersClick: async function () {
       this.$router.push('/GuessStakeholder')
       // await this.$store.dispatch('setTagHigh', {tag: null})
+    },
+    onKeywordSelected: async function (tag) {
+      const targetTag = this.$store.state.tags.find(t => {
+        return t.tag === tag
+      })
+      await this.$store.dispatch('setTagHigh', {tag: targetTag})
+      this.$router.push('/GuessEffects')
+      this.isVisible = false
     }
   }
 }
@@ -83,8 +132,26 @@ export default {
 .subheader {
   padding-bottom: 0.5em;
 }
-.v-card__title {
+/* .v-card__title {
   padding-bottom: 0 !important;
   padding-top: 0 !important;
+} */
+.no--padding {
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+}
+
+.mytag {
+  font-size: 1.1em;
+  text-decoration: #fafafa underline;
+  cursor: pointer;
+}
+
+.v-card.guesses {
+  height: 100%;
+}
+
+.v-card__title {
+  word-break: keep-all;
 }
 </style>

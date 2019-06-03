@@ -5,6 +5,10 @@ export const state = () => ({
   ],
   policy: {},
   userPolicy: {
+    initial_opinion: '',
+    initial_stance: 4,
+    final_stance: 4,
+    final_opinion: ''
   },
   effects: [],
   userToken: null,
@@ -33,10 +37,9 @@ export const state = () => ({
   tagLowInfo: {},
   totalPosCount: 0,
   totalNegCount: 0,
-  initialOpinion: '',
-  initialStance: 0,
   pinnedEffects: [],
-  guessedItems: []
+  guessedItems: [],
+  mybox: [[], [], []]
 })
 
 export const mutations = {
@@ -78,7 +81,13 @@ export const mutations = {
     state.policies = payload
   },
   logout (state) {
-    state.user = {}
+    state.user = {
+      email: 'abcdef@kaist.ac.kr',
+      experiment_condition: -1,
+      pk: 1,
+      step: 1,
+      is_participant: false
+    }
     state.userToken = null
   },
   finishPresurvey (state) {
@@ -86,20 +95,6 @@ export const mutations = {
   },
   setTags (state, payload) {
     state.tags = payload
-  },
-  addUsedEffect (state, effect) {
-    state.usedEffects.push(effect)
-  },
-  addUsedEffects (state, effects) {
-    state.usedEffects.concat(effects)
-  },
-  setSelectedTag (state, tag) {
-    state.selectedTag = tag
-  },
-  addBrowsedTag (state, tag) {
-    if (state.browsedTags.indexOf(tag) === -1) {
-      state.browsedTags.push(tag)
-    }
   },
   setKeywords (state, payload) {
     state.keywords = payload
@@ -132,10 +127,15 @@ export const mutations = {
     state.totalNegCount = negCount
   },
   setInitialStance (state, stance) {
-    state.initialStance = stance
+    state.userPolicy.initial_stance = stance
+    state.userPolicy.final_stance = stance
+  },
+  setFinalStance (state, stance) {
+    state.userPolicy.final_stance = stance
   },
   setInitialOpinion (state, opinion) {
-    state.initialOpinion = opinion
+    state.initial_opinion = opinion
+    state.final_opinion = opinion
   },
   addPinnedEffects (state, effects) {
     state.pinnedEffects = state.pinnedEffects.concat(effects)
@@ -152,12 +152,27 @@ export const mutations = {
   },
   setGuessedItems (state, guessedItems) {
     state.guessedItems = guessedItems
+  },
+  removeEffect (state, effectId) {
+    const effectIdx = state.effects.findIndex(e => {
+      return e.id === effectId
+    })
+    state.effects.splice(effectIdx, 1)
+  },
+  setMyBox (state, boxes) {
+    state.mybox = boxes
+  },
+  addMyBox (state, {keyword, idx}) {
+    state.mybox[idx].push(keyword)
+  },
+  removeFromMyBox (state, {idx, tagIdx}) {
+    state.mybox[idx].splice(tagIdx, 1)
   }
 }
 
 export const getters = {
   userGroup (state) {
-    return state.user.experiment_condition
+    return state.user ? state.user.experiment_condition : -1
   },
   isLookingAround (state) {
     return !state.userToken
@@ -401,7 +416,20 @@ export const actions = {
   async setInitialOpinion (context, {initialOpinion, initialStance, policy}) {
     context.commit('setInitialOpinion', initialOpinion)
     context.commit('setInitialStance', initialStance)
-    // TODO: Add async operation with API
+
+    if (context.state.userToken) {
+      try {
+        const newUP = await this.$axios.$patch(`/api/userpolicy/${context.state.userPolicy.id}/`, {
+          initial_opinion: initialOpinion,
+          initial_stance: initialStance,
+          final_opinion: initialOpinion,
+          final_stance: initialStance
+        })
+        context.commit('setUserPolicy', newUP)
+      } catch (err) {
+        console.log(err)
+      }
+    }
   },
   async addPinnedEffects (context, {effect}) {
     console.log('aaa')
@@ -429,5 +457,9 @@ export const actions = {
       context.commit('removePinnedEffects', [effect])
     } catch (err) {
     }
+  },
+  async rateEffect (context, {direction, effectId}) {
+    // TODO: connect with API
+    // context.commit('removeEffect', effectId)
   }
 }

@@ -2,29 +2,172 @@
   <v-layout row wrap justify-center>
     <v-flex xs12 lg9 grow ref="myCloudContainer" :style="`height: 40em;`">
       <svg ref="myCloud" style="width: 100%; height: 100%;">
-        <g :transform="`translate(${svgWidth/2}, ${svgHeight/2})`">
-          <text v-for="word in words"
-            :key="word.text"
+        <g :transform="`translate(${svgWidth/2}, ${svgHeight/2})`"
+            v-for="word in words"
+            :key="word.text">
+          <text 
             :fill-opacity="word.ratio"
             text-anchor="middle"
             :transform="`translate(${word.x}, ${word.y})rotate(${word.rotate})`"
-            :style="`font-size: ${word.size}px; font-family: 'sans-serif'; fill: ${fill(word.type)}; cursor: pointer; ${selectedKeyword === word.text ? 'stroke: #000000; stroke-width: 2px; ' : ''}`"
-            @click="onKeywordSelected(word.tag)"
-            @mouseover="hover = word"
-            @mouseleave="hover = null"
+            :style="`font-size: ${word.size}px; font-family: 'sans-serif'; font-weight: ${word.weight}; fill: ${word.fill}; cursor: pointer; ${selectedKeyword && selectedKeyword.tag === word.tag ? 'stroke: #000000; stroke-width: 2px; ' : ''}`"
+            @click="onSelectKeyword(word)"
             >
           {{word.text}}
           </text>
         </g>
       </svg>
     </v-flex>
-    <!-- <v-flex xs12 lg3 v-if="hover">
-      <div class="triangle-obtuse" v-for="t in getHoverContext(hover.text)"
+    <v-flex lg3>
+      <!-- <div class="triangle-obtuse" v-for="t in getHoverContext(hover.text)"
         :key="t"
         v-html="t">
-        
+                    @click="onKeywordSelected(word.tag)"
+
+      </div> -->
+      <!-- <div class="mybox"
+        @drop.prevent="mybox1.push(drag)"
+        @dragover.prevent="onDragover(drag)">
+        가장 영향을 많이 받을 집단
+        <div v-for="e in mybox1" 
+          :key="e.tag"
+          @click="onKeywordSelected(e.tag)"
+          >
+          {{e.tag}}
+        </div>
       </div>
-    </v-flex> -->
+      <div class="mybox"
+        @drop.prevent="mybox2.push(drag)"
+        @dragover.prevent="onDragover(drag)">
+        <div v-for="e in mybox2" 
+          :key="e.tag"
+          @click="onKeywordSelected(e.tag)"
+          >
+          {{e.tag}}
+        </div>
+      </div>
+      <div class="mybox"
+        @drop.prevent="mybox3.push(drag)"
+        @dragover.prevent="onDragover(drag)">
+        <div v-for="e in mybox3" 
+          :key="e.tag"
+          @click="onKeywordSelected(e.tag)"
+          >
+          {{e.tag}}
+        </div>
+      </div> -->
+      <v-layout row wrap fill-height align-space-around>
+        <!-- <v-flex xs2>
+          <v-card dark color="grey" style="cursor: pointer;">
+            <v-icon>
+              chevron_right
+            </v-icon>
+          </v-card>
+        </v-flex> -->
+        <v-flex xs12 grow>
+          <v-card outline
+            color="blue-grey lighten-2"
+            flat
+            dark
+            >
+            <v-card-title class="title">
+              기사에 많이 언급된 사람들
+            </v-card-title>
+            <v-card-text>
+              <div v-for="t in importantTags" 
+                :key="t"
+                @click="onKeywordSelected(t)"
+                class="mytags--article"
+                style="cursor: pointer;"
+                >
+                <span class="mytag">{{t}}</span>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 grow>
+          <v-card dark color="green" @click="onDragover(0)" style="cursor: pointer;"
+            :elevation="selectedKeyword && selectedKeyword.text ? 24 : 0">
+            <v-card-title class="title">
+              나와 관련있는 사람들
+            </v-card-title>
+            <v-card-text>
+              <div v-if="mybox[0].length === 0 && selectedKeyword">
+                여기를 눌러 집단을 추가해주세요!
+              </div>
+              <div v-else-if="mybox[0].length === 0">
+                왼쪽에서 집단을 선택해보세요!
+              </div>
+              <div v-for="e in mybox[0]" 
+                :key="e.tag"
+                @click="onKeywordSelected(e.tag)"
+                class="mytags"
+                >
+                <span class="mytag">{{e.tag}}</span>
+                <v-btn class="mybtn" small icon @click.stop="removeTag(0, idx)">
+                  <v-icon small>
+                    close
+                  </v-icon>
+                </v-btn>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 grow>
+          <v-card dark color="light-blue" @click="onDragover(1)" style="cursor: pointer;" 
+            :elevation="selectedKeyword && selectedKeyword.text ? 24 : 0">
+            <v-card-title class="title">
+              예상하지 못한 사람들
+            </v-card-title>
+            <v-card-text>
+              <div v-if="mybox[1].length === 0 && selectedKeyword">
+                여기를 눌러 집단을 추가해주세요!
+              </div>
+              <div v-else-if="mybox[1].length === 0">
+                왼쪽에서 집단을 선택해보세요!
+              </div>
+              <div v-for="(e, idx) in mybox[1]" 
+                :key="e.tag"
+                @click="onKeywordSelected(e.tag)"
+                class="mytags"
+                >
+                <span class="mytag">{{e.tag}}</span>
+                <v-btn class="mybtn" small icon @click.stop="removeTag(1, idx)">
+                  <v-icon small>
+                    close
+                  </v-icon>
+                </v-btn>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 grow>
+          <v-card dark color="red" @click="onDragover(2)" style="cursor: pointer;"
+            :elevation="selectedKeyword && selectedKeyword.text ? 24 : 0">
+            <v-card-title class="title">
+              의견을 알 것 같은 사람들
+            </v-card-title>
+            <v-card-text>
+              <div v-if="mybox[2].length === 0 && selectedKeyword">
+                여기를 눌러 집단을 추가해주세요!
+              </div>
+              <div v-else-if="mybox[2].length === 0">
+                왼쪽에서 집단을 선택해보세요!
+              </div>
+              <div v-for="e in mybox[2]" 
+                :key="e.tag"
+                >
+                <span class="mytag" @click.stop="onKeywordSelected(e.tag)">{{e.tag}}</span>
+                <v-btn class="mybtn" small icon @click.stop="removeTag(2, idx)">
+                  <v-icon small>
+                    close
+                  </v-icon>
+                </v-btn>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-flex>
   </v-layout>
 </template>
 
@@ -39,8 +182,10 @@ export default {
       }).map(w => {
         return {
           text: `#${w.tag}`,
-          size: Math.sqrt(w.pos_count + w.neg_count) * 10 + 3,
-          tag: w.tag
+          size: 60, // Math.sqrt(w.pos_count + w.neg_count) * 10 + 3,
+          tag: w.tag,
+          important: this.importantTags.includes(w.tag),
+          fill: this.fill(w)
         }
       })
       this.svgWidth = this.$refs.myCloudContainer.clientWidth
@@ -87,6 +232,7 @@ export default {
         .rotate(0)
         .font('sans-serif')
         .fontSize(d => d.size)
+        .fontWeight(d => d.important ? '550' : '400')
         .start()
     }
   },
@@ -96,17 +242,18 @@ export default {
       svgWidth: 0,
       svgHeight: 0,
       hover: false,
-      selectedKeyword: ''
+      selectedKeyword: null,
+      drag: ''
     }
   },
   methods: {
-    fill: function (type) {
-      if (type === 'pos') {
+    fill: function (word) {
+      if (word.pos_count >= 2 * word.neg_count) {
         return '#03A9F4'
-      } else if (type === 'neg') {
+      } else if (word.pos_count * 2 <= word.neg_count) {
         return '#F44336'
-      } else if (type === 'both') {
-        return '#673AB7'
+      // } else if (type === 'both') {
+      //   return '#673AB7'
       } else {
         return '#607D88'
       }
@@ -125,17 +272,75 @@ export default {
       })
       // console.log(res)
       return res
+    },
+    onDragover: function (i) {
+      if (this.selectedKeyword) {
+        this.$store.commit('addMyBox', {keyword: this.selectedKeyword, idx: i})
+        // this.mybox[i].push(this.selectedKeyword)
+        this.selectedKeyword = null
+      }
+      // console.log(drag)
+    },
+    onSelectKeyword: function (word) {
+      if (this.selectedKeyword && (this.selectedKeyword.tag === word.tag)) {
+        this.selectedKeyword = null
+      } else {
+        this.selectedKeyword = word
+      }
+    },
+    removeTag: function (i, tagIdx) {
+      this.$store.commit('removeFromMyBox', {idx: i, tagIdx: tagIdx})
     }
   },
   computed: {
     tags: function () {
       return this.$store.state.tags
+    },
+    importantTags: function () {
+      return this.$store.state.policy.key_stakeholders
+    },
+    mybox: function () {
+      return this.$store.state.mybox
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
+.mybox {
+  /* outline: black solid 1px; */
+  height: 30%;
+  margin: 3% 0 0 0;
+}
+
+.mytag {
+  font-size: 1.1em;
+  text-decoration: underline;
+}
+.v-card__title {
+  word-break: keep-all;
+}
+/* .myshine:after {
+  animation: shine 2s ease-in-out infinite;
+  animation-fill-mode: forwards;
+  content: "";
+  position: absolute;
+  top: -110%;
+  left: -210%;
+  width: 200%;
+  height: 200%;
+  opacity: 0;
+  transform: rotate(30deg);
+  
+  background: rgba(255, 255, 255, 0.13);
+  background: linear-gradient(
+    to right, 
+    rgba(255, 255, 255, 0.13) 0%,
+    rgba(255, 255, 255, 0.13) 77%,
+    rgba(255, 255, 255, 0.5) 92%,
+    rgba(255, 255, 255, 0.0) 100%
+  ); 
+} */
 .triangle-obtuse {
   position:relative;
   padding:1em;
@@ -184,5 +389,32 @@ export default {
   /* reduce the damage in FF3.0 */
   display:block;
   width:0;
+}
+.mytags {
+  width: fit-content;
+  margin: auto;
+}
+
+.title {
+  margin: auto;
+}
+.mybtn {
+  margin: 0 !important;
+}
+@keyframes shine {
+  10% {
+    opacity: 1;
+    top: -30%;
+    left: -30%;
+    transition-property: left, top, opacity;
+    transition-duration: 0.7s, 0.7s, 0.15s;
+    transition-timing-function: ease;
+  }
+  100% {
+    opacity: 0;
+    top: -30%;
+    left: -30%;
+    transition-property: left, top, opacity;
+  }
 }
 </style>

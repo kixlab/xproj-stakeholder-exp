@@ -30,6 +30,14 @@
           </v-btn>
         </v-flex>
       </v-card-actions>
+      <v-card-actions v-if="isGuessing">
+        <v-btn color="green" block outline @click="onNewClick">
+          새로워요!
+        </v-btn>
+        <v-btn color="red" block outline @click="onExpectedClick">
+          뻔해요...
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </div>
 </template>
@@ -53,6 +61,12 @@ export default {
         await this.$store.dispatch('removePinnedEffects', payload)
       }
       this.pinned = !this.pinned
+    },
+    onNewClick: function () {
+      this.$emit('new-click')
+    },
+    onExpectedClick: function () {
+      this.$emit('expected-click')
     }
   },
   mixins: [setTokenMixin],
@@ -67,6 +81,10 @@ export default {
     selectedKeyword: String,
     showTag: {
       default: true
+    },
+    isGuessing: {
+      default: false,
+      type: Boolean
     }
   },
   computed: {

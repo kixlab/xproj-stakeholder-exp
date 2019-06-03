@@ -184,7 +184,7 @@ export default {
           this.$router.push('/ReadNews')
         }
       } else {
-        this.$router.push('/GuessStakeholder')
+        this.$router.push('/ReadNews')
       }
     },
     selectPolicy: function (policyID) {

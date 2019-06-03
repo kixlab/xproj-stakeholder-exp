@@ -51,8 +51,9 @@ export default {
       if ((this.userGroup === 8 && this.policy.id === 1) ||
       (this.userGroup === 9 && this.policy.id === 1) ||
       (this.userGroup === 10 && this.policy.id === 2) ||
-      (this.userGroup === 11 && this.policy.id === 2)) {
-        this.$router.push('/TagOverview')
+      (this.userGroup === 11 && this.policy.id === 2) ||
+      (this.userGroup === -1)) {
+        this.$router.push('/GuessStakeholder')
       } else if ((this.userGroup === 8 && this.policy.id === 2) ||
       (this.userGroup === 9 && this.policy.id === 2) ||
       (this.userGroup === 10 && this.policy.id === 1) ||

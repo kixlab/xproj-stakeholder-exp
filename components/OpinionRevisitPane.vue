@@ -1,44 +1,48 @@
 <template>
   <v-card color="grey lighten-4">
-    <!-- <v-card-title>
-      aaaa
-    </v-card-title> -->
+    <v-card-title @click="isVisible = !isVisible" style="cursor: pointer;">
+      <span class="title">정책에 대한 입장이 변하셨다면 여기를 눌러주세요!</span>
+    </v-card-title>
     <!-- content here -->
-    <v-card-text>
-      <v-layout row wrap>
-        <v-flex xs12>
-          혹시 정책에 대한 의견이 변하셨나요? 의견이 어떻게 바뀌셨는지 알려주세요!
-          <v-slider
-            v-model="currentStance"
-            @change="onUpdateStance"
-            @start="previousStance = currentStance"
-            :tick-labels="opinions"
-            min="1"
-            max="7"
-            >
-          </v-slider>
-          <!-- <br>
-          <div v-if="updateStance">
-            이 정책에 대해서 왜 그렇게 생각하시나요? 이유를 알려주세요!
-            <v-textarea
-              v-model="changedOpinion">
-            </v-textarea>
+    <v-expand-transition>
+      <v-card-text v-if="isVisible">
+        <v-layout row wrap>
+          <v-flex xs12>
+            정책에 대한 입장이 어떻게 변하셨는지 알려주세요!
+            <!-- 혹시 정책에 대한 의견이 변하셨나요? 의견이 어떻게 바뀌셨는지 알려주세요! -->
+            <v-slider
+              v-model="currentStance"
+              @change="onUpdateStance"
+              @start="previousStance = currentStance"
+              :tick-labels="opinions"
+              :tick-size="3"
+              min="1"
+              max="7"
+              >
+            </v-slider>
             <br>
-            <div v-if="error">
-              의견 업데이트가 실패했습니다. 다시 한 번 시도해주세요!
+            <div v-if="updateStance">
+              <!-- 이 정책에 대해서 왜 그렇게 생각하시나요? 이유를 알려주세요!
+              <v-textarea
+                v-model="changedOpinion">
+              </v-textarea>
+              <br>
+              <div v-if="error">
+                의견 업데이트가 실패했습니다. 다시 한 번 시도해주세요!
+              </div> -->
+              <v-btn class="error"
+                @click="onCancelUpdateStance">
+                취소
+              </v-btn>
+              <v-btn class="success"
+                @click="onCommitUpdateStance">
+                저장
+              </v-btn>
             </div>
-            <v-btn class="error"
-              @click="onCancelUpdateStance">
-              취소
-            </v-btn>
-            <v-btn class="success"
-              @click="onCommitUpdateStance">
-              저장
-            </v-btn>
-          </div> -->
-        </v-flex>
-      </v-layout>
-    </v-card-text>
+          </v-flex>
+        </v-layout>
+      </v-card-text>
+    </v-expand-transition>
   </v-card>
 </template>
 
@@ -63,7 +67,8 @@ export default {
       updateStance: false,
       showMyOpinion: false,
       opinions: ['매우 부정적', '', '', '', '', '', '매우 긍정적'],
-      error: false
+      error: false,
+      isVisible: false
     }
   },
   methods: {
@@ -73,20 +78,26 @@ export default {
     onCancelUpdateStance: function () {
       this.updateStance = false
       this.currentStance = this.previousStance
+      this.isVisible = false
     },
     onCommitUpdateStance: async function () {
       // TODO: Apply in database
       this.error = false
-      try {
-        const result = await this.$axios.$patch(`/api/userpolicy/${this.userPolicy.id}/`, {
-          final_stance: this.currentStance,
-          final_opinion: this.changedOpinion
-        })
-        this.$store.state.commit('setUserPolicy', result)
-        this.updateStance = false
-      } catch (e) {
-        this.error = true
+      if (this.$store.state.userToken) {
+        try {
+          const result = await this.$axios.$patch(`/api/userpolicy/${this.userPolicy.id}/`, {
+            final_stance: this.currentStance,
+            final_opinion: this.changedOpinion
+          })
+          this.$store.state.commit('setUserPolicy', result)
+          this.updateStance = false
+        } catch (e) {
+          this.error = true
+        }
+      } else {
+        this.$store.commit('setFinalStance', this.currentStance)
       }
+      this.isVisible = false
     }
   }
 }
@@ -95,6 +106,9 @@ export default {
 .v-card__text {
   padding-bottom:0 !important;
   padding-top: 0 !important;
+}
+
+.v-card {
   margin-bottom: 1em;
 }
 .subheader {

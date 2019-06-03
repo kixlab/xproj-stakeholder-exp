@@ -4,26 +4,33 @@
     <v-flex xs12>
       <v-card color="grey lighten-4">
         <v-card-text>
-          정책에 대한 의견을 읽기 전, 정책에 대해 간단히 알려드릴게요!
+          기사를 읽고, 정책을 이해해보세요!
         </v-card-text>
       </v-card>
     </v-flex>
-    <v-flex xl8 lg10 xs12>
-      <!-- <strong>아래 버튼을 눌러</strong> 기사를 읽은 뒤, 여기로 돌아와주세요.<br><br>
+    <v-flex xs12>
+      <strong>아래 버튼을 눌러</strong> 기사를 읽은 뒤, 여기로 돌아와주세요.<br><br>
       각 기사를 <strong style="color:red;">1분 이상</strong> 읽어야 다음으로 넘어갈 수 있습니다.<br>
-      1분이 지나면 버튼이 <strong style="color:green;">초록색</strong>으로 바뀝니다.<br><br> -->
-      먼저, 정책에 대한 아래의 설명을 읽어주세요.
-      <v-divider class="mydivider" />
+      1분이 지나면 버튼이 <strong style="color:green;">초록색</strong>으로 바뀝니다.<br><br>
     </v-flex>
 
-    <v-flex xl8 lg10 xs12>
-       <!-- replace with article....?? -->
-      <div style="text-align: left; line-height: 1.8em;" v-html="policy.description"></div>
-    </v-flex>
-    <br>
     <v-flex xs12>
-      <!-- <span style="text-align:left;"><strong> 첫 번째 기사 </strong></span> -->
-      아래 기사는 정책에 대한 더 자세한 설명을 담고 있습니다.
+      먼저, 정책에 대한 아래의 설명을 읽어주세요. <!-- replace with article....?? -->
+      <br>
+      <div style="text-align: left;" v-html="policy.description"></div>
+    </v-flex>
+    
+    <v-flex xs12>
+      이제, 이 정책에 대해 어떻게 생각하시는지 알려주세요!
+      <v-slider
+        max="7"
+        min="1"
+        :tick-labels="opinions"
+        v-model="initialStance">
+      </v-slider>
+    </v-flex>
+    <v-flex xs12>
+      <span style="text-align:left;"><strong> 첫 번째 기사 </strong></span>
       <v-divider/>
       <v-btn 
         :color="read1 ? 'success' : 'black'"
@@ -32,19 +39,12 @@
         block ripple large v-html="article_title_cut(policy.article1_title)"></v-btn>
       <br>
     </v-flex>
-
-    <v-flex xs12>
-      이제, 이 정책에 대해 어떻게 생각하시는지 알려주세요!
-      <v-slider
-        max="7"
-        min="1"
-        :tick-labels="opinions"
-        :tick-size="3"
-        v-model="initialStance">
-      </v-slider>
+    <v-flex xs12 v-if="article1Show">
+      <!-- <iframe style="width: 90vw; height: 100vh;" :src="policy.article1_link"></iframe>
+      <v-btn block large @click="article1Show = false"></v-btn> -->
+      {{policy.article1_content}}
     </v-flex>
-
-    <!-- <v-flex xs12>
+    <v-flex xs12>
       <span style="text-align:left;"><strong> 두 번째 기사 </strong></span>
       <v-divider/>
       <v-btn 
@@ -53,8 +53,8 @@
         @click="openSecondArticle"
         block ripple large v-html="article_title_cut(policy.article2_title)"></v-btn>
       <br>
-    </v-flex> -->
-    <v-flex xl8 lg10 xs12 v-if="userGroup >= 0">
+    </v-flex>
+    <v-flex xs12>
       <span style="text-align:left;"><strong> 기사를 모두 읽으셨다면, 아래 설문을 작성해주세요. </strong></span>
       <v-divider/>
       <v-btn 
@@ -62,20 +62,18 @@
         color="success"
         @click="openPreSurvey"
         ripple>설문하기</v-btn>
-      <span style="text-align:left;"><strong> 설문을 모두 마치신 뒤, 아래 버튼을 눌러주세요. </strong></span>
-
     </v-flex>
 
     <v-flex xs12 row wrap>
     <!-- <template v-if="!(read1&&read2)">
       <strong style="color:red;">두 기사를 각각 1분 이상 읽으셔야<br>다음으로 넘어가실 수 있습니다.</strong>
     </template> -->
-    <v-btn block color="primary" @click="onClickComplete">정책에 대한 의견 보러가기</v-btn>
+    <span style="text-align:left;"><strong> 설문을 모두 마치신 뒤, 아래 버튼을 눌러주세요. </strong></span>
+    <v-btn block color="primary" @click="onClickComplete">다음</v-btn>
     <!-- <v-btn block :disabled="!(read1 && read2)" color="primary" @click="onClickComplete">다음</v-btn> -->
     </v-flex>
   </v-layout>
 </template>
-
 <style scoped>
 #header {
     flex: 1;
@@ -85,13 +83,7 @@
 .v-btn {
   word-break: keep-all;
 }
-.mydivider {
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-
 </style>
-
 <script>
 import PromisePane from '~/components/PromisePane.vue'
 import GoNextMixin from '~/mixins/goNext.js'
@@ -199,51 +191,44 @@ export default {
         eventValue: 0
       })
       this.dialog = false
-      // fetch previous guess
-      this.$store.dispatch('setInitialOpinion', {
-        initialOpinion: '',
-        initialStance: this.initialStance,
-        policy: this.policy.id})
-      this.$store.commit('setGuessedItems', [])
-      this.$store.commit('setMyBox', [[], [], []])
       this.goNext()
       // this.$router.push(this.nextRoute)
     },
     openFirstArticle () {
-      // this.$ga.event({
-      //   eventCategory: this.$router.currentRoute.path,
-      //   eventAction: 'OpenFirstArticle',
-      //   eventLabel: `${this.policy.title}`,
-      //   eventValue: 0
-      // })
-      // this.article1Show = true
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenFirstArticle',
+        eventLabel: `${this.policy.title}`,
+        eventValue: 0
+      })
+      this.article1Show = true
       window.open(this.policy.article1_link, '_blank')
-      // if (!this.read1) {
-      //   // setTimeout(() => {
-      //   this.$store.commit('setReadCounter1', Date.now())
-      //   this.$store.dispatch('incrementUserPolicyArticlesSeen')
-      //   // this.read1 = true
-      //   // }, 60000)
-      // }
+      if (!this.read1) {
+        // setTimeout(() => {
+        this.$store.commit('setReadCounter1', Date.now())
+        this.$store.dispatch('incrementUserPolicyArticlesSeen')
+        // this.read1 = true
+        // }, 60000)
+      }
       // this.read1 = true
     },
-    // openSecondArticle () {
-    //   this.$ga.event({
-    //     eventCategory: this.$router.currentRoute.path,
-    //     eventAction: 'OpenSecondArticle',
-    //     eventLabel: `${this.policy.title}`,
-    //     eventValue: 0
-    //   })
-    //   window.open(this.policy.article2_link, '_blank')
-    //   if (!this.read2) {
-    //     // setTimeout(() => {
-    //     this.$store.commit('setReadCounter2', Date.now())
-    //     this.$store.dispatch('incrementUserPolicyArticlesSeen')
-    //     // this.read1 = true
-    //     // }, 60000)
-    //   }
-    //   // this.read2 = true
-    // },
+    openSecondArticle () {
+      this.$ga.event({
+        eventCategory: this.$router.currentRoute.path,
+        eventAction: 'OpenSecondArticle',
+        eventLabel: `${this.policy.title}`,
+        eventValue: 0
+      })
+      window.open(this.policy.article2_link, '_blank')
+      if (!this.read2) {
+        // setTimeout(() => {
+        this.$store.commit('setReadCounter2', Date.now())
+        this.$store.dispatch('incrementUserPolicyArticlesSeen')
+        // this.read1 = true
+        // }, 60000)
+      }
+      // this.read2 = true
+    },
     openPreSurvey: function () {
       window.open(this.surveyURLs[`pre${this.policy.id}`], '_blank')
     },

@@ -118,7 +118,8 @@
                     :key="effect.id"
                     :effect="effect"
                     :selectedKeyword="selectedKeyword"
-                    :show-tag="showTags"/>
+                    :show-tag="showTags"
+                    :isGuessing="showTags"/>
                 </template>
               </v-flex>
             </v-layout>

@@ -155,7 +155,9 @@ export default {
       tagHigh: null,
       tagLow: null,
       tagHighInfo: null,
-      tagLowInfo: null
+      tagLowInfo: null,
+      guessedItems: [],
+      mybox: [[], [], []]
     })
   },
   layout: 'index',
