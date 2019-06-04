@@ -6,7 +6,7 @@
         <opinion-revisit-pane></opinion-revisit-pane>
         <guess-pane
           :opened="true"
-          @update-tag-high="onUpdateTagHigh"></guess-pane>
+          ></guess-pane>
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-center
@@ -16,7 +16,8 @@
       </v-flex> -->
       <v-flex xl8 lg10 xs12>
         <opinion-revisit-pane></opinion-revisit-pane>
-        <guess-pane></guess-pane>
+        <guess-pane
+          @update-tag-high="onUpdateTagHigh"></guess-pane>
       </v-flex>
       <v-flex xs12>
         <span class="question">
@@ -29,6 +30,7 @@
       <v-flex xl8 lg10 xs12>
         <v-text-field
           :disabled="isRatingPaneVisible"
+          v-model="guessedEffect"
           :label="`#${tagHigh.tag} 집단은 어떤 영향을 받을까요?`">
         </v-text-field>
       </v-flex>
@@ -83,7 +85,8 @@
     <v-layout row wrap justify-center v-else>
       <v-flex xl8 lg10 xs12>
         <opinion-revisit-pane></opinion-revisit-pane>
-        <guess-pane></guess-pane>
+        <guess-pane 
+          @update-tag-high="onUpdateTagHigh"></guess-pane>
       </v-flex>
       <v-flex xl8 lg10>
         <span class="question">
@@ -93,7 +96,6 @@
         </span>
         <br>
         <rating-pane
-          @rating-enough="onRatingEnough"
           :key="tagHigh.tag"
           >
         </rating-pane>
@@ -106,6 +108,7 @@
           #{{tagHigh.tag}} 집단은 어떤 영향을 받는 것 같나요? 정답은 없으니 생각나는 대로 편하게 적어주세요!
         </span>
         <v-text-field
+          v-model="guessedEffect"
           :disabled="showNextOptions"
           :label="`#${tagHigh.tag} 집단은 어떤 영향을 받나요? 간단히 적어주세요!`">
         </v-text-field>
@@ -175,7 +178,8 @@ export default {
       onTagLowLoading: false,
       effectFilter: [0, 1],
       isRatingPaneVisible: false,
-      showNextOptions: false
+      showNextOptions: false,
+      guessedEffect: ''
     }
   },
   computed: {
@@ -220,8 +224,10 @@ export default {
       }
     },
     onUpdateTagHigh: function () {
+      console.log('fire')
       this.isRatingPaneVisible = false
       this.showNextOptions = false
+      this.guessedEffect = ''
     }
   }
 }
