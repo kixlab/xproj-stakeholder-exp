@@ -8,7 +8,7 @@
             :fill-opacity="Math.sqrt(word.ratio * word.ratio * word.ratio)"
             text-anchor="middle"
             :transform="`translate(${word.x}, ${word.y})rotate(${word.rotate})`"
-            :style="`font-size: ${word.size}px; font-family: 'sans-serif'; fill: ${fill(word.type)}; cursor: pointer; ${selectedKeyword === word.text ? 'stroke: #000000; stroke-width: 2px; ' : ''}`"
+            :style="`font-size: ${word.size}px; font-family: sans-serif; fill: ${fill(word.type)}; cursor: pointer; ${selectedKeyword === word.text ? 'stroke: #000000; stroke-width: 2px; ' : ''}`"
             @click="onKeywordSelected(word.text)"
             @mouseover="hover = word"
             @mouseleave="hover = null"
