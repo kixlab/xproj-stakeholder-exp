@@ -86,13 +86,13 @@ export default {
       return this.$store.state.tagHigh
     },
     isGuessingStakeholder: function () {
-      return (this.$router.currentRoute.path === '/GuessStakeholder') || (this.$router.currentRoute.path === '/GuessEffects' && !this.tagHigh)
+      return (this.$router.currentRoute.path.toLowerCase().includes('/guessstakeholder')) || (this.$router.currentRoute.path.toLowerCase().includes('/guesseffects') && !this.tagHigh)
     },
     isGuessingEffect: function () {
-      return this.$router.currentRoute.path === '/GuessEffects' && this.tagHigh
+      return this.$router.currentRoute.path.toLowerCase().includes('/guesseffects') && this.tagHigh
     },
     isExploringEffect: function () {
-      return this.$router.currentRoute.path === '/ExploreEffects'
+      return this.$router.currentRoute.path.toLowerCase().includes('/exploreeffects')
     },
     mybox: function () {
       return this.$store.state.mybox

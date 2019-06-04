@@ -9,7 +9,7 @@
             :fill-opacity="word.ratio"
             text-anchor="middle"
             :transform="`translate(${word.x}, ${word.y})rotate(${word.rotate})`"
-            :style="`font-size: ${word.size}px; font-family: 'sans-serif'; font-weight: ${word.weight}; fill: ${word.fill}; cursor: pointer; ${selectedKeyword && selectedKeyword.tag === word.tag ? 'stroke: #000000; stroke-width: 2px; ' : ''}`"
+            :style="`font-size: ${word.size}px; font-family: sans-serif; font-weight: ${word.weight}; fill: ${word.fill}; cursor: pointer; ${selectedKeyword && selectedKeyword.tag === word.tag ? 'stroke: #000000; stroke-width: 2px; ' : ''}`"
             @click="onSelectKeyword(word)"
             >
           {{word.text}}
@@ -103,7 +103,7 @@
                 class="mytags"
                 >
                 <span class="mytag">{{e.tag}}</span>
-                <v-btn class="mybtn" small icon @click.stop="removeTag(0, idx)">
+                <v-btn class="mybtn" small icon @click.stop="removeTag(0, e)">
                   <v-icon small>
                     close
                   </v-icon>
@@ -125,13 +125,13 @@
               <div v-else-if="mybox[1].length === 0">
                 왼쪽에서 집단을 선택해보세요!
               </div>
-              <div v-for="(e, idx) in mybox[1]" 
+              <div v-for="e in mybox[1]" 
                 :key="e.tag"
                 @click="onKeywordSelected(e.tag)"
                 class="mytags"
                 >
                 <span class="mytag">{{e.tag}}</span>
-                <v-btn class="mybtn" small icon @click.stop="removeTag(1, idx)">
+                <v-btn class="mybtn" small icon @click.stop="removeTag(1, e)">
                   <v-icon small>
                     close
                   </v-icon>
@@ -157,7 +157,7 @@
                 :key="e.tag"
                 >
                 <span class="mytag" @click.stop="onKeywordSelected(e.tag)">{{e.tag}}</span>
-                <v-btn class="mybtn" small icon @click.stop="removeTag(2, idx)">
+                <v-btn class="mybtn" small icon @click.stop="removeTag(2, e)">
                   <v-icon small>
                     close
                   </v-icon>
@@ -288,8 +288,8 @@ export default {
         this.selectedKeyword = word
       }
     },
-    removeTag: function (i, tagIdx) {
-      this.$store.commit('removeFromMyBox', {idx: i, tagIdx: tagIdx})
+    removeTag: function (i, tag) {
+      this.$store.commit('removeFromMyBox', {idx: i, tag: tag})
     }
   },
   computed: {

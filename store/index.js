@@ -163,9 +163,17 @@ export const mutations = {
     state.mybox = boxes
   },
   addMyBox (state, {keyword, idx}) {
-    state.mybox[idx].push(keyword)
+    const tagIdx = state.mybox[idx].findIndex(t => {
+      return t.tag === keyword.tag
+    })
+    if (tagIdx === -1) {
+      state.mybox[idx].push(keyword)
+    }
   },
-  removeFromMyBox (state, {idx, tagIdx}) {
+  removeFromMyBox (state, {idx, tag}) {
+    const tagIdx = state.mybox[idx].findIndex(t => {
+      return t.tag === tag.tag
+    })
     state.mybox[idx].splice(tagIdx, 1)
   }
 }
