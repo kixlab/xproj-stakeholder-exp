@@ -20,14 +20,17 @@
         <span class="title">#{{tagHigh.tag}}</span>
       </template>
       <v-spacer />
-      <v-btn v-if="isGuessingEffect || isExploringEffect" icon @click="isVisible = !isVisible">
+      <v-btn v-if="!opened && (isGuessingEffect || isExploringEffect)" icon @click="isVisible = !isVisible">
         <v-icon>
           {{isVisible ? 'expand_less' : 'expand_more'}}
         </v-icon>
       </v-btn>
     </v-card-title>
     <v-expand-transition>
-      <v-card-text v-if="isVisible">
+      <v-card-text v-if="isVisible || opened">
+        <span class="prompt" v-if="opened">
+          {{policy.title}} 정책과 관련해 의견을 알고 싶으신 집단을 선택해주세요!
+        </span>
         <v-layout row justify-space-between fill-height> 
           <v-flex xs3>
             <v-card class="guesses" dark color="grey"
@@ -70,6 +73,11 @@
 
 <script>
 export default {
+  props: {
+    opened: {
+      default: false
+    }
+  },
   computed: {
     guessedItems: function () {
       return this.$store.state.guessedItems
@@ -78,10 +86,10 @@ export default {
       return this.$store.state.tagHigh
     },
     isGuessingStakeholder: function () {
-      return this.$router.currentRoute.path === '/GuessStakeholder'
+      return (this.$router.currentRoute.path === '/GuessStakeholder') || (this.$router.currentRoute.path === '/GuessEffects' && !this.tagHigh)
     },
     isGuessingEffect: function () {
-      return this.$router.currentRoute.path === '/GuessEffects'
+      return this.$router.currentRoute.path === '/GuessEffects' && this.tagHigh
     },
     isExploringEffect: function () {
       return this.$router.currentRoute.path === '/ExploreEffects'
@@ -93,7 +101,7 @@ export default {
       return [
         '나와 관련있는 사람들',
         '예상하지 못한 사람들',
-        '의견을 알 것 같은 사람들'
+        '의견을 예상할 수 있는 사람들'
       ]
     },
     colors: function () {
@@ -101,6 +109,9 @@ export default {
     },
     importantTags: function () {
       return this.$store.state.policy.key_stakeholders
+    },
+    policy: function () {
+      return this.$store.state.policy
     }
   },
   data: function () {
@@ -120,6 +131,7 @@ export default {
       await this.$store.dispatch('setTagHigh', {tag: targetTag})
       this.$router.push('/GuessEffects')
       this.isVisible = false
+      this.$emit('update-tag-high')
     }
   }
 }
@@ -149,6 +161,11 @@ export default {
 
 .v-card.guesses {
   height: 100%;
+}
+
+.prompt {
+  font-size: 1.1em;
+  line-height: 1.6em;
 }
 
 .v-card__title {

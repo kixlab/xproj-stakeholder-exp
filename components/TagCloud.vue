@@ -144,7 +144,7 @@
           <v-card dark color="red" @click="onDragover(2)" style="cursor: pointer;"
             :elevation="selectedKeyword && selectedKeyword.text ? 24 : 0">
             <v-card-title class="title">
-              의견을 알 것 같은 사람들
+              의견을 예상할 수 있는 사람들
             </v-card-title>
             <v-card-text>
               <div v-if="mybox[2].length === 0 && selectedKeyword">

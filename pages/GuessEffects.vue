@@ -1,8 +1,16 @@
 <template>
   <v-container style="padding: 0;">
     <promise-pane :policy="policy"></promise-pane>
+    <v-layout row wrap justify-center v-if="!tagHigh">
+      <v-flex xl8 lg10 xs12>
+        <opinion-revisit-pane></opinion-revisit-pane>
+        <guess-pane
+          :opened="true"
+          @update-tag-high="onUpdateTagHigh"></guess-pane>
+      </v-flex>
+    </v-layout>
     <v-layout row wrap justify-center
-      v-if="tagHigh.pos_count + tagHigh.neg_count >= 10">
+      v-else-if="tagHigh && (tagHigh.pos_count + tagHigh.neg_count >= 10)">
       <!-- <v-flex xs12>
         <opinion-revisit-pane />
       </v-flex> -->
@@ -38,17 +46,18 @@
         <br>
         <rating-pane
           @rating-enough="onRatingEnough"
+          :key="tagHigh.tag"
           >
         </rating-pane>
         <template v-if="showNextOptions">
           이제, #{{tagHigh.tag}} 집단의 의견을 더 알아보거나, 다른 사람들의 의견을 보실 수 있습니다!
           <v-layout row wrap justify-center>
-            <v-flex xs6>
+            <v-flex xl4 lg5 xs6>
               <v-btn block color="secondary" @click="onNextClick">
                 #{{tagHigh.tag}} 집단의 더 많은 의견 보기
               </v-btn>
             </v-flex>
-            <v-flex xs6>
+            <v-flex xl4 lg5 xs6>
               <v-btn block color="primary" @click="onSeeMoreTagsClick">
                 다른 집단 보러 가기
               </v-btn>
@@ -73,19 +82,25 @@
     </v-layout>
     <v-layout row wrap justify-center v-else>
       <v-flex xl8 lg10 xs12>
+        <opinion-revisit-pane></opinion-revisit-pane>
         <guess-pane></guess-pane>
       </v-flex>
       <v-flex xl8 lg10>
         <span class="question">
           #{{tagHigh.tag}} 집단은 {{tagHigh.pos_count}}명이 긍정적 영향을 받고, {{tagHigh.neg_count}}명이 부정적 영향을 받는다고 응답했습니다.
           <br>
-          #{{tagHigh.tag}} 집단이 적은 의견은 어떤 느낌인가요?
+          #{{tagHigh.tag}} 집단이 적은 영향은 어떤 느낌인가요?
         </span>
         <br>
         <rating-pane
           @rating-enough="onRatingEnough"
+          :key="tagHigh.tag"
           >
         </rating-pane>
+        <!-- <effects-pane
+          :effects="effects"
+          :height="40">
+        </effects-pane> -->
         <v-divider/>
         <span>
           #{{tagHigh.tag}} 집단은 어떤 영향을 받는 것 같나요? 정답은 없으니 생각나는 대로 편하게 적어주세요!
@@ -101,12 +116,12 @@
         <template v-if="showNextOptions">
           이제, #{{tagHigh.tag}} 집단의 의견을 더 알아보거나, 다른 사람들의 의견을 보실 수 있습니다!
           <v-layout row wrap justify-center>
-            <v-flex xs6>
+            <v-flex xl4 lg5 xs6>
               <v-btn block color="secondary" @click="onNextClick">
                 #{{tagHigh.tag}} 집단의 의견 보기
               </v-btn>
             </v-flex>
-            <v-flex xs6>
+            <v-flex xl4 lg5 xs6>
               <v-btn block color="primary" @click="onSeeMoreTagsClick">
                 다른 집단 보러 가기
               </v-btn>
@@ -129,6 +144,7 @@ import setTokenMixin from '~/mixins/setToken.js'
 import RatingPane from '~/components/RatingPane.vue'
 import GuessPane from '~/components/GuessPane.vue'
 import OpinionRevisitPane from '~/components/OpinionRevisitPane.vue'
+import EffectsPane from '~/components/EffectsPane.vue'
 export default {
   // fetch: async function ({app, store, params}) {
   //   const effects = await app.$axios.$get('/api/effects/', {
@@ -146,7 +162,8 @@ export default {
     EffectsWordCloud,
     RatingPane,
     GuessPane,
-    OpinionRevisitPane
+    OpinionRevisitPane,
+    EffectsPane
   },
   mixins: [setTokenMixin],
   data: function () {
@@ -174,86 +191,11 @@ export default {
     tags: function () {
       return this.$store.state.tags
     },
-    // tagLows: function () {
-    //   if (this.tagHigh) {
-    //     return this.tagHigh.children.slice().sort((a, b) => {
-    //       if (a.total_count < b.total_count) {
-    //         return 1
-    //       } else if (a.total_count > b.total_count) {
-    //         return -1
-    //       } else {
-    //         return 0
-    //       }
-    //     })
-    //   } else {
-    //     return []
-    //   }
-    // },
     tagHigh: function () {
       return this.$store.state.tagHigh
     }
-    // tagLow: function () {
-    //   return this.$store.state.tagLow
-    // },
-    // tagHighInfo: function () {
-    //   return this.$store.state.tagHighInfo
-    // },
-    // tagLowInfo: function () {
-    //   return this.$store.state.tagLowInfo
-    // },
-    // filteredTags: function () {
-    //   const ft = this.tags.filter((tag) => { return tag.total_count >= 3 })
-    //   return ft.length > 0 ? ft : this.tags
-    // },
-    // userGroup: function () {
-    //   return this.$store.getters.userGroup
-    // }
   },
   methods: {
-    // onUpdateSelectedTagHighByLink: function (tagTxt) {
-    //   const tag = this.tags.find((t) => {
-    //     return t.tag === tagTxt
-    //   })
-    //   this.onUpdateSelectedTagHigh(tag)
-    // },
-    // onUpdateSelectedTagHigh: async function (tag) {
-    //   this.onLoading = true
-    //   this.onTagLoading = true
-    //   console.log('aaa')
-    //   await this.$store.dispatch('setTagHigh', {tag: tag, effectFilter: this.effectFilter})
-    //   this.onLoading = false
-    //   this.onTagLoading = false
-    // },
-    // onTagHighReset: async function () {
-    //   this.onLoading = true
-    //   await this.$store.dispatch('setTagHigh', {tag: null, effectFilter: this.effectFilter})
-    //   this.onLoading = false
-    // },
-    // onUpdateSelectedTagLow: async function (tag, isOpening, idx) {
-    //   this.onLoading = true
-    //   this.onTagLowLoading = true
-    //   // if (!idx) {
-    //   //   idx = this.tagLows.findIndex(t => {
-    //   //     return t.tag === tag.tag
-    //   //   })
-    //   // }
-    //   await this.$store.dispatch('setTagLow', {tag: tag, isOpening: isOpening, effectFilter: this.effectFilter})
-    //   this.expansionPanelValue = idx
-    //   this.onLoading = false
-    //   this.onTagLowLoading = false
-    // },
-    // onUpdateSelectedTag: async function (tag) {
-    //   this.onLoading = true
-    //   await this.$store.dispatch('updateSelectedTag', tag)
-    //   this.onLoading = false
-    // },
-    // onShowPolicyListClick: function () {
-    //   if (!this.$store.state.userToken || !this.$store.state.user.is_participant || this.$store.state.user.step > 2) {
-    //     this.$router.push('/ShowPolicies')
-    //   } else {
-    //     this.$router.push('/PostSurvey')
-    //   }
-    // },
     onRateClick: function () {
       this.isRatingPaneVisible = true
       // this.$vuetify.goTo(this.$refs.mydivider)
@@ -262,7 +204,10 @@ export default {
       this.$router.push('/ExploreEffects')
     },
     onSeeMoreTagsClick: function () {
-      this.$router.push('/GuessStakeholder')
+      this.$store.dispatch('setTagHigh', {tag: null})
+      this.isRatingPaneVisible = false
+      this.showNextOptions = false
+      // this.$router.push('/GuessStakeholder')
     },
     onRatingEnough: function () {
       this.showNextOptions = true
@@ -273,6 +218,10 @@ export default {
       } else {
         this.$router.push('/PostSurvey')
       }
+    },
+    onUpdateTagHigh: function () {
+      this.isRatingPaneVisible = false
+      this.showNextOptions = false
     }
   }
 }

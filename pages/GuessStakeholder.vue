@@ -20,8 +20,10 @@
         @keyup.enter="onAddTagGuess"
         :label="`${policy.title} 정책에 영향을 받을 것 같은 사람을 편하게 적어주세요!`" >
         <div slot="append">
-          <v-btn @click="onAddTagGuess">
-            추가하기
+          <v-btn icon @click="onAddTagGuess">
+            <v-icon>
+              add
+            </v-icon>
           </v-btn>
         </div>
       </v-text-field>
@@ -33,7 +35,7 @@
           <template v-if="!alreadyGuessed">
             <template v-if="guessedItems.length === 0">
               <span style="font-weight: bold">{{policy.title}} </span>정책에 영향을 받는다고 생각하시는 집단을 적고
-              <br> "추가하기" 버튼을 눌러보세요!
+              <br> "+" 버튼을 눌러보세요!
               <!-- <span style="font-weight: bold">{{policy.title}} </span>정책에 영향을 받는 사람을 적어주세요! -->
             </template>
             <v-chip 
@@ -104,7 +106,9 @@
           <br>
           더 알고 싶으신 집단을 클릭해서, 오른쪽 분류에 넣어주세요!
           <br>
-          분류하신 집단을 클릭하시면 그 집단의 생각을 보실 수 있습니다.
+
+          <!-- <br>
+          분류하신 집단을 클릭하시면 그 집단의 생각을 보실 수 있습니다. -->
           <!-- <span class="emphasis">{{prompts[promptIdx]}}</span>을 선택해보세요! -->
         </span>
       </v-flex>
@@ -114,6 +118,11 @@
           :importantTags="importantTags"
           @keyword-selected="onTagSeeMore">
         </tag-cloud>
+      </v-flex>
+      <v-flex xl8 lg10 xs12>
+        <v-btn block color="primary" @click="onGuessEffectsClick">
+          정책에 대한 의견 보러가기
+        </v-btn>
       </v-flex>
       <v-flex xl8 lg10 xs12>
         <v-btn block @click="onShowPolicyListClick">
@@ -224,6 +233,9 @@ export default {
       this.$store.dispatch('setTagHigh', {tag: tag}).then(() => {
         this.$router.push('/GuessEffects')
       })
+    },
+    onGuessEffectsClick: function () {
+      this.$router.push('/GuessEffects')
     },
     addNewGuessedItem: function () {
       this.guessedItems.push({

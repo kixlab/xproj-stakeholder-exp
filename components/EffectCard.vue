@@ -126,8 +126,22 @@ export default {
 <style scoped>
 .card__effect {
   margin-bottom: 0.5em;
+  /* margin-top: 10vh; */
   width: 100%;
 }
+/* 
+.card__effect::before{
+  position: relative;
+  
+  top: 0;
+  height: 10vh;
+  width: 100%;
+  box-sizing: border-box;
+  fill: #00000080;
+  content: "aaaaaaaaaaaa";
+  border: 1px #000000 solid;
+  
+} */
 .v-card__text {
   text-align: left !important;
   padding-bottom: 0;

@@ -100,7 +100,7 @@
                 </div>
               </v-flex>
             </v-layout>
-            <v-layout :class="sortedEffects.length >= 10 ? 'cards__list__cloud' : 'cards__list'" column align-center justify-center>
+            <v-layout class="cards__list" :style="`height: ${sortedEffects.length >= 10 ? height - 30 : height}vh`" column align-center justify-center>
               <v-flex style="overflow: auto; width: 100%;">
                 <template v-if="onKeywordLoading">
                   <div style="width: 100%">
@@ -142,14 +142,14 @@
   margin-top: 20px;
 }
 .cards__list {
-  height: 72.7vh;
+  /* height: 72.7vh; */
   margin-top: 1vh;
   margin-bottom: 1vh;
   width: 100%;
 }
 
 .cards__list__cloud {
-  height: 40vh;
+  /* height: 40vh; */
   margin-top: 1vh;
   margin-bottom: 1vh;
   width: 100%;
@@ -276,6 +276,10 @@ export default {
     closeTags: Array,
     showTags: {
       default: true
+    },
+    height: {
+      type: Number,
+      default: 70
     }
   },
   watch: {
