@@ -16,7 +16,7 @@
     "@nuxtjs/proxy": "^1.2.4",
     "axios": "^0.18.0",
     "axios-retry": "^3.1.2",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.21",
     "npm": "^6.4.0",
     "nuxt": "^1.4.2",
     "vee-validate": "^2.1.0-beta.8",
