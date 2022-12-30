@@ -18,7 +18,7 @@
     "axios-retry": "^3.1.2",
     "lodash": "^4.17.10",
     "npm": "^6.4.0",
-    "nuxt": "^1.4.2",
+    "nuxt": "^3.0.0",
     "vee-validate": "^2.1.0-beta.8",
     "vue-analytics": "^5.16.3",
     "vuetify": "^1.1.14",
@@ -28,13 +28,13 @@
     "babel-eslint": "^7.2.3",
     "eslint": "^4.3.0",
     "eslint-config-standard": "^10.2.1",
-    "eslint-loader": "^1.9.0",
+    "eslint-loader": "^4.0.2",
     "eslint-plugin-html": "^3.1.1",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1"
+    "stylus-loader": "^7.1.0"
   }
 }
